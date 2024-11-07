@@ -11,6 +11,9 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'gray-300': '#B1B1B1', // Custom gray color
+        'green-300': '#01A982', // Custom green color for button text/icon/background
+        'green-500': '#1CD3A8', // Another green color for contrast if needed
       },
     },
   },
