@@ -15,18 +15,8 @@ const config: Config = {
         'green-300': '#01A982', // Custom green color for button text/icon/background
         'green-500': '#1CD3A8', // Another green color for contrast if needed
       },
-      animation: {
-        'bg-pan': 'bg-pan 0.5s ease infinite',
-      },
-      keyframes: {
-        'bg-pan': {
-          '0%': { 'background-position': '100% 50%' },
-          '100%': { 'background-position': '0% 50%' },
-        },
-      },
     },
   },
   plugins: [],
 };
 export default config;
-
