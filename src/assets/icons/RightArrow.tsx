@@ -3,6 +3,7 @@ import React from "react";
 interface RightArrowProps {
   color?: string;
 }
+
 const RightArrow: React.FC<RightArrowProps> = ( { color = "currentColor" }) => {
   return (
     <svg
