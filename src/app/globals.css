@@ -15,6 +15,19 @@ body {
   font-family: "Inter";
 }
 
+@layer components { 
+  .flex_item-start {
+    @apply flex flex-col items-start justify-center
+  }
+  .nav-transition{
+    @apply transition-all duration-200
+  }
+  .nav-option{
+    @apply text-steel-gray
+  }
+
+}
+
 .bg-custom-gradient-green{
   background: linear-gradient(65deg, #01A982 29.4%, #01A982 36.24%, #1CD3A8 44.6%, #01A982 54.09%, #01A982 105.37%);
   background-position: 99% 50%;
@@ -24,3 +37,4 @@ body {
 .bg-custom-gradient-green:hover {
   background-size: 100% 100%;
 }
+

@@ -14,6 +14,8 @@ const config: Config = {
         'gray-300': '#B1B1B1', // Custom gray color
         'green-300': '#01A982', // Custom green color for button text/icon/background
         'green-500': '#1CD3A8', // Another green color for contrast if needed
+        'primary-black':'#020103', // black color, ref: navbar background
+        'steel-gray': '#ADB3CC' // blue tint with gray, ref: navigation option color
       },
     },
   },
