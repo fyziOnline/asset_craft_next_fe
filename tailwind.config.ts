@@ -14,6 +14,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'off-white-primary':'#EEEEEE', // ref : this is the background color used in header and footer
         'gray-300': '#B1B1B1', // Custom gray color
         'green-100': '#00A881', // Custom light green color
         'green-300': '#01A982', // Custom green color for button text/icon/background
