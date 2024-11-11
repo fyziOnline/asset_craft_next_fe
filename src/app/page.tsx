@@ -1,32 +1,48 @@
-import Accordion from "@/components/global/Accordion";
-import DropDown from "@/components/global/DropDown";
-import TextField from "@/components/global/TextField"
+'use client';
+
+import Button from "../components/global/Button";
 
 export default function Home() {
-
-  const dropDownlist = [
-    { value: "Announcement", label: "Announcement" },
-    { value: "Newsletter", label: "Newsletter" },
-    { value: "Promotional Email", label: "Promotional Email" },
-  ]
   return (
-    <div className="flex items-center justify-center gap-2 w-full h-screen flex-col">
-      <div className="w-3/4 " >
-        <Accordion checked={false} HeaderTitle="Email - Key Messages & Content">
-          <h5 className="text-[#160647] font-semibold pb-4">Specify the topic, occasion, event or context for your email.</h5>
-          
-          <DropDown 
-            optionLists={dropDownlist} 
-            selectPlaceHolder="Select Email Type"
-          />
+    <div className="w-100 h-screen flex items-center justify-center flex-col gap-2">
+      <Button 
+        buttonText="Generate" 
+        handleClick={() => console.log("Generate")}
+      />
 
-          <TextField customClass="w-[700px] h-11 mt-8" placeholder="Please enter the name of your campaign, event or occasion." />
-          <TextField customClass="w-[700px] mt-4" placeholder="Create a short introductory paragraph that explains how a hybrid cloud platform helps businesses manage their IT environments more effectively." />
-          <TextField customClass="w-[700px] mt-4" placeholder="List the features of a cloud platform that boost performance and streamline operations, highlighting operational efficiency and time-saving benefits." />
-          <TextField customClass="w-[700px] mt-4" placeholder="Generate a description of how the platform offers flexibility and control for businesses managing hybrid and multi-cloud environments." />
+      <Button 
+        buttonText="Generate"  
+        backgroundColor="bg-gray-300"
+        handleClick={() => console.log("Generate disabled")}
+      />
 
-        </Accordion>
-      </div>
+      <Button 
+        buttonText="Regenerate"
+        handleClick={() => console.log("Regenerate")}
+      />
+
+      <Button 
+        buttonText="View & Edit"
+        backgroundColor="bg-white"
+        textColor="text-green-300"
+        iconColor="#01A982"
+        customClass="border-2 border-green-300"
+        handleClick={() => console.log("view & edit")}
+      />
+
+      <Button
+        buttonText="Save As"
+        backgroundColor="bg-white"
+        textColor="text-green-300"
+        iconColor="#01A982"
+        customClass="border-2 border-green-300"
+        handleClick={() => console.log("Save As clicked")}
+      />
+
+      <Button 
+        buttonText="Submit" 
+        handleClick={() => console.log("Submit clicked")}
+      />
     </div>
   );
 }
