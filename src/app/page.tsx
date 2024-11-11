@@ -1,10 +1,26 @@
-import Breadcrumb from "@/components/global/Breadcrumb";
+import Accordion from "@/components/global/Accordion";
+import Search from "@/components/global/Search";
 
 export default function Home() {
 
+  const usersList = [
+    {
+        label: "Stan Lee (You)",
+        value: "Stan Lee (You)",
+        firstLetter: "S",
+        IconColor: "bg-custom-light-blue"
+    },
+    {
+        label: "Suman Ann Thomas",
+        value: "Suman Ann Thomas",
+        firstLetter: "S",
+        IconColor: "bg-custom-light-red"
+    }
+]
+
   return (
     <div className="w-full h-screen p-20">
-       <Breadcrumb projectName="GreenLake" TaskName="Storage Asia 2024" TaskType="Email_1" />
+       <Search optionsList={usersList} />
     </div>
   );
 }

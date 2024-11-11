@@ -1,6 +1,6 @@
 "use client";
 
-import DownArrow from "@/assets/icons/DownArrow";
+import  { DownArrow } from "@/assets/icons/DownArrow";
 import { useRef, useState } from "react";
 
 /**
