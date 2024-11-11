@@ -41,8 +41,8 @@ const Button: React.FC<ButtonProps> = ({
     type="button"
 }) => {
   return (
-    <button onClick={handleClick} type={type} className={`relative flex items-center justify-center gap-[10px] w-[200px] h-12 rounded-full  ${backgroundColor} ${customClass}`}>
-        <span className={`text-md font-semibold ${textColor}`}>{buttonText}</span>
+    <button onClick={handleClick} type={type} className={`relative flex items-center justify-center gap-3 px-8 py-3 h-12 rounded-full  ${backgroundColor} ${customClass}`}>
+        <span className={`text-lg leading-[24px] font-bold ${textColor}`}>{buttonText}</span>
         {showIcon && <RightArrow color={iconColor} />}
     </button>
   )
