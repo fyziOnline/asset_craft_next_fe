@@ -9,8 +9,8 @@ interface Logo {
   }
   
  export const HPE_Logo: React.FC<Logo> = ({
-    width = 71,
-    height = 20,
+    width = 70, // 71
+    height = 15, // 20
     className = '',
     color = '#00B188'
   }) => {
@@ -34,8 +34,8 @@ interface Logo {
   }
 
   export const HPE_Brand_Logo: React.FC<Logo> = ({
-    width = 237,
-    height = 119,
+    width = 220, // 237
+    height = 89, // 119
     className = '',
     color = '#00B188',
     textColor = '#fff',

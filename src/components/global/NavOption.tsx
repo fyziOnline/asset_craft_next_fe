@@ -16,12 +16,12 @@ const NavOption:React.FC<NavOptionProp> = ({children,href,label,spanClass='',chi
   return (
     <Link
         href={href}
-        className=" text-steel-gray flex items-center gap-3 first:mt-0  mt-[1.45rem]"
+        className="  flex items-center gap-3 first:mt-0  mt-[1.45rem]"
     >
         <div className={childClass}>
             {children}
         </div>
-        <span className={`${spanClass} opacity-0 text-lg font-medium text-nowrap group-hover:opacity-100 nav-transition`}>{label}</span>
+        <span className={`${spanClass} opacity-0 text-lg font-medium text-nowrap group-hover:opacity-100 nav-transition ${isActive ? 'text-green-100' : 'text-steel-gray' }`}>{label}</span>
     </Link>
   )
 }
