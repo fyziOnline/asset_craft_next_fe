@@ -1,31 +1,19 @@
-"use client"
+'use client';
 
-import Search from "@/components/global/Search";
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
+import Navbar from "@/components/layout/Navbar";
 
 export default function Home() {
 
-  const usersList = [
-    {
-        label: "Stan Lee (You)",
-        value: "Stan Lee (You)",
-        firstLetter: "S",
-        IconColor: "bg-custom-light-blue"
-    },
-    {
-        label: "Suman Ann Thomas",
-        value: "Suman Ann Thomas",
-        firstLetter: "S",
-        IconColor: "bg-custom-light-red"
-    }
-]
-
-const handleSelectEmployee = (value : {} ) => {
-  console.log("selectEmployee" , value);
-}
-
   return (
-    <div className="w-full h-screen p-20">
-       <Search optionsList={usersList} onSelect={handleSelectEmployee} />
-    </div>
+    <main className="w-100 h-screen flex items-center justify-center flex-col gap-2">
+      <Header />
+      <Navbar />
+      <div>
+        This is the main content
+      </div>
+      <Footer/>
+    </main>
   );
 }
