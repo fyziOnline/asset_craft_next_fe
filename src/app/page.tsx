@@ -1,4 +1,5 @@
-import Accordion from "@/components/global/Accordion";
+"use client"
+
 import Search from "@/components/global/Search";
 
 export default function Home() {
@@ -18,9 +19,13 @@ export default function Home() {
     }
 ]
 
+const handleSelectEmployee = (value : {} ) => {
+  console.log("selectEmployee" , value);
+}
+
   return (
     <div className="w-full h-screen p-20">
-       <Search optionsList={usersList} />
+       <Search optionsList={usersList} onSelect={handleSelectEmployee} />
     </div>
   );
 }
