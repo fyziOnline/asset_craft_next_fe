@@ -7,8 +7,8 @@ interface icon {
 
 
 export const UserIcon: React.FC<icon> = ({
-    width = 44,
-    height = 44,
+    width = 34,
+    height = 34,
     className = '',
     color = '#00A881'
   }) => {
