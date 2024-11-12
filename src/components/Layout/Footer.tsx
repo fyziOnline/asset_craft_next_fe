@@ -1,0 +1,49 @@
+import { HPE_Logo } from "@/assets/icons/HPE_Logo"
+import Link from "next/link"
+
+interface FooterLink {
+    label: string
+    href: string
+  }
+  
+  const footerLinks: FooterLink[] = [
+    {
+      label: 'Privacy',
+      href: '/'  
+    },
+    {
+      label: 'Terms of Use',
+      href: '/'
+    },
+    {
+      label: 'Ad Choice & Cookies',
+      href: '/'
+    },
+    {
+      label: 'Sitemap',
+      href: '/'
+    }
+  ]
+
+const Footer:React.FC = () => {
+  return (
+    <footer className="fixed right-0 left-0 bottom-0 z-40 bg-off-white-primary p-[2.5rem]">
+        <div className="flex justify-between align-bottom">
+            <p className="text-xs">© Copyright 2024 Hewlett Packard Enterprise Development LP</p>
+            <div className="flex gap-[7px]">
+                {footerLinks.map((link,index) => (
+                    <div>
+                        <Link href={link.href} className="text-xs">{link.label}</Link>
+                        {index < footerLinks.length-1 && <span className="ml-[7px]">|</span>}
+                    </div>
+                ))}
+            </div>
+        </div>
+        <div className="flex justify-center">
+            <HPE_Logo />
+        </div>
+    </footer>
+  )
+}
+
+export default Footer
