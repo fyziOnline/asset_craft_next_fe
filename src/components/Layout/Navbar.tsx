@@ -2,7 +2,7 @@
 import { HPE_Brand_Logo, HPE_Logo } from "@/assets/icons/HPE_Logo";
 import { AboutIcon, AssetIcon, CompetedIcon, DashboardIcon, DashedSeparator, FolderIcon, SettingsIcon } from "@/assets/icons/NavIcons";
 import NavOption from "../global/NavOption";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 interface NavOptions {
@@ -57,6 +57,7 @@ const bottomOptions: NavOptions[] = [
 const Navbar:React.FC = () => {
     const [activeButton, setActiveButton] = useState<number | null> (null);
     const pathname = usePathname()
+    
   return (
     <nav className="group bg-primary-black fixed top-0 left-0 p-[1.87rem] h-full w-[5.5rem] hover:w-[18.68rem] nav-transition overflow-hidden">
         <div>
@@ -69,14 +70,14 @@ const Navbar:React.FC = () => {
                     </NavOption>
                 )) }
             </div>
-            <div className="absolute top-[19.8rem] left-[1rem] right-[3rem] w-16 overflow-hidden group-hover:w-full nav-transition">
+            <div className="pointer-events-none absolute top-[19.8rem] left-[1rem] right-[3rem] w-16 overflow-hidden group-hover:w-full nav-transition">
                 <DashedSeparator />
             </div>
             <div className="flex_item-start absolute top-[28rem] left-[2.43rem] group-hover:left-[1.625rem] nav-transition">
                 <p className=" text-steel-gray-shade opacity-0 group-hover:opacity-100 nav-transition mb-2">Options</p>
                 <div>
                     {bottomOptions.map(options => (
-                        <NavOption key={options.id} href={options.href} label={options.label}>
+                        <NavOption key={options.id} href={options.href} label={options.label} pathname={pathname}>
                             {options.component}
                         </NavOption>
                     )) }
