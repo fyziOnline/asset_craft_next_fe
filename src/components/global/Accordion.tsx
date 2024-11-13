@@ -31,7 +31,7 @@ interface AccordionProps {
 }
 
 const Accordion: React.FC<AccordionProps> = ({ HeaderTitle , children , checked = false }) => {
-  const [showContent, setShowContent] = useState(false)
+  const [showContent, setShowContent] = useState(true)
   const contentRef = useRef<HTMLDivElement>(null)
 
   /**
