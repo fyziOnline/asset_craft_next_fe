@@ -1,16 +1,15 @@
 'use client';
-
-import Footer from "@/components/layout/Footer";
-import Header from "@/components/layout/Header";
-import Navbar from "@/components/layout/Navbar";
+import LayoutWrapper from "@/layout/LayoutWrapper";
 
 export default function Home() {
   return (
-    <main className="w-100 h-screen  flex flex-col gap-2">
-      <Header />
-      <Navbar />
-      <div></div>
-      <Footer/>
-    </main>
+    // <div className="w-100 h-screen flex items-center justify-center flex-col gap-2">
+    <>
+      <LayoutWrapper layout="main">
+          <div>
+            Home
+          </div>
+      </LayoutWrapper>
+    </>
   );
 }
