@@ -2,7 +2,6 @@
 import { HPE_Brand_Logo, HPE_Logo } from "@/assets/icons/HPE_Logo";
 import { AboutIcon, AssetIcon, CompetedIcon, DashboardIcon, DashedSeparator, FolderIcon, SettingsIcon } from "@/assets/icons/NavIcons";
 import NavOption from "../global/NavOption";
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 interface NavOptions {
@@ -55,7 +54,6 @@ const bottomOptions: NavOptions[] = [
 ]
 
 const Navbar:React.FC = () => {
-    const [activeButton, setActiveButton] = useState<number | null> (null);
     const pathname = usePathname()
     
   return (
