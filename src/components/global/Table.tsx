@@ -4,10 +4,14 @@ import React, { useState } from 'react'
 
 /**
  * Table is a React component that displays a table with sortable columns.
- * @param listItems - The list of data items to be displayed in the table.
- * @param tableHeadings - The headings of the columns.
- * @param arrowInHeadings - The columns that will have sortable arrows.
- * @returns A JSX element representing the table.
+ *
+ * @param {Object} props - The props object.
+ * @param {Array<Object<string, string>>} props.listItems - The list of data items to be displayed in the table, where each item is an object with key-value pairs representing column data.
+ * @param {Array<string>} props.tableHeadings - The headings of the columns, displayed at the top of the table.
+ * @param {Array<string>} [props.arrowInHeadings=[]] - An optional array of column headings that will display sortable arrows, allowing the user to sort the data by those columns.
+ * @param {Array<string>} [props.columnWidths=[]] - An optional array of column widths, where each width corresponds to a column. If specified, it controls the width of each column using CSS units (e.g., '1fr', '200px'). Defaults to equal width for each column if not provided.
+ * 
+ * @returns {JSX.Element} A JSX element representing the table.
  */
 
 interface Options {
@@ -17,10 +21,11 @@ interface Options {
 interface TableProps {
   listItems: Options[];
   tableHeadings: string[];
-  arrowInHeadings: string[];
+  arrowInHeadings?: string[];
+  columnWidths?: string[];
 }
 
-const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings }) => {
+const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [] }) => {
     const [sortListData, setSortListData] = useState<Options[]>(listItems);
     const [sortArrows, setSortArrows] = useState<{ [key: string]: boolean }>({...tableHeadings.reduce((acc, heading) => ({ ...acc, [heading]: true }), {}) });
 
@@ -65,11 +70,14 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         // Update the state with the sorted data
         setSortListData(sortedData);
     };
+
+    // Set dynamic widths for columns or fallback to equal width if not provided
+    const gridColumnStyle = columnWidths.length === getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${getListItemsHeadings.length}, 1fr)`;
     
     
   return (
     <div className='w-full'>
-      <div className="grid text-center p-6" style={{ gridTemplateColumns: `repeat(${getListItemsHeadings.length}, 1fr)` }}>
+      <div className="grid text-center p-6" style={{ gridTemplateColumns: gridColumnStyle }}>
         {tableHeadings.map((heading, index) => (
           <div key={index} className='flex items-center gap-2'>
             <p className='text-base font-semibold'>{heading}</p>
@@ -86,7 +94,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
 
       <div className='grid gap-[10px]'>
         {sortListData.map((data, index) => (
-          <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: `repeat(${getListItemsHeadings.length}, 1fr)` }}>
+          <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: gridColumnStyle }}>
             {getListItemsHeadings.map((heading, idx) => (
               <div key={idx} className={`text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
                 {data[heading]}
