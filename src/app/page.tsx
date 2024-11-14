@@ -1,28 +1,25 @@
 'use client';
 import Accordion from "@/components/global/Accordion";
-import DragAndDrop from "@/components/global/DragAndDrop";
+import Button from "@/components/global/Button";
+import FileUploadPopup from "@/components/global/FileUploadPopup";
 import LayoutWrapper from "@/layout/LayoutWrapper";
+import { useState } from "react";
 
 export default function Home() {
+  const [popUpOpen , setPopUpOpen] = useState(false)
 
-  const handleFileSelect = (file: File) => {
-    console.log("Selected file:", file);
-    // Handle the file, e.g., upload to server or process locally
-  };
+  const togglePopUp = () => {
+    setPopUpOpen(!popUpOpen)
+  }
   
   return (
     // <div className="w-100 h-screen flex items-center justify-center flex-col gap-2">
     <>
       <LayoutWrapper layout="main">
           <div className="mt-10 mx-20">
-            <Accordion
-              HeaderTitle="Additional Campaign Assets"
-              checked={true}
-            >
-              <DragAndDrop
-                onFileSelect={handleFileSelect}
-               />
-            </Accordion>
+
+            <Button buttonText="popup" handleClick={togglePopUp}/>
+            <FileUploadPopup isOpen={popUpOpen}  onClose={() => setPopUpOpen(false)}/>
           </div>
       </LayoutWrapper>
     </>
