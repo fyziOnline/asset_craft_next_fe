@@ -2,6 +2,7 @@
 
 import React from 'react';
 import RightArrow from "../../assets/icons/RightArrow"
+import { AllinOne } from "@/assets/icons/AppIcons"
 
 /**
  * Button component renders a button with customizable text, color, and an optional icon.
@@ -22,11 +23,12 @@ import RightArrow from "../../assets/icons/RightArrow"
 interface ButtonProps {
     buttonText: string;
     textColor?: string;
-    spanClass?: string
+    textStyle?: string;
     iconColor? : string;
     backgroundColor?: string;
     customClass?: string;
     showIcon?: boolean;
+    IconComponent?: React.ReactNode;
     handleClick?: () => void;
     type?: "button" | "submit" | "reset";
 }
@@ -35,16 +37,17 @@ const Button: React.FC<ButtonProps> = ({
     buttonText,
     backgroundColor="bg-custom-gradient-green",
     textColor="text-white",
-    spanClass = '',
     iconColor="white",
+    textStyle="",
+    IconComponent = null,
     customClass,
     showIcon = true,
     handleClick,
     type="button"
 }) => {
   return (
-    <button onClick={handleClick} type={type} className={` flex items-center justify-center gap-3 px-8 py-3 rounded-full ${backgroundColor} ${customClass} `}>
-        <span className={`${spanClass} text-sm leading-[24px] font-bold ${textColor}`}>{buttonText}</span>
+    <button onClick={handleClick} type={type} className={` ${customClass} flex items-center justify-center gap-3 py-3 h-12 rounded-full ${backgroundColor}`}>
+        <p className={`flex items-center gap-1 text-lg leading-[24px] font-bold ${textColor} ${textStyle}`}>{IconComponent}{buttonText}</p>
         {showIcon && <RightArrow color={iconColor} />}
     </button>
   )

@@ -17,7 +17,7 @@ const AssetCard:FC = () => {
           <UpdateIndicator date="20 Jan 2024"/>
           <Button 
             buttonText='Clone It' 
-            showIcon spanClass='text-[1rem] font-base text-[#00A881]' 
+            showIcon textStyle='text-[1rem] font-base text-[#00A881]' 
             customClass='static border-[1.5px] border-[#00A881]  px-[1.4rem] py-2' 
             textColor='#00A881' 
             backgroundColor='white' 
