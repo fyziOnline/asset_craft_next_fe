@@ -22,6 +22,7 @@ import RightArrow from "../../assets/icons/RightArrow"
 interface ButtonProps {
     buttonText: string;
     textColor?: string;
+    textStyle?: string;
     iconColor? : string;
     backgroundColor?: string;
     customClass?: string;
@@ -35,6 +36,7 @@ const Button: React.FC<ButtonProps> = ({
     backgroundColor="bg-custom-gradient-green",
     textColor="text-white",
     iconColor="white",
+    textStyle="",
     customClass,
     showIcon = true,
     handleClick,
@@ -42,7 +44,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button onClick={handleClick} type={type} className={`relative flex items-center justify-center gap-3 px-8 py-3 h-12 rounded-full  ${backgroundColor} ${customClass}`}>
-        <span className={`text-lg leading-[24px] font-bold ${textColor}`}>{buttonText}</span>
+        <p className={`text-lg leading-[24px] font-bold ${textColor} ${textStyle}`}>{buttonText}</p>
         {showIcon && <RightArrow color={iconColor} />}
     </button>
   )
