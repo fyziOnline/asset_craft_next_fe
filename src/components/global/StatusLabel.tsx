@@ -14,8 +14,8 @@ const getLabelTheme = (status: StatusProp) => {
 
 const StatusLabel:FC<StatusProp> = ({status_value}) => {
   return (
-    <div className="border-2 border-crystal-blue-500 bg-crystal-blue-200 w-fit px-[1rem] rounded-full ">
-      <p className="text-crystal-blue-500">{statusText[status_value]}</p> 
+    <div className="border-2 border-crystal-blue-500 group-hover:border-black bg-crystal-blue-200 group-hover:bg-white w-fit px-[1rem] rounded-full ">
+      <p className="text-crystal-blue-500 group-hover:text-black">{statusText[status_value]}</p> 
     </div>
   )
 }

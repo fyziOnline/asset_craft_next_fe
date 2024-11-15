@@ -4,7 +4,7 @@ interface icon {
     width?: number | string
     height?: number | string
     className?: string
-    color?: string
+    color : string
 }
 
 export const MailIcon:FC<icon> = ({
