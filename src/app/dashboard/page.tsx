@@ -4,16 +4,17 @@ import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
+import { AllinOne } from "@/assets/icons/AppIcons";
 
 const Dashboard: FC = () => {
 
   const buttonData = [
-    { text: "All in One", backgroundColor: "bg-green-300", customClass: "", showIcon: false },
-    { text: "Email", backgroundColor: "bg-white", customClass: "border-2 border-green-300", showIcon: false , color: "text-foreground"},
-    { text: "LinkedIn", backgroundColor: "bg-white", customClass: "border-2 border-green-300", showIcon: false , color: "text-foreground" },
-    { text: "Landing Page", backgroundColor: "bg-white", customClass: "border-2 border-green-300", showIcon: false , color: "text-foreground"},
-    { text: "Call Script", backgroundColor: "bg-white", customClass: "border-2 border-green-300", showIcon: false, color: "text-foreground" },
-    { text: "All Pre-Created Assets", backgroundColor: "bg-white", customClass: "border-2 border-green-300", showIcon: false , color: "text-foreground" },
+    { text: "All in One", backgroundColor: "bg-green-300", customClass: "px-[50px]", showIcon: false },
+    { text: "Email", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false , color: "text-foreground"},
+    { text: "LinkedIn", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false , color: "text-foreground" },
+    { text: "Landing Page", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false , color: "text-foreground"},
+    { text: "Call Script", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false, color: "text-foreground" },
+    { text: "All Pre-Created Assets", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false , color: "text-foreground" },
   ];
 
   const dashboardData = [
@@ -117,16 +118,17 @@ const pendingApprovals = [
                 What would you like to create today?
               </p>
 
-              <div className="flex w-full overflow-x-auto gap-4 my-5 scrollbar-hide">
+              <div className="flex w-full overflow-x-auto gap-4 my-5 scrollbar-hide overflow-y-hidden">
                 {buttonData.map((button, index) => (
                   <Button
                     key={index}
                     buttonText={button.text}
                     showIcon={button.showIcon}
+                    IconComponent={button.text === "All in One" && <AllinOne />}
                     backgroundColor={button.backgroundColor}
                     customClass={button.customClass}
                     textColor={button.color}
-                    textStyle={`font-normal px-[50px] py-3 text-center whitespace-nowrap`}
+                    textStyle={`font-normal py-3 text-center whitespace-nowrap`}
                   />
                 ))}
               </div>
