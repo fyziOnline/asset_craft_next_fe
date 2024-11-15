@@ -24,7 +24,12 @@ const config: Config = {
         'green-500': '#1CD3A8', // Another green color for contrast if needed
         'primary-black':'#020103', // black color, ref: navbar background
         'steel-gray': '#ADB3CC', // blue tint with gray, ref: navigation option color
-        'steel-gray-shade': '#55597D' // blue tint with gray, ref: navigation option color
+        'steel-gray-shade': '#55597D', // blue tint with gray, ref: navigation option color
+        'faded-grey':'#475467',
+        'grey-800':'#444444',
+        'grey-500' : '#6F6F6F',
+        'crystal-blue-500':'#5DB9FF',
+        'crystal-blue-200':'#EBF6FF'
       },
       boxShadow: {
         'dropdown-shadow': '0px 4px 14px 0px rgba(0, 0, 0, 0.10)',
@@ -32,7 +37,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp')
+  ],
 };
 export default config;
 
