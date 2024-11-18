@@ -14,10 +14,13 @@
   .nav-option{
     @apply text-steel-gray
   }
+  input[type='range'] {
+    @apply w-full h-4 rounded-lg appearance-none cursor-pointer;
+  }
 
 }
 
-.bg-custom-gradient-green{
+ss.bg-custom-gradient-green{
   background: linear-gradient(65deg, #01A982 29.4%, #01A982 36.24%, #1CD3A8 44.6%, #01A982 54.09%, #01A982 105.37%);
   background-position: 99% 50%;
   background-size: 220% 200%;
@@ -106,3 +109,28 @@
   }
 
 }
+
+/* .custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width:1.7rem;
+  height: 1.7rem;
+  background: #00A881;
+  border: 3px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 99;
+  position: relative;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.custom-range::-moz-range-thumb {
+  width: 1.7rem;
+  height: 1.7rem;
+  background: #00A881;
+  border: 3px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 99;
+  position: relative;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+} */
