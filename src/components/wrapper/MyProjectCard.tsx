@@ -23,7 +23,7 @@ const onLeave = () => {
         <UpdateIndicator date="20 Jan 2024"/>
           <Button
             buttonText='Clone It' 
-            showIcon spanClass='text-[1rem] font-base' 
+            showIcon textStyle='text-[1rem] font-base' 
             customClass='static border-[1.5px] border-[#00A881]  px-[1.4rem] py-2 group-hover:border-white' 
             textColor={!isHovered ? 'text-[#00A881]' : 'text-[#fff]'} 
             backgroundColor='white' 
