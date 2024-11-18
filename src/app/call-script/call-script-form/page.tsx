@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import Breadcrumb from "@/components/global/Breadcrumb";
 import Image from 'next/image';
+import Accordion from '@/components/global/Accordion';
 
 const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -18,11 +19,29 @@ const Page = () => {
             </div>
             <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
                 <div className="flex">
-                    <div className="flex-1 py-10">
+                    <div className="flex-1 py-10 overflow-y-scroll scrollbar-hide h-[70vh]">
                         <div className="flex items-center justify-center">
                             <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-black text-xl tracking-[0] leading-[normal] whitespace-nowrap">
                                 Please provide the necessary information to generate AI content
                             </p>
+                        </div>
+                        <div className='px-[10%]'>
+                            <div className='mt-[40px]'>
+                                <Accordion HeaderTitle="Call Objective and Target Audience" checked={false}>
+                                    <div>Accordion content goes here</div>
+                                </Accordion>
+                            </div>
+                            <div className='mt-[25px]'>
+                                <Accordion HeaderTitle="Tone, Style, and Objections" checked={false}>
+                                    <div>Accordion content goes here</div>
+                                </Accordion>
+                            </div>
+                            <div className='mt-[25px]'>
+                                <Accordion HeaderTitle="Content Structuring for Communication" checked={false}>
+                                    <div>Accordion content goes here</div>
+                                </Accordion>
+                            </div>
+
                         </div>
                     </div>
                     <div className="flex">
@@ -39,7 +58,7 @@ const Page = () => {
                         </div>
                         {/* Sidebar */}
                         <div
-                            className={`bg-[#F5F5F7] flex items-center justify-center overflow-y-scroll transition-all duration-300 ease-in-out ${isOpen ? 'w-[320px]' : 'w-[0px]'} h-[70vh]`}
+                            className={`bg-[#F5F5F7] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${isOpen ? 'w-[320px]' : 'w-[0px]'} h-[70vh]`}
                         >
                             <div>
                                 <div>
