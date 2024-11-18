@@ -1,3 +1,4 @@
+'use client';
 import { FC } from "react";
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import SearchBox from "@/components/global/SearchBox";
@@ -5,8 +6,10 @@ import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
 import { AllinOne } from "@/assets/icons/AppIcons";
+import { useRouter } from 'next/navigation';
 
 const Dashboard: FC = () => {
+  const router = useRouter();
 
   const buttonData = [
     { text: "All in One", backgroundColor: "bg-green-300", customClass: "px-[50px]", showIcon: false },
@@ -128,6 +131,11 @@ const pendingApprovals = [
                     backgroundColor={button.backgroundColor}
                     customClass={button.customClass}
                     textColor={button.color}
+                    handleClick={() => {
+                      if (button.text === "Call Script") {
+                        router.push("/call-script")
+                      }
+                    }}
                     textStyle={`font-normal py-3 text-center whitespace-nowrap`}
                   />
                 ))}
