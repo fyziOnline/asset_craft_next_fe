@@ -1,5 +1,6 @@
 'use client';
 
+import { EmailIcon, LinkedinIcon, SalesCallIcon } from '@/assets/icons/TableIcon';
 import React, { useState } from 'react'
 
 /**
@@ -47,6 +48,15 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         }
     }
 
+    const getIcon = (value: string | undefined) => {
+      const icons: { [key: string]: JSX.Element } = {
+        Email_1: <EmailIcon />,
+        LinkedIn_1: <LinkedinIcon />,
+        SalesCall_1: <SalesCallIcon />,
+      };
+      return value ? icons[value] || null : null;
+    };
+
     // Function to handle sorting when a column header is clicked
     const handleSort = (column: number) => {
         const columnHeading = tableHeadings[column]; // Get the column heading
@@ -77,7 +87,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
     
   return (
     <div className='w-full'>
-      <div className="grid text-center p-6" style={{ gridTemplateColumns: gridColumnStyle }}>
+      <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle }}>
         {tableHeadings.map((heading, index) => (
           <div key={index} className='flex items-center gap-2'>
             <p className='text-base font-semibold'>{heading}</p>
@@ -96,7 +106,8 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         {sortListData.map((data, index) => (
           <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: gridColumnStyle }}>
             {getListItemsHeadings.map((heading, idx) => (
-              <div key={idx} className={`text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
+              <div key={idx} className={`flex items-center gap-2 text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
+                {getIcon(data[heading])}
                 {data[heading]}
               </div>
             ))}

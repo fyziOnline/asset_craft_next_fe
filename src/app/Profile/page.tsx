@@ -29,7 +29,7 @@ const page: React.FC = () => {
     };
 
   return (
-    <LayoutWrapper>
+    <LayoutWrapper layout='main'>
         <div className='w-[80%] h-full mt-8  mx-auto'>
             <div className='flex items-baseline justify-between mb-5'>
                 <h1 className="text-[30px] text-green-100 font-bold leading-normal">
