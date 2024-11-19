@@ -93,7 +93,7 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
                 }
             </div>
             {isOtherSelected &&
-                <TextField customClass='h-11' placeholder='Specify other target audiences' />
+                <TextField customClass='h-11' customAreaClass="whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide" placeholder='Specify other target audiences' />
             }
         </div>
     )

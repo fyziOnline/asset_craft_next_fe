@@ -107,7 +107,43 @@ const Page = () => {
                             <div className='mt-[25px]'>
                                 {/* step 3 */}
                                 <Accordion HeaderTitle="Content Structuring for Communication" checked={true}>
-                                    <div>Accordion content goes here</div>
+                                    <div>
+                                        <ChildrenTitle title='Prospect Details' customClass="text-[18px]" ></ChildrenTitle>
+                                        <ChildrenTitle title='What is the prospect’s company and role?' ></ChildrenTitle>
+                                        <TextField placeholder={`"Generate a personalized introduction for a sales call the Chief Information Officer (CIO) at Global Tech Solutions."`}
+                                        ></TextField>
+
+                                        <ChildrenTitle title='Solution Introduction' customClass="text-[18px] mt-[20px]" ></ChildrenTitle>
+                                        <ChildrenTitle title='How does your solution align with the needs of this role and industry?' ></ChildrenTitle>
+                                        <TextField placeholder={`"Generate an introduction for HPE GreenLake focusing on challenges like cloud management, cost optimization, and scalability. Include the benefits of a pay-per-use model and hybrid cloud flexibility."`} rows={2} ></TextField>
+
+                                        <ChildrenTitle title='Value Proposition' customClass="text-[18px] mt-[20px]" ></ChildrenTitle>
+                                        <ChildrenTitle title='What are the top benefits of your solution that would appeal to this prospect?' ></ChildrenTitle>
+                                        <TextField placeholder={`"Generate a description of the key benefits of HPE GreenLake, focusing on cost reduction, scalability, and simplified cloud management. Emphasize how it helps streamline operations and allows the IT team to focus on strategic initiatives."`} rows={2}  ></TextField>
+
+                                        <ChildrenTitle title='The Next Steps' customClass="text-[18px] mt-[20px]" ></ChildrenTitle>
+                                        <ChildrenTitle title='What is the next step that you’d like the prospect to take?' ></ChildrenTitle>
+                                        <TextField placeholder={`"Generate a call-to-action to schedule a demo. Highlight the value of the demo in showcasing how HPE GreenLake can optimize cloud operations. Mention a 30-minute session to walk through real-world applications for their team."`} rows={2}></TextField>
+                                    </div>
+                                    <div className='max-w-full flex justify-end pt-5 pb-3'>
+                                        <Button
+                                            buttonText='Back'
+                                            showIcon
+                                            textStyle='text-[1rem] font-base text-[#00A881]'
+                                            textColor="text-[#B1B1B1]"
+                                            iconColor="#B1B1B1"
+                                            backgroundColor='bg-[#fff]'
+                                            customClassIcon="rotate-180"
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
+                                        <Button
+                                            buttonText='Next'
+                                            showIcon
+                                            textStyle='text-[1rem] font-base text-[#00A881]'
+                                            textColor="text-[#00A881]"
+                                            iconColor="#00A881"
+                                            backgroundColor='bg-[#fff]'
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
+                                    </div>
                                 </Accordion>
                             </div>
                             <div className='flex justify-end my-[50px]'>
