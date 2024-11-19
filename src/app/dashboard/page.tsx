@@ -136,7 +136,7 @@ const pendingApprovals = [
                         router.push("/call-script")
                       }
                     }}
-                    textStyle={`font-normal py-3 text-center whitespace-nowrap`}
+                    textStyle={`font-normal text-sm text-center whitespace-nowrap`}
                   />
                 ))}
               </div>
@@ -151,14 +151,14 @@ const pendingApprovals = [
                 </div>
             </div>
           </div>
-          <div className="w-[30%] bg-[#F9F9F9] rounded-[14px] ml-7">
-            <div className="p-8">
+          <div className="w-[30%] bg-[#F9F9F9] rounded-[14px] ml-4">
+            <div className="p-6">
               <div className="flex items-baseline justify-between">
                 <p className="text-xl font-bold">Pending Approval:</p>
                 <p className="text-base font-normal underline">View all</p>
               </div>
               {pendingApprovals.map((data , index) => (
-                <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-4 mt-2">
+                <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-3 mt-2">
                   <p className="text-[##2F363F] font-inter text-base font-normal mb-1">{data.name}</p>
                   <div className="flex items-center justify-between">
                     <p className="text-[#636363] font-semibold text-sm">Last Updated:</p>

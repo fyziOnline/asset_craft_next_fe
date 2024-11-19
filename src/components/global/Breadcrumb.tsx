@@ -16,7 +16,7 @@ import Link from 'next/link';
  */
 
 interface BreadcrumbProps {
-    projectName: string;
+    projectName?: string;
     projectUrl?: string;
     TaskName?: string;
     TaskType?: string;
