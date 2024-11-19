@@ -55,10 +55,10 @@ const CompletedAssets:FC = () => {
     }
 ];
 
-  const tableHeading = ["Project Name" , "Campaign Name", "Asset Name", "Created On" , "Approver" , "Last Edited" , "Current Status"]
+const tableHeading = ["Project Name" , "Campaign Name", "Asset Name", "Created On" , "Approved By" , "Approved On" , "Current Status"]
 
-  const arrowshowItems = ["Project Name" , "Campaign Name", "Asset Name", "Created On", "Last Edited" , "Current Status"]
- 
+const arrowshowItems = ["Project Name", "Created On", "Approved On"]
+
 
   return (
     <>
