@@ -1,12 +1,16 @@
-import { FC } from "react";
+'use client';
+
+import { FC, useState } from "react";
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
 import { AllinOne } from "@/assets/icons/AppIcons";
+import ProjectSetUpModal from "@/components/wrapper/ProjectSetUpModal";
 
 const Dashboard: FC = () => {
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   const buttonData = [
     { text: "All in One", backgroundColor: "bg-green-300", customClass: "px-[50px]", showIcon: false },
@@ -86,9 +90,19 @@ const pendingApprovals = [
 
   const tableHeading = ["Project Name" , "Campaign Name", "Asset Details", "Created On" , "Approved By" , "Approved On" , "Current Status"]
 
+
+  const handleShowPopup = (value: string) => {
+    setModalOpen(true)
+  }
+
+  const closeModal = () => setModalOpen(false);
+
   return (
     <>
       <LayoutWrapper layout="main">
+
+       <ProjectSetUpModal isOpen={isModalOpen} onClose={closeModal} />
+
         <div className="px-8 pt-8 pb-4">
           <div className="flex items-center justify-between">
             <h1 className="text-[30px] text-green-100 font-bold leading-normal">
@@ -128,7 +142,8 @@ const pendingApprovals = [
                     backgroundColor={button.backgroundColor}
                     customClass={button.customClass}
                     textColor={button.color}
-                    textStyle={`font-normal py-3 text-center whitespace-nowrap`}
+                    handleClick={() => handleShowPopup(button.text)}
+                    textStyle={`font-normal text-sm text-center whitespace-nowrap`}
                   />
                 ))}
               </div>
@@ -143,14 +158,14 @@ const pendingApprovals = [
                 </div>
             </div>
           </div>
-          <div className="w-[30%] bg-[#F9F9F9] rounded-[14px] ml-7">
-            <div className="p-8">
+          <div className="w-[30%] bg-[#F9F9F9] rounded-[14px] ml-4">
+            <div className="p-6">
               <div className="flex items-baseline justify-between">
                 <p className="text-xl font-bold">Pending Approval:</p>
                 <p className="text-base font-normal underline">View all</p>
               </div>
               {pendingApprovals.map((data , index) => (
-                <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-4 mt-2">
+                <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-3 mt-2">
                   <p className="text-[##2F363F] font-inter text-base font-normal mb-1">{data.name}</p>
                   <div className="flex items-center justify-between">
                     <p className="text-[#636363] font-semibold text-sm">Last Updated:</p>

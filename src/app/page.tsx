@@ -69,9 +69,6 @@ const Home:FC = () => {
                 })}
               </div>
 
-            {/* </div> */}
-
-              
           </div>
       </LayoutWrapper>
     </>
@@ -79,8 +76,6 @@ const Home:FC = () => {
 }
 
 export default Home
-
-              {/* <Home_bg /> */}
 
 
 

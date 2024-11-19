@@ -57,7 +57,7 @@ const Navbar:React.FC = () => {
     const pathname = usePathname()
     
   return (
-    <nav className="group bg-primary-black fixed top-0 left-0 p-[1.87rem] h-full w-[5.5rem] hover:w-[18.68rem] nav-transition overflow-hidden z-20">
+    <nav className="group bg-primary-black fixed top-0 left-0 p-[1.87rem] h-full w-[5.5rem] hover:w-[18.68rem] nav-transition overflow-hidden z-50">
         <div>
             <HPE_Logo className="absolute top-[1.62rem] left-[0.7rem] group-hover:opacity-0 nav-transition" />
             <HPE_APP_Logo className="absolute top-[2.81rem] invisible opacity-0 left-[2.13rem] group-hover:visible group-hover:opacity-100 nav-transition" />

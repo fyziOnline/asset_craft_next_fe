@@ -4,16 +4,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #020103;;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-}
-
 @layer components { 
   .flex_item-start {
     @apply flex flex-col items-start justify-center
@@ -36,7 +26,7 @@ body {
 
 }
 
-ss.bg-custom-gradient-green{
+.bg-custom-gradient-green{
   background: linear-gradient(65deg, #01A982 29.4%, #01A982 36.24%, #1CD3A8 44.6%, #01A982 54.09%, #01A982 105.37%);
   background-position: 99% 50%;
   background-size: 220% 200%;
@@ -126,3 +116,14 @@ ss.bg-custom-gradient-green{
     transform: rotate(0deg);
   }
 } /* need to be updated */
+.custom-range::-moz-range-thumb {
+  width: 1.7rem;
+  height: 1.7rem;
+  background: #00A881;
+  border: 3px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 99;
+  position: relative;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+} 

@@ -1,5 +1,6 @@
 'use client';
 
+import { EmailIcon, LinkedinIcon, SalesCallIcon } from '@/assets/icons/TableIcon';
 import React, { useState } from 'react'
 
 /**
@@ -9,7 +10,8 @@ import React, { useState } from 'react'
  * @param {Array<Object<string, string>>} props.listItems - The list of data items to be displayed in the table, where each item is an object with key-value pairs representing column data.
  * @param {Array<string>} props.tableHeadings - The headings of the columns, displayed at the top of the table.
  * @param {Array<string>} [props.arrowInHeadings=[]] - An optional array of column headings that will display sortable arrows, allowing the user to sort the data by those columns.
- * @param {Array<string>} [props.columnWidths=[]] - An optional array of column widths, where each width corresponds to a column. If specified, it controls the width of each column using CSS units (e.g., '1fr', '200px'). Defaults to equal width for each column if not provided.
+ * @param {Array<string>} [props.columnWidths=[]] - An optional array of column widths, where each width corresponds to a column. If specified, it controls the width of each column using CSS units (e.g., '1fr', '200px'). Defaults to equal width for each column if not provided.  
+ * columnWidths={['4fr', '1fr', '1fr']}
  * 
  * @returns {JSX.Element} A JSX element representing the table.
  */
@@ -37,15 +39,24 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
     const getStatusClass = (status: string) => {
         switch (status) {
         case 'In Progress':
-            return 'text-[#5DB9FF]';  // Blue background for In Progress
+            return 'text-[#5DB9FF] font-semibold';  // Blue background for In Progress
         case 'Pending Approval':
-            return 'text-[#1CD3A8]';  // Green background for Pending Approval
+            return 'text-[#1CD3A8] font-semibold';  // Green background for Pending Approval
         case 'Completed':
-            return 'text-[#00A881]';  // Green background for Complete
+            return 'text-[#00A881] font-semibold';  // Green background for Complete
         default:
             return 'text-black';  // Default gray background for unknown status
         }
     }
+
+    const getIcon = (value: string | undefined) => {
+      const icons: { [key: string]: JSX.Element } = {
+        Email_1: <EmailIcon />,
+        LinkedIn_1: <LinkedinIcon />,
+        SalesCall_1: <SalesCallIcon />,
+      };
+      return value ? icons[value] || null : null;
+    };
 
     // Function to handle sorting when a column header is clicked
     const handleSort = (column: number) => {
@@ -77,7 +88,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
     
   return (
     <div className='w-full'>
-      <div className="grid text-center p-6" style={{ gridTemplateColumns: gridColumnStyle }}>
+      <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle }}>
         {tableHeadings.map((heading, index) => (
           <div key={index} className='flex items-center gap-2'>
             <p className='text-base font-semibold'>{heading}</p>
@@ -96,7 +107,8 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         {sortListData.map((data, index) => (
           <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: gridColumnStyle }}>
             {getListItemsHeadings.map((heading, idx) => (
-              <div key={idx} className={`text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
+              <div key={idx} className={`flex items-center gap-2 text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
+                {getIcon(data[heading])}
                 {data[heading]}
               </div>
             ))}

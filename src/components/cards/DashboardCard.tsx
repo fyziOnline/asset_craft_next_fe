@@ -22,11 +22,11 @@ const DashboardCard: React.FC<DashboardCardProps> = ({projectName, allProjectDat
       <div className="flex flex-col items-end mt-4">
         <div className='flex items-baseline'>
           <p className="text-4xl font-bold group-hover:text-white">{underReview}</p>
-          <p className="text-base text-start w-[120px] pl-3 group-hover:text-white">Under Review</p>
+          <p className="text-sm text-start w-[120px] pl-3 group-hover:text-white">Under Review</p>
         </div>
         <div className='flex items-baseline'>
           <p className="text-4xl font-bold group-hover:text-white">{inProgress}</p>
-          <p className="text-base text-start w-[120px] pl-3 group-hover:text-white">In Progress</p>
+          <p className="text-sm text-start w-[120px] pl-3 group-hover:text-white">In Progress</p>
         </div>
       </div>
     </div>
