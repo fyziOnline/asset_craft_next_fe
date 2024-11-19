@@ -104,7 +104,7 @@ const Page = () => {
                                         </div>
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
-                                        <Button
+                                        {/* <Button
                                             buttonText='Back'
                                             showIcon
                                             textStyle='text-[1rem] font-base text-[#00A881]'
@@ -112,7 +112,7 @@ const Page = () => {
                                             iconColor="#B1B1B1"
                                             backgroundColor='bg-[#fff]'
                                             customClassIcon="rotate-180"
-                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' /> */}
                                         <Button
                                             buttonText='Next'
                                             showIcon
@@ -146,7 +146,7 @@ const Page = () => {
                                         <TextField placeholder={`"Generate a call-to-action to schedule a demo. Highlight the value of the demo in showcasing how HPE GreenLake can optimize cloud operations. Mention a 30-minute session to walk through real-world applications for their team."`} rows={2}></TextField>
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
-                                        <Button
+                                        {/* <Button
                                             buttonText='Back'
                                             showIcon
                                             textStyle='text-[1rem] font-base text-[#00A881]'
@@ -154,7 +154,7 @@ const Page = () => {
                                             iconColor="#B1B1B1"
                                             backgroundColor='bg-[#fff]'
                                             customClassIcon="rotate-180"
-                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' /> */}
                                         <Button
                                             buttonText='Next'
                                             showIcon
