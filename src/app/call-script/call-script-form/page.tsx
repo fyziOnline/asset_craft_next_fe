@@ -4,6 +4,7 @@ import LayoutWrapper from "@/layout/LayoutWrapper";
 import Breadcrumb from "@/components/global/Breadcrumb";
 import Image from 'next/image';
 import Accordion from '@/components/global/Accordion';
+import Button from '@/components/global/Button';
 
 const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -27,21 +28,31 @@ const Page = () => {
                         </div>
                         <div className='px-[10%]'>
                             <div className='mt-[40px]'>
-                                <Accordion HeaderTitle="Call Objective and Target Audience" checked={false}>
+                                {/* step 1 */}
+                                <Accordion HeaderTitle="Call Objective and Target Audience" checked={true} disableShowContent={true}>
                                     <div>Accordion content goes here</div>
                                 </Accordion>
                             </div>
                             <div className='mt-[25px]'>
+                                {/* step 2 */}
                                 <Accordion HeaderTitle="Tone, Style, and Objections" checked={false}>
                                     <div>Accordion content goes here</div>
                                 </Accordion>
                             </div>
                             <div className='mt-[25px]'>
+                                {/* step 3 */}
                                 <Accordion HeaderTitle="Content Structuring for Communication" checked={false}>
                                     <div>Accordion content goes here</div>
                                 </Accordion>
                             </div>
-
+                            <div className='flex justify-end mt-[50px]'>
+                                <Button
+                                    buttonText='Generate'
+                                    showIcon
+                                    textStyle='text-[1rem] font-base text-[#00A881]'
+                                    backgroundColor='bg-[#B1B1B1]'
+                                    customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
+                            </div>
                         </div>
                     </div>
                     <div className="flex">
