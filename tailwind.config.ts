@@ -17,6 +17,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'black-translucent': 'rgba(0, 0, 0, 0.54)',
         'off-white-primary':'#EEEEEE', // ref : this is the background color used in header and footer
         'custom-light-blue': 'rgba(149, 206, 255, 0.32)',
         'custom-light-red': 'rgba(255, 71, 71, 0.32)',
@@ -79,11 +80,6 @@ const config: Config = {
         'search-box-shadow': '0px 2.106px 1.053px 0px rgba(0, 0, 0, 0.10);',
         'rage-thumb-shadow': '0 0 2px rgba(0, 0, 0, 0.2)',
       },
-      borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
-  		}
     },
   },
   plugins: [
