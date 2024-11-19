@@ -10,7 +10,8 @@ import React, { useState } from 'react'
  * @param {Array<Object<string, string>>} props.listItems - The list of data items to be displayed in the table, where each item is an object with key-value pairs representing column data.
  * @param {Array<string>} props.tableHeadings - The headings of the columns, displayed at the top of the table.
  * @param {Array<string>} [props.arrowInHeadings=[]] - An optional array of column headings that will display sortable arrows, allowing the user to sort the data by those columns.
- * @param {Array<string>} [props.columnWidths=[]] - An optional array of column widths, where each width corresponds to a column. If specified, it controls the width of each column using CSS units (e.g., '1fr', '200px'). Defaults to equal width for each column if not provided.
+ * @param {Array<string>} [props.columnWidths=[]] - An optional array of column widths, where each width corresponds to a column. If specified, it controls the width of each column using CSS units (e.g., '1fr', '200px'). Defaults to equal width for each column if not provided.  
+ * columnWidths={['4fr', '1fr', '1fr']}
  * 
  * @returns {JSX.Element} A JSX element representing the table.
  */
