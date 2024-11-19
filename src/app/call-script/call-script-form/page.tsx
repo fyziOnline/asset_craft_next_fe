@@ -5,6 +5,8 @@ import Breadcrumb from "@/components/global/Breadcrumb";
 import Image from 'next/image';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
+import TextField from '@/components/global/TextField';
+import DropDown from '@/components/global/DropDown';
 
 const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +15,12 @@ const Page = () => {
         setIsOpen(!isOpen);
     };
 
+    const ListTargetAudience = [
+        { label: 'General Public', value: 'General Public' },
+        { label: 'Existing Customers', value: 'Existing Customers' },
+        { label: 'Prospective Customers', value: 'Prospective Customers' }
+    ]
+
     return (
         <LayoutWrapper layout="main">
             <div className="py-[2rem] px-[1.5rem]">
@@ -20,37 +28,59 @@ const Page = () => {
             </div>
             <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
                 <div className="flex">
-                    <div className="flex-1 py-10 overflow-y-scroll scrollbar-hide h-[70vh]">
+                    <div className="flex-1 py-10">
                         <div className="flex items-center justify-center">
                             <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-black text-xl tracking-[0] leading-[normal] whitespace-nowrap">
                                 Please provide the necessary information to generate AI content
                             </p>
                         </div>
-                        <div className='px-[10%]'>
+                        <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[62vh]'>
                             <div className='mt-[40px]'>
                                 {/* step 1 */}
-                                <Accordion HeaderTitle="Call Objective and Target Audience" checked={true} disableShowContent={true}>
-                                    <div>Accordion content goes here</div>
+                                <Accordion HeaderTitle="Call Objective and Target Audience" checked={true}>
+                                    <div className='max-w-[90%]'>
+                                        <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-[#160647] text-base tracking-[0] leading-5 whitespace-nowrap mb-[12px]"
+                                        >Provide details on the purpose of the call</p>
+                                        <TextField placeholder="What is the purpose of the call? What would you like to communicate?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+
+                                        <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-[#160647] text-base tracking-[0] leading-5 whitespace-nowrap mb-[12px] mt-5"
+                                        >Target audience</p>
+                                        <DropDown selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
+
+                                        <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-[#160647] text-base tracking-[0] leading-5 whitespace-nowrap mb-[12px] mt-5"
+                                        >Describe the key messages you want to highlight</p>
+                                        <TextField placeholder="What are the 2-3 key points you want to highlight in this post?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                    </div>
+                                    <div className='max-w-full flex justify-end pt-5 pb-3'>
+                                        <Button
+                                            buttonText='Next'
+                                            showIcon
+                                            textStyle='text-[1rem] font-base text-[#00A881]'
+                                            textColor="text-[#00A881]"
+                                            iconColor="#00A881"
+                                            backgroundColor='bg-[#fff]'
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
+                                    </div>
                                 </Accordion>
                             </div>
                             <div className='mt-[25px]'>
                                 {/* step 2 */}
-                                <Accordion HeaderTitle="Tone, Style, and Objections" checked={false}>
+                                <Accordion HeaderTitle="Tone, Style, and Objections" checked={true}>
                                     <div>Accordion content goes here</div>
                                 </Accordion>
                             </div>
                             <div className='mt-[25px]'>
                                 {/* step 3 */}
-                                <Accordion HeaderTitle="Content Structuring for Communication" checked={false}>
+                                <Accordion HeaderTitle="Content Structuring for Communication" checked={true}>
                                     <div>Accordion content goes here</div>
                                 </Accordion>
                             </div>
-                            <div className='flex justify-end mt-[50px]'>
+                            <div className='flex justify-end my-[50px]'>
                                 <Button
                                     buttonText='Generate'
                                     showIcon
                                     textStyle='text-[1rem] font-base text-[#00A881]'
-                                    backgroundColor='bg-[#B1B1B1]'
+                                    // backgroundColor='bg-[#B1B1B1]'
                                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                             </div>
                         </div>

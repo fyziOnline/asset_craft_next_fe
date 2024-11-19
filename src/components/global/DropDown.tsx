@@ -38,7 +38,7 @@ interface DropDownProps {
 const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, customClass = "", dropdownWidthClass = "" }) => {
     const [selectedOption, setSelectedOption] = useState('')
     const [showOptionList, setShowOptionList] = useState(false)
-    const [isOtherSelected , setIsOtherSelected] = useState(false)
+    const [isOtherSelected, setIsOtherSelected] = useState(false)
 
     const dropdownRef = useRef<HTMLDivElement | null>(null)
 
@@ -52,8 +52,9 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
         setIsOtherSelected(false)
     }
 
-    const hanleOtherSelectedOption = (value : string) => {
+    const hanleOtherSelectedOption = (value: string) => {
         setIsOtherSelected(true)
+        setShowOptionList(false)
         setSelectedOption(value)
     }
 
@@ -70,23 +71,23 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
     }, [])
 
     return (
-        <div ref={dropdownRef} className={`flex flex-col gap-[7px] w-[260px] ${dropdownWidthClass}`}>
+        <div ref={dropdownRef} className={`relative flex flex-col gap-[7px] w-[260px] ${dropdownWidthClass}`}>
             <div onClick={handleDropDownList} className={`h-[60px] shadow-dropdown-shadow rounded-lg flex items-center justify-between px-4 py-5 cursor-pointer ${customClass}`}>
                 <p className={`text-base ${!selectedOption ? "text-[#666666]" : ""}`}>{selectedOption || selectPlaceHolder}</p>
-                <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : "" }`}><MdOutlineKeyboardArrowDown size={25} /></span>
+                <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
             </div>
-            <div className={`w-[260px] z-50 h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all duration-300 ease-in-out overflow-hidden ${showOptionList ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
-                {showOptionList && 
+            <div className={`w-[260px] top-[70px] z-50 h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all absolute duration-300 ease-in-out overflow-hidden ${showOptionList ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
+                {showOptionList &&
                     <>
-                    {optionLists.map((options, index) => (
-                        <div 
-                            key={index} 
-                            onClick={() => handleSelectList(options.value)} 
-                            className='h-11 px-4 py-3 flex items-center text-base cursor-pointer'
-                        >
-                            {options.label}
-                        </div>
-                    ))}
+                        {optionLists.map((options, index) => (
+                            <div
+                                key={index}
+                                onClick={() => handleSelectList(options.value)}
+                                className='h-11 px-4 py-3 flex items-center text-base cursor-pointer'
+                            >
+                                {options.label}
+                            </div>
+                        ))}
                         <div onClick={() => hanleOtherSelectedOption("Other")} className='h-11 px-4 py-3 flex items-center text-base cursor-pointer'>Other</div>
                     </>
                 }

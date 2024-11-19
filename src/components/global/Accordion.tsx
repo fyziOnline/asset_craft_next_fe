@@ -65,7 +65,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
             </label>
           </div>
           <div>
-            <p className="font-semibold text-base">{HeaderTitle}</p>
+            <p className="font-semibold text-[20px]">{HeaderTitle}</p>
           </div>
         </div>
         <div className={`cursor-pointer transition-transform ${showContent ? "rotate-180" : ""}`}>
