@@ -13,6 +13,7 @@ import RangeSlider from '@/components/global/RangeSlider';
 
 const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [generateStep, setGenerateStep] = useState(0); //0 - Normal, 1 - Loading, 2 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
 
     const toggleSidebar = () => {
@@ -35,6 +36,14 @@ const Page = () => {
     const onNext = (step: number): void => {
         setCheckedList([...checkedList, step])
     };
+
+    const handleGenerate = () => {
+        let newStep = generateStep + 1
+        if (newStep === 3) {
+            newStep = 0
+        }
+        setGenerateStep(newStep)
+    }
 
 
     return (
@@ -177,10 +186,11 @@ const Page = () => {
                             </div>
                             <div className='flex justify-end my-[50px]'>
                                 <Button
-                                    buttonText='Generate'
+                                    buttonText={[0, 1].includes(generateStep) ? 'Generate' : 'Regenerate'}
                                     showIcon
                                     textStyle='text-[1rem] font-base text-[#00A881]'
-                                    // backgroundColor='bg-[#B1B1B1]'
+                                    backgroundColor={[0, 2].includes(generateStep) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
+                                    handleClick={handleGenerate}
                                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                             </div>
                         </div>
