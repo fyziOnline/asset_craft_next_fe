@@ -28,6 +28,7 @@ const config: Config = {
         'steel-gray': '#ADB3CC', // blue tint with gray, ref: navigation option color
         'steel-gray-shade': '#55597D', // blue tint with gray, ref: navigation option color
         'faded-grey':'#475467',
+        'grey-100': '#F9F9F9',
         'grey-800':'#444444',
         'grey-500' : '#6F6F6F',
         'grey-300' : '#7F7F7F',
