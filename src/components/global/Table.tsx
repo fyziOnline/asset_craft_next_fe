@@ -4,16 +4,18 @@ import { EmailIcon, LinkedinIcon, SalesCallIcon } from '@/assets/icons/TableIcon
 import React, { useState } from 'react'
 
 /**
- * Table is a React component that displays a table with sortable columns.
+ * Table component displays a customizable table with sortable columns.
  *
- * @param {Object} props - The props object.
+ * @param {Object} props - The props object for the Table component.
  * @param {Array<Object<string, string>>} props.listItems - The list of data items to be displayed in the table, where each item is an object with key-value pairs representing column data.
  * @param {Array<string>} props.tableHeadings - The headings of the columns, displayed at the top of the table.
  * @param {Array<string>} [props.arrowInHeadings=[]] - An optional array of column headings that will display sortable arrows, allowing the user to sort the data by those columns.
- * @param {Array<string>} [props.columnWidths=[]] - An optional array of column widths, where each width corresponds to a column. If specified, it controls the width of each column using CSS units (e.g., '1fr', '200px'). Defaults to equal width for each column if not provided.  
- * columnWidths={['4fr', '1fr', '1fr']}
+ * @param {Array<string>} [props.columnWidths=[]] - An optional array of column widths, where each width corresponds to a column. If specified, it controls the width of each column using CSS units (e.g., '1fr', '200px'). Defaults to equal width for each column if not provided.
+ * eg:- columnWidths={['4fr', '1fr', '1fr']}
+ * @param {string} [props.IconAssetName] - An optional prop to specify a column name to display an icon (e.g., "Email_1", "LinkedIn_1").
+ * @param {React.ReactNode} [props.IconComponent] - An optional React component to render as an icon next to the data for the specified column.
  * 
- * @returns {JSX.Element} A JSX element representing the table.
+ * @returns {JSX.Element} A JSX element representing the table, with sortable columns and optional icon rendering.
  */
 
 interface Options {
@@ -25,9 +27,11 @@ interface TableProps {
   tableHeadings: string[];
   arrowInHeadings?: string[];
   columnWidths?: string[];
+  IconAssetName?: string;
+  IconComponent?: React.ReactNode;
 }
 
-const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [] }) => {
+const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [] , IconAssetName , IconComponent}) => {
     const [sortListData, setSortListData] = useState<Options[]>(listItems);
     const [sortArrows, setSortArrows] = useState<{ [key: string]: boolean }>({...tableHeadings.reduce((acc, heading) => ({ ...acc, [heading]: true }), {}) });
 
@@ -49,6 +53,13 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         }
     }
 
+
+    /**
+     * Returns the corresponding icon for a given value.
+     * 
+     * @param {string | undefined} value - The value that determines the icon.
+     * @returns {JSX.Element | null} The corresponding icon element, or null if no icon is found.
+     */
     const getIcon = (value: string | undefined) => {
       const icons: { [key: string]: JSX.Element } = {
         Email_1: <EmailIcon />,
@@ -108,6 +119,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
           <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: gridColumnStyle }}>
             {getListItemsHeadings.map((heading, idx) => (
               <div key={idx} className={`flex items-center gap-2 text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
+                {heading === IconAssetName &&  IconComponent }
                 {getIcon(data[heading])}
                 {data[heading]}
               </div>
