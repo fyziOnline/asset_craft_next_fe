@@ -32,7 +32,7 @@ interface FooterLink {
 
 const Footer:React.FC = () => {
   return (
-    <footer className="fixed right-0 left-0 bottom-0 z-40 bg-off-white-primary p-[2.5rem]">
+    <footer className="fixed right-0 left-0 bottom-0 z-40 bg-off-white-primary px-[2.5rem] py-[2rem]">
         <div className="flex justify-between align-bottom">
             <p className="text-xs">© Copyright 2024 Hewlett Packard Enterprise Development LP</p>
             <div className="flex gap-[7px]">

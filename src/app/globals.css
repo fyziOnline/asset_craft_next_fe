@@ -27,6 +27,12 @@ body {
   input[type='range'] {
     @apply w-full h-4 rounded-lg appearance-none cursor-pointer;
   }
+  .home-box-element {
+    @apply block text-sm bg-[rgba(255,252,252,0.46)] rounded-xl
+  }
+  /* .color-wheel-circle {
+    @apply w-8 aspect-square
+  } */
 
 }
 
@@ -49,28 +55,74 @@ ss.bg-custom-gradient-green{
   scrollbar-width: none;      /* For Firefox */
 }
 
-
-/* .custom-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width:1.7rem;
-  height: 1.7rem;
-  background: #00A881;
-  border: 3px solid white;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 99;
+.login-divider-or {
   position: relative;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+.login-divider-or::before {
+  position: absolute;
+  content: '';
+  left: 0;
+  right: calc(50% + 0.75rem);
+  top:50%;
+  height: 0.5px;
+  background: rgba(255, 255, 255, 0.20);
+}
+.login-divider-or::after {
+  position: absolute;
+  content: '';
+  left: calc(50% + 0.75rem);
+  right: 0;
+  top:50%;
+  height: 0.5px;
+  background: rgba(255, 255, 255, 0.20);
 }
 
-.custom-range::-moz-range-thumb {
-  width: 1.7rem;
-  height: 1.7rem;
-  background: #00A881;
-  border: 3px solid white;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 99;
-  position: relative;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
-} */
+
+.color-wheel {
+  position: absolute;
+  right: 10%;
+  height: 100%;
+}  /* need to be updated */
+
+.eclipse-1{
+    position: absolute;
+  width: 15rem;
+  aspect-ratio: 1;
+  background: rgba(151, 71, 255, 0.3);
+  filter: blur(150px);
+  top: 0;
+  left: 0;
+} /* need to be updated */
+
+.eclipse-2 {
+  position: absolute;
+    width: 15rem;
+    aspect-ratio: 1;
+    background: rgba(28, 211, 168, 0.3);
+    filter: blur(150px);
+    /* bottom: 0; */
+    right: -52%;
+    bottom: 10%;
+} /* need to be updated */
+
+
+.eclipse-3{
+  position: absolute;
+  width: 15rem;
+  aspect-ratio: 1;
+  /* bottom: 0; */
+  right: 20%;
+  bottom: -58%;
+  background: rgba(255, 255, 71, 0.3);
+  filter: blur(150px);
+} /* need to be updated */
+
+
+@keyframes rotate-wheel {
+  from {
+    transform: rotate(90deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+} /* need to be updated */
