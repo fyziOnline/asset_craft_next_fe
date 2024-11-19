@@ -33,6 +33,7 @@ const config: Config = {
         'grey-800':'#444444',
         'grey-500' : '#6F6F6F',
         'grey-300' : '#7F7F7F',
+        'grey-200' : '#D0D0D0',
         'grey-700' : '#62697626', // ref : non selected portion of range slider
         'crystal-blue-500':'#5DB9FF',
         'crystal-blue-200':'#EBF6FF',

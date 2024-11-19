@@ -1,7 +1,8 @@
 import { FC, ReactNode } from "react"
 import MainLayout from "./MainLayout"
+import HomeLayout from "./HomeLayout"
 
-type LayoutType = 'main' 
+type LayoutType = 'main' | 'home'
 
 interface WrapperProps {
     children : ReactNode
@@ -9,7 +10,8 @@ interface WrapperProps {
 }
 
 const Layout = {
-    main : MainLayout
+    main : MainLayout,
+    home : HomeLayout
 }
 
 const LayoutWrapper:FC<WrapperProps> = ({children,layout='main'}) => {
