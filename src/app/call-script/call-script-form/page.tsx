@@ -13,6 +13,7 @@ import RangeSlider from '@/components/global/RangeSlider';
 
 const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [checkedList, setCheckedList] = useState<number[]>([]);
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -30,6 +31,11 @@ const Page = () => {
         { label: 'Conversational and Collaborative', value: 'Conversational and Collaborative' },
         { label: 'Persuasive and Sales-Oriented', value: 'Persuasive and Sales-Oriented' }
     ]
+
+    const onNext = (step: number): void => {
+        setCheckedList([...checkedList, step])
+    };
+
 
     return (
         <LayoutWrapper layout="main">
@@ -60,14 +66,14 @@ const Page = () => {
                 <div className="flex">
                     <div className="flex-1 py-10">
                         <div className="flex items-center justify-center">
-                            <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-black text-xl tracking-[0] leading-[normal] whitespace-nowrap">
+                            <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-black text-xl tracking-[0] leading-[normal] whitespace-nowrap pb-[10px]">
                                 Please provide the necessary information to generate AI content
                             </p>
                         </div>
                         <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[62vh]'>
                             <div className='mt-[40px]'>
                                 {/* step 1 */}
-                                <Accordion HeaderTitle="Call Objective and Target Audience" checked={true}>
+                                <Accordion HeaderTitle="Call Objective and Target Audience" checked={checkedList.includes(1)} isShowContent={false}>
                                     <div className='max-w-[90%]'>
                                         <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
                                         <TextField placeholder="What is the purpose of the call? What would you like to communicate?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
@@ -86,13 +92,14 @@ const Page = () => {
                                             textColor="text-[#00A881]"
                                             iconColor="#00A881"
                                             backgroundColor='bg-[#fff]'
+                                            handleClick={() => { onNext(1) }}
                                             customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                                     </div>
                                 </Accordion>
                             </div>
                             <div className='mt-[25px]'>
                                 {/* step 2 */}
-                                <Accordion HeaderTitle="Tone, Style, and Objections" checked={true}>
+                                <Accordion HeaderTitle="Tone, Style, and Objections" checked={checkedList.includes(2)} isShowContent={false}>
                                     <div className='max-w-[90%] flex'>
                                         <div className='flex-1'>
                                             <ChildrenTitle title='What tone should the call have?'></ChildrenTitle>
@@ -120,13 +127,14 @@ const Page = () => {
                                             textColor="text-[#00A881]"
                                             iconColor="#00A881"
                                             backgroundColor='bg-[#fff]'
+                                            handleClick={() => { onNext(2) }}
                                             customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                                     </div>
                                 </Accordion>
                             </div>
                             <div className='mt-[25px]'>
                                 {/* step 3 */}
-                                <Accordion HeaderTitle="Content Structuring for Communication" checked={true}>
+                                <Accordion HeaderTitle="Content Structuring for Communication" checked={checkedList.includes(3)} isShowContent={false}>
                                     <div>
                                         <ChildrenTitle title='Prospect Details' customClass="text-[18px]" ></ChildrenTitle>
                                         <ChildrenTitle title='What is the prospect’s company and role?' ></ChildrenTitle>
@@ -162,6 +170,7 @@ const Page = () => {
                                             textColor="text-[#00A881]"
                                             iconColor="#00A881"
                                             backgroundColor='bg-[#fff]'
+                                            handleClick={() => { onNext(3) }}
                                             customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                                     </div>
                                 </Accordion>
