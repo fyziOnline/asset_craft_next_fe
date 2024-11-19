@@ -38,11 +38,11 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
     const getStatusClass = (status: string) => {
         switch (status) {
         case 'In Progress':
-            return 'text-[#5DB9FF]';  // Blue background for In Progress
+            return 'text-[#5DB9FF] font-semibold';  // Blue background for In Progress
         case 'Pending Approval':
-            return 'text-[#1CD3A8]';  // Green background for Pending Approval
+            return 'text-[#1CD3A8] font-semibold';  // Green background for Pending Approval
         case 'Completed':
-            return 'text-[#00A881]';  // Green background for Complete
+            return 'text-[#00A881] font-semibold';  // Green background for Complete
         default:
             return 'text-black';  // Default gray background for unknown status
         }

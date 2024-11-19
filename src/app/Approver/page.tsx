@@ -56,6 +56,7 @@ const page = () => {
   const tableHeading = ["Project Name" , "Campaign Name", "Asset Name", "Created On" , "Approver" , "Last Edited" , "Current Status"]
 
   const arrowshowItems = ["Project Name" , "Campaign Name", "Asset Name", "Created On", "Last Edited" , "Current Status"]
+ 
   return (
     <LayoutWrapper layout='main'>
         <div className="py-[2rem] px-[1.5rem]">

@@ -26,7 +26,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ projectName, projectUrl = "", T
     
   return (
     <div className='flex items-center '>
-        <div className='pr-5 cursor-pointer'>
+        <div className='cursor-pointer'>
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="22" viewBox="0 0 13 22" fill="none">
                 <path d="M12 1L2 10.7959L12 20.5918" stroke="#BBBBBB" strokeWidth="2.5"/>
             </svg>
