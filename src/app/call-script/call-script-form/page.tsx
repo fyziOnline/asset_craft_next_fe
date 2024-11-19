@@ -7,6 +7,9 @@ import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
 import DropDown from '@/components/global/DropDown';
+import ChildrenTitle from './components/ChildrenTitle';
+import ChooseLabel from './components/ChooseLabel';
+import RangeSlider from '@/components/global/RangeSlider';
 
 const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +22,13 @@ const Page = () => {
         { label: 'General Public', value: 'General Public' },
         { label: 'Existing Customers', value: 'Existing Customers' },
         { label: 'Prospective Customers', value: 'Prospective Customers' }
+    ]
+
+    const ListTone = [
+        { label: 'Empathetic (for grievance/support)', value: 'Empathetic (for grievance/support)' },
+        { label: 'Professional and Technical', value: 'Professional and Technical' },
+        { label: 'Conversational and Collaborative', value: 'Conversational and Collaborative' },
+        { label: 'Persuasive and Sales-Oriented', value: 'Persuasive and Sales-Oriented' }
     ]
 
     return (
@@ -39,16 +49,13 @@ const Page = () => {
                                 {/* step 1 */}
                                 <Accordion HeaderTitle="Call Objective and Target Audience" checked={true}>
                                     <div className='max-w-[90%]'>
-                                        <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-[#160647] text-base tracking-[0] leading-5 whitespace-nowrap mb-[12px]"
-                                        >Provide details on the purpose of the call</p>
+                                        <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
                                         <TextField placeholder="What is the purpose of the call? What would you like to communicate?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                                        <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-[#160647] text-base tracking-[0] leading-5 whitespace-nowrap mb-[12px] mt-5"
-                                        >Target audience</p>
+                                        <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
                                         <DropDown selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
 
-                                        <p className="[font-family:'Inter-Bold',Helvetica] font-bold text-[#160647] text-base tracking-[0] leading-5 whitespace-nowrap mb-[12px] mt-5"
-                                        >Describe the key messages you want to highlight</p>
+                                        <ChildrenTitle title='Describe the key messages you want to highlight' customClass='mt-5' ></ChildrenTitle>
                                         <TextField placeholder="What are the 2-3 key points you want to highlight in this post?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
@@ -66,7 +73,35 @@ const Page = () => {
                             <div className='mt-[25px]'>
                                 {/* step 2 */}
                                 <Accordion HeaderTitle="Tone, Style, and Objections" checked={true}>
-                                    <div>Accordion content goes here</div>
+                                    <div className='max-w-[90%] flex'>
+                                        <div className='flex-1'>
+                                            <ChildrenTitle title='What tone should the call have?'></ChildrenTitle>
+                                            <ChooseLabel optionLists={ListTone}></ChooseLabel>
+                                        </div>
+                                        <div className='flex-1'>
+                                            <ChildrenTitle title='How creative you want the output?'></ChildrenTitle>
+                                            <RangeSlider></RangeSlider>
+                                        </div>
+                                    </div>
+                                    <div className='max-w-full flex justify-end pt-5 pb-3'>
+                                        <Button
+                                            buttonText='Back'
+                                            showIcon
+                                            textStyle='text-[1rem] font-base text-[#00A881]'
+                                            textColor="text-[#B1B1B1]"
+                                            iconColor="#B1B1B1"
+                                            backgroundColor='bg-[#fff]'
+                                            customClassIcon="rotate-180"
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
+                                        <Button
+                                            buttonText='Next'
+                                            showIcon
+                                            textStyle='text-[1rem] font-base text-[#00A881]'
+                                            textColor="text-[#00A881]"
+                                            iconColor="#00A881"
+                                            backgroundColor='bg-[#fff]'
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
+                                    </div>
                                 </Accordion>
                             </div>
                             <div className='mt-[25px]'>

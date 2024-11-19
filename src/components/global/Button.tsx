@@ -13,6 +13,7 @@ import { AllinOne } from "@/assets/icons/AppIcons"
  * @param {string} [props.iconColor="white"] - The color of the icon (optional).
  * @param {string} [props.backgroundColor="bg-custom-gradient-green"] - The background color of the button (optional).
  * @param {string} [props.customClass] - Any additional custom CSS classes for the button (optional).
+ * @param {string} [props.customClassIcon] - Any additional custom CSS classes for the icon (optional).
  * @param {boolean} [props.showIcon=true] - Whether to show the arrow icon. Defaults to `true`.
  * @param {Function} [props.handleClick] - A callback function to handle the click event (optional).
  * @param {"button" | "submit" | "reset"}  [props.type="button"] - The type of the button (optional, default is "button").
@@ -21,34 +22,38 @@ import { AllinOne } from "@/assets/icons/AppIcons"
  */
 
 interface ButtonProps {
-    buttonText: string;
-    textColor?: string;
-    textStyle?: string;
-    iconColor? : string;
-    backgroundColor?: string;
-    customClass?: string;
-    showIcon?: boolean;
-    IconComponent?: React.ReactNode;
-    handleClick?: () => void;
-    type?: "button" | "submit" | "reset";
+  buttonText: string;
+  textColor?: string;
+  textStyle?: string;
+  iconColor?: string;
+  backgroundColor?: string;
+  customClass?: string;
+  customClassIcon?: string;
+  showIcon?: boolean;
+  IconComponent?: React.ReactNode;
+  handleClick?: () => void;
+  type?: "button" | "submit" | "reset";
 }
 
-const Button: React.FC<ButtonProps> = ({ 
-    buttonText,
-    backgroundColor="bg-custom-gradient-green",
-    textColor="text-white",
-    iconColor="white",
-    textStyle="",
-    IconComponent = null,
-    customClass,
-    showIcon = true,
-    handleClick,
-    type="button"
+const Button: React.FC<ButtonProps> = ({
+  buttonText,
+  backgroundColor = "bg-custom-gradient-green",
+  textColor = "text-white",
+  iconColor = "white",
+  textStyle = "",
+  IconComponent = null,
+  customClass,
+  customClassIcon = "",
+  showIcon = true,
+  handleClick,
+  type = "button"
 }) => {
   return (
     <button onClick={handleClick} type={type} className={` ${customClass} flex items-center justify-center gap-3 py-3 h-12 rounded-full ${backgroundColor}`}>
-        <p className={`flex items-center gap-1 text-lg leading-[24px] font-bold ${textColor} ${textStyle}`}>{IconComponent}{buttonText}</p>
+      <p className={`flex items-center gap-1 text-lg leading-[24px] font-bold ${textColor} ${textStyle}`}>{IconComponent}{buttonText}</p>
+      <div className={customClassIcon}>
         {showIcon && <RightArrow color={iconColor} />}
+      </div>
     </button>
   )
 }
