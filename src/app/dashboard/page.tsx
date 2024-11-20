@@ -14,11 +14,11 @@ const Dashboard: FC = () => {
 
   const buttonData = [
     { text: "All in One", backgroundColor: "bg-green-300", customClass: "px-[50px]", showIcon: false },
-    { text: "Email", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false , color: "text-foreground"},
-    { text: "LinkedIn", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false , color: "text-foreground" },
-    { text: "Landing Page", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false , color: "text-foreground"},
+    { text: "Email", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false, color: "text-foreground" },
+    { text: "LinkedIn", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false, color: "text-foreground" },
+    { text: "Landing Page", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false, color: "text-foreground" },
     { text: "Call Script", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false, color: "text-foreground" },
-    { text: "All Pre-Created Assets", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false , color: "text-foreground" },
+    { text: "All Pre-Created Assets", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false, color: "text-foreground" },
   ];
 
   const dashboardData = [
@@ -57,38 +57,38 @@ const Dashboard: FC = () => {
       approvedOn: '22.01.2024',
       currentStatus: 'Completed',
     }
-];
+  ];
 
-const pendingApprovals = [
-  {
-    id: 1,
-    name: "Email_1",
-    lastUpdated: "2nd Oct 2024",
-  },
-  {
-    id: 2,
-    name: "LinkedIn_1",
-    lastUpdated: "3rd Oct 2024",
-  },
-  {
-    id: 3,
-    name: "SalesCall_1",
-    lastUpdated: "4th Oct 2024",
-  },
-  {
-    id: 4,
-    name: "Lorem",
-    lastUpdated: "4th Oct 2024",
-  },
-  {
-    id: 5,
-    name: "Lorem",
-    lastUpdated: "4th Oct 2024",
-  },
-];
+  const pendingApprovals = [
+    {
+      id: 1,
+      name: "Email_1",
+      lastUpdated: "2nd Oct 2024",
+    },
+    {
+      id: 2,
+      name: "LinkedIn_1",
+      lastUpdated: "3rd Oct 2024",
+    },
+    {
+      id: 3,
+      name: "SalesCall_1",
+      lastUpdated: "4th Oct 2024",
+    },
+    {
+      id: 4,
+      name: "Lorem",
+      lastUpdated: "4th Oct 2024",
+    },
+    {
+      id: 5,
+      name: "Lorem",
+      lastUpdated: "4th Oct 2024",
+    },
+  ];
 
 
-  const tableHeading = ["Project Name" , "Campaign Name", "Asset Details", "Created On" , "Approved By" , "Approved On" , "Current Status"]
+  const tableHeading = ["Project Name", "Campaign Name", "Asset Details", "Created On", "Approved By", "Approved On", "Current Status"]
 
 
   const handleShowPopup = (value: string) => {
@@ -97,11 +97,15 @@ const pendingApprovals = [
 
   const closeModal = () => setModalOpen(false);
 
+  const handleNext = () => {
+
+  }
+
   return (
     <>
       <LayoutWrapper layout="main">
 
-       <ProjectSetUpModal isOpen={isModalOpen} onClose={closeModal} />
+        <ProjectSetUpModal onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} />
 
         <div className="px-8 pt-8 pb-4">
           <div className="flex items-center justify-between">
@@ -149,13 +153,13 @@ const pendingApprovals = [
               </div>
             </div>
             <div className="border-t border-[#D9D9D9]">
-                <div className="mt-5">
-                  <p className="text-xl font-bold">Recent Assets:</p>
-                </div>
+              <div className="mt-5">
+                <p className="text-xl font-bold">Recent Assets:</p>
+              </div>
 
-                <div>
-                  <Table listItems={tableData} tableHeadings={tableHeading} />
-                </div>
+              <div>
+                <Table listItems={tableData} tableHeadings={tableHeading} />
+              </div>
             </div>
           </div>
           <div className="w-[30%] bg-[#F9F9F9] rounded-[14px] ml-4">
@@ -164,14 +168,14 @@ const pendingApprovals = [
                 <p className="text-xl font-bold">Pending Approval:</p>
                 <p className="text-base font-normal underline">View all</p>
               </div>
-              {pendingApprovals.map((data , index) => (
+              {pendingApprovals.map((data, index) => (
                 <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-3 mt-2">
                   <p className="text-[##2F363F] font-inter text-base font-normal mb-1">{data.name}</p>
                   <div className="flex items-center justify-between">
                     <p className="text-[#636363] font-semibold text-sm">Last Updated:</p>
                     <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
                   </div>
-              </div>
+                </div>
               ))}
             </div>
           </div>

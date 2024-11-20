@@ -6,6 +6,7 @@ import LayoutWrapper from "@/layout/LayoutWrapper";
 import Search from '@/components/global/Search';
 import { html_content_big } from '../call-script-form/data/data';
 import TextField from '@/components/global/TextField';
+import AddVersionModel from './components/AddVersionModel';
 
 const Page = () => {
     const [htmlContent, setHtmlContent] = useState(html_content_big);
@@ -131,6 +132,11 @@ const Page = () => {
                                 </div>
                             </div>
                         </div> : null}
+                        {isShowAddVer ? <AddVersionModel
+                            isShowAddVer={isShowAddVer}
+                            setIsShowAddVer={setIsShowAddVer}
+                            handleAddVersion={handleAddVersion}
+                            handleChangeTextVersion={handleChangeTextVersion} /> : null}
                     </div>
                 </div>
             </div>
