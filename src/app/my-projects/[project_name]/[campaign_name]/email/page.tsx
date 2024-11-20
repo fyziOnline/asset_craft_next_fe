@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/global/Breadcrumb"
+import AssetGenerationHeader from "@/components/layout/AssetGenerationHeader"
 import TemplateSelectionContainer from "@/components/layout/TemplateSelectionContainer"
 import LayoutWrapper from "@/layout/LayoutWrapper"
 import { FC } from "react"
@@ -39,13 +40,11 @@ const ProjectAssetPage: FC<ProjectAssetProp> = async ({ params }) => {
   const takeData = async () => {
     return params
   }
-  const {project_name,campaign_name,asset_name} = await takeData()
+  const {project_name,campaign_name} = await takeData()
 
   return (
     <LayoutWrapper layout="main">
-      <div className="border-grey-200 border-b-[1px] border-solid py-[2rem] px-[1.5rem] mb-4">
-        <Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={asset_name}/>
-      </div>
+      <AssetGenerationHeader params={{project_name,campaign_name}} />
       <div className=" px-[1.5rem]">
         <TemplateSelectionContainer aspect_ratio="1 / 2" templateData={dummyTemplateData} title="Select one of the templates"/>
       </div>
