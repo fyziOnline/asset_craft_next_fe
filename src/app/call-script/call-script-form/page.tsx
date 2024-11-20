@@ -38,9 +38,20 @@ const Page = () => {
     };
 
     const handleGenerate = () => {
+        if (generateStep === 2) { return }
+
         let newStep = generateStep + 1
         if (newStep === 4) {
             newStep = 1
+            setIsOpen(false)
+        } else {
+            if (newStep === 2) {
+                setCheckedList([1, 2, 3])
+                setTimeout(() => {
+                    setGenerateStep(3)
+                }, 3000);
+            }
+            setIsOpen(true)
         }
         setGenerateStep(newStep)
     }
@@ -107,6 +118,10 @@ const Page = () => {
                 </p>
             </div>
         </div>)
+    }
+
+    const sidebarStep2 = () => {
+
     }
 
 
@@ -261,7 +276,7 @@ const Page = () => {
                     </div>
                     <div className="flex">
                         {/* Button */}
-                        <div
+                        {generateStep === 1 ? <div
                             className="flex w-[25px] h-14 items-center gap-2.5 px-2 py-[19px] relative bg-[#00b188] rounded-[10px_0px_0px_10px] mt-[20px] cursor-pointer"
                             onClick={toggleSidebar}
                         >
@@ -270,12 +285,19 @@ const Page = () => {
                                 alt="Vector"
                                 src="/vector_right_arrow.svg"
                             />
-                        </div>
+                        </div> : null}
                         {/* Sidebar */}
                         <div
-                            className={`bg-[#F5F5F7] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${isOpen ? 'w-[320px]' : 'w-[0px]'} h-[70vh]`}
+                            className={`bg-[#F5F5F7] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${isOpen ? (generateStep === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'} h-[70vh]`}
                         >
                             {generateStep === 1 && sidebarStep1()}
+
+                            <Image
+                                src="/images/event_invite_call_script.png"
+                                alt="call script"
+                                width={390}
+                                height={528}
+                            />
                         </div>
                     </div>
                 </div>
