@@ -10,8 +10,10 @@ import DropDown from '@/components/global/DropDown';
 import ChildrenTitle from './components/ChildrenTitle';
 import ChooseLabel from './components/ChooseLabel';
 import RangeSlider from '@/components/global/RangeSlider';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
@@ -54,6 +56,10 @@ const Page = () => {
             setIsOpen(true)
         }
         setGenerateStep(newStep)
+    }
+
+    const handleEdit = () => {
+        router.push("/call-script/call-script-edit")
     }
 
     const sidebarStep1 = () => {
@@ -160,6 +166,7 @@ const Page = () => {
                         textColor="text-[#00A881]"
                         iconColor="#00A881"
                         backgroundColor='bg-[#fff]'
+                        handleClick={handleEdit}
                         customClass='min-w-[180px] static border-[3px] border-[#00A881] px-[1.4rem] py-2 group-hover:border-white mr-[70px]' />
                     <Button
                         buttonText='Save'
