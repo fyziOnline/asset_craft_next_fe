@@ -96,9 +96,10 @@ const Page = () => {
                     </div>
                 </div>
                 <div className='pl-[64px]'>
-                    {versionList.map((item) => {
+                    {versionList.map((item, index) => {
                         return (
                             <button
+                                key={item + index}
                                 onClick={() => { setVersionSelected(item) }}
                                 className={`${versionSelected === item ? "text-white bg-[#01A982]" : "text-black bg-[#e4e4e4]"} inline-block h-[42px] mx-1 text-center text-lg font-normal  rounded-tl-[20px] rounded-tr-[20px] px-[30px] py-2`}>
                                 {item}
