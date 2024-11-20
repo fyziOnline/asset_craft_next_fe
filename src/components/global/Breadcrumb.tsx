@@ -25,20 +25,20 @@ interface BreadcrumbProps {
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ projectName, projectUrl = "", TaskName = "", TaskType = "" }) => {
     
   return (
-    <div className='flex items-center '>
+    <div className='flex items-center py-2'>
         <div className='cursor-pointer'>
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="22" viewBox="0 0 13 22" fill="none">
                 <path d="M12 1L2 10.7959L12 20.5918" stroke="#BBBBBB" strokeWidth="2.5"/>
             </svg>
         </div>
         <Link href={projectUrl} className='border-r-[1px] border-r-[#073634]'>
-            <p className='text-[26px] text-[#7F7F7F] leading-normal font-bold px-[6px]'>{projectName}</p>
+            <p className='text-xl text-[#7F7F7F] leading-normal font-bold px-[6px]'>{projectName}</p>
         </Link>
         <Link href={projectUrl} className='border-r-[1px] border-r-[#073634]'>
-            <p className='text-[26px] leading-normal font-bold text-green-100 px-[6px]'>{TaskName}</p>
+            <p className='text-xl leading-normal font-bold text-green-100 px-[6px]'>{TaskName}</p>
         </Link>
         <Link href={projectUrl}>
-            <p className='text-[26px] leading-normal font-bold text-green-100 px-[6px]'>{TaskType}</p>
+            <p className='text-xl leading-normal font-bold text-green-100 px-[6px]'>{TaskType}</p>
         </Link>
     </div>
   )

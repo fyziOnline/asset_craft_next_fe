@@ -50,7 +50,7 @@ const MyProjects:FC = () => {
   return (
     <>
         <LayoutWrapper layout="main" >
-            <div className="flex items-center justify-between py-[2rem] px-[1.5rem]">
+            <div className="flex items-center justify-between pt-[2rem] px-[1.5rem]">
                 <Breadcrumb TaskType="My Projects"/>
                 <span className="pr-10"><GridIcon /></span>
             </div>
