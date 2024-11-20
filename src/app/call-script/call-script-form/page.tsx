@@ -13,7 +13,7 @@ import RangeSlider from '@/components/global/RangeSlider';
 
 const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [generateStep, setGenerateStep] = useState(0); //0 - Normal, 1 - Loading, 2 - Regenerate
+    const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
 
     const toggleSidebar = () => {
@@ -39,10 +39,74 @@ const Page = () => {
 
     const handleGenerate = () => {
         let newStep = generateStep + 1
-        if (newStep === 3) {
-            newStep = 0
+        if (newStep === 4) {
+            newStep = 1
         }
         setGenerateStep(newStep)
+    }
+
+    const sidebarStep1 = () => {
+        return (<div>
+            <div>
+                <Image
+                    src="/images/event_invite_call_script.png"
+                    alt="call script"
+                    width={267}
+                    height={362}
+                />
+                <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
+                    <span className="font-semibold">Prospect Details</span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
+                        Personalise the introduction based on the prospect’s background.
+                        <br />
+                    </span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica]">
+                        <br />
+                    </span>
+
+                    <span className="font-semibold">Solution Introduction</span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
+                        Explain how your product or service is relevant to the prospect’s
+                        needs.
+                        <br />
+                    </span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica]">
+                        <br />
+                    </span>
+
+                    <span className="font-semibold">Value Proposition</span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
+                        Showcase the primary benefits of your product or service that directly
+                        address the prospect’s pain points.
+                        <br />
+                    </span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica]">
+                        <br />
+                    </span>
+
+                    <span className="font-semibold">The Next Steps</span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
+
+                    <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
+                        Encourage the prospect to take action to move the conversation
+                        forward.
+                    </span>
+                </p>
+            </div>
+        </div>)
     }
 
 
@@ -186,10 +250,10 @@ const Page = () => {
                             </div>
                             <div className='flex justify-end my-[50px]'>
                                 <Button
-                                    buttonText={[0, 1].includes(generateStep) ? 'Generate' : 'Regenerate'}
+                                    buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                                     showIcon
                                     textStyle='text-[1rem] font-base text-[#00A881]'
-                                    backgroundColor={[0, 2].includes(generateStep) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
+                                    backgroundColor={[1, 3].includes(generateStep) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
                                     handleClick={handleGenerate}
                                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                             </div>
@@ -211,67 +275,7 @@ const Page = () => {
                         <div
                             className={`bg-[#F5F5F7] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${isOpen ? 'w-[320px]' : 'w-[0px]'} h-[70vh]`}
                         >
-                            <div>
-                                <div>
-                                    <Image
-                                        src="/images/event_invite_call_script.png"
-                                        alt="call script"
-                                        width={267}
-                                        height={362}
-                                    />
-                                    <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
-                                        <span className="font-semibold">Prospect Details</span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
-                                            Personalise the introduction based on the prospect’s background.
-                                            <br />
-                                        </span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica]">
-                                            <br />
-                                        </span>
-
-                                        <span className="font-semibold">Solution Introduction</span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
-                                            Explain how your product or service is relevant to the prospect’s
-                                            needs.
-                                            <br />
-                                        </span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica]">
-                                            <br />
-                                        </span>
-
-                                        <span className="font-semibold">Value Proposition</span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
-                                            Showcase the primary benefits of your product or service that directly
-                                            address the prospect’s pain points.
-                                            <br />
-                                        </span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica]">
-                                            <br />
-                                        </span>
-
-                                        <span className="font-semibold">The Next Steps</span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
-
-                                        <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
-                                            Encourage the prospect to take action to move the conversation
-                                            forward.
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
+                            {generateStep === 1 && sidebarStep1()}
                         </div>
                     </div>
                 </div>
