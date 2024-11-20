@@ -2,14 +2,14 @@ import { FC } from "react"
 import Breadcrumb from "@/components/global/Breadcrumb"
 import LayoutWrapper from "@/layout/LayoutWrapper"
 import Table from "@/components/global/Table"
-import { EmailIcon } from "@/assets/icons/TableIcon"
+import { SalesCallIcon } from "@/assets/icons/TableIcon"
 
   
 const page:FC = () => {
 
   const tableData = [
     {
-      assetName: 'Storage Asia Emailer 2 - Cloud Systems ',
+      assetName: 'Lorem ipsum dolor sit amet',
       creadedOn: '18.01.2024',
       approvedBy: 'Prakash C.',
       approvedOn: '20.01.2024',
@@ -20,33 +20,12 @@ const page:FC = () => {
       creadedOn: '18.01.2024',
       approvedBy: 'Avish J.',
       approvedOn: '20.01.2024',
-      currentStatus: 'Pending Approval',
+      currentStatus: 'In Progress',
     },
     {
       assetName: 'Lorem ipsum dolor sit amet',
       creadedOn: '21.01.2024',
       approvedBy: 'Prakash C.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'Pending Approval',
-    },
-    {
-      assetName: 'Lorem ipsum dolor sit amet',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Avish J.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'In Progress',
-    },
-    {
-      assetName: 'Lorem ipsum dolor sit amet',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Avish J.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'In Progress',
-    },
-    {
-      assetName: 'Lorem ipsum dolor sit amet',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Avish J.',
       approvedOn: '22.01.2024',
       currentStatus: 'Pending Approval',
     }
@@ -61,11 +40,11 @@ const page:FC = () => {
     <>
         <LayoutWrapper layout="main" >
             <div className="pt-[2rem] px-[1.5rem]">
-                <Breadcrumb TaskType="Email Assets"/>
+                <Breadcrumb TaskType="Call Script Assets"/>
             </div>
 
             <div className="px-16">
-              <Table IconComponent={<EmailIcon />} IconAssetName="assetName" columnWidths={["4fr" , "1fr" ,"1fr" ,"1fr" ,"1fr"]} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
+              <Table IconComponent={<SalesCallIcon />} IconAssetName="assetName" columnWidths={["4fr" , "1fr" ,"1fr" ,"1fr" ,"1fr"]} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
           </div>
         </LayoutWrapper>
     </>

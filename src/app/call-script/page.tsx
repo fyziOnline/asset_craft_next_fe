@@ -3,11 +3,18 @@ import React from 'react';
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import Breadcrumb from "@/components/global/Breadcrumb"
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
+    const router = useRouter();
+
+    const navigateForm = () => {
+        router.push("/call-script/call-script-form")
+    }
+
     return (
         <LayoutWrapper layout="main">
-            <div className="py-[2rem] px-[1.5rem]">
+            <div className="pt-[2rem] px-[1.5rem]">
                 <Breadcrumb projectName="GreenLake" TaskName='Storage Asia 2024' TaskType='SalesCall_1' />
             </div>
             <div className="py-10 px-16 border-t border-solid border-[#D9D9D9]">
@@ -18,7 +25,7 @@ const Page = () => {
                         </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 mt-11">
-                        <div className="mx-10">
+                        <div onClick={navigateForm} className="mx-10">
                             <Image
                                 src="/images/event_invite_call_script.png"
                                 alt="call script"
@@ -29,7 +36,7 @@ const Page = () => {
                                 Event Invite Call Script
                             </div>
                         </div>
-                        <div className="mx-10">
+                        <div onClick={navigateForm} className="mx-10">
                             <Image
                                 src="/images/sales_call_script.png"
                                 alt="call script"
@@ -40,7 +47,7 @@ const Page = () => {
                                 Sales Call Script
                             </div>
                         </div>
-                        <div className="mx-10">
+                        <div onClick={navigateForm} className="mx-10">
                             <Image
                                 src="/images/demo_call_script.png"
                                 alt="call script"

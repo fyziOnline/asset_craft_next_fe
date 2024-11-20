@@ -7,10 +7,12 @@ import React from "react";
  * @param {string} [id] - The id of the textarea field, useful for associating a label.
  * @param {string} [value] - The current value of the textarea field.
  * @param {string} [customClass] - Custom CSS class(es) to apply to the textarea container.
+ * @param {string} [customAreaClass] - Custom CSS class(es) to apply to the textarea.
  * @param {boolean} [disabled=false] - Whether the textarea is disabled.
  * @param {boolean} [readOnly=false] - Whether the textarea is read-only.
  * @param {string} placeholder - The placeholder text to display in the textarea field.
- * @param {(e: React.FormEvent<HTMLTextAreaElement>) => void} [handleChange] - The event handler for textarea value changes.
+ * @param {number} rows - rows number of the textarea field.
+ * @param {(e: React.ChangeEvent<HTMLTextAreaElement>) => void} [handleChange] - The event handler for textarea value changes.
  * 
  * @returns {JSX.Element} The rendered TextField component.
  */
@@ -20,33 +22,38 @@ interface TextFieldProps {
   id?: string;
   value?: string;
   customClass?: string;
+  customAreaClass?: string;
   disabled?: boolean;
   readOnly?: boolean;
   placeholder: string;
-  handleChange?: (e: React.FormEvent<HTMLTextAreaElement>) => void;
+  rows?: number;
+  handleChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const TextField: React.FC<TextFieldProps> = ({ 
-  name, 
+const TextField: React.FC<TextFieldProps> = ({
+  name,
   id,
   value,
   customClass = "",
+  customAreaClass = "",
   disabled = false,
   readOnly = false,
   placeholder,
+  rows = 1,
   handleChange
 }) => {
   return (
     <div className={`border border-[#DCD8E8] w-full rounded-[10px] ${customClass}`}>
-      <textarea 
+      <textarea
         name={name}
         id={id}
         value={value}
         disabled={disabled}
         readOnly={readOnly}
         placeholder={placeholder}
+        rows={rows}
         onChange={handleChange}
-        className="w-full h-full border-none px-3 py-3  rounded-[10px] text-sm italic outline-none resize-none"
+        className={`w-full h-full border-none px-3 py-3 rounded-[10px] text-sm italic outline-none resize-none ${customAreaClass}`}
       />
     </div>
   )
