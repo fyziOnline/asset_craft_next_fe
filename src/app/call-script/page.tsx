@@ -14,7 +14,7 @@ const Page = () => {
 
     return (
         <LayoutWrapper layout="main">
-            <div className="py-[2rem] px-[1.5rem]">
+            <div className="pt-[2rem] px-[1.5rem]">
                 <Breadcrumb projectName="GreenLake" TaskName='Storage Asia 2024' TaskType='SalesCall_1' />
             </div>
             <div className="py-10 px-16 border-t border-solid border-[#D9D9D9]">

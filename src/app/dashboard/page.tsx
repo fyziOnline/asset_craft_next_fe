@@ -1,15 +1,16 @@
 'use client';
-import { FC } from "react";
+
+import { FC, useState } from "react";
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
 import { AllinOne } from "@/assets/icons/AppIcons";
-import { useRouter } from 'next/navigation';
+import ProjectSetUpModal from "@/components/wrapper/ProjectSetUpModal";
 
 const Dashboard: FC = () => {
-  const router = useRouter();
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   const buttonData = [
     { text: "All in One", backgroundColor: "bg-green-300", customClass: "px-[50px]", showIcon: false },
@@ -89,9 +90,19 @@ const pendingApprovals = [
 
   const tableHeading = ["Project Name" , "Campaign Name", "Asset Details", "Created On" , "Approved By" , "Approved On" , "Current Status"]
 
+
+  const handleShowPopup = (value: string) => {
+    setModalOpen(true)
+  }
+
+  const closeModal = () => setModalOpen(false);
+
   return (
     <>
       <LayoutWrapper layout="main">
+
+       <ProjectSetUpModal isOpen={isModalOpen} onClose={closeModal} />
+
         <div className="px-8 pt-8 pb-4">
           <div className="flex items-center justify-between">
             <h1 className="text-[30px] text-green-100 font-bold leading-normal">
@@ -131,11 +142,7 @@ const pendingApprovals = [
                     backgroundColor={button.backgroundColor}
                     customClass={button.customClass}
                     textColor={button.color}
-                    handleClick={() => {
-                      if (button.text === "Call Script") {
-                        router.push("/call-script")
-                      }
-                    }}
+                    handleClick={() => handleShowPopup(button.text)}
                     textStyle={`font-normal text-sm text-center whitespace-nowrap`}
                   />
                 ))}

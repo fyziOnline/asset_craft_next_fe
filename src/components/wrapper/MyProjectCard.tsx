@@ -27,7 +27,7 @@ const onLeave = () => {
             customClass='static border-[1.5px] border-[#00A881]  px-[1.4rem] py-2 group-hover:border-white' 
             textColor={!isHovered ? 'text-[#00A881]' : 'text-[#fff]'} 
             backgroundColor='white' 
-            iconColor={!isHovered ? '#00A881' : '[#fff'}/>
+            iconColor={!isHovered ? '#00A881' : '#fff'}/>
         </div>
     </div>
   )

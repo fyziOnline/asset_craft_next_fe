@@ -1,42 +1,81 @@
-'use client';
-
-import { useEffect, useState } from "react";
-import DatePicker from "@/components/global/DatePicker";
+import { FC } from "react";
+import { UserIcon } from "@/assets/icons/AppIcons";
 import LayoutWrapper from "@/layout/LayoutWrapper";
 
-export default function Home() {
-  const [scheduledDates, setScheduledDates] = useState<Date[]>([]);
-  const todayDate = new Date();
+type TaglineObj  = {
+  title : string
+  content : string
 
-  // Example to simulate fetching dates from an API or a dynamic source
-  useEffect(() => {
-    // Replace this with an actual API call or dynamic data source
-    const fetchScheduledDates = () => {
-      setScheduledDates([]);
-    };
+}
 
-    fetchScheduledDates();
-  }, []);
+const TaglineContents:TaglineObj[] = [
+  {
+    title:'Optimised Templates',
+    content : 'Select from a wide range of ready-to-use templates for emails, social media posts, landing pages, and more, designed to ensure consistency and impact.'
+  },
+  {
+    title:'AI-Enhanced Copywriting',
+    content : 'Generate tailored content based on your campaign goals, with messaging optimized for audience engagement and brand alignment'
+  },
+  {
+    title:'Fast and Efficient',
+    content:'Create, refine, and distribute marketing materials quickly, without the need for extensive customizations.'
+  },
+  {
+    title:'Cross-Platform Distribution',
+    content:'Easily generate and distribute content for various channels, streamlining your marketing operations across platforms.'
+  }
+]
 
-  // Handler function when a date is selected
-  const handleDateChange = (newDate: Date) => {
-    // You can add logic to modify scheduledDates if necessary
-    console.log("Selected date:", newDate);
-    // For example, adding the selected date to scheduledDates
-    setScheduledDates(prevDates => [...prevDates, newDate]);
-  };
-
+const Home:FC = () => {
+  
   return (
     <>
-      <LayoutWrapper layout="main">
-        <div className="mt-10 mx-20 h-screen">
-          <DatePicker
-            scheduledDates={scheduledDates}
-            todayDate={todayDate}
-            onDateSelect={handleDateChange} // Pass the callback to DatePicker
-          />
-        </div>
+      <LayoutWrapper layout="home">
+          <div className="h-full">
+            {/* <div> */}
+              <div className="flex relative justify-evenly items-center gap-[2rem] ">
+                <section className="text-white w-[25rem]">
+                  <h1 className="text-6xl leading-[6rem]">BrandCentral<sup className="text-5xl">ai</sup></h1>
+                  <p className="text-wrap text-lg">Simplifying Marketing Content with AI-Driven Precision by HPE</p>
+                </section>
+                <div className="color-wheel ">
+                  <div className="eclipse-1"></div>
+                  <div className="eclipse-2"></div>
+                  <div className="eclipse-3"></div>
+                </div>
+                <div className="relative text-white border-4 bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-12 pt-12 pb-14 flex flex-col items-center">
+                  <UserIcon className="mb-[1.5rem]" />
+                  <input className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[35ch] outline-none" placeholder="Email ID" type="text" />
+                  <button className="mb-[1.3rem] text-xs home-box-element px-[1.8rem] py-[0.7rem]">Get your OTP</button>
+                  <p className="text-[0.7rem] mb-[0.7rem] ">Not an member? <span className="text-green-100">Sing up now</span></p>
+                  <p className="login-divider-or mb-[1.3rem] text-[0.7rem] w-full flex justify-center">or</p>
+                  <button className="home-box-element p-[0.7rem] text-xs w-full">Sign in through SSO</button>
+                </div>
+              </div>
+
+              <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mb-6">
+                <p className="mb-6">Tailored Content at Scale</p>
+              </div>
+
+              <div className="grid grid-cols-4 gap-7">
+                {TaglineContents.map(tagline=>{
+                  return (
+                    <section key={tagline.title} className="text-white">
+                      <h2 className="mb-[1rem]">{tagline.title}</h2>
+                      <p className="text-grey-200 text-sm">{tagline.content}</p>
+                    </section>
+                  )
+                })}
+              </div>
+
+          </div>
       </LayoutWrapper>
     </>
   );
 }
+
+export default Home
+
+
+

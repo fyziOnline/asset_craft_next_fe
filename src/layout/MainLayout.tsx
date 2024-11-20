@@ -3,7 +3,7 @@ import Header from "@/components/layout/Header";
 import Navbar from "@/components/layout/Navbar";
 
 interface LayoutProps {
-    children?: React.ReactNode;
+    children: React.ReactNode;
 }
 
 const MainLayout:React.FC<LayoutProps> = ({children}) => {

@@ -17,6 +17,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'black-translucent': 'rgba(0, 0, 0, 0.54)',
         'off-white-primary':'#EEEEEE', // ref : this is the background color used in header and footer
         'custom-light-blue': 'rgba(149, 206, 255, 0.32)',
         'custom-light-red': 'rgba(255, 71, 71, 0.32)',
@@ -32,6 +33,7 @@ const config: Config = {
         'grey-800':'#444444',
         'grey-500' : '#6F6F6F',
         'grey-300' : '#7F7F7F',
+        'grey-200' : '#D0D0D0',
         'grey-700' : '#62697626', // ref : non selected portion of range slider
         'crystal-blue-500':'#5DB9FF',
         'crystal-blue-200':'#EBF6FF',
@@ -79,11 +81,6 @@ const config: Config = {
         'search-box-shadow': '0px 2.106px 1.053px 0px rgba(0, 0, 0, 0.10);',
         'rage-thumb-shadow': '0 0 2px rgba(0, 0, 0, 0.2)',
       },
-      borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
-  		}
     },
   },
   plugins: [
