@@ -12,7 +12,7 @@ import React from "react";
  * @param {boolean} [readOnly=false] - Whether the textarea is read-only.
  * @param {string} placeholder - The placeholder text to display in the textarea field.
  * @param {number} rows - rows number of the textarea field.
- * @param {(e: React.FormEvent<HTMLTextAreaElement>) => void} [handleChange] - The event handler for textarea value changes.
+ * @param {(e: React.ChangeEvent<HTMLTextAreaElement>) => void} [handleChange] - The event handler for textarea value changes.
  * 
  * @returns {JSX.Element} The rendered TextField component.
  */
@@ -27,7 +27,7 @@ interface TextFieldProps {
   readOnly?: boolean;
   placeholder: string;
   rows?: number;
-  handleChange?: (e: React.FormEvent<HTMLTextAreaElement>) => void;
+  handleChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 const TextField: React.FC<TextFieldProps> = ({
