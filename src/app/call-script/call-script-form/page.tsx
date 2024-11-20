@@ -152,7 +152,7 @@ const Page = () => {
                 <div className='flex-1'>
                     <Breadcrumb projectName="GreenLake" TaskName="Storage Asia 2024" TaskType="SalesCall_1" />
                 </div>
-                <div className='flex'>
+                {generateStep === 3 ? <div className='flex'>
                     <Button
                         buttonText='View & Edit'
                         showIcon
@@ -169,7 +169,7 @@ const Page = () => {
                         iconColor="#00A881"
                         backgroundColor='bg-[#fff]'
                         customClass='min-w-[180px] static border-[3px] border-[#00A881] px-[1.4rem] py-2 group-hover:border-white' />
-                </div>
+                </div> : null}
             </div>
             <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
                 <div className="flex">
