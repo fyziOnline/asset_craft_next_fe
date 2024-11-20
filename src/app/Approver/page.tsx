@@ -59,7 +59,7 @@ const page = () => {
  
   return (
     <LayoutWrapper layout='main'>
-        <div className="py-[2rem] px-[1.5rem]">
+        <div className="pt-[2rem] px-[1.5rem]">
             <Breadcrumb TaskType='Approval Assets:' />
         </div>
 

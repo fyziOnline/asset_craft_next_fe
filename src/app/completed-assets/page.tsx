@@ -63,7 +63,7 @@ const arrowshowItems = ["Project Name", "Created On", "Approved On"]
   return (
     <>
         <LayoutWrapper layout="main" >
-          <div className="flex items-center justify-between py-[2rem] px-[1.5rem]">
+          <div className="flex items-center justify-between pt-[2rem] px-[1.5rem]">
               <Breadcrumb TaskType='Completed Assets' />
               <span className="pr-10"><GridIcon /></span>
           </div>

@@ -25,3 +25,12 @@ export const SalesCallIcon = () => {
     </svg>
   )
 }
+
+export const LandingAssetIcon = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M6.55078 19.8104H5.42578C4.82904 19.8104 4.25675 19.5734 3.83479 19.1514C3.41283 18.7295 3.17578 18.1572 3.17578 17.5604V6.31042C3.17578 5.71369 3.41283 5.14139 3.83479 4.71943C4.25675 4.29748 4.82904 4.06042 5.42578 4.06042H23.4258C24.0225 4.06042 24.5948 4.29748 25.0168 4.71943C25.4387 5.14139 25.6758 5.71369 25.6758 6.31042V17.5604C25.6758 18.1572 25.4387 18.7295 25.0168 19.1514C24.5948 19.5734 24.0225 19.8104 23.4258 19.8104H22.3008" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M14.4258 17.5604L20.0508 24.3104H8.80078L14.4258 17.5604Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+     </svg>
+  )
+}
