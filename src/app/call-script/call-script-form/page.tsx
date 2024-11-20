@@ -151,7 +151,6 @@ const Page = () => {
         return <div className="w-full h-full p-16 overflow-y-scroll" dangerouslySetInnerHTML={{ __html: html_content }} />;
     }
 
-
     return (
         <LayoutWrapper layout="main">
             <div className="flex py-[2rem] px-[1.5rem]">
