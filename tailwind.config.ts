@@ -11,6 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      aspectRatio:{
+        half : "1 / 2"
+      },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
       },
