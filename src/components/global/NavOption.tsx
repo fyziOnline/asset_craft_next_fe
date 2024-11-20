@@ -12,7 +12,7 @@ interface NavOptionProp {
 }
 
 const NavOption:FC<NavOptionProp> = ({children,href,label,spanClass='',childClass='',pathname=''}) => {
-  const isActive = pathname === href
+  const isActive = pathname.startsWith(href)
   const iconColor = isActive ? '#00A881' : '#ADB3CC'
   return (
     <Link
