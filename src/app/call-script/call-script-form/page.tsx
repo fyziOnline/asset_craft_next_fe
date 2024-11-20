@@ -18,6 +18,8 @@ const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
+    const [disableList, setDisableList] = useState<number[]>([2, 3]);
+    const [isShowList, setIsShowList] = useState<number[]>([]);
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -37,19 +39,45 @@ const Page = () => {
     ]
 
     const onNext = (step: number): void => {
+        if (step === 1) {
+            setDisableList([1, 3])
+            setIsShowList([2])
+        } else if (step === 2) {
+            setDisableList([1, 2])
+            setIsShowList([3])
+        } else if (step === 3) {
+            setIsShowList([])
+            if (checkedList.length === 3) { return }
+        }
         setCheckedList([...checkedList, step])
     };
 
+    const onBack = (step: number): void => {
+        if (step === 3) {
+            setDisableList([1, 3])
+            setIsShowList([2])
+            setCheckedList([1])
+        } else if (step === 2) {
+            setDisableList([2, 3])
+            setIsShowList([1])
+            setCheckedList([])
+        }
+    }
+
     const handleGenerate = () => {
-        if (generateStep === 2) { return }
+        if (generateStep === 2 || checkedList.length !== 3) { return }
 
         let newStep = generateStep + 1
         if (newStep === 4) {
             newStep = 1
             setIsOpen(false)
+            setIsShowList([])
+            setCheckedList([])
+            setDisableList([2, 3])
         } else {
             if (newStep === 2) {
                 setCheckedList([1, 2, 3])
+                setDisableList([1, 2, 3])
                 setTimeout(() => {
                     setGenerateStep(3)
                 }, 3000);
@@ -177,7 +205,12 @@ const Page = () => {
                         <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[62vh]'>
                             <div className='mt-[40px]'>
                                 {/* step 1 */}
-                                <Accordion HeaderTitle="Call Objective and Target Audience" checked={checkedList.includes(1)} isShowContent={false}>
+                                <Accordion
+                                    HeaderTitle="Call Objective and Target Audience"
+                                    checked={checkedList.includes(1)}
+                                    disableShowContent={disableList.includes(1)}
+                                    handleShowContent={() => { setIsShowList([1]) }}
+                                    isShowContent={isShowList.includes(1)}>
                                     <div className='max-w-[90%]'>
                                         <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
                                         <TextField placeholder="What is the purpose of the call? What would you like to communicate?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
@@ -203,7 +236,12 @@ const Page = () => {
                             </div>
                             <div className='mt-[25px]'>
                                 {/* step 2 */}
-                                <Accordion HeaderTitle="Tone, Style, and Objections" checked={checkedList.includes(2)} isShowContent={false}>
+                                <Accordion
+                                    HeaderTitle="Tone, Style, and Objections"
+                                    checked={checkedList.includes(2)}
+                                    disableShowContent={disableList.includes(2)}
+                                    handleShowContent={() => { setIsShowList([2]) }}
+                                    isShowContent={isShowList.includes(2)}>
                                     <div className='max-w-[90%] flex'>
                                         <div className='flex-1'>
                                             <ChildrenTitle title='What tone should the call have?'></ChildrenTitle>
@@ -215,7 +253,7 @@ const Page = () => {
                                         </div>
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
-                                        {/* <Button
+                                        <Button
                                             buttonText='Back'
                                             showIcon
                                             textStyle='text-[1rem] font-base text-[#00A881]'
@@ -223,7 +261,8 @@ const Page = () => {
                                             iconColor="#B1B1B1"
                                             backgroundColor='bg-[#fff]'
                                             customClassIcon="rotate-180"
-                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' /> */}
+                                            handleClick={() => { onBack(2) }}
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
                                         <Button
                                             buttonText='Next'
                                             showIcon
@@ -238,7 +277,12 @@ const Page = () => {
                             </div>
                             <div className='mt-[25px]'>
                                 {/* step 3 */}
-                                <Accordion HeaderTitle="Content Structuring for Communication" checked={checkedList.includes(3)} isShowContent={false}>
+                                <Accordion
+                                    HeaderTitle="Content Structuring for Communication"
+                                    checked={checkedList.includes(3)}
+                                    disableShowContent={disableList.includes(3)}
+                                    handleShowContent={() => { setIsShowList([3]) }}
+                                    isShowContent={isShowList.includes(3)}>
                                     <div>
                                         <ChildrenTitle title='Prospect Details' customClass="text-[18px]" ></ChildrenTitle>
                                         <ChildrenTitle title='What is the prospect’s company and role?' ></ChildrenTitle>
@@ -258,7 +302,7 @@ const Page = () => {
                                         <TextField placeholder={`"Generate a call-to-action to schedule a demo. Highlight the value of the demo in showcasing how HPE GreenLake can optimize cloud operations. Mention a 30-minute session to walk through real-world applications for their team."`} rows={2}></TextField>
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
-                                        {/* <Button
+                                        <Button
                                             buttonText='Back'
                                             showIcon
                                             textStyle='text-[1rem] font-base text-[#00A881]'
@@ -266,7 +310,8 @@ const Page = () => {
                                             iconColor="#B1B1B1"
                                             backgroundColor='bg-[#fff]'
                                             customClassIcon="rotate-180"
-                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' /> */}
+                                            handleClick={() => { onBack(3) }}
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
                                         <Button
                                             buttonText='Next'
                                             showIcon
@@ -284,7 +329,7 @@ const Page = () => {
                                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                                     showIcon
                                     textStyle='text-[1rem] font-base text-[#00A881]'
-                                    backgroundColor={[1, 3].includes(generateStep) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
+                                    backgroundColor={((checkedList.length === 3 && generateStep != 2) || generateStep === 3) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
                                     handleClick={handleGenerate}
                                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                             </div>

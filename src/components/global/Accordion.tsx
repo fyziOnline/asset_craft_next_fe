@@ -20,6 +20,7 @@ import { useEffect, useRef, useState } from "react";
  * @param {boolean} props.checked - Indicates if the checkbox is selected (read-only).
  * @param {boolean} props.disableShowContent - disable Show Content
  * @param {boolean} props.isShowContent - Show Content
+ * @param {void} props.handleShowContent - handle Show Content
  * @param {React.ReactNode} props.children - The content displayed when the accordion is expanded.
  *
  * @returns {JSX.Element} The rendered Accordion component.
@@ -32,9 +33,10 @@ interface AccordionProps {
   children: React.ReactNode;
   disableShowContent?: boolean;
   isShowContent?: boolean;
+  handleShowContent?: () => void;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = false, disableShowContent = false, isShowContent = false }) => {
+const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = false, disableShowContent = false, isShowContent = false, handleShowContent = () => { } }) => {
   const [showContent, setShowContent] = useState(isShowContent)
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -47,6 +49,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
   const toggleContent = () => {
     if (!disableShowContent) {
       setShowContent((prev) => !prev)
+      handleShowContent()
     }
   }
 
