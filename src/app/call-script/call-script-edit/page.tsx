@@ -7,7 +7,18 @@ import Search from '@/components/global/Search';
 import { html_content_big } from '../call-script-form/data/data';
 
 const Page = () => {
+    const [htmlContent, setHtmlContent] = useState(html_content_big);
 
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        const target = event.target as HTMLElement;
+
+        const svgElement = target.closest('svg[data-id]') as SVGElement | null;
+        if (svgElement) {
+            const id = svgElement.dataset.id;
+            console.log(`Click SVG with ID: ${id}`);
+            setHtmlContent(htmlContent.replace("Prospect Details", "Test Demo"))
+        }
+    };
     return (
         <LayoutWrapper layout="main">
             <div className='overflow-hidden'>
@@ -46,7 +57,7 @@ const Page = () => {
                 <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
                     <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide">
                         <div>
-                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: html_content_big }} />
+                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: htmlContent }} onClick={handleClick} />
                         </div>
                     </div>
                 </div>
