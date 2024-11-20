@@ -11,6 +11,7 @@ import ChildrenTitle from './components/ChildrenTitle';
 import ChooseLabel from './components/ChooseLabel';
 import RangeSlider from '@/components/global/RangeSlider';
 import { useRouter } from 'next/navigation';
+import { html_content } from './data/data';
 
 const Page = () => {
     const router = useRouter();
@@ -136,18 +137,6 @@ const Page = () => {
     }
 
     const sidebarStep3 = () => {
-        const html_content = `<div style="position:relative; width: 100%; min-height:100%; padding-top: 10.64px; padding-bottom: 10.64px; background: white; box-shadow: 0px 0px 1.4px 0.7px rgba(112, 112, 112, 0.20); border-radius: 7.09px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 14.18px; display: inline-flex">
-        <div style="width:100%; text-align:center;top: 28.10px; color: #073634; font-size: 18.13px; font-family: Inter; font-weight: 700; word-wrap: break-word">Sales Call Script</div>
-        <div style="width:100%; padding:15px; flex-direction: column; justify-content: center; align-items: center; gap: 20px; display: flex">
-            <div><span style="color: black; font-size: 9.93px; font-family: Roboto; font-weight: 500; line-height: 14.18px; word-wrap: break-word">Prospect Details <br/> </span><span style="color: black; font-size: 9.93px; font-family: Roboto; font-weight: 400; line-height: 14.18px; word-wrap: break-word">"Hi Sarah, this is [Your Name] calling from HPE. I understand you’re the Chief Information Officer (CIO) at Global Tech Solutions. I appreciate you taking the time today, and I’m excited to discuss how we can support your team’s cloud needs with HPE GreenLake."</span></div>
-            <div style="width: 90%; height: 0px; border: 0.91px #E7E7E7 solid"></div>
-            <div><span style="color: black; font-size: 9.93px; font-family: Roboto; font-weight: 500; line-height: 14.18px; word-wrap: break-word">Solution Introduction <br/> </span><span style="color: black; font-size: 9.93px; font-family: Roboto; font-weight: 400; line-height: 14.18px; word-wrap: break-word">"I know that as a CIO, managing a complex multi-cloud environment while keeping costs under control is a top priority. HPE GreenLake offers a unique hybrid cloud solution with a flexible, pay-per-use model that helps businesses like yours manage resources more efficiently. It’s designed to scale as your needs evolve, providing the benefits of cloud without the challenges of managing everything on-premises."</span></div>
-            <div style="width: 90%; height: 0px; border: 0.91px #E7E7E7 solid"></div>
-            <div><span style="color: black; font-size: 9.93px; font-family: Roboto; font-weight: 500; line-height: 14.18px; word-wrap: break-word">Value Proposition <br/> </span><span style="color: black; font-size: 9.93px; font-family: Roboto; font-weight: 400; line-height: 14.18px; word-wrap: break-word">"With HPE GreenLake, you can reduce your upfront capital expenditures by up to 30% while maintaining the flexibility to scale up or down as needed. It also simplifies the management of your IT environment by unifying cloud and on-premises resources, freeing up your team to focus on strategic projects instead of day-to-day maintenance. This means you can deliver faster data access, improve productivity, and better meet the evolving needs of your organisation."</span></div>
-            <div style="width: 90%; height: 0px; border: 0.91px #E7E7E7 solid"></div>
-            <div><span style="color: black; font-size: 9.93px; font-family: Roboto; font-weight: 500; line-height: 14.18px; word-wrap: break-word">Propose the Next Step <br/> </span><span style="color: black; font-size: 9.93px; font-family: Roboto; font-weight: 400; line-height: 14.18px; word-wrap: break-word">"Sarah, I’d love to schedule a 30-minute demo with you next week, where we can walk through some real-world examples of how HPE GreenLake has helped companies like Global Tech Solutions streamline their operations and cut costs. Would you be available on [Propose a date/time]? I believe this session could provide valuable insights tailored specifically to your needs."</span></div>
-        </div>
-</div>`
         return <div className="w-full h-full p-16 overflow-y-scroll" dangerouslySetInnerHTML={{ __html: html_content }} />;
     }
 
