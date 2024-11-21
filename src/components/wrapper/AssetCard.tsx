@@ -58,7 +58,7 @@ const AssetCard:FC<AssetCardProp> = ({data}) => {
         <AssetIndicator hoverStatus={isHovered} asset_type={data.assetName}/>
         <StatusLabel status_value={status}/>
       </div>
-        <CardContent header={data.projectName} cardClass='mb-5' content='Ipsum dolor sit amet consectetur adipisicing elit. Ipsum deleniti ab perspiciatis obcaecati inventore quae officiis debitis ullam dolorem illo? dsjfkwhai udjsfhuwieuh fuehu' /> 
+        <CardContent header={data.projectName} cardClass='mb-5' content='Ipsum dolor sit amet consectetur adipisicing elit. Ipsum deleniti ab perspiciatis obcaecati inventore quae officiis debitis ullam dolorem illo? dsjfkwhai udjsfhuwieuh fuehu Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, fugiat!' /> 
         <div className='flex justify-between items-center'>
           <UpdateIndicator date={data.creadedOn}/>
           <Button 

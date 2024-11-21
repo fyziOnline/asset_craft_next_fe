@@ -17,7 +17,7 @@ const NavOption:FC<NavOptionProp> = ({children,href,label,spanClass='',childClas
   return (
     <Link
         href={href}
-        className="  flex items-center gap-3 first:mt-0  mt-[1.45rem] relative"
+        className="  flex items-center gap-3 first:mt-0  mt-[1.2rem] relative"
     >
         {isActive && <div className="w-2 bg-green-100 absolute top-[20%] bottom-[20%] rounded-tr-[2px] rounded-br-[2px] left-[-2.68rem] group-hover:left-[-1.875rem] nav-transition"></div>}
         <div className={`${childClass}`}>
