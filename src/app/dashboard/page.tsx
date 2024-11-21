@@ -8,9 +8,14 @@ import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
 import { AllinOne } from "@/assets/icons/AppIcons";
 import ProjectSetUpModal from "@/components/wrapper/ProjectSetUpModal";
+import TextField from "@/components/global/TextField";
+import { EmailIcon, LandingAssetIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 
 const Dashboard: FC = () => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [chooseAssetModal , setChooseAssetModal] = useState<boolean>(false);
+  const [selectedButton , setSelectedButton] = useState<string>()
+  const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
 
   const buttonData = [
     { text: "All in One", backgroundColor: "bg-green-300", customClass: "px-[50px]", showIcon: false },
@@ -27,6 +32,13 @@ const Dashboard: FC = () => {
     { projectName: "LinkedIn", totalAssets: 15, underReview: 4, inProgress: 11 },
     { projectName: "Call Script", totalAssets: 15, underReview: 4, inProgress: 11 },
     { projectName: "Landing Page", totalAssets: 15, underReview: 4, inProgress: 11 },
+  ];
+
+  const options = [
+    { id: 1, label: "Email", icon: <EmailIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(1) ? "white" : "black"} /> },
+    { id: 2, label: "LinkedIn", icon: <LinkedinIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(2) ? "white" : "black"} /> },
+    { id: 3, label: "Call Script", icon: <SalesCallIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(3) ? "white" : "black"} /> },
+    { id: 4, label: "Landing Page", icon: <LandingAssetIcon2 strokeColor={selectedIndexes.includes(4) ? "white" : "black"} /> },
   ];
 
   const tableData = [
@@ -93,19 +105,60 @@ const Dashboard: FC = () => {
 
   const handleShowPopup = (value: string) => {
     setModalOpen(true)
+    setSelectedButton(value)
+  }
+
+  const onSelect = (index: number) => {
+    // Toggle selection: if index is already selected, deselect it; otherwise, select it
+    setSelectedIndexes(prev => 
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    );
   }
 
   const closeModal = () => setModalOpen(false);
 
   const handleNext = () => {
-
+    if(selectedButton === "All in One") {
+      setChooseAssetModal(true)
+      setModalOpen(false)
+    }
   }
 
   return (
     <>
       <LayoutWrapper layout="main">
 
-        <ProjectSetUpModal onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} />
+        <ProjectSetUpModal title="Project Details" selectedValue={selectedButton} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} >
+                  <div className='w-full flex flex-col gap-3 px-12 pb-7'>
+                      <div className='pt-[15px] flex flex-col gap-3'>
+                          <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
+                          <TextField customClass='h-12' placeholder='Type the name of your Project/Solution here.' />
+                      </div>
+                      <div className='flex flex-col gap-3'>
+                          <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
+                          <TextField customClass='h-12' placeholder='Type the name of your Campaign here.' />
+                      </div>
+                      {selectedButton !== "All in One" &&
+                          <div className='flex flex-col gap-3'>
+                              <p className='text-[#160647] text-base tracking-wide font-semibold'>Digital Marketing Asset Name</p>
+                              <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here.' />
+                          </div>
+                      }
+                  </div>
+        </ProjectSetUpModal>
+
+        <ProjectSetUpModal title="Choose your Assets" onClose={closeModal} selectedValue="All in One" isOpen={chooseAssetModal} onNext={handleNext}>
+          <div className="flex items-center justify-between px-11 py-8 ">
+            {options.map((data, index) => (
+            <div key={index} className="cursor-pointer" onClick={() => onSelect(data.id)}>
+              <div  className={` ${selectedIndexes.includes(data.id) ? "bg-green-300" : "bg-white border border-foreground"} flex items-center flex-col rounded-2xl py-4 w-[160px]`}>
+                  {data.icon}
+                <p className={`text-cente text-base tracking-wide ${selectedIndexes.includes(data.id) ? "text-white" : "text-black"}`}>{data.label}</p>
+              </div>
+            </div>
+            ))}
+          </div>
+        </ProjectSetUpModal>
 
         <div className="px-8 pt-8 pb-4">
           <div className="flex items-center justify-between">

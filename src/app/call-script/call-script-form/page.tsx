@@ -342,7 +342,7 @@ const Page = () => {
                             onClick={toggleSidebar}
                         >
                             <img
-                                className="relative w-[10.5px] h-[18.5px] mt-[-0.25px] mb-[-0.25px] ml-[-0.75px] mr-[-0.75px]"
+                                className={`relative w-[10.5px] h-[18.5px] mt-[-0.25px] mb-[-0.25px] ml-[-0.75px] mr-[-0.75px] transition-transform duration-300 ${isOpen ? '' : 'rotate-180'}`}
                                 alt="Vector"
                                 src="/vector_right_arrow.svg"
                             />
