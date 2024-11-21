@@ -10,7 +10,7 @@ import { FC, useState } from "react"
   
 const AssetInProgress:FC = () => {
 
-  const [isList,setIsList] = useState<Boolean>(false)
+  const [isList,setIsList] = useState<Boolean>(true)
 
   const tableData = [
     {
@@ -83,10 +83,10 @@ const AssetInProgress:FC = () => {
         <LayoutWrapper layout="main" >
             <div className="flex items-center justify-between pt-[2rem] px-[1.5rem]">
                 <Breadcrumb TaskType="Asset In Progress"/>
-                <span className="pr-10 cursor-pointer" onClick={toggleListType}>{isList ? <ListIcon /> : <GridIcon />}</span>
+                <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
             </div>
 
-            <div className="px-16 ">
+            <div className="px-20">
               { !isList ? 
                  <div className="grid grid-cols-[repeat(3,1fr)] mt-4 gap-x-10 gap-y-10 overflow-auto">
                   {tableData.map((data,index)=>(
