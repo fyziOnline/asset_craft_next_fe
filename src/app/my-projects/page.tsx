@@ -64,10 +64,10 @@ const MyProjects:FC = () => {
                 <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon /> }</span>
             </div>
 
-            <div className="px-20">
+            <div className="px-24">
               {
                 !isList ? 
-                  <div className="grid grid-cols-[repeat(3,1fr)] mt-4 gap-x-10 gap-y-10 overflow-auto">
+                  <div className="grid grid-cols-[repeat(3,1fr)] mt-4 gap-x-12 gap-y-12 overflow-auto">
                   {tableData.map((data,index)=>(
                     <div key={index}> 
                       <MyProjectCard data={data} />
