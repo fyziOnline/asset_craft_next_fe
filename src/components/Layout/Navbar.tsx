@@ -68,7 +68,7 @@ const Navbar:React.FC = () => {
                     </NavOption>
                 )) }
             </div>
-            <div className="pointer-events-none absolute top-[19.8rem] left-[1rem] right-[3rem] w-16 overflow-hidden group-hover:w-full nav-transition">
+            {/* <div className="pointer-events-none absolute top-[19.8rem] left-[1rem] right-[3rem] w-16 overflow-hidden group-hover:w-full nav-transition">
                 <DashedSeparator />
             </div>
             <div className="flex_item-start absolute top-[28rem] left-[2.43rem] group-hover:left-[1.625rem] nav-transition">
@@ -80,7 +80,7 @@ const Navbar:React.FC = () => {
                         </NavOption>
                     )) }
                 </div>
-            </div>
+            </div> */}
         </div>
     </nav>
   )
