@@ -6,56 +6,27 @@ import FormCard from './components/FormCard';
 
 const Page = () => {
     const [activeButton, setActiveButton] = useState<"upload" | "recent">("upload");
+    const [selectedStyle, setSelectedStyle] = useState<string>("");
 
     const handleButtonClick = (button: "upload" | "recent") => {
         setActiveButton(button);
     };
 
     const keyMessage = [
-        {
-          "label": "Innovation and Leadership",
-          "checked": false
-        },
-        {
-          "label": "Cost-Effectiveness and Value",
-          "checked": false
-        },
-        {
-          "label": "Performance and Reliability",
-          "checked": false
-        },
-        {
-          "label": "Security and Compliance",
-          "checked": false
-        },
-        {
-          "label": "Scalability and Flexibility",
-          "checked": false
-        },
-        {
-          "label": "Other (Please Specify)",
-          "checked": false,
-        }
-    ]
+        { label: "Innovation and Leadership", checked: false },
+        { label: "Cost-Effectiveness and Value", checked: false },
+        { label: "Performance and Reliability", checked: false },
+        { label: "Security and Compliance", checked: false },
+        { label: "Scalability and Flexibility", checked: false },
+        { label: "Other (Please Specify)", checked: false },
+    ];
 
     const contentStyle = [
-        {
-          "label": "Technical & Informative",
-          "checked": false
-        },
-        {
-          "label": "Engaging & Conversational",
-          "checked": false
-        },
-        {
-          "label": "Inspirational & Motivational",
-          "checked": false
-        },
-        {
-          "label": "Direct & To-the-Point",
-          "checked": false
-        }
-    ]
+        { label: "Technical & Informative", checked: false },
+        { label: "Engaging & Conversational", checked: false },
+        { label: "Inspirational & Motivational", checked: false },
+        { label: "Direct & To-the-Point", checked: false },
+    ];
 
     return (
         <LayoutWrapper layout="main">
@@ -139,11 +110,16 @@ const Page = () => {
                             <div className='bg-[#D9D9D9] group-hover:bg-custom-green-light rounded-b-3xl min-h-[371px] px-7 py-10 flex flex-col gap-6'>
                                     {contentStyle.map((data, index) => (
                                             <div key={index} className='flex items-center gap-2'>
-                                                    <input
-                                                        type="radio"
-                                                        name="style"
-                                                        className="h-5 w-5 type border"
-                                                    />
+                                                <input
+                                                    type="radio"
+                                                    name="style"
+                                                    checked={selectedStyle === data.label}
+                                                    onChange={() => setSelectedStyle(data.label)}
+                                                    className="peer hidden"
+                                                />
+                                                <div className="w-5 h-5 rounded-full border border-green-300 flex items-center justify-center peer-checked:border-blue-500 peer-checked:bg-blue-500">
+                                                    <div className="w-2.5 h-2.5 rounded-full bg-transparent peer-checked:bg-black peer-checked:opacity-100 opacity-0 transition"></div>
+                                                </div>
                                                 <p className='text-base font-normal'>{data.label}</p>
                                             </div>
                                     ))}
