@@ -1,15 +1,18 @@
-import React, { useEffect, useRef } from 'react'
-import TextField from '../global/TextField'
+import React, { ReactNode, useEffect, useRef } from 'react'
+import { ExpressIcon } from '@/assets/icons/AppIcons';
 
 interface ProjectSetUpModalProps {
+    title: string;
     isOpen: boolean;
-    onClose: () => void,
-    onNext?: () => void
+    onClose: () => void;
+    onNext?: () => void;
+    selectedValue?: string;
+    children: ReactNode;
 }
 
-const ProjectSetUpModal: React.FC<ProjectSetUpModalProps> = ({ isOpen, onClose, onNext }) => {
+const ProjectSetUpModal: React.FC<ProjectSetUpModalProps> = ({ children, title, isOpen, onClose, onNext, selectedValue = "" }) => {
     const modalRef = useRef<HTMLDivElement>(null);
-
+    
     useEffect(() => {
         // Close modal if clicking outside of it
         const handleClickOutside = (event: MouseEvent) => {
@@ -34,7 +37,10 @@ const ProjectSetUpModal: React.FC<ProjectSetUpModalProps> = ({ isOpen, onClose, 
         <div className='w-full h-screen flex items-center justify-center fixed top-0 bottom-0 left-0 right-0 bg-black-translucent'>
             <div ref={modalRef} className='bg-white w-1/2 h-auto rounded-3xl'>
                 <div className='flex items-center justify-between px-12 pt-5 py-3 border-b-[1px] border-[#EBEFF2]'>
-                    <p className='text-xl font-semibold tracking-wide'>Project Details</p>
+                    <div className='flex items-center gap-5'>
+                        {selectedValue === "All in One" && <ExpressIcon /> }
+                        <p className='text-xl font-semibold tracking-wide'>{title}</p>
+                    </div>
                     <div onClick={onNext} className='flex items-center gap-[10px] cursor-pointer'>
                         <p className='text-xl font-medium tracking-wide text-green-300'>Next</p>
                         <span>
@@ -44,20 +50,9 @@ const ProjectSetUpModal: React.FC<ProjectSetUpModalProps> = ({ isOpen, onClose, 
                         </span>
                     </div>
                 </div>
-                <div className='w-full flex flex-col gap-3 px-12 pb-7'>
-                    <div className='pt-[15px] flex flex-col gap-3'>
-                        <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
-                        <TextField customClass='h-12' placeholder='Type the name of your Project/Solution here.' />
-                    </div>
-                    <div className='flex flex-col gap-3'>
-                        <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
-                        <TextField customClass='h-12' placeholder='Type the name of your Campaign here.' />
-                    </div>
-                    <div className='flex flex-col gap-3'>
-                        <p className='text-[#160647] text-base tracking-wide font-semibold'>Digital Marketing Asset Name</p>
-                        <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here.' />
-                    </div>
-                </div>
+                <>
+                    {children}
+                </>
             </div>
         </div>
     )
