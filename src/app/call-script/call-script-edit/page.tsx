@@ -51,7 +51,7 @@ const Page = () => {
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#fff]"
                             iconColor="#fff"
-                            customClass='static border-[3px] border-[#00A881] mr-[80px] ml-[0px] px-[35px] py-2 group-hover:border-white' />
+                            customClass='static mr-[80px] ml-[0px] px-[35px] py-2 group-hover:border-white' />
                     </div>
                 </div>
                 <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
