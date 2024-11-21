@@ -45,6 +45,7 @@ const Page = () => {
     };
 
 
+
     return (
         <LayoutWrapper layout="main">
             <div className='overflow-hidden'>
@@ -92,7 +93,7 @@ const Page = () => {
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#fff]"
                             iconColor="#fff"
-                            customClass='static mr-[80px] ml-[0px] px-[35px] py-2 group-hover:border-white' />
+                            customClass='static mr-[80px] ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
                     </div>
                 </div>
                 <div className='pl-[64px]'>
