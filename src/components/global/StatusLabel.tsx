@@ -1,21 +1,31 @@
 import { FC } from "react"
 
 interface StatusProp {
-  status_value : "0" | "1" 
+  status_value : "0" | "1" | "2" | "3"
 }
-const statusText = {
-  '0' : 'In Progress',
-  '1' : 'To be Approved'
+const statusCorrespondence = {
+  '0' : {
+          text : 'In Progress',
+          theme : ' border-crystal-blue-500 text-crystal-blue-500 bg-crystal-blue-200'
+        },
+  '1' : {
+          text : 'To be approved',
+          theme : ' border-green-100 text-green-100 bg-green-mist'
+        },
+  '2' : {
+          text : 'Pending Approval',
+          theme : ' border-crystal-blue-500 text-crystal-blue-500 bg-crystal-blue-200'
+        },
+  '3' : {
+          text : 'Completed',
+          theme : ' border-green-100 text-white bg-green-100'
+        }
 }
-
-const getLabelTheme = (status: StatusProp) => {
-  return status.status_value === '0' ? 'some-theme-for-0' : 'some-theme-for-1';
-};
 
 const StatusLabel:FC<StatusProp> = ({status_value}) => {
   return (
-    <div className="border-2 border-crystal-blue-500 group-hover:border-black bg-crystal-blue-200 group-hover:bg-white w-fit px-[1rem] rounded-full ">
-      <p className="text-crystal-blue-500 group-hover:text-black">{statusText[status_value]}</p> 
+    <div className={`border-2 ${statusCorrespondence[status_value].theme} group-hover:border-black group-hover:bg-white w-fit px-[1rem] rounded-full`}>
+      <p className="text-sm  group-hover:text-black">{statusCorrespondence[status_value].text}</p> 
     </div>
   )
 }

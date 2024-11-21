@@ -1,11 +1,16 @@
-import { GridIcon } from "@/assets/icons/AppIcons"
+'use client'
+
+import { GridIcon, ListIcon } from "@/assets/icons/AppIcons"
 import Breadcrumb from "@/components/global/Breadcrumb"
 import Table from "@/components/global/Table"
+import AssetCard from "@/components/wrapper/AssetCard"
 import LayoutWrapper from "@/layout/LayoutWrapper"
-import { FC } from "react"
+import { FC, useState } from "react"
 
   
 const AssetInProgress:FC = () => {
+
+  const [isList,setIsList] = useState<Boolean>(false)
 
   const tableData = [
     {
@@ -67,6 +72,10 @@ const AssetInProgress:FC = () => {
   const tableHeading = ["Project Name" , "Campaign Name", "Asset Name", "Created On" , "Approved By" , "Approved On" , "Current Status"]
 
   const arrowshowItems = ["Project Name", "Created On", "Approved On"]
+
+  const toggleListType = () => {
+    setIsList(pre=>!pre)
+  }
  
 
   return (
@@ -74,12 +83,22 @@ const AssetInProgress:FC = () => {
         <LayoutWrapper layout="main" >
             <div className="flex items-center justify-between pt-[2rem] px-[1.5rem]">
                 <Breadcrumb TaskType="Asset In Progress"/>
-                <span className="pr-10"><GridIcon /></span>
+                <span className="pr-10 cursor-pointer" onClick={toggleListType}>{isList ? <ListIcon /> : <GridIcon />}</span>
             </div>
 
-            <div className="px-16">
-              <Table listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
-          </div>
+            <div className="px-16 ">
+              { !isList ? 
+                 <div className="grid grid-cols-[repeat(3,1fr)] mt-4 gap-x-10 gap-y-10 overflow-auto">
+                  {tableData.map((data,index)=>(
+                    <div key={index}> 
+                      <AssetCard data={data} />
+                    </div>
+                  ))}
+                </div>
+                :
+                <Table listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} 
+              />}
+            </div>
         </LayoutWrapper>
     </>
   )
