@@ -24,6 +24,7 @@ const config: Config = {
         'off-white-primary':'#EEEEEE', // ref : this is the background color used in header and footer
         'custom-light-blue': 'rgba(149, 206, 255, 0.32)',
         'custom-light-red': 'rgba(255, 71, 71, 0.32)',
+        'custom-green-light': 'rgba(0, 168, 129, 0.15)',
         'gray-300': '#B1B1B1', // Custom gray color
         'green-100': '#00A881', // Custom light green color
         'green-300': '#01A982', // Custom green color for button text/icon/background
@@ -83,6 +84,7 @@ const config: Config = {
         'dropdown-shadow': '0px 4px 14px 0px rgba(0, 0, 0, 0.10)',
         'search-box-shadow': '0px 2.106px 1.053px 0px rgba(0, 0, 0, 0.10);',
         'rage-thumb-shadow': '0 0 2px rgba(0, 0, 0, 0.2)',
+        'box-green-shadow': '0px 10px 20px 0px rgba(0, 168, 129, 0.50);'
       },
     },
   },
