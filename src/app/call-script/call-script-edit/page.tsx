@@ -1,13 +1,20 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import Search from '@/components/global/Search';
 import { html_content_big } from '../call-script-form/data/data';
+import TextField from '@/components/global/TextField';
+import AddVersionModel from './components/AddVersionModel';
 
 const Page = () => {
     const [htmlContent, setHtmlContent] = useState(html_content_big);
+    const [isShowSave, setShowSave] = useState(false)
+    const [isShowAddVer, setIsShowAddVer] = useState(false)
+    const [versionList, setVersionList] = useState(["Version 1", "Version 2", "Version 3"])
+    const [versionSelected, setVersionSelected] = useState("Version 1")
+    const refVersion = useRef('')
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         const target = event.target as HTMLElement;
@@ -19,10 +26,29 @@ const Page = () => {
             setHtmlContent(htmlContent.replace("Prospect Details", "Test Demo"))
         }
     };
+
+    const handleSave = (type: number) => {
+        if (type === 1) {
+            setIsShowAddVer(true)
+        }
+        setShowSave(!isShowSave)
+    }
+
+    const handleChangeTextVersion = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        refVersion.current = event.target.value;
+    };
+
+    const handleAddVersion = () => {
+        if (refVersion.current.trim().length === 0) { return }
+        setVersionList([...versionList, refVersion.current])
+        setIsShowAddVer(false)
+    };
+
+
     return (
         <LayoutWrapper layout="main">
             <div className='overflow-hidden'>
-                <div className="flex py-[2rem] px-[1.5rem]">
+                <div className="flex pt-[2rem] pb-2 px-[1.5rem]">
                     <div className='flex-1'>
                         <Breadcrumb projectName="GreenLake" TaskName="Storage Asia 2024" TaskType="SalesCall_1" />
                     </div>
@@ -37,14 +63,29 @@ const Page = () => {
                             <div className="mx-2 text-black text-lg font-normal font-['Inter']">Assign Approver</div>
                         </div>
                         <Search placeHolder=''></Search>
-                        <Button
-                            buttonText='Save As'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
-                            customClass='static border-[3px] border-[#00A881] px-[1.4rem] mx-[40px] py-2 group-hover:border-white' />
+                        <div className='relative'>
+                            <Button
+                                buttonText='Save As'
+                                showIcon
+                                textStyle='text-[1rem] font-base text-[#00A881]'
+                                textColor="text-[#00A881]"
+                                iconColor="#00A881"
+                                backgroundColor='bg-[#fff]'
+                                handleClick={() => { setShowSave(!isShowSave) }}
+                                customClass='static border-[3px] border-[#00A881] px-[1.4rem] mx-[40px] py-2 group-hover:border-white' />
+                            {isShowSave ?
+                                <div className="w-[170px] h-[130px] ml-[40px] absolute z-10 rounded-[14px] bg-[#fdfdfd] flex flex-col">
+                                    <button onClick={() => handleSave(1)} className="h-[43px] flex items-center justify-start px-4 rounded-t-[14px]">
+                                        <span className="text-black text-lg font-normal font-['Inter']">New Version</span>
+                                    </button>
+                                    <button onClick={() => handleSave(2)} className="h-[43px] flex items-center justify-start px-4 border-t-[0.5px] border-[#7F7F7F] border-solid">
+                                        <span className="text-black text-lg font-normal font-['Inter']">HTML File</span>
+                                    </button>
+                                    <button onClick={() => handleSave(3)} className="h-[43px] flex items-center justify-start px-4 rounded-b-[14px] border-t-[0.5px] border-[#7F7F7F] border-solid">
+                                        <span className="text-black text-lg font-normal font-['Inter']">PDF File</span>
+                                    </button>
+                                </div> : null}
+                        </div>
                         <Button
                             buttonText='Submit'
                             showIcon
@@ -54,11 +95,49 @@ const Page = () => {
                             customClass='static mr-[80px] ml-[0px] px-[35px] py-2 group-hover:border-white' />
                     </div>
                 </div>
+                <div className='pl-[64px]'>
+                    {versionList.map((item, index) => {
+                        return (
+                            <button
+                                key={item + index}
+                                onClick={() => { setVersionSelected(item) }}
+                                className={`${versionSelected === item ? "text-white bg-[#01A982]" : "text-black bg-[#e4e4e4]"} inline-block h-[42px] mx-1 text-center text-lg font-normal  rounded-tl-[20px] rounded-tr-[20px] px-[30px] py-2`}>
+                                {item}
+                            </button>)
+                    })}
+                </div>
                 <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
-                    <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide">
+                    <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide relative">
                         <div>
                             <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: htmlContent }} onClick={handleClick} />
                         </div>
+
+                        {isShowAddVer ? <div className='fixed left-0 right-0 h-[70vh] bg-black bg-opacity-55 flex items-center justify-center'>
+                            <div className="w-[900px] relative bg-white rounded-3xl">
+                                <div className='flex items-center px-[50px] pt-[25px]'>
+                                    <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold font-['Inter'] leading-[17.11px]">Save new version as:</div>
+                                    <Button
+                                        buttonText='Next'
+                                        showIcon
+                                        textStyle='text-[1rem] font-base text-[#00A881]'
+                                        textColor="text-[#00A881]"
+                                        iconColor="#00A881"
+                                        backgroundColor='#fff'
+                                        handleClick={handleAddVersion}
+                                        customClass='static py-2 group-hover:border-white' />
+                                </div>
+                                <div className="w-full h-px bg-[#ebeff2]" />
+                                <div className='mx-[50px] mt-[15px] pb-[35px]'>
+                                    <div className="text-[#160647] mb-[15px] text-base font-bold font-['Inter'] leading-tight">New Version Name</div>
+                                    <TextField handleChange={handleChangeTextVersion} placeholder={`Type the name of your new version.`} rows={1}></TextField>
+                                </div>
+                            </div>
+                        </div> : null}
+                        {isShowAddVer ? <AddVersionModel
+                            isShowAddVer={isShowAddVer}
+                            setIsShowAddVer={setIsShowAddVer}
+                            handleAddVersion={handleAddVersion}
+                            handleChangeTextVersion={handleChangeTextVersion} /> : null}
                     </div>
                 </div>
             </div>

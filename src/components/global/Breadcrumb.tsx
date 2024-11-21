@@ -19,7 +19,7 @@ interface BreadcrumbProps {
     projectName?: string;
     projectUrl?: string;
     TaskName?: string;
-    TaskType?: string;
+    TaskType?: string | undefined;
 }
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ projectName, projectUrl = "", TaskName = "", TaskType = "" }) => {

@@ -10,9 +10,10 @@ interface Template {
 interface TemplateViewerProps {
   templateData ?: Template[]
   title : string
+  aspect_ratio : string
 }
 
-const TemplateSelectionContainer:FC<TemplateViewerProps> = ({templateData=[],title=''}) => {
+const TemplateSelectionContainer:FC<TemplateViewerProps> = ({templateData=[],title='',aspect_ratio}) => {
   return (
     <section>
       <h1 className="text-center font-bold mb-5">{title}</h1>
@@ -20,7 +21,8 @@ const TemplateSelectionContainer:FC<TemplateViewerProps> = ({templateData=[],tit
         {templateData.map((template)=>(
           <div key={template.id} className="flex flex-col items-center flex-shrink-0">
             <div
-              className="w-[10rem] h-[50vh]  relative bg-gray-200 mb-4"
+              className="h-[50vh] aspect-half  relative bg-gray-200 mb-4"
+              style={{aspectRatio:aspect_ratio}}
             >
               <Image
                 src={template.imageUrl}
