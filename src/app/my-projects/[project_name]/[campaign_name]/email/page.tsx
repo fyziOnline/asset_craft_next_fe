@@ -1,4 +1,3 @@
-import Breadcrumb from "@/components/global/Breadcrumb"
 import AssetGenerationHeader from "@/components/layout/AssetGenerationHeader"
 import TemplateSelectionContainer from "@/components/layout/TemplateSelectionContainer"
 import LayoutWrapper from "@/layout/LayoutWrapper"
