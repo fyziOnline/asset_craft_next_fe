@@ -47,7 +47,7 @@ export const LandingAssetIcon: FC<IconProps> = ({ width = "27" , height = "27" ,
 export const LandingAssetIcon2: FC<IconProps> = ({width = "98" , height = "99" , strokeColor = "black", strokeWidth = "1.45496"}) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 98 99" fill="none">
-      <path d="M57.0942 8.8623H24.6001C22.4456 8.8623 20.3793 9.71817 18.8559 11.2416C17.3324 12.7651 16.4766 14.8313 16.4766 16.9858V81.9741C16.4766 84.1286 17.3324 86.1949 18.8559 87.7183C20.3793 89.2418 22.4456 90.0976 24.6001 90.0976H73.3413C75.4958 90.0976 77.562 89.2418 79.0855 87.7183C80.609 86.1949 81.4648 84.1286 81.4648 81.9741V33.2329L57.0942 8.8623Z" stroke={strokeColor} strokeWidth={strokeWidth} stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M57.0942 8.8623H24.6001C22.4456 8.8623 20.3793 9.71817 18.8559 11.2416C17.3324 12.7651 16.4766 14.8313 16.4766 16.9858V81.9741C16.4766 84.1286 17.3324 86.1949 18.8559 87.7183C20.3793 89.2418 22.4456 90.0976 24.6001 90.0976H73.3413C75.4958 90.0976 77.562 89.2418 79.0855 87.7183C80.609 86.1949 81.4648 84.1286 81.4648 81.9741V33.2329L57.0942 8.8623Z" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M57.0977 8.8623V33.2329H81.4683" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M65.2207 53.542H32.7266" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M65.2207 69.7891H32.7266" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"/>
