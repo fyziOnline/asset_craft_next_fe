@@ -116,6 +116,7 @@ const Dashboard: FC = () => {
   }
 
   const closeModal = () => setModalOpen(false);
+  const closeAssetModal = () => setChooseAssetModal(false)
 
   const handleNext = () => {
     if(selectedButton === "All in One") {
@@ -147,7 +148,7 @@ const Dashboard: FC = () => {
                   </div>
         </ProjectSetUpModal>
 
-        <ProjectSetUpModal title="Choose your Assets" onClose={closeModal} selectedValue="All in One" isOpen={chooseAssetModal} onNext={handleNext}>
+        <ProjectSetUpModal title="Choose your Assets" onClose={closeAssetModal} selectedValue="All in One" isOpen={chooseAssetModal} onNext={handleNext}>
           <div className="flex items-center justify-between px-11 py-8 ">
             {options.map((data, index) => (
             <div key={index} className="cursor-pointer" onClick={() => onSelect(data.id)}>
