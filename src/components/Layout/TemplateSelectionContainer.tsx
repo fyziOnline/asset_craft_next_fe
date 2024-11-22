@@ -31,7 +31,7 @@ const TemplateSelectionContainer:FC<TemplateViewerProps> = ({templateData=[],tit
                 className="object-fill"
               />
             </div>
-            <h2 className="text-sm font-bold">{template.template_name}e</h2>
+            <h2 className="text-sm font-bold">{template.template_name}</h2>
           </div>
         ))}
         
