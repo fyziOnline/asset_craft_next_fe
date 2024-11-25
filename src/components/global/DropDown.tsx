@@ -76,7 +76,7 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
                 <p className={`text-base ${!selectedOption ? "text-[#666666]" : ""}`}>{selectedOption || selectPlaceHolder}</p>
                 <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
             </div>
-            <div className={`w-[260px] top-[70px] z-50 h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all absolute duration-300 ease-in-out overflow-hidden ${showOptionList ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
+            <div className={`w-[260px] top-[70px] z-[100] h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all absolute duration-300 ease-in-out ${showOptionList ? 'max-h-[140px] overflow-y-scroll opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
                 {showOptionList &&
                     <>
                         {optionLists.map((options, index) => (

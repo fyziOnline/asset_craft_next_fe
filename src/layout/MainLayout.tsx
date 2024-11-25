@@ -8,14 +8,14 @@ interface LayoutProps {
 
 const MainLayout:React.FC<LayoutProps> = ({children}) => {
   return (
-    <div>
+    <>
         <Header />
         <Navbar />
         <main className="ml-[5.5rem] mt-[3.5rem] pb-[2rem] overflow-auto">
             {children}
         </main>
         <Footer />
-    </div>
+    </>
   )
 }
 
