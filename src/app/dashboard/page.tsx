@@ -6,7 +6,7 @@ import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
-import { AllinOne } from "@/assets/icons/AppIcons";
+import { AllinOne, ExpressIcon } from "@/assets/icons/AppIcons";
 import ProjectSetUpModal from "@/components/wrapper/ProjectSetUpModal";
 import TextField from "@/components/global/TextField";
 import { EmailIcon, LandingAssetIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
@@ -18,7 +18,7 @@ const Dashboard: FC = () => {
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
 
   const buttonData = [
-    { text: "All in One", backgroundColor: "bg-green-300", customClass: "px-[50px]", showIcon: false },
+    { text: "All in One", backgroundColor: "bg-green-300", customClass: "px-[50px] py-1", showIcon: false },
     { text: "Email", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false, color: "text-foreground" },
     { text: "LinkedIn", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false, color: "text-foreground" },
     { text: "Landing Page", backgroundColor: "bg-white", customClass: "border-2 border-green-300 min-w-min px-[50px]", showIcon: false, color: "text-foreground" },
@@ -196,7 +196,7 @@ const Dashboard: FC = () => {
                     key={index}
                     buttonText={button.text}
                     showIcon={button.showIcon}
-                    IconComponent={button.text === "All in One" && <AllinOne />}
+                    IconComponent={button.text === "All in One" && <ExpressIcon  strokeColor="white" width="40" height="38"/>}
                     backgroundColor={button.backgroundColor}
                     customClass={button.customClass}
                     textColor={button.color}
