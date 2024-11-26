@@ -12,7 +12,13 @@ const config: Config = {
   theme: {
     extend: {
       aspectRatio:{
-        half : "1 / 2"
+        half : "1 / 2",
+        card : "434 / 330",
+        new : '345 / 255'
+      },
+      screens:{
+        mlg : '840px',
+        // md : '780px'
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],

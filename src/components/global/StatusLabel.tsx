@@ -25,7 +25,7 @@ const statusCorrespondence = {
 const StatusLabel:FC<StatusProp> = ({status_value}) => {
   return (
     <div className={`border-2 ${statusCorrespondence[status_value].theme} group-hover:border-black group-hover:bg-white w-fit px-[1rem] rounded-full`}>
-      <p className="text-sm  group-hover:text-black">{statusCorrespondence[status_value].text}</p> 
+      <p className=" text-[0.7rem] md:text-sm group-hover:text-black">{statusCorrespondence[status_value].text}</p> 
     </div>
   )
 }

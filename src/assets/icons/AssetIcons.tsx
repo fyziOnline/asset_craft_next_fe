@@ -17,7 +17,7 @@ export const MailIcon:FC<IconProps> = ({
       <svg 
         width={width} 
         height={height} 
-        viewBox="0 0 44 44"
+        viewBox={`0 0 ${width * 1.55} ${height * 1.55}`}
         className={className} 
         aria-label="mail icon"
         role="img"

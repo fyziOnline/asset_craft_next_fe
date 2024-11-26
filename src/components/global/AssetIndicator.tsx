@@ -31,7 +31,7 @@ const AssetIndicator:FC<AssetIndicatorProp> = ({hoverStatus,asset_type='Email_1'
   return (
     <div className="w-fit text-center text-green-100 group-hover:text-white">
         <AssetIcon color={hoverStatus ? 'white' : 'black'} />
-        <p className="text-[0.9rem]">{asset_type}</p>
+        <p className="text-[0.9rem] mlg:text-[1rem]">{asset_type}</p>
     </div>
   )
 }

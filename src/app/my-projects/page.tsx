@@ -59,15 +59,15 @@ const MyProjects:FC = () => {
   return (
     <>
         <LayoutWrapper layout="main" >
-            <div className="flex items-center justify-between pt-[2rem] px-[1.5rem]">
+            <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
                 <Breadcrumb TaskType="My Projects"/>
                 <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon /> }</span>
             </div>
 
-            <div className="px-24">
+            <div className="asset-grid-padding">
               {
                 !isList ? 
-                  <div className="grid grid-cols-[repeat(3,1fr)] mt-4 gap-x-12 gap-y-12 overflow-auto">
+                  <div className="asset-grid-layout mt-4  justify-center overflow-auto">
                   {tableData.map((data,index)=>(
                     <div key={index}> 
                       <MyProjectCard data={data} />
