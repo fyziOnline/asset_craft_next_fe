@@ -11,7 +11,9 @@ import ChildrenTitle from './components/ChildrenTitle';
 import ChooseLabel from './components/ChooseLabel';
 import RangeSlider from '@/components/global/RangeSlider';
 import { useRouter } from 'next/navigation';
-import { html_content } from './data/data';
+// import { html_content } from './data/data';
+import { ApiService } from '@/lib/axios_generic';
+import { urls } from '@/apis/urls';
 
 const Page = () => {
     const router = useRouter();
@@ -20,6 +22,7 @@ const Page = () => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
+    const [html_content, setHtml_content] = useState("");
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -64,7 +67,7 @@ const Page = () => {
         }
     }
 
-    const handleGenerate = () => {
+    const handleGenerate = async () => {
         if (generateStep === 2 || checkedList.length !== 3) { return }
 
         let newStep = generateStep + 1
@@ -76,11 +79,18 @@ const Page = () => {
             setDisableList([2, 3])
         } else {
             if (newStep === 2) {
+                const resHTML = await ApiService.get<any>(`${urls.asset_select}?assetId=e3c33964-f8a6-ef11-ac7b-0a9328dfcacd`)
+                if (resHTML.isSuccess && resHTML.assetContentVersions.length > 0) {
+                    const assetHTML = resHTML.assetContentVersions[0].assetHTML
+                    setHtml_content(assetHTML)
+                }
+
                 setCheckedList([1, 2, 3])
                 setDisableList([1, 2, 3])
+
                 setTimeout(() => {
                     setGenerateStep(3)
-                }, 3000);
+                }, 1000);
             }
             setIsOpen(true)
         }
