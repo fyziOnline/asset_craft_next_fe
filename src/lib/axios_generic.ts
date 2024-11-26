@@ -1,5 +1,6 @@
+import { nkey } from '@/data/keyStore';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
-// import { getAccessToken, refreshAccessToken } from './auth-service';
+import Cookies from 'js-cookie';
 
 // Custom error class for API errors
 class ApiError extends Error {
@@ -27,7 +28,7 @@ const apiClient: AxiosInstance = axios.create({
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     // Add authentication token if available
-    const accessToken = "";
+    const accessToken = Cookies.get(nkey.auth_token);
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
