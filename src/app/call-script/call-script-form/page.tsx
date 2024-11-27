@@ -179,15 +179,17 @@ const Page = () => {
         // return <div className="w-full h-full p-16 overflow-y-scroll" dangerouslySetInnerHTML={{ __html: html_content }} />;
         return (
             <TransformWrapper
-                initialScale={0.3}
-                minScale={0.3}
-                maxScale={0.3}
+                initialScale={0.4}
+                minScale={0.4}
+                maxScale={0.4}
                 panning={{ lockAxisX: true }}
-                initialPositionX={0}
-                initialPositionY={0}
+                centerZoomedOut
+                initialPositionX={171}
             >
-                <TransformComponent>
-                    <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: html_content }} />
+                <TransformComponent
+                    wrapperStyle={{ width: '100%', height: '100%' }}
+                >
+                    <div dangerouslySetInnerHTML={{ __html: html_content }} />
                 </TransformComponent>
             </TransformWrapper>
         )
