@@ -1,20 +1,27 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import Search from '@/components/global/Search';
-import { html_content_big } from '../call-script-form/data/data';
 import TextField from '@/components/global/TextField';
 import AddVersionModel from './components/AddVersionModel';
+import { nkey } from '@/data/keyStore';
 
 const Page = () => {
-    const [htmlContent, setHtmlContent] = useState(html_content_big);
+    const [htmlContent, setHtmlContent] = useState("");
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
     const [versionList, setVersionList] = useState(["Version 1", "Version 2", "Version 3"])
     const [versionSelected, setVersionSelected] = useState("Version 1")
     const refVersion = useRef('')
+
+    useEffect(() => {
+        const savedData = sessionStorage.getItem(nkey.html_content);
+        if (savedData) {
+            setHtmlContent(savedData);
+        }
+    }, []);
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         const target = event.target as HTMLElement;
