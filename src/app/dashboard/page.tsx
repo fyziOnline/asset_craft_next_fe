@@ -1,6 +1,7 @@
 'use client';
 
 import { FC, useState } from "react";
+import { useRouter } from 'next/navigation';
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
@@ -12,9 +13,10 @@ import TextField from "@/components/global/TextField";
 import { EmailIcon, LandingAssetIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 
 const Dashboard: FC = () => {
+  const router = useRouter();
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [chooseAssetModal , setChooseAssetModal] = useState<boolean>(false);
-  const [selectedButton , setSelectedButton] = useState<string>()
+  const [chooseAssetModal, setChooseAssetModal] = useState<boolean>(false);
+  const [selectedButton, setSelectedButton] = useState<string>()
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
 
   const buttonData = [
@@ -110,7 +112,7 @@ const Dashboard: FC = () => {
 
   const onSelect = (index: number) => {
     // Toggle selection: if index is already selected, deselect it; otherwise, select it
-    setSelectedIndexes(prev => 
+    setSelectedIndexes(prev =>
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
     );
   }
@@ -119,9 +121,12 @@ const Dashboard: FC = () => {
   const closeAssetModal = () => setChooseAssetModal(false)
 
   const handleNext = () => {
-    if(selectedButton === "All in One") {
+    if (selectedButton === "All in One") {
       setChooseAssetModal(true)
       setModalOpen(false)
+    } else if (selectedButton === "Call Script") {
+      router.push("/call-script")
+      closeModal()
     }
   }
 
@@ -130,33 +135,33 @@ const Dashboard: FC = () => {
       <LayoutWrapper layout="main">
 
         <ProjectSetUpModal title="Project Details" selectedValue={selectedButton} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} >
-                  <div className='w-full flex flex-col gap-3 px-12 pb-7'>
-                      <div className='pt-[15px] flex flex-col gap-3'>
-                          <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
-                          <TextField customClass='h-12' placeholder='Type the name of your Project/Solution here.' />
-                      </div>
-                      <div className='flex flex-col gap-3'>
-                          <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
-                          <TextField customClass='h-12' placeholder='Type the name of your Campaign here.' />
-                      </div>
-                      {selectedButton !== "All in One" &&
-                          <div className='flex flex-col gap-3'>
-                              <p className='text-[#160647] text-base tracking-wide font-semibold'>Digital Marketing Asset Name</p>
-                              <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here.' />
-                          </div>
-                      }
-                  </div>
+          <div className='w-full flex flex-col gap-3 px-12 pb-7'>
+            <div className='pt-[15px] flex flex-col gap-3'>
+              <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
+              <TextField customClass='h-12' placeholder='Type the name of your Project/Solution here.' />
+            </div>
+            <div className='flex flex-col gap-3'>
+              <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
+              <TextField customClass='h-12' placeholder='Type the name of your Campaign here.' />
+            </div>
+            {selectedButton !== "All in One" &&
+              <div className='flex flex-col gap-3'>
+                <p className='text-[#160647] text-base tracking-wide font-semibold'>Digital Marketing Asset Name</p>
+                <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here.' />
+              </div>
+            }
+          </div>
         </ProjectSetUpModal>
 
         <ProjectSetUpModal title="Choose your Assets" onClose={closeAssetModal} selectedValue="All in One" isOpen={chooseAssetModal} onNext={handleNext}>
           <div className="flex items-center justify-between px-11 py-8 ">
             {options.map((data, index) => (
-            <div key={index} className="cursor-pointer" onClick={() => onSelect(data.id)}>
-              <div  className={` ${selectedIndexes.includes(data.id) ? "bg-green-300" : "bg-white border border-foreground"} flex items-center flex-col rounded-2xl py-4 w-[160px]`}>
+              <div key={index} className="cursor-pointer" onClick={() => onSelect(data.id)}>
+                <div className={` ${selectedIndexes.includes(data.id) ? "bg-green-300" : "bg-white border border-foreground"} flex items-center flex-col rounded-2xl py-4 w-[160px]`}>
                   {data.icon}
-                <p className={`text-cente text-base tracking-wide ${selectedIndexes.includes(data.id) ? "text-white" : "text-black"}`}>{data.label}</p>
+                  <p className={`text-cente text-base tracking-wide ${selectedIndexes.includes(data.id) ? "text-white" : "text-black"}`}>{data.label}</p>
+                </div>
               </div>
-            </div>
             ))}
           </div>
         </ProjectSetUpModal>
@@ -196,7 +201,7 @@ const Dashboard: FC = () => {
                     key={index}
                     buttonText={button.text}
                     showIcon={button.showIcon}
-                    IconComponent={button.text === "All in One" && <ExpressIcon  strokeColor="white" width="40" height="38"/>}
+                    IconComponent={button.text === "All in One" && <ExpressIcon strokeColor="white" width="40" height="38" />}
                     backgroundColor={button.backgroundColor}
                     customClass={button.customClass}
                     textColor={button.color}

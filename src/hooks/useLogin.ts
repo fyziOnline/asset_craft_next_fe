@@ -39,6 +39,7 @@ export const useLogin = () => {
             }
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error))
         } finally {
             setIsLoading(false);
         }
