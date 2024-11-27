@@ -7,24 +7,20 @@ import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
 import DropDown from '@/components/global/DropDown';
-import ChildrenTitle from './components/ChildrenTitle';
-import ChooseLabel from './components/ChooseLabel';
+import ChildrenTitle from '@/app/call-script/call-script-form/components/ChildrenTitle';
+import ChooseLabel from '@/app/call-script/call-script-form/components/ChooseLabel';
 import RangeSlider from '@/components/global/RangeSlider';
 import { useRouter } from 'next/navigation';
-// import { html_content } from './data/data';
-import { ApiService } from '@/lib/axios_generic';
-import { urls } from '@/apis/urls';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { nkey } from '@/data/keyStore';
+import { html_content } from '@/app/call-script/call-script-form/data/data';
+import DragAndDrop from '@/components/global/DragAndDrop';
 
 const Page = () => {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
-    const [disableList, setDisableList] = useState<number[]>([2, 3]);
+    const [disableList, setDisableList] = useState<number[]>([2, 3 , 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const [html_content, setHtml_content] = useState("");
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -34,6 +30,12 @@ const Page = () => {
         { label: 'General Public', value: 'General Public' },
         { label: 'Existing Customers', value: 'Existing Customers' },
         { label: 'Prospective Customers', value: 'Prospective Customers' }
+    ]
+
+    const listofcampains = [
+        { label: 'Product Launch', value: 'Product Launch' },
+        { label: 'Event Promotion', value: 'Event Promotion' },
+        { label: 'Brand Awareness', value: 'Brand Awareness' }
     ]
 
     const ListTone = [
@@ -51,67 +53,71 @@ const Page = () => {
             setDisableList([1, 2])
             setIsShowList([3])
         } else if (step === 3) {
+            setIsShowList([4])
+        } else if (step === 4) {
             setIsShowList([])
-            if (checkedList.length === 3) { return }
+            if (checkedList.length === 4) { return }
         }
         setCheckedList([...checkedList, step])
     };
 
     const onBack = (step: number): void => {
-        if (step === 3) {
-            setDisableList([1, 3])
-            setIsShowList([2])
-            setCheckedList([1])
+        if (step === 4) {
+            setDisableList([1, 2, 4]);
+            setIsShowList([3]);
+            setCheckedList([1, 2, 3]);
+        } else if (step === 3) {
+            setDisableList([1, 3]);
+            setIsShowList([2]);
+            setCheckedList([1]);
         } else if (step === 2) {
-            setDisableList([2, 3])
-            setIsShowList([1])
-            setCheckedList([])
+            setDisableList([2, 3, 4]);
+            setIsShowList([1]);
+            setCheckedList([]);
         }
-    }
+    };
+    
 
-    const handleGenerate = async () => {
-        if (generateStep === 2 || checkedList.length !== 3) { return }
-
-        let newStep = generateStep + 1
-        if (newStep === 4) {
-            newStep = 1
-            setIsOpen(false)
-            setIsShowList([])
-            setCheckedList([])
-            setDisableList([2, 3])
+    const handleGenerate = (): void => {
+        if (generateStep === 2 || checkedList.length !== 4) {
+            return;
+        }
+    
+        let newStep = generateStep + 1;
+    
+        if (newStep === 5) { // Reset after completing step 4
+            newStep = 1;
+            setIsOpen(false);
+            setIsShowList([]);
+            setCheckedList([]);
+            setDisableList([2, 3, 4]);
         } else {
             if (newStep === 2) {
-                const resHTML = await ApiService.get<any>(`${urls.asset_select}?assetId=e3c33964-f8a6-ef11-ac7b-0a9328dfcacd`)
-                if (resHTML.isSuccess && resHTML.assetContentVersions.length > 0) {
-                    const assetHTML = resHTML.assetContentVersions[0].assetHTML
-                    setHtml_content(assetHTML)
-                }
-
-                setCheckedList([1, 2, 3])
-                setDisableList([1, 2, 3])
-
+                setCheckedList([1, 2, 3, 4]);
+                setDisableList([1, 2, 3, 4]);
                 setTimeout(() => {
-                    setGenerateStep(3)
-                }, 1000);
+                    setGenerateStep(3);
+                }, 3000);
             }
-            setIsOpen(true)
+            setIsOpen(true);
         }
-        setGenerateStep(newStep)
-    }
+        setGenerateStep(newStep);
+    };
+    
 
     const handleEdit = () => {
-        sessionStorage.setItem(nkey.html_content, html_content);
-        router.push("/call-script/call-script-edit")
+        router.push("")
     }
 
     const sidebarStep1 = () => {
         return (<div>
             <div>
                 <Image
-                    src="/images/event_invite_call_script.png"
+                    className='w-[267px] h-[420px]'
+                    src="/images/landing_templates/landing3.png"
                     alt="call script"
-                    width={267}
-                    height={362}
+                    width="267"
+                    height="360"
                 />
                 <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
                     <span className="font-semibold">Prospect Details</span>
@@ -170,7 +176,7 @@ const Page = () => {
 
     const sidebarStep2 = () => {
         return (<Image
-            src="/images/event_invite_call_script.png"
+            src="/images/landing_templates/landing3.png"
             alt="call script"
             width={390}
             height={528}
@@ -178,22 +184,10 @@ const Page = () => {
     }
 
     const sidebarStep3 = () => {
-        // return <div className="w-full h-full p-16 overflow-y-scroll" dangerouslySetInnerHTML={{ __html: html_content }} />;
         return (
-            <TransformWrapper
-                initialScale={0.4}
-                minScale={0.4}
-                maxScale={0.4}
-                panning={{ lockAxisX: true }}
-                centerZoomedOut
-                initialPositionX={171}
-            >
-                <TransformComponent
-                    wrapperStyle={{ width: '100%', height: '100%' }}
-                >
-                    <div dangerouslySetInnerHTML={{ __html: html_content }} />
-                </TransformComponent>
-            </TransformWrapper>
+            <div className='w-full h-full flex items-center justify-center overflow-y-scroll'>
+                <img className='w-[350px] h-[550px]' src="/images/Template1.png" alt="" />
+            </div>
         )
     }
 
@@ -201,7 +195,7 @@ const Page = () => {
         <LayoutWrapper layout="main">
             <div className="flex py-[2rem] px-[1.5rem]">
                 <div className='flex-1'>
-                    <Breadcrumb projectName="GreenLake" TaskName="Storage Asia 2024" TaskType="SalesCall_1" />
+                    <Breadcrumb projectName="GreenLake" TaskName="Storage Asia 2024" TaskType="LandingPage_1" />
                 </div>
                 {generateStep === 3 ? <div className='flex'>
                     <Button
@@ -235,20 +229,31 @@ const Page = () => {
                             <div className='mt-[40px]'>
                                 {/* step 1 */}
                                 <Accordion
-                                    HeaderTitle="Call Objective and Target Audience"
+                                    HeaderTitle="Campaign Overview"
                                     checked={checkedList.includes(1)}
                                     disableShowContent={disableList.includes(1)}
                                     handleShowContent={() => { setIsShowList([1]) }}
                                     isShowContent={isShowList.includes(1)}>
                                     <div className='max-w-[90%]'>
-                                        <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
-                                        <TextField placeholder="What is the purpose of the call? What would you like to communicate?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                        <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
+                                        <TextField placeholder="Enter the name of the product or solution." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                                        <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
-                                        <DropDown selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
+                                        <div className='flex items-center gap-40'>
+                                            <div>
+                                                <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
+                                                <DropDown selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
+                                            </div>
 
-                                        <ChildrenTitle title='Describe the key messages you want to highlight' customClass='mt-5' ></ChildrenTitle>
-                                        <TextField placeholder="What are the 2-3 key points you want to highlight in this post?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                            <div>
+                                                <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
+                                                <DropDown selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
+                                            </div>
+                                        </div>
+
+                                        <div className='w-[300px]'>
+                                            <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
+                                            <RangeSlider></RangeSlider>
+                                        </div>
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                                         <Button
@@ -266,20 +271,19 @@ const Page = () => {
                             <div className='mt-[25px]'>
                                 {/* step 2 */}
                                 <Accordion
-                                    HeaderTitle="Tone, Style, and Objections"
+                                    HeaderTitle="Key Message & Content"
                                     checked={checkedList.includes(2)}
                                     disableShowContent={disableList.includes(2)}
                                     handleShowContent={() => { setIsShowList([2]) }}
                                     isShowContent={isShowList.includes(2)}>
-                                    <div className='max-w-[90%] flex'>
-                                        <div className='flex-1'>
-                                            <ChildrenTitle title='What tone should the call have?'></ChildrenTitle>
-                                            <ChooseLabel optionLists={ListTone}></ChooseLabel>
-                                        </div>
-                                        <div className='flex-1'>
-                                            <ChildrenTitle title='How creative you want the output?'></ChildrenTitle>
-                                            <RangeSlider></RangeSlider>
-                                        </div>
+                                    <div className='max-w-[90%]'>
+                                            <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
+                                            <TextField placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?”" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+
+                                            <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
+                                            <TextField placeholder="HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility. Feature 1, Feature 2, Feature 3" 
+                                                customAreaClass='whitespace-nowrap overflow-x-hidden overflow-y-auto h-28 scrollbar-hide'></TextField>
+
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                                         <Button
@@ -307,29 +311,17 @@ const Page = () => {
                             <div className='mt-[25px]'>
                                 {/* step 3 */}
                                 <Accordion
-                                    HeaderTitle="Content Structuring for Communication"
+                                    HeaderTitle="Additional Campaign Assets"
                                     checked={checkedList.includes(3)}
                                     disableShowContent={disableList.includes(3)}
                                     handleShowContent={() => { setIsShowList([3]) }}
                                     isShowContent={isShowList.includes(3)}>
-                                    <div>
-                                        <ChildrenTitle title='Prospect Details' customClass="text-[18px]" ></ChildrenTitle>
-                                        <ChildrenTitle title='What is the prospect’s company and role?' ></ChildrenTitle>
-                                        <TextField placeholder={`"Generate a personalized introduction for a sales call the Chief Information Officer (CIO) at Global Tech Solutions."`}
-                                        ></TextField>
+                                        <div>
+                                            <DragAndDrop />
 
-                                        <ChildrenTitle title='Solution Introduction' customClass="text-[18px] mt-[20px]" ></ChildrenTitle>
-                                        <ChildrenTitle title='How does your solution align with the needs of this role and industry?' ></ChildrenTitle>
-                                        <TextField placeholder={`"Generate an introduction for HPE GreenLake focusing on challenges like cloud management, cost optimization, and scalability. Include the benefits of a pay-per-use model and hybrid cloud flexibility."`} rows={2} ></TextField>
-
-                                        <ChildrenTitle title='Value Proposition' customClass="text-[18px] mt-[20px]" ></ChildrenTitle>
-                                        <ChildrenTitle title='What are the top benefits of your solution that would appeal to this prospect?' ></ChildrenTitle>
-                                        <TextField placeholder={`"Generate a description of the key benefits of HPE GreenLake, focusing on cost reduction, scalability, and simplified cloud management. Emphasize how it helps streamline operations and allows the IT team to focus on strategic initiatives."`} rows={2}  ></TextField>
-
-                                        <ChildrenTitle title='The Next Steps' customClass="text-[18px] mt-[20px]" ></ChildrenTitle>
-                                        <ChildrenTitle title='What is the next step that you’d like the prospect to take?' ></ChildrenTitle>
-                                        <TextField placeholder={`"Generate a call-to-action to schedule a demo. Highlight the value of the demo in showcasing how HPE GreenLake can optimize cloud operations. Mention a 30-minute session to walk through real-world applications for their team."`} rows={2}></TextField>
-                                    </div>
+                                            <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
+                                            <TextField placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                        </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                                         <Button
                                             buttonText='Back'
@@ -353,12 +345,63 @@ const Page = () => {
                                     </div>
                                 </Accordion>
                             </div>
+
+                            <div className='mt-[25px]'>
+                                {/* step 4 */}
+                                <Accordion
+                                    HeaderTitle="Content Structuring for Communication"
+                                    checked={checkedList.includes(4)}
+                                    disableShowContent={disableList.includes(4)}
+                                    handleShowContent={() => { setIsShowList([4]) }}
+                                    isShowContent={isShowList.includes(4)}>
+                                    <div>
+                                        <ChildrenTitle title='Section 1: Hero Section' customClass="text-[18px]" />
+                                        <ChildrenTitle title='Headline:' />
+                                        <TextField customClass='h-16' placeholder={`"Generate a compelling headline that captures attention and introduces the product. The product is [Product Name], and it is designed to help [Target Audience] with [Main Benefit]."`}/>
+
+                                        <ChildrenTitle title='Subheading:' customClass="text-[18px] mt-[20px]" />
+                                        <TextField placeholder={`"Generate a brief subheading or tagline that supports the headline and highlights the product’s core value. Focus on [Key Feature] for [Target Audience]."`} rows={2} />
+
+                                        <ChildrenTitle title='Call-to-Action (CTA):' customClass="text-[18px] mt-[20px]" />
+                                        <TextField placeholder={`"Generate a clear call-to-action (CTA) encouraging users to engage. Focus on [Desired User Action]."`} rows={1}  />
+
+                                        <ChildrenTitle title='Section 2: Feature Highlights' customClass="text-[18px] mt-[20px]" />
+                                        <ChildrenTitle title='Main Features:' />
+                                        <TextField placeholder={`“List 3-5 main features or benefits of the product. Focus on [Key Features] and how they help [Target Audience]."`} rows={1} />
+
+                                        <ChildrenTitle title='Section 3: Closing CTA' customClass="text-[18px] mt-[20px]" />
+                                        <ChildrenTitle title='Final Call-to-Action:' />
+                                        <TextField placeholder={`"Sign up for a free demo and experience cloud efficiency today!"`} rows={1} />
+                                    </div>
+                                    <div className='max-w-full flex justify-end pt-5 pb-3'>
+                                        <Button
+                                            buttonText='Back'
+                                            showIcon
+                                            textStyle='text-[1rem] font-base text-[#00A881]'
+                                            textColor="text-[#B1B1B1]"
+                                            iconColor="#B1B1B1"
+                                            backgroundColor='bg-[#fff]'
+                                            customClassIcon="rotate-180"
+                                            handleClick={() => { onBack(4) }}
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
+                                        <Button
+                                            buttonText='Next'
+                                            showIcon
+                                            textStyle='text-[1rem] font-base text-[#00A881]'
+                                            textColor="text-[#00A881]"
+                                            iconColor="#00A881"
+                                            backgroundColor='bg-[#fff]'
+                                            handleClick={() => { onNext(4) }}
+                                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
+                                    </div>
+                                </Accordion>
+                            </div>
                             <div className='flex justify-end my-[50px]'>
                                 <Button
                                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                                     showIcon
                                     textStyle='text-[1rem] font-base text-[#00A881]'
-                                    backgroundColor={((checkedList.length === 3 && generateStep != 2) || generateStep === 3) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
+                                    backgroundColor={((checkedList.length === 4 && generateStep != 2) || generateStep === 4) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
                                     handleClick={handleGenerate}
                                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                             </div>
