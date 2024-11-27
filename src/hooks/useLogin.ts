@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { ApiService } from '@/lib/axios_generic';
 import { nkey } from '@/data/keyStore';
+import { urls } from '@/apis/urls';
 
 export const useLogin = () => {
     const router = useRouter();
@@ -14,14 +15,14 @@ export const useLogin = () => {
             if (emailRef.current.trim().length === 0) { return }
 
             setIsLoading(true);
-            const resLogin = await ApiService.post<any>('/user/login', {
+            const resLogin = await ApiService.post<any>(urls.login, {
                 "email": emailRef.current
             });
 
             if (resLogin.isSuccess) {
                 const otp = prompt("Enter OTP code:");
                 if (otp && otp.trim().length > 0) {
-                    const resToken = await ApiService.post<any>('/user/login/finalise', {
+                    const resToken = await ApiService.post<any>(urls.finalise, {
                         "twoFactorToken": resLogin.twoFactorToken,
                         "otp": otp
                     })
