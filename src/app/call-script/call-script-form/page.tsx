@@ -101,7 +101,7 @@ const Page = () => {
 
     const handleEdit = () => {
         sessionStorage.setItem(nkey.html_content, html_content);
-        router.push("/call-script/call-script-edit")
+        router.push("/edit-html-content?type=call-script")
     }
 
     const sidebarStep1 = () => {

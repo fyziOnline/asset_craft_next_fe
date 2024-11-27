@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import LayoutWrapper from "@/layout/LayoutWrapper";
@@ -9,6 +10,9 @@ import AddVersionModel from './components/AddVersionModel';
 import { nkey } from '@/data/keyStore';
 
 const Page = () => {
+    const searchParams = useSearchParams();
+    const contentType = searchParams.get('type') || '';
+
     const [htmlContent, setHtmlContent] = useState("");
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
