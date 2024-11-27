@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { nkey } from '@/data/keyStore';
 
 const Page = () => {
     const router = useRouter();
@@ -99,6 +100,7 @@ const Page = () => {
     }
 
     const handleEdit = () => {
+        sessionStorage.setItem(nkey.html_content, html_content);
         router.push("/call-script/call-script-edit")
     }
 
