@@ -37,11 +37,16 @@ const Page = () => {
         { label: 'Brand Awareness', value: 'Brand Awareness' }
     ]
 
-    const ListTone = [
-        { label: 'Empathetic (for grievance/support)', value: 'Empathetic (for grievance/support)' },
-        { label: 'Professional and Technical', value: 'Professional and Technical' },
-        { label: 'Conversational and Collaborative', value: 'Conversational and Collaborative' },
-        { label: 'Persuasive and Sales-Oriented', value: 'Persuasive and Sales-Oriented' }
+    const emailType = [
+        { label: 'Announcement', value: 'Announcement' },
+        { label: 'Newsletter', value: 'Newsletter' },
+        { label: 'Promotional Email', value: 'Promotional Email' }
+    ]
+
+    const keyPoints = [
+        { label: 'Innovation', value: 'Innovation' },
+        { label: 'Performance', value: 'Performance' },
+        { label: 'Increased Security', value: 'Increased Security' },
     ]
 
     const onNext = (step: number): void => {
@@ -113,7 +118,7 @@ const Page = () => {
             <div>
                 <Image
                     className='w-[267px] h-[420px]'
-                    src="/images/landing_templates/landing3.png"
+                    src="/images/linkedin-template.png"
                     alt="call script"
                     width="267"
                     height="360"
@@ -174,18 +179,17 @@ const Page = () => {
     }
 
     const sidebarStep2 = () => {
-        return (<Image
-            src="/images/landing_templates/landing3.png"
-            alt="call script"
-            width={390}
-            height={528}
-        />)
+        return (
+            <div className='w-full h-full flex items-center justify-center overflow-y-scroll'>
+                <img className='w-[350px] h-[550px]' src="/images/post-template.png" alt="" />
+            </div>
+        )
     }
 
     const sidebarStep3 = () => {
         return (
             <div className='w-full h-full flex items-center justify-center overflow-y-scroll'>
-                <img className='w-[350px] h-[550px]' src="/images/Template1.png" alt="" />
+                <img className='w-[350px] h-[550px]' src="/images/Frame-linkedin.png" alt="" />
             </div>
         )
     }
@@ -194,7 +198,7 @@ const Page = () => {
         <LayoutWrapper layout="main">
             <div className="flex py-[2rem] px-[1.5rem]">
                 <div className='flex-1'>
-                    <Breadcrumb projectName="GreenLake" TaskName="Storage Asia 2024" TaskType="LandingPage_1" />
+                    <Breadcrumb projectName="GreenLake" TaskName="Storage Asia 2024" TaskType="LinkedIn_1" />
                 </div>
                 {generateStep === 3 ? <div className='flex'>
                     <Button
@@ -270,18 +274,26 @@ const Page = () => {
                             <div className='mt-[25px]'>
                                 {/* step 2 */}
                                 <Accordion
-                                    HeaderTitle="Key Message & Content"
+                                    HeaderTitle="Post Context"
                                     checked={checkedList.includes(2)}
                                     disableShowContent={disableList.includes(2)}
                                     handleShowContent={() => { setIsShowList([2]) }}
                                     isShowContent={isShowList.includes(2)}>
                                     <div className='max-w-[90%]'>
-                                            <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
-                                            <TextField placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?”" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                            <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
+                                            <TextField placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                                            <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
-                                            <TextField placeholder="HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility. Feature 1, Feature 2, Feature 3" 
-                                                customAreaClass='whitespace-nowrap overflow-x-hidden overflow-y-auto h-28 scrollbar-hide'></TextField>
+                                            <div className='flex items-center gap-40'>
+                                            <div>
+                                                <ChildrenTitle title='Email Type' customClass='mt-5' />
+                                                <DropDown selectPlaceHolder="Select Post Type" optionLists={emailType} />
+                                            </div>
+
+                                            <div>
+                                                <ChildrenTitle title='Key Points' customClass='mt-5' />
+                                                <DropDown selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
+                                            </div>
+                                        </div>
 
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
@@ -354,23 +366,18 @@ const Page = () => {
                                     handleShowContent={() => { setIsShowList([4]) }}
                                     isShowContent={isShowList.includes(4)}>
                                     <div>
-                                        <ChildrenTitle title='Section 1: Hero Section' customClass="text-[18px]" />
-                                        <ChildrenTitle title='Headline:' />
-                                        <TextField customClass='h-16' placeholder={`"Generate a compelling headline that captures attention and introduces the product. The product is [Product Name], and it is designed to help [Target Audience] with [Main Benefit]."`}/>
+                                        <ChildrenTitle title='Hook/Headline & Introduction' customClass="text-[18px]" />
+                                        <ChildrenTitle title='Catchy introduction to the topic/product along with a brief overview.' />
+                                        <TextField customClass='h-16' placeholder={`"Write a compelling headline that promotes the benefits of HPE GreenLake’s hybrid cloud solution, followed by a 2-3 sentence introduction explaining the benefits of HPE GreenLake and why attending StorageAsia 2024 is beneficial."`}/>
 
-                                        <ChildrenTitle title='Subheading:' customClass="text-[18px] mt-[20px]" />
-                                        <TextField placeholder={`"Generate a brief subheading or tagline that supports the headline and highlights the product’s core value. Focus on [Key Feature] for [Target Audience]."`} rows={2} />
+                                        <ChildrenTitle title='Main Message & Call-to-Action (CTA)' customClass="text-[18px] mt-[20px]" />
+                                        <ChildrenTitle title='Highlight the core benefits of the product along with actionable event details.' />
+                                        <TextField placeholder={`"List 2-3 key benefits of HPE GreenLake, focusing on flexibility, control, and cost efficiency. Write a 2-3 sentence event promotion with a call-to-action that encourages users to attend StorageAsia 2024 and engage with HPE experts."`} rows={2} />
 
-                                        <ChildrenTitle title='Call-to-Action (CTA):' customClass="text-[18px] mt-[20px]" />
-                                        <TextField placeholder={`"Generate a clear call-to-action (CTA) encouraging users to engage. Focus on [Desired User Action]."`} rows={1}  />
+                                        <ChildrenTitle title='Hashtags & Keywords' customClass="text-[18px] mt-[20px]" />
+                                        <ChildrenTitle title='Industry-relevant hashtags for discoverability.' />
+                                        <TextField placeholder={`"Generate 4-5 relevant hashtags for an HPE GreenLake LinkedIn post on hybrid cloud solutions."`} rows={1}  />
 
-                                        <ChildrenTitle title='Section 2: Feature Highlights' customClass="text-[18px] mt-[20px]" />
-                                        <ChildrenTitle title='Main Features:' />
-                                        <TextField placeholder={`“List 3-5 main features or benefits of the product. Focus on [Key Features] and how they help [Target Audience]."`} rows={1} />
-
-                                        <ChildrenTitle title='Section 3: Closing CTA' customClass="text-[18px] mt-[20px]" />
-                                        <ChildrenTitle title='Final Call-to-Action:' />
-                                        <TextField placeholder={`"Sign up for a free demo and experience cloud efficiency today!"`} rows={1} />
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                                         <Button
