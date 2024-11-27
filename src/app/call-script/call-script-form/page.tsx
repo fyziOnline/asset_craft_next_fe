@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 // import { html_content } from './data/data';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const Page = () => {
     const router = useRouter();
@@ -175,7 +176,21 @@ const Page = () => {
     }
 
     const sidebarStep3 = () => {
-        return <div className="w-full h-full p-16 overflow-y-scroll" dangerouslySetInnerHTML={{ __html: html_content }} />;
+        // return <div className="w-full h-full p-16 overflow-y-scroll" dangerouslySetInnerHTML={{ __html: html_content }} />;
+        return (
+            <TransformWrapper
+                initialScale={0.3}
+                minScale={0.3}
+                maxScale={0.3}
+                panning={{ lockAxisX: true }}
+                initialPositionX={0}
+                initialPositionY={0}
+            >
+                <TransformComponent>
+                    <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: html_content }} />
+                </TransformComponent>
+            </TransformWrapper>
+        )
     }
 
     return (
