@@ -81,7 +81,7 @@ const Page = () => {
             setDisableList([2, 3])
         } else {
             if (newStep === 2) {
-                const resHTML = await ApiService.get<any>(`${urls.asset_select}?assetId=e3c33964-f8a6-ef11-ac7b-0a9328dfcacd`)
+                const resHTML = await ApiService.get<any>(`${urls.asset_select}?assetId=a844c23c-a4ac-ef11-ac7b-0a9328dfcacd`)
                 if (resHTML.isSuccess && resHTML.assetContentVersions.length > 0) {
                     const assetHTML = resHTML.assetContentVersions[0].assetHTML
                     setHtml_content(assetHTML)
@@ -186,7 +186,8 @@ const Page = () => {
                 maxScale={0.4}
                 panning={{ lockAxisX: true }}
                 centerZoomedOut
-                initialPositionX={171}
+                smooth
+                centerOnInit
             >
                 <TransformComponent
                     wrapperStyle={{ width: '100%', height: '100%' }}
