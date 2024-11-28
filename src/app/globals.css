@@ -18,7 +18,17 @@
     @apply w-full h-4 rounded-lg appearance-none cursor-pointer;
   }
   .home-box-element {
-    @apply block text-sm bg-[rgba(255,252,252,0.46)] rounded-xl
+    @apply block text-sm bg-[rgba(255,251.79,251.79,0.46)] rounded-xl
+  }
+  .asset-grid-layout {
+    @apply 
+      grid 
+      grid-cols-[minmax(300px,360px)] md:grid-cols-[repeat(2,minmax(310px,380px))] xl:grid-cols-[repeat(3,minmax(auto,380px))]
+      gap-x-4 lg:gap-x-6
+      gap-y-4 lg:gap-y-6;
+  }
+  .asset-grid-padding { 
+    @apply px-4 lg:px-16 xl:px-20
   }
   /* .color-wheel-circle {
     @apply w-8 aspect-square
@@ -68,53 +78,94 @@
 
 
 .color-wheel {
-  position: absolute;
-  right: 10%;
-  height: 100%;
-}  /* need to be updated */
-
+  position: relative;
+  /* right: 10%;
+  height: 100%; */
+  /* animation: rotate-wheel 2s ease; */
+}  
 .eclipse-1{
-    position: absolute;
-  width: 15rem;
-  aspect-ratio: 1;
-  background: rgba(151, 71, 255, 0.3);
-  filter: blur(150px);
-  top: 0;
-  left: 0;
-} /* need to be updated */
-
-.eclipse-2 {
   position: absolute;
-    width: 15rem;
+  width: 13rem;
+  aspect-ratio: 1;
+  background: rgba(151, 71, 255, 0.5);
+  border-radius: 100%;
+  top:12rem ;
+  left:5.5rem;
+  animation: eclipse-purple-translation 2s ease;
+  /* top: -10%; */
+  filter: blur(150px);
+} 
+
+.eclipse-3 {
+  position: absolute;
+    width: 13rem;
+    border-radius: 100%;
     aspect-ratio: 1;
-    background: rgba(28, 211, 168, 0.3);
+    background: rgba(28, 211, 168, 0.5);
+    left: -8rem;
+    top: 9.4rem;
+    animation: eclipse-green-translation 2s ease;
     filter: blur(150px);
     /* bottom: 0; */
-    right: -52%;
-    bottom: 10%;
-} /* need to be updated */
+    /* right: -52%;
+    bottom: 10%; */
+} 
 
-
-.eclipse-3{
+.eclipse-2{
   position: absolute;
-  width: 15rem;
+  width: 13rem;
   aspect-ratio: 1;
-  /* bottom: 0; */
-  right: 20%;
-  bottom: -58%;
-  background: rgba(255, 255, 71, 0.3);
+  border-radius: 100%;
+  top: 0rem;
+  left: 13.5rem;
+  background: rgba(255, 255, 71, 0.5);
+  animation: eclipse-yellow-translation 2s ease;
   filter: blur(150px);
-} /* need to be updated */
+} 
+
+@keyframes eclipse-purple-translation {
+  0% {
+    top: -8rem;
+  }
+  50% {
+    top: 16rem;
+    left: -8rem;
+  }
+  100%{
+    top:12rem ;
+    left:5.5rem;
+  }
+}
+@keyframes eclipse-green-translation {
+  0% {
+    left: 12rem;
+    top: 0;
+  }
+  50% {
+    left: -8rem;
+    top: -6.5rem;
+  }
+  100%{
+    left: -8rem;
+    top: 9.4rem;
+  }
+}
+@keyframes eclipse-yellow-translation {
+  0% {
+    left: 0;
+    top: 14.5rem;
+  }
+  50% {
+    left: 13.5rem;
+    top: 2rem;
+  }
+  100%{
+    top: 0rem;
+    left: 13.5rem;
+  }
+}
 
 
-@keyframes rotate-wheel {
-  from {
-    transform: rotate(90deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
-} /* need to be updated */
 .custom-range::-moz-range-thumb {
   width: 1.7rem;
   height: 1.7rem;

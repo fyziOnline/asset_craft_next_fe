@@ -49,7 +49,7 @@ const Button: React.FC<ButtonProps> = ({
   type = "button"
 }) => {
   return (
-    <button onClick={handleClick} type={type} className={` ${customClass} flex items-center justify-center gap-3   rounded-full ${backgroundColor}`}>
+    <button onClick={handleClick} type={type} className={` ${customClass} inline-flex whitespace-nowrap items-center justify-center gap-3   rounded-full ${backgroundColor}`}>
       <p className={`flex items-center gap-1 text-sm leading-[24px] font-bold ${textColor} ${textStyle}`}>{IconComponent}{buttonText}</p>
       <div className={customClassIcon}>
         {showIcon && <RightArrow color={iconColor} />}

@@ -81,16 +81,17 @@ const AssetInProgress:FC = () => {
   return (
     <>
         <LayoutWrapper layout="main" >
-            <div className="flex items-center justify-between pt-[2rem] px-[1.5rem]">
+            <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
                 <Breadcrumb TaskType="Asset In Progress"/>
                 <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
             </div>
 
-            <div className="px-24">
+            <div className="px-4 lg:px-16 xl:px-20">
               { !isList ? 
-                 <div className="grid grid-cols-[repeat(3,1fr)] mt-4 gap-x-12 gap-y-12 overflow-auto">
-                  {tableData.map((data,index)=>(
-                    <div key={index}> 
+                 <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
+                  {tableData.map((data,index)=>( 
+                    <div key={index} 
+                    > 
                       <AssetCard data={data} />
                     </div>
                   ))}
