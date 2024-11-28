@@ -19,7 +19,6 @@ const AssetGenerationHeader:FC<ProjectAssetProp> = ({params}) => {
   }
 
   const {project_name, campaign_name} = accessParams()
-  console.log('searchParams:', project_name,campaign_name,asset_name);
 
 
   return (

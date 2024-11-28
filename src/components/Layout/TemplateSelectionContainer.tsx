@@ -11,18 +11,25 @@ interface TemplateViewerProps {
   templateData ?: Template[]
   title : string
   aspect_ratio : string
+  onProceed : (selectedTemplate:string) => void
 }
 
-const TemplateSelectionContainer:FC<TemplateViewerProps> = ({templateData=[],title='',aspect_ratio}) => {
+const TemplateSelectionContainer:FC<TemplateViewerProps> = ({templateData=[],title='',aspect_ratio,onProceed}) => {
+
+  const onTemplateSelection = (template:Template) => {
+    onProceed(template.template_name)
+  }
+
   return (
-    <section>
+    <section >
       <h1 className="text-center font-bold mb-5">{title}</h1>
       <div className="flex justify-evenly gap-10 w-full overflow-x-auto">
         {templateData.map((template)=>(
           <div key={template.id} className="flex flex-col items-center flex-shrink-0">
             <div
-              className="h-[50vh] aspect-half  relative bg-gray-200 mb-4"
+              className="h-[50vh] aspect-half  relative bg-gray-200 mb-4 cursor-pointer"
               style={{aspectRatio:aspect_ratio}}
+              onClick={() => onTemplateSelection(template)}
             >
               <Image
                 src={template.imageUrl}
