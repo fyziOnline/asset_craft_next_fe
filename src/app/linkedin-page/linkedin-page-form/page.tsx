@@ -7,8 +7,8 @@ import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
 import DropDown from '@/components/global/DropDown';
-import ChildrenTitle from '@/app/call-script/call-script-form/components/ChildrenTitle';
-import ChooseLabel from '@/app/call-script/call-script-form/components/ChooseLabel';
+import ChildrenTitle from '@/components/global/ChildrenTitle';
+import ChooseLabel from '@/components/global/ChooseLabel';
 import RangeSlider from '@/components/global/RangeSlider';
 import { useRouter } from 'next/navigation';
 import DragAndDrop from '@/components/global/DragAndDrop';
@@ -18,7 +18,7 @@ const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
-    const [disableList, setDisableList] = useState<number[]>([2, 3 , 4]);
+    const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
 
     const toggleSidebar = () => {
@@ -80,15 +80,15 @@ const Page = () => {
             setCheckedList([]);
         }
     };
-    
+
 
     const handleGenerate = (): void => {
         if (generateStep === 2 || checkedList.length !== 4) {
             return;
         }
-    
+
         let newStep = generateStep + 1;
-    
+
         if (newStep === 5) { // Reset after completing step 4
             newStep = 1;
             setIsOpen(false);
@@ -107,7 +107,7 @@ const Page = () => {
         }
         setGenerateStep(newStep);
     };
-    
+
 
     const handleEdit = () => {
         router.push("")
@@ -241,7 +241,7 @@ const Page = () => {
                                         <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
                                         <TextField placeholder="Enter the name of the product or solution." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                                        <div className='flex items-center gap-40'>
+                                        <div className='flex items-center gap-[16%]'>
                                             <div>
                                                 <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
                                                 <DropDown selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
@@ -280,10 +280,10 @@ const Page = () => {
                                     handleShowContent={() => { setIsShowList([2]) }}
                                     isShowContent={isShowList.includes(2)}>
                                     <div className='max-w-[90%]'>
-                                            <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
-                                            <TextField placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                        <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
+                                        <TextField placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                                            <div className='flex items-center gap-40'>
+                                        <div className='flex items-center gap-[16%]'>
                                             <div>
                                                 <ChildrenTitle title='Email Type' customClass='mt-5' />
                                                 <DropDown selectPlaceHolder="Select Post Type" optionLists={emailType} />
@@ -327,12 +327,12 @@ const Page = () => {
                                     disableShowContent={disableList.includes(3)}
                                     handleShowContent={() => { setIsShowList([3]) }}
                                     isShowContent={isShowList.includes(3)}>
-                                        <div>
-                                            <DragAndDrop />
+                                    <div>
+                                        <DragAndDrop />
 
-                                            <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
-                                            <TextField placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
-                                        </div>
+                                        <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
+                                        <TextField placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                    </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                                         <Button
                                             buttonText='Back'
@@ -368,7 +368,7 @@ const Page = () => {
                                     <div>
                                         <ChildrenTitle title='Hook/Headline & Introduction' customClass="text-[18px]" />
                                         <ChildrenTitle title='Catchy introduction to the topic/product along with a brief overview.' />
-                                        <TextField customClass='h-16' placeholder={`"Write a compelling headline that promotes the benefits of HPE GreenLake’s hybrid cloud solution, followed by a 2-3 sentence introduction explaining the benefits of HPE GreenLake and why attending StorageAsia 2024 is beneficial."`}/>
+                                        <TextField customClass='h-16' placeholder={`"Write a compelling headline that promotes the benefits of HPE GreenLake’s hybrid cloud solution, followed by a 2-3 sentence introduction explaining the benefits of HPE GreenLake and why attending StorageAsia 2024 is beneficial."`} />
 
                                         <ChildrenTitle title='Main Message & Call-to-Action (CTA)' customClass="text-[18px] mt-[20px]" />
                                         <ChildrenTitle title='Highlight the core benefits of the product along with actionable event details.' />
@@ -376,7 +376,7 @@ const Page = () => {
 
                                         <ChildrenTitle title='Hashtags & Keywords' customClass="text-[18px] mt-[20px]" />
                                         <ChildrenTitle title='Industry-relevant hashtags for discoverability.' />
-                                        <TextField placeholder={`"Generate 4-5 relevant hashtags for an HPE GreenLake LinkedIn post on hybrid cloud solutions."`} rows={1}  />
+                                        <TextField placeholder={`"Generate 4-5 relevant hashtags for an HPE GreenLake LinkedIn post on hybrid cloud solutions."`} rows={1} />
 
                                     </div>
                                     <div className='max-w-full flex justify-end pt-5 pb-3'>

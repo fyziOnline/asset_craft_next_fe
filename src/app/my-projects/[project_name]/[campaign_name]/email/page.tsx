@@ -1,6 +1,7 @@
 import ProgressSection from "@/app/my-projects/asset-generation-progress/progressSection"
 import AssetGenerationHeader from "@/components/layout/AssetGenerationHeader"
 import TemplateSelectionContainer from "@/components/layout/TemplateSelectionContainer"
+import { useAppData } from "@/context/AppContext"
 import LayoutWrapper from "@/layout/LayoutWrapper"
 import { FC } from "react"
 
@@ -44,8 +45,8 @@ const ProjectAssetPage: FC<ProjectAssetProp> = async ({ params }) => {
 
   return (
     <LayoutWrapper layout="main">
-      <AssetGenerationHeader params={{project_name,campaign_name}} />
-      <div className=" px-[1.5rem]">
+        <AssetGenerationHeader params={{project_name,campaign_name}} />
+      <div>
         <ProgressSection />
         {/* <TemplateSelectionContainer aspect_ratio="1 / 2" templateData={dummyTemplateData} title="Select one of the templates"/> */}
       </div>
