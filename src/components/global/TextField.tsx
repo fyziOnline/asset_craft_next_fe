@@ -52,7 +52,7 @@ const TextField: React.FC<TextFieldProps> = ({
         readOnly={readOnly}
         placeholder={placeholder}
         rows={rows}
-        onChange={handleChange}
+        onBlur={handleChange}
         className={`w-full h-full border-none px-3 py-3 rounded-[10px] text-sm italic outline-none resize-none ${customAreaClass}`}
       />
     </div>
