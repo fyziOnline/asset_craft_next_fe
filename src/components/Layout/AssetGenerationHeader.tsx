@@ -13,7 +13,7 @@ interface ProjectAssetProp {
 const AssetGenerationHeader:FC<ProjectAssetProp> = ({params}) => {
   const queryParams = useSearchParams()
   const asset_name =queryParams.get('asset_name') ?? 'default' 
-
+  
   const accessParams = () => {
     return params
   }
@@ -23,7 +23,7 @@ const AssetGenerationHeader:FC<ProjectAssetProp> = ({params}) => {
 
   return (
     <div className="border-grey-200 border-b-[1px] border-solid pt-[2rem] pb-5 px-[1.5rem] mb-4">
-        <Breadcrumb projectName={project_name.split('%20').join(' ')} TaskName={campaign_name.split('%20').join(' ')} TaskType={asset_name.split('%20').join(' ')}/>
+        <Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={asset_name}/>
     </div>
   )
 }

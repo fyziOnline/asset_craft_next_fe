@@ -5,9 +5,12 @@ import Breadcrumb from "@/components/global/Breadcrumb"
 import Table from "@/components/global/Table"
 import LayoutWrapper from "@/layout/LayoutWrapper"
 import MyProjectCard from "@/components/wrapper/MyProjectCard"
+import { useRouter } from "next/navigation"
+import ProjectPageLayout from "@/components/layout/ProjectPageLayout"
 
   
 const MyProjects:FC = () => {
+  const router = useRouter()
   const [isList,setIsList] = useState<Boolean>(true)
 
   const tableData = [
@@ -50,6 +53,10 @@ const MyProjects:FC = () => {
       setIsList(pre=>!pre)
     }
 
+  const onSelectingProject = (project_name:string) => {
+    router.push(`my-projects/${encodeURIComponent(project_name)}`)
+    
+  }
 
   const tableHeading = ["Project Name", "Created On", "Last Edited"]
 
@@ -58,27 +65,7 @@ const MyProjects:FC = () => {
 
   return (
     <>
-        <LayoutWrapper layout="main" >
-            <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
-                <Breadcrumb TaskType="My Projects"/>
-                <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon /> }</span>
-            </div>
-
-            <div className="asset-grid-padding">
-              {
-                !isList ? 
-                  <div className="asset-grid-layout mt-4  justify-center overflow-auto">
-                  {tableData.map((data,index)=>(
-                    <div key={index}> 
-                      <MyProjectCard data={data} />
-                    </div>
-                  ))}
-                  </div>
-                  :
-                <Table columnWidths={['9fr', '1.5fr', '1fr']} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
-              }
-          </div>
-        </LayoutWrapper>
+        <ProjectPageLayout project_data={tableData} onSelectingProjects={onSelectingProject} tableHeadings={tableHeading} headersHavingToggle={arrowshowItems} page="My Project"/>
     </>
   )
 }

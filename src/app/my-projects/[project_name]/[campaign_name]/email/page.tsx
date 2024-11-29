@@ -40,7 +40,9 @@ const ProjectAssetPage: FC<ProjectAssetProp> = async ({ params }) => {
   const takeData = async () => {
     return params
   }
-  const {project_name,campaign_name} = await takeData()
+  const data = await takeData()
+  const project_name = decodeURIComponent(data.project_name)
+  const campaign_name = decodeURIComponent(data.campaign_name)
 
   return (
     <LayoutWrapper layout="main">
