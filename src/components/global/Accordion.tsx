@@ -55,7 +55,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
 
   return (
     <div className='flex flex-col border border-[#9A9A9A] bg-white rounded-[20px] w-full'>
-      <div onClick={toggleContent} className={`flex items-center justify-between px-20 w-full h-[100px] cursor-pointer `}>
+      <div onClick={toggleContent} className={`flex items-center justify-between px-[8%] w-full h-[100px] cursor-pointer `}>
         <div className="flex items-center gap-9">
           <div>
             <label className="flex flex-row items-center gap-2.5 dark:text-white light:text-black">
@@ -68,7 +68,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
             </label>
           </div>
           <div>
-            <p className="font-semibold text-[20px]">{HeaderTitle}</p>
+            <p className="font-semibold text-lg text-wrap tracking-normal">{HeaderTitle}</p>
           </div>
         </div>
         <div className={`cursor-pointer transition-transform ${showContent ? "rotate-180" : ""}`}>
@@ -77,7 +77,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
       </div>
 
       <div ref={contentRef} className="overflow-hidden transition-all duration-500 relative bottom-4" style={{ height: showContent ? `auto` : "0px", }}>
-        <div className="pl-[150px] pr-[74px] pb-4">{children}</div>
+        <div className="px-[15%] pb-4">{children}</div>
       </div>
     </div>
   );
