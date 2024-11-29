@@ -1,5 +1,5 @@
 'use client'
-import ProjectPageLayout from '@/components/layout/ProjectPageLayout';
+import ProjectPageLayout from '@/layout/specific_layout/ProjectPageLayout';
 import { usePathname, useRouter } from 'next/navigation';
 import { FC } from 'react'
 
@@ -31,7 +31,7 @@ const ProjectPage:FC = () => {
     const headerHavingSortingToggle = ["Project Name", "Created On", "Last Edited"]
 
 const onSelectingProject = (campaign_name:string) => {
-    router.push(`my-projects/${project_name}/${encodeURIComponent(campaign_name)}`)
+    router.push(`/my-projects/${project_name}/${encodeURIComponent(campaign_name)}`)
   }
 
   return (

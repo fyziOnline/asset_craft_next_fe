@@ -6,7 +6,7 @@ import Table from "@/components/global/Table"
 import LayoutWrapper from "@/layout/LayoutWrapper"
 import MyProjectCard from "@/components/wrapper/MyProjectCard"
 import { useRouter } from "next/navigation"
-import ProjectPageLayout from "@/components/layout/ProjectPageLayout"
+import ProjectPageLayout from "@/layout/specific_layout/ProjectPageLayout"
 
   
 const MyProjects:FC = () => {

@@ -2,10 +2,10 @@
 
 import LayoutWrapper from '@/layout/LayoutWrapper'
 import { FC, useState } from 'react'
-import Breadcrumb from '../global/Breadcrumb'
+import Breadcrumb from '../../components/global/Breadcrumb'
 import { GridIcon, ListIcon } from '@/assets/icons/AppIcons'
-import MyProjectCard from '../wrapper/MyProjectCard'
-import Table from '../global/Table'
+import MyProjectCard from '../../components/wrapper/MyProjectCard'
+import Table from '../../components/global/Table'
 
 interface Project {
   [key:string] : string

@@ -5,12 +5,11 @@ import Breadcrumb from "@/components/global/Breadcrumb"
 import Table from "@/components/global/Table"
 import AssetCard from "@/components/wrapper/AssetCard"
 import LayoutWrapper from "@/layout/LayoutWrapper"
+import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 import { FC, useState } from "react"
 
   
 const AssetInProgress:FC = () => {
-
-  const [isList,setIsList] = useState<Boolean>(true)
 
   const tableData = [
     {
@@ -71,36 +70,17 @@ const AssetInProgress:FC = () => {
 
   const tableHeading = ["Project Name" , "Campaign Name", "Asset Name", "Created On" , "Approved By" , "Approved On" , "Current Status"]
 
-  const arrowshowItems = ["Project Name", "Created On", "Approved On"]
-
-  const toggleListType = () => {
-    setIsList(pre=>!pre)
-  }
+  const headerHavingSortingToggle = ["Project Name", "Created On", "Approved On"]
  
 
   return (
     <>
-        <LayoutWrapper layout="main" >
-            <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
-                <Breadcrumb TaskType="Asset In Progress"/>
-                <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
-            </div>
-
-            <div className="px-4 lg:px-16 xl:px-20">
-              { !isList ? 
-                 <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
-                  {tableData.map((data,index)=>( 
-                    <div key={index} 
-                    > 
-                      <AssetCard data={data} />
-                    </div>
-                  ))}
-                </div>
-                :
-                <Table listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} 
-              />}
-            </div>
-        </LayoutWrapper>
+       <AssetsPageLayout
+          campaign_data={tableData}
+          tableHeadings={tableHeading}
+          headersHavingToggle={headerHavingSortingToggle}
+          page="Asset In Progress"
+       />
     </>
   )
 }
