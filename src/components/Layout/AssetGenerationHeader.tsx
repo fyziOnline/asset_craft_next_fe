@@ -21,7 +21,7 @@ const AssetGenerationHeader:FC<ProjectAssetProp> = ({params }) => {
   const router = useRouter();
   const queryParams = useSearchParams()
   const asset_name =queryParams.get('asset_name') ?? 'default' 
-
+  
   const accessParams = () => {
     return params
   }

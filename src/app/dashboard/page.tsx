@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { useRouter } from 'next/navigation';
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import SearchBox from "@/components/global/SearchBox";
@@ -12,12 +12,24 @@ import ProjectSetUpModal from "@/components/wrapper/ProjectSetUpModal";
 import TextField from "@/components/global/TextField";
 import { EmailIcon, LandingAssetIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 
+type AssetDetails = {
+  project_name: string;
+  campaign_name: string;
+  asset_name: string;
+};
+
 const Dashboard: FC = () => {
   const router = useRouter();
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [chooseAssetModal, setChooseAssetModal] = useState<boolean>(false);
   const [selectedButton, setSelectedButton] = useState<string>()
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
+
+  const [assetDetails,setAssetDetails] = useState<AssetDetails>({
+    project_name:'',
+    campaign_name:'',
+    asset_name:''
+  })
 
   const buttonData = [
     { text: "All in One", backgroundColor: "bg-green-300", customClass: "px-[50px] py-1", showIcon: false },
@@ -120,13 +132,26 @@ const Dashboard: FC = () => {
   const closeModal = () => setModalOpen(false);
   const closeAssetModal = () => setChooseAssetModal(false)
 
+  const onChangeAssetDetails = (e:ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setAssetDetails(pre => ({
+      ...pre,
+      [name] : value
+    }))
+    
+  }
+
   const handleNext = () => {
+    console.log('selected button :',assetDetails);
+    
     if (selectedButton === "All in One") {
       setChooseAssetModal(true)
       setModalOpen(false)
     } else if (selectedButton === "Call Script") {
       router.push("/call-script")
       closeModal()
+    } else if(selectedButton === 'Email') {
+      router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/email?asset_name=${assetDetails.asset_name}`)
     }
   }
 
@@ -138,16 +163,16 @@ const Dashboard: FC = () => {
           <div className='w-full flex flex-col gap-3 px-12 pb-7'>
             <div className='pt-[15px] flex flex-col gap-3'>
               <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
-              <TextField customClass='h-12' placeholder='Type the name of your Project/Solution here.' />
+              <TextField customClass='h-12' placeholder='Type the name of your Project/Solution here.' name="project_name"  handleChange={onChangeAssetDetails} />
             </div>
             <div className='flex flex-col gap-3'>
               <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
-              <TextField customClass='h-12' placeholder='Type the name of your Campaign here.' />
+              <TextField customClass='h-12' placeholder='Type the name of your Campaign here.' name="campaign_name" handleChange={onChangeAssetDetails}/>
             </div>
             {selectedButton !== "All in One" &&
               <div className='flex flex-col gap-3'>
                 <p className='text-[#160647] text-base tracking-wide font-semibold'>Digital Marketing Asset Name</p>
-                <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here.' />
+                <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here.' name="asset_name" handleChange={onChangeAssetDetails}/>
               </div>
             }
           </div>

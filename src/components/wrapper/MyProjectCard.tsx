@@ -5,16 +5,15 @@ import UpdateIndicator from '../global/UpdateIndicator'
 import Button from '../global/Button'
 
 
-interface AssetCardProp {
+interface ProjectCarpProp {
   data : {
-    projectName: string
-    creadedOn: string
-    approvedOn: string 
+    [key:string] : string
   }
+  handleSelectProject : (project_name:string) => void
 }
 
 
-const MyProjectCard:FC<AssetCardProp> = ({data}) => {
+const MyProjectCard:FC<ProjectCarpProp> = ({data,handleSelectProject}) => {
 const [isHovered,setIsHovered] = useState<boolean>(false)
 const onHover = () => {
   setIsHovered(true)
@@ -27,6 +26,7 @@ const onLeave = () => {
         className='group p-[2rem] border-2  rounded-3xl hover:bg-green-100' 
         onMouseEnter={onHover} 
         onMouseLeave={onLeave}
+        onClick={()=>handleSelectProject(data.projectName)}
     >
         <CardContent header={data.projectName} cardClass='mb-14' content='Ipsum dolor sit amet consectetur adipisicing elit. Ipsum deleniti ab perspiciatis obcaecati inventore quae officiis debitis ullam dolorem illo? dsjfkwhai udjsfhuwieuh fuehu Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, fugiat! ' />  
         <div className='flex justify-between'>

@@ -8,13 +8,7 @@ import Button from '../global/Button'
 
 interface AssetCardProp {
   data : {
-    projectName: string
-    campaignName: string
-    assetName: string
-    creadedOn: string
-    approvedBy: string
-    approvedOn: string 
-    currentStatus: string
+    [key:string] : string
   }
 }
 
