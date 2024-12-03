@@ -37,7 +37,7 @@ export const useLogin = () => {
             });
 
             if (resLogin.isSuccess) {
-                Cookies.set(nkey.email_login, emailRef.current, { expires: 30 });
+                Cookies.set(nkey.email_login, emailRef.current, { expires: 180 });
                 loginRef.current = resLogin
                 setIsOtpVisible(true);
             }
@@ -64,11 +64,11 @@ export const useLogin = () => {
             });
 
             if (resToken.isSuccess) {
-                Cookies.set(nkey.auth_token, resToken.loginToken, { expires: 30 });
+                Cookies.set(nkey.auth_token, resToken.loginToken, { expires: 180 });
                 const resClientID = await ApiService.get<any>(urls.client_select_all, {});
 
                 if (resClientID.isSuccess && resClientID.clients.length > 0) {
-                    Cookies.set(nkey.client_ID, resClientID.clients[0].clientID, { expires: 30 });
+                    Cookies.set(nkey.client_ID, resClientID.clients[0].clientID, { expires: 180 });
                     router.push('/dashboard');
                 } else {
                     Cookies.remove(nkey.auth_token)
