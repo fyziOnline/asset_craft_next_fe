@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   env: {
     API_URL: process.env.API_URL
+  },
+  images: {
+    domains: ["stratagile-emailcraft.s3.ap-southeast-1.amazonaws.com"]
   }
 };
 
