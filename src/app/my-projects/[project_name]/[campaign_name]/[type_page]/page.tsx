@@ -22,12 +22,12 @@ const ProjectAssetPage: FC<ProjectAssetProp> = async ({ params }) => {
   const type_page = decodeURIComponent(data.type_page) //use ListTypePage
 
   return (
-    <LayoutWrapper layout="main">
+    <>
       <AssetGenerationHeader params={{ project_name, campaign_name }} />
       <div>
         <ProgressSection params={{ campaign_name, type_page }} />
       </div>
-    </LayoutWrapper>
+    </>
   )
 }
 
