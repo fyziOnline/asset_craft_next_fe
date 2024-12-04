@@ -12,10 +12,13 @@ import { html_content } from '@/app/call-script/call-script-form/data/data';
 
 
 interface TemplateViewerProps {
-    templateId?: string
+    params: {
+        templateId?: string,
+        campaignId?: string
+    }
 }
 
-const TemplateGenerationSection: FC<TemplateViewerProps> = ({ templateId = "" }) => {
+const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const { contextData } = useAppData();
     const [isOpen, setIsOpen] = useState(false);
 

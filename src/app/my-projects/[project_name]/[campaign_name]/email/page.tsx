@@ -24,7 +24,7 @@ const ProjectAssetPage: FC<ProjectAssetProp> = async ({ params }) => {
     <LayoutWrapper layout="main">
       <AssetGenerationHeader params={{ project_name, campaign_name }} />
       <div>
-        <ProgressSection />
+        <ProgressSection params={{ campaign_name }} />
       </div>
     </LayoutWrapper>
   )
