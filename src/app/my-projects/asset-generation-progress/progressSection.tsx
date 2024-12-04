@@ -1,70 +1,85 @@
 'use client'
+import { urls } from '@/apis/urls'
+import { useLoading } from '@/components/global/Loading/LoadingContext'
 import TemplateGenerationSection from '@/components/layout/TemplateGenerationSection'
 import TemplateSelectionContainer from '@/components/layout/TemplateSelectionContainer'
-import { FC, ReactNode, useState } from 'react'
-
-interface Template {
-    id: string
-    imageUrl: string
-    template_name: string
-  }
+import { nkey } from '@/data/keyStore'
+import { useGetTemplates } from '@/hooks/useGetTemplates'
+import { ApiService } from '@/lib/axios_generic'
+import { FC, ReactNode, useRef, useState } from 'react'
+import Cookies from 'js-cookie';
+import moment from 'moment';
 
 type ProgressComponent = ReactNode;
+interface ProjectAssetProp {
+  params: {
+    project_name?: string
+    campaign_name?: string
+    asset_name?: string
+    type_page?: string
+  }
+  handleEdit?: () => void
+}
 
+const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
+  const total_steps: number = 2
+  const [currentStep, setCurrentStep] = useState<number>(0)
+  const { listTemplates } = useGetTemplates({ type_page: params.type_page })
+  const templateChooseRef = useRef("e348c23c-a4ac-ef11-ac7b-0a9328dfcacd")
+  const campaignIdRef = useRef("70b77f95-0fb2-ef11-ac7b-0a9328dfcacd")
+  const { setShowLoading } = useLoading()
 
-const dummyTemplateData:Template[] = [
-    {
-      imageUrl : '/images/email_templates/template_1.png',
-      template_name :'Event Invite',
-      id : '1'
-    },
-    {
-      imageUrl : '/images/email_templates/template_2.png',
-      template_name :'Webinar',
-      id : '2'
-    },
-    {
-      imageUrl : '/images/email_templates/template_3.png',
-      template_name :'Product Features',
-      id:'3'
-    }
-  ]
+  const handleNext = async (selectedTemplate: string) => {
+    if (currentStep < total_steps) {
+      try {
+        setShowLoading(true)
+        const client_ID = Cookies.get(nkey.client_ID);
+        const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
 
+        // const res = await ApiService.post<any>(urls.campaign_add, {
+        //   "clientID": client_ID,
+        //   "campaignName": params.campaign_name,
+        //   "country": "",
+        //   "squad": "",
+        //   "startDate": currentDate,
+        //   "endDate": "",
+        //   "status": ""
+        // });
+        const res = { isSuccess: true, campaignID: "70b77f95-0fb2-ef11-ac7b-0a9328dfcacd" }
 
-const ProgressSection:FC = () => {
-    const total_steps:number = 2
-    const [currentStep,setCurrentStep] = useState<number>(0)
-    const [templateOnSelect,setTemplateOnSelect] = useState<string>('')
-
-    const handleNext = (selectedTemplate:string) => {
-        if(currentStep < total_steps) {
-            setTemplateOnSelect(selectedTemplate)
-            console.log('selected template :',selectedTemplate);
-            
-            setCurrentStep(pre=>pre+1)
-        } 
-    }
-    const handlePrevious = () => {
-        if (currentStep > 0 ) {
-            setCurrentStep(pre=>pre-1)
+        if (res.isSuccess) {
+          templateChooseRef.current = selectedTemplate
+          campaignIdRef.current = res.campaignID
+          setCurrentStep(pre => pre + 1)
         }
+      } catch (error) {
+        console.error('API Error:', ApiService.handleError(error));
+        alert(ApiService.handleError(error));
+      } finally {
+        setShowLoading(false)
+      }
     }
+  }
 
-
-    
-    const pageProgressComponents: { [key: number]: ProgressComponent } = {
-        0: (
-            <TemplateSelectionContainer 
-                aspect_ratio='1 / 2' 
-                templateData={dummyTemplateData} 
-                title='Select one of the templates' 
-                onProceed={handleNext} 
-           />
-        ),
-        1: (
-            <TemplateGenerationSection />
-        )
+  const handlePrevious = () => {
+    if (currentStep > 0) {
+      setCurrentStep(pre => pre - 1)
     }
+  }
+
+  const pageProgressComponents: { [key: number]: ProgressComponent } = {
+    0: (
+      <TemplateSelectionContainer
+        aspect_ratio='1 / 2'
+        templateData={listTemplates}
+        title='Select one of the templates'
+        onProceed={handleNext}
+      />
+    ),
+    1: (
+      <TemplateGenerationSection params={{ type_page: params.type_page, templateId: templateChooseRef.current, campaignId: campaignIdRef.current }} />
+    )
+  }
 
   return pageProgressComponents[currentStep]
 }
