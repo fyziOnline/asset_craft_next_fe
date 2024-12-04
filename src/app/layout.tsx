@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AppDataProvider } from "@/context/AppContext";
 import "./globals.css";
+import { LoadingProvider } from "@/components/global/Loading/LoadingContext";
 
 export const metadata: Metadata = {
   title: "HPE Brand Central AI",
@@ -16,7 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-inter">
         <AppDataProvider>
-          {children}
+          <LoadingProvider>
+            {children}
+          </LoadingProvider>
         </AppDataProvider>
       </body>
     </html>
