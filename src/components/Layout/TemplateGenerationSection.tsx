@@ -1,21 +1,23 @@
 'use client';
 import React, { FC, useState } from 'react';
 import Image from 'next/image';
-import AssetGenerate from '../ui/AssetGenerate';
-import AssetViewer from '../ui/AssetViewer';
 import LandingPage from '../asset-generate/LandingPage';
-import { useAppData } from '@/context/AppContext';
 import LinkedInPage from '../asset-generate/LinkedinPage';
 import CallScriptPage from '../asset-generate/CallScriptPage';
+import { ListTypePage } from '@/data/dataGlobal';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { html_content } from '@/app/call-script/call-script-form/data/data';
-
+import { useAppData } from '@/context/AppContext';
 
 interface TemplateViewerProps {
-    templateId?: string
+    params: {
+        templateId?: string,
+        campaignId?: string,
+        type_page?: string
+    }
 }
 
-const TemplateGenerationSection: FC<TemplateViewerProps> = ({ templateId = "" }) => {
+const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const { contextData } = useAppData();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -23,7 +25,20 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ templateId = "" })
         setIsOpen(!isOpen);
     };
 
-    console.log("log", contextData.assetGenerateStatus)
+    const renderAssetGenerateContent = () => {
+        switch (params.type_page) {
+            case ListTypePage.Email:
+                return <LandingPage />;
+            case ListTypePage.LandingPage:
+                return <LandingPage />;
+            case ListTypePage.LinkedIn:
+                return <LinkedInPage />;
+            case ListTypePage.CallScript:
+                return <CallScriptPage />;
+            default:
+                return null;
+        }
+    };
 
     const sidebarStep1 = () => {
         return (<div>
@@ -126,20 +141,6 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ templateId = "" })
         );
     }
 
-    const renderAssetGenerateContent = () => {
-        switch (contextData.assetGenerateTemplate) {
-            case "LANDINGPAGE":
-                return <LandingPage />;
-            case "LINKEDIN":
-                return <LinkedInPage />;
-            case "CALLSCRIPT":
-                return <CallScriptPage />;
-            default:
-                return null;
-        }
-    };
-
-
     return (
         <div className='min-h-[70vh]'>
             <div className="flex">
@@ -149,17 +150,17 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ templateId = "" })
                             Please provide the necessary information to generate AI content
                         </p>
                     </div>
-                    <AssetGenerate>
+                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[62vh]'>
                         {renderAssetGenerateContent()}
-                    </AssetGenerate>
+                    </div>
                 </div>
                 <div className="flex">
                     {contextData.assetGenerateStatus === 1 &&
-                        <AssetViewer>
+                        <div>
                             <div onClick={toggleSidebar} className='flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] relative bg-[#00b188] rounded-[10px_0px_0px_10px] mt-[20px] cursor-pointer'>
                                 <img src="/vector_right_arrow.svg" className={`relative w-[10.5px] h-[18.5px] mt-[-0.25px] mb-[-0.25px] mr-[-0.75px] transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`} alt="vector" />
                             </div>
-                        </AssetViewer>
+                        </div>
                     }
                     <div className={`bg-[#F5F5F7] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'} h-[70vh]`}>
                         {contextData.assetGenerateStatus === 1 && sidebarStep1()}
