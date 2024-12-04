@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { AppDataProvider } from "@/context/AppContext";
 import "./globals.css";
+import LayoutWrapper from "@/layout/LayoutWrapper";
+import { usePathname } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "HPE Brand Central AI",
@@ -16,7 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-inter">
         <AppDataProvider>
-          {children}
+          <LayoutWrapper layout="main">
+            {children}
+          </LayoutWrapper>
         </AppDataProvider>
       </body>
     </html>

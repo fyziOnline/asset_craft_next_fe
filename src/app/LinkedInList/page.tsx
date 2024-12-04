@@ -60,15 +60,12 @@ const page:FC = () => {
 
   return (
     <>
-        <LayoutWrapper layout="main" >
-            <div className="py-[2rem] px-[1.5rem]">
-                <Breadcrumb TaskType="LinkedIn Assets"/>
-            </div>
-
-            <div className="px-16">
-              <Table IconComponent={<LinkedinIcon />} IconAssetName="assetName" columnWidths={["4fr" , "1fr" ,"1fr" ,"1fr" ,"1fr"]} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
-          </div>
-        </LayoutWrapper>
+      <div className="py-[2rem] px-[1.5rem]">
+          <Breadcrumb TaskType="LinkedIn Assets"/>
+      </div>
+      <div className="px-16">
+        <Table IconComponent={<LinkedinIcon />} IconAssetName="assetName" columnWidths={["4fr" , "1fr" ,"1fr" ,"1fr" ,"1fr"]} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
+      </div>
     </>
   )
 }

@@ -2,7 +2,6 @@
 
 import { ChangeEvent, FC, useState } from "react";
 import { useRouter } from 'next/navigation';
-import LayoutWrapper from "@/layout/LayoutWrapper";
 import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
@@ -157,8 +156,6 @@ const Dashboard: FC = () => {
 
   return (
     <>
-      <LayoutWrapper layout="main">
-
         <ProjectSetUpModal title="Project Details" selectedValue={selectedButton} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} >
           <div className='w-full flex flex-col gap-3 px-12 pb-7'>
             <div className='pt-[15px] flex flex-col gap-3'>
@@ -264,7 +261,6 @@ const Dashboard: FC = () => {
             </div>
           </div>
         </div>
-      </LayoutWrapper>
     </>
   );
 };
