@@ -15,6 +15,8 @@ interface ProjectAssetProp {
   params: {
     project_name?: string
     campaign_name?: string
+    asset_name?: string
+    type_page?: string
   }
   handleEdit?: () => void
 }
@@ -22,7 +24,7 @@ interface ProjectAssetProp {
 const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const total_steps: number = 2
   const [currentStep, setCurrentStep] = useState<number>(0)
-  const { listTemplates } = useGetTemplates()
+  const { listTemplates } = useGetTemplates({ type_page: params.type_page })
   const templateChooseRef = useRef("e348c23c-a4ac-ef11-ac7b-0a9328dfcacd")
   const campaignIdRef = useRef("70b77f95-0fb2-ef11-ac7b-0a9328dfcacd")
   const { setShowLoading } = useLoading()
@@ -75,7 +77,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
       />
     ),
     1: (
-      <TemplateGenerationSection params={{ templateId: templateChooseRef.current, campaignId: campaignIdRef.current }} />
+      <TemplateGenerationSection params={{ type_page: params.type_page, templateId: templateChooseRef.current, campaignId: campaignIdRef.current }} />
     )
   }
 

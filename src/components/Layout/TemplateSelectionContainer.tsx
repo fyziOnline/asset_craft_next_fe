@@ -1,17 +1,6 @@
 import Image from "next/image"
 import { FC } from "react"
-
-interface Template {
-  assetTypeID: string,
-  assetTypeName: string,
-  description: string,
-  isActive: number,
-  layoutID: string,
-  templateID: string,
-  templateImageURL: string,
-  templateName: string,
-}
-
+import { Template } from "../../../types/templates"
 
 interface TemplateViewerProps {
   templateData?: Template[]
