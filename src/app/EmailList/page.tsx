@@ -58,16 +58,13 @@ const page:FC = () => {
  
 
   return (
-    <>
-        <LayoutWrapper layout="main" >
-            <div className="pt-[2rem] px-[1.5rem]">
-                <Breadcrumb TaskType="Email Assets"/>
-            </div>
-
-            <div className="px-16">
-              <Table IconComponent={<EmailIcon />} IconAssetName="assetName" columnWidths={["4fr" , "1fr" ,"1fr" ,"1fr" ,"1fr"]} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
-          </div>
-        </LayoutWrapper>
+   <>
+      <div className="pt-[2rem] px-[1.5rem]">
+          <Breadcrumb TaskType="Email Assets"/>
+      </div>
+      <div className="px-16">
+        <Table IconComponent={<EmailIcon />} IconAssetName="assetName" columnWidths={["4fr" , "1fr" ,"1fr" ,"1fr" ,"1fr"]} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
+      </div>
     </>
   )
 }

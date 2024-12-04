@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AppDataProvider } from "@/context/AppContext";
 import "./globals.css";
+import LayoutWrapper from "@/layout/LayoutWrapper";
 import { LoadingProvider } from "@/components/global/Loading/LoadingContext";
 
 export const metadata: Metadata = {
@@ -18,7 +19,9 @@ export default function RootLayout({
       <body className="font-inter">
         <AppDataProvider>
           <LoadingProvider>
-            {children}
+            <LayoutWrapper>
+              {children}
+            </LayoutWrapper>
           </LoadingProvider>
         </AppDataProvider>
       </body>

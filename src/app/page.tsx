@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { UserIcon } from "@/assets/icons/AppIcons";
-import LayoutWrapper from "@/layout/LayoutWrapper";
+// import LayoutWrapper from "@/layout/LayoutWrapper";
 import { useLogin } from "@/hooks/useLogin";
 import Button from "@/components/global/Button";
 
@@ -39,7 +39,6 @@ const Home: FC = () => {
 
   return (
     <>
-      <LayoutWrapper layout="home">
         <div className="h-full pt-7">
           {/* <div> */}
           <div className="flex relative justify-evenly items-center gap-[2rem] ">
@@ -128,7 +127,6 @@ const Home: FC = () => {
           </div>
         )}
 
-      </LayoutWrapper>
     </>
   );
 }

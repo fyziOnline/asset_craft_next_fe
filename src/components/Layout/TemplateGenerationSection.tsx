@@ -8,6 +8,7 @@ import { ListTypePage } from '@/data/dataGlobal';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { html_content } from '@/app/call-script/call-script-form/data/data';
 import { useAppData } from '@/context/AppContext';
+import EmailPage from '../asset-generate/EmailPage';
 
 interface TemplateViewerProps {
     params: {
@@ -28,7 +29,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const renderAssetGenerateContent = () => {
         switch (params.type_page) {
             case ListTypePage.Email:
-                return <LandingPage />;
+                return <EmailPage />;
             case ListTypePage.LandingPage:
                 return <LandingPage />;
             case ListTypePage.LinkedIn:

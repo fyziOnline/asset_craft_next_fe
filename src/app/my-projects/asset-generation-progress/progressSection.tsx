@@ -77,7 +77,13 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
       />
     ),
     1: (
-      <TemplateGenerationSection params={{ type_page: params.type_page, templateId: templateChooseRef.current, campaignId: campaignIdRef.current }} />
+      <TemplateGenerationSection 
+        params={{ 
+          type_page: params.type_page, 
+          templateId: templateChooseRef.current, 
+          campaignId: campaignIdRef.current 
+        }} 
+      />
     )
   }
 

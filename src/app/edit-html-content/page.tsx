@@ -58,7 +58,7 @@ const Page = () => {
 
 
     return (
-        <LayoutWrapper layout="main">
+        <>
             <div className='overflow-hidden'>
                 <div className="flex pt-[2rem] pb-2 px-[1.5rem]">
                     <div className='flex-1'>
@@ -153,7 +153,7 @@ const Page = () => {
                     </div>
                 </div>
             </div>
-        </LayoutWrapper>
+        </>
     );
 };
 

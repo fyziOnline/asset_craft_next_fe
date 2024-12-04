@@ -6,6 +6,7 @@ interface AppData {
     assetTemplateShow: boolean;
     assetGenerateTemplate: string;
     assetGenerateStatus: number;
+    layoutType : 'main' | 'home'
 }
 
 interface AppDataContextType {
@@ -23,6 +24,7 @@ const APP_DATA: AppData = {
     assetTemplateShow: false,
     assetGenerateTemplate: "LANDINGPAGE",
     assetGenerateStatus: 1,
+    layoutType:'main'
 };
 
 // Create a provider component

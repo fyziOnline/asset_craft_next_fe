@@ -24,27 +24,24 @@ const AssetsPageLayout:FC<AssetsPageProps> = ({campaign_data,tableHeadings,heade
   }
   return (
     <>
-       <LayoutWrapper layout="main" >
-            <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
-                <Breadcrumb TaskType={page}/>
-                <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
-            </div>
-
-            <div className="px-4 lg:px-16 xl:px-20">
-              { !isList ? 
-                 <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
-                  {campaign_data.map((data,index)=>( 
-                    <div key={index} 
-                    > 
-                      <AssetCard data={data} />
-                    </div>
-                  ))}
-                </div>
-                :
-                <Table listItems={campaign_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} 
-              />}
-            </div>
-        </LayoutWrapper>
+      <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
+          <Breadcrumb TaskType={page}/>
+          <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
+      </div>
+      <div className="px-4 lg:px-16 xl:px-20">
+        { !isList ? 
+           <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
+            {campaign_data.map((data,index)=>( 
+              <div key={index} 
+              > 
+                <AssetCard data={data} />
+              </div>
+            ))}
+          </div>
+          :
+          <Table listItems={campaign_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} 
+        />}
+      </div>
     </>
   )
 }
