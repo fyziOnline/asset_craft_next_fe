@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import Image from 'next/image';
 import AssetGenerate from '../ui/AssetGenerate';
 import AssetViewer from '../ui/AssetViewer';
@@ -10,16 +10,20 @@ import CallScriptPage from '../asset-generate/CallScriptPage';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { html_content } from '@/app/call-script/call-script-form/data/data';
 
-const TemplateGenerationSection = () => {
-    const [isOpen, setIsOpen] = useState(false);
 
+interface TemplateViewerProps {
+    templateId?: string
+}
+
+const TemplateGenerationSection: FC<TemplateViewerProps> = ({ templateId = "" }) => {
     const { contextData } = useAppData();
+    const [isOpen, setIsOpen] = useState(false);
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
 
-    console.log("log" , contextData.assetGenerateStatus)
+    console.log("log", contextData.assetGenerateStatus)
 
     const sidebarStep1 = () => {
         return (<div>
@@ -106,7 +110,7 @@ const TemplateGenerationSection = () => {
                         centerZoomedOut
                         smooth
                         centerOnInit
-                        >
+                    >
                         <TransformComponent
                             wrapperStyle={{ width: '100%', height: '100%' }}
                         >
