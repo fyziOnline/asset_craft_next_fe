@@ -1,4 +1,5 @@
 'use client'
+import { useLoading } from '@/components/global/Loading/LoadingContext'
 import TemplateGenerationSection from '@/components/layout/TemplateGenerationSection'
 import TemplateSelectionContainer from '@/components/layout/TemplateSelectionContainer'
 import { useGetTemplates } from '@/hooks/useGetTemplates'
@@ -11,11 +12,16 @@ const ProgressSection: FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0)
   const { listTemplates } = useGetTemplates()
   const templateChooseRef = useRef("")
+  const { setShowLoading } = useLoading()
 
-  const handleNext = (selectedTemplate: string) => {
+  const handleNext = async (selectedTemplate: string) => {
     if (currentStep < total_steps) {
-      templateChooseRef.current = selectedTemplate
-      setCurrentStep(pre => pre + 1)
+      setShowLoading(true)
+      setTimeout(() => {
+        setShowLoading(false)
+        templateChooseRef.current = selectedTemplate
+        setCurrentStep(pre => pre + 1)
+      }, 3000);
     }
   }
 
