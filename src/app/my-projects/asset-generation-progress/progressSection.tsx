@@ -25,8 +25,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const total_steps: number = 2
   const [currentStep, setCurrentStep] = useState<number>(0)
   const { listTemplates } = useGetTemplates({ type_page: params.type_page })
-  const templateChooseRef = useRef("e348c23c-a4ac-ef11-ac7b-0a9328dfcacd")
-  const campaignIdRef = useRef("70b77f95-0fb2-ef11-ac7b-0a9328dfcacd")
+  const assetIDTemplateRef = useRef("b26bf18a-c0b2-ef11-ac7b-0a9328dfcacd")
   const { setShowLoading } = useLoading()
 
   const handleNext = async (selectedTemplate: string) => {
@@ -36,7 +35,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         const client_ID = Cookies.get(nkey.client_ID);
         const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
 
-        // const res = await ApiService.post<any>(urls.campaign_add, {
+        // const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
         //   "clientID": client_ID,
         //   "campaignName": params.campaign_name,
         //   "country": "",
@@ -45,12 +44,22 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         //   "endDate": "",
         //   "status": ""
         // });
-        const res = { isSuccess: true, campaignID: "70b77f95-0fb2-ef11-ac7b-0a9328dfcacd" }
+        const res_campaign_add = { isSuccess: true, campaignID: "70b77f95-0fb2-ef11-ac7b-0a9328dfcacd" }
 
-        if (res.isSuccess) {
-          templateChooseRef.current = selectedTemplate
-          campaignIdRef.current = res.campaignID
-          setCurrentStep(pre => pre + 1)
+        if (res_campaign_add.isSuccess) {
+          // const resAddWithTemplate = await ApiService.post<any>(urls.asset_addWithTemplate, {
+          //       "campaignID": res_campaign_add.campaignID,
+          //       "assetName": params.asset_name,
+          //       "templateID": selectedTemplate,
+          //       "language": "",
+          //       "assetAIPrompt": ""
+          //   });
+          const resAddWithTemplate = { isSuccess: true, assetID: "" }
+
+          if (resAddWithTemplate.isSuccess) {
+            assetIDTemplateRef.current = resAddWithTemplate.assetID
+            setCurrentStep(pre => pre + 1)
+          }
         }
       } catch (error) {
         console.error('API Error:', ApiService.handleError(error));
@@ -77,12 +86,11 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
       />
     ),
     1: (
-      <TemplateGenerationSection 
-        params={{ 
-          type_page: params.type_page, 
-          templateId: templateChooseRef.current, 
-          campaignId: campaignIdRef.current 
-        }} 
+      <TemplateGenerationSection
+        params={{
+          type_page: params.type_page,
+          assetID: assetIDTemplateRef.current
+        }}
       />
     )
   }
