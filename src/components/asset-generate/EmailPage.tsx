@@ -82,12 +82,13 @@ const EmailPage = () => {
 
         let newStep = generateStep + 1;
 
-        if (newStep === 5) { // Reset after completing step 4
+        if (newStep > 3) { // Reset after completing step 3
             newStep = 1;
             setIsOpen(false);
             setIsShowList([]);
             setCheckedList([]);
             setDisableList([2, 3, 4]);
+            setContextData({ assetTemplateShow: false });
         } else {
             if (newStep === 2) {
                 setCheckedList([1, 2, 3, 4]);
