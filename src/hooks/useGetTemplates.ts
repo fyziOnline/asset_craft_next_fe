@@ -5,6 +5,7 @@ import { nkey } from '@/data/keyStore';
 import { urls } from '@/apis/urls';
 import { Template } from '../../types/templates';
 import { ListTypePage } from '@/data/dataGlobal';
+import { useSearchParams } from 'next/navigation';
 
 interface GetTemplatesProps {
     type_page?: string
@@ -13,6 +14,8 @@ interface GetTemplatesProps {
 export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
     const [isLoading, setIsLoading] = useState(false)
     const [listTemplates, setListTemplates] = useState<Template[]>([])
+    const queryParams = useSearchParams()
+    const assetTypeID = queryParams.get('assetTypeID')
 
     useEffect(() => {
         if (type_page === ListTypePage.Email) {
