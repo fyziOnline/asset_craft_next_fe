@@ -12,8 +12,7 @@ import EmailPage from '../asset-generate/EmailPage';
 
 interface TemplateViewerProps {
     params: {
-        templateId?: string,
-        campaignId?: string,
+        assetID?: string,
         type_page?: string
     }
 }

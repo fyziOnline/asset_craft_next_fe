@@ -116,11 +116,11 @@ export const useDashboard = () => {
         if (selectedButton?.assetTypeName === "All in One") {
             setChooseAssetModal(true)
             setModalOpen(false)
-        } else if (selectedButton?.assetTypeName === 'Email') {
+        } else if (selectedButton?.assetTypeName.includes("Email")) {
             router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.Email}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}`)
-        } else if (selectedButton?.assetTypeName === 'Landing Page') {
+        } else if (selectedButton?.assetTypeName.includes('Landing')) {
             router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LandingPage}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}`)
-        } else if (selectedButton?.assetTypeName === 'LinkedIn Post') {
+        } else if (selectedButton?.assetTypeName.includes('LinkedIn')) {
             router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LinkedIn}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}`)
         }
     }
