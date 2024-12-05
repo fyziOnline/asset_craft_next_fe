@@ -9,10 +9,12 @@ import LandingPage from '../asset-generate/LandingPage';
 import LinkedInPage from '../asset-generate/LinkedinPage';
 import CallScriptPage from '../asset-generate/CallScriptPage';
 import EmailPage from '../asset-generate/EmailPage';
+import { Template } from '@/types/templates';
 
 interface TemplateViewerProps {
     params: {
         assetID?: string,
+        template?: Template
         type_page: string
     }
 }
@@ -45,7 +47,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
             <div>
                 <Image
                     className='w-[267px] h-[420px]'
-                    src="/images/landing_templates/landing3.png"
+                    src={params.template?.templateImageURL || ""}
                     alt="call script"
                     width="267"
                     height="360"

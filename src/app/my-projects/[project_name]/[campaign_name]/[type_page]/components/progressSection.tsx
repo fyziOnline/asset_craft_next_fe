@@ -9,6 +9,7 @@ import { ApiService } from '@/lib/axios_generic'
 import { FC, ReactNode, useRef, useState } from 'react'
 import Cookies from 'js-cookie';
 import moment from 'moment';
+import { Template } from '@/types/templates'
 
 type ProgressComponent = ReactNode;
 interface ProjectAssetProp {
@@ -16,7 +17,7 @@ interface ProjectAssetProp {
     project_name?: string
     campaign_name?: string
     asset_name?: string
-    type_page?: string
+    type_page: string
   }
   handleEdit?: () => void
 }
@@ -26,9 +27,10 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const [currentStep, setCurrentStep] = useState<number>(0)
   const { listTemplates } = useGetTemplates({ type_page: params.type_page })
   const assetIDTemplateRef = useRef("b26bf18a-c0b2-ef11-ac7b-0a9328dfcacd")
+  const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
 
-  const handleNext = async (selectedTemplate: string) => {
+  const handleNext = async (selectedTemplate: Template) => {
     if (currentStep < total_steps) {
       try {
         setShowLoading(true)
@@ -50,7 +52,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
           // const resAddWithTemplate = await ApiService.post<any>(urls.asset_addWithTemplate, {
           //       "campaignID": res_campaign_add.campaignID,
           //       "assetName": params.asset_name,
-          //       "templateID": selectedTemplate,
+          // "templateID": selectedTemplate.templateID,
           //       "language": "",
           //       "assetAIPrompt": ""
           //   });
@@ -58,6 +60,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
 
           if (resAddWithTemplate.isSuccess) {
             assetIDTemplateRef.current = resAddWithTemplate.assetID
+            selectedTemplateRef.current = selectedTemplate
             setCurrentStep(pre => pre + 1)
           }
         }
@@ -89,7 +92,8 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
       <TemplateGenerationSection
         params={{
           type_page: params.type_page,
-          assetID: assetIDTemplateRef.current
+          assetID: assetIDTemplateRef.current,
+          template: selectedTemplateRef.current
         }}
       />
     )
