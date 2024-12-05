@@ -6,7 +6,8 @@ export const urls = {
     template_select_all: "/template/select/all",
     campaign_add: "/campaign/add",
     asset_addWithTemplate: "/asset/addWithTemplate",
-    asset_generate: "/asset/generate",
     asset_select: "/asset/select",
+    asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
+    asset_generate: "/asset/generate",
 
 };

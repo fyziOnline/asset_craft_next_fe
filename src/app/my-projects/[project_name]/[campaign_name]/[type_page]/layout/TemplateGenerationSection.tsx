@@ -9,11 +9,13 @@ import LandingPage from '../asset-generate/LandingPage';
 import LinkedInPage from '../asset-generate/LinkedinPage';
 import CallScriptPage from '../asset-generate/CallScriptPage';
 import EmailPage from '../asset-generate/EmailPage';
+import { Template } from '@/types/templates';
 
 interface TemplateViewerProps {
     params: {
         assetID?: string,
-        type_page?: string
+        template?: Template
+        type_page: string
     }
 }
 
@@ -44,8 +46,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
         return (<div>
             <div>
                 <Image
-                    className='w-[267px] h-[420px]'
-                    src="/images/landing_templates/landing3.png"
+                    src={params.template?.templateImageURL || ""}
                     alt="call script"
                     width="267"
                     height="360"
@@ -107,8 +108,13 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
 
     const sidebarStep2 = () => {
         return (
-            <div>
-                <img className='w-[350px] h-[550px]' src="/images/post-template.png" alt="" />
+            <div className='w-[70%] h-[90%] relative'>
+                <Image
+                    src={params.template?.templateImageURL || ""}
+                    alt=""
+                    fill
+                    className="object-fill"
+                />
             </div>
         )
     }
@@ -116,7 +122,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const sidebarStep3 = () => {
         return (
             <>
-                {contextData.assetGenerateTemplate === "CALLSCRIPT" ? (
+                {[ListTypePage.Email, ListTypePage.CallScript].includes(params.type_page) ? (
                     <TransformWrapper
                         initialScale={0.4}
                         minScale={0.4}
@@ -129,7 +135,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                         <TransformComponent
                             wrapperStyle={{ width: '100%', height: '100%' }}
                         >
-                            <div dangerouslySetInnerHTML={{ __html: html_content }} />
+                            <div dangerouslySetInnerHTML={{ __html: contextData.HTMLContent }} />
                         </TransformComponent>
                     </TransformWrapper>
                 ) : (

@@ -8,6 +8,7 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
+import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 
 const EmailPage = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,7 @@ const EmailPage = () => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
+    const { generateHTML } = useGenerateTemplate({ params: { assetID: "b26bf18a-c0b2-ef11-ac7b-0a9328dfcacd" } })
 
     const { setContextData } = useAppData();
 
@@ -75,7 +77,7 @@ const EmailPage = () => {
     };
 
 
-    const handleGenerate = (): void => {
+    const handleGenerate = async () => {
         if (generateStep === 2 || checkedList.length !== 4) {
             return;
         }
@@ -90,16 +92,19 @@ const EmailPage = () => {
             setDisableList([2, 3, 4]);
             setContextData({ assetTemplateShow: false });
         } else {
+            setIsOpen(true);
+            setContextData({ assetTemplateShow: true });
+
             if (newStep === 2) {
                 setCheckedList([1, 2, 3, 4]);
                 setDisableList([1, 2, 3, 4]);
-                setTimeout(() => {
-                    setGenerateStep(3);
-                    setContextData({ assetGenerateStatus: 3 });
-                }, 3000);
+                setContextData({ assetGenerateStatus: newStep });
+                setGenerateStep(newStep);
+                const HTMLContent = await generateHTML()
+                setGenerateStep(3);
+                setContextData({ assetGenerateStatus: 3, HTMLContent: HTMLContent });
+                return
             }
-            setIsOpen(true);
-            setContextData({ assetTemplateShow: true });
         }
         setContextData({ assetGenerateStatus: newStep });
         setGenerateStep(newStep);

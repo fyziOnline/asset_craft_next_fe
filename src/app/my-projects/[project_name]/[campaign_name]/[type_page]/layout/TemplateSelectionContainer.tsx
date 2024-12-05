@@ -6,14 +6,14 @@ interface TemplateViewerProps {
   templateData?: Template[]
   title: string
   aspect_ratio: string
-  onProceed?: (selectedTemplate: string) => void
+  onProceed?: (selectedTemplate: Template) => void
 }
 
 const TemplateSelectionContainer: FC<TemplateViewerProps> = ({ templateData = [], title = '', aspect_ratio, onProceed }) => {
 
   const onTemplateSelection = (template: Template) => {
     if (onProceed) {
-      onProceed(template.templateID)
+      onProceed(template)
     }
   }
 
