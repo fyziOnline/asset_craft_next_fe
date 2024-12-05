@@ -15,7 +15,6 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
     const [isLoading, setIsLoading] = useState(false)
     const [listTemplates, setListTemplates] = useState<Template[]>([])
     const queryParams = useSearchParams()
-    const assetTypeID = queryParams.get('assetTypeID')
 
     useEffect(() => {
         if (type_page === ListTypePage.Email) {
@@ -86,8 +85,8 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
         try {
             setIsLoading(true);
             const client_ID = Cookies.get(nkey.client_ID)
-            const resGetTemplates = await ApiService.get<any>(`${urls.template_select_all}?clientID=${client_ID}`);
-            console.log('resGetTemplates: ', resGetTemplates);
+            const assetTypeID = queryParams.get('assetTypeID')
+            const resGetTemplates = await ApiService.get<any>(`${urls.template_select_all}?clientID=${client_ID}&assetTypeID=${assetTypeID}`);
 
             if (resGetTemplates.isSuccess) {
                 setListTemplates(resGetTemplates.templates)
