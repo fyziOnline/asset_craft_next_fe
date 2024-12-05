@@ -46,7 +46,6 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
         return (<div>
             <div>
                 <Image
-                    className='w-[267px] h-[420px]'
                     src={params.template?.templateImageURL || ""}
                     alt="call script"
                     width="267"
@@ -109,8 +108,13 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
 
     const sidebarStep2 = () => {
         return (
-            <div>
-                <img className='w-[350px] h-[550px]' src="/images/post-template.png" alt="" />
+            <div className='w-[70%] h-[90%] relative'>
+                <Image
+                    src={params.template?.templateImageURL || ""}
+                    alt=""
+                    fill
+                    className="object-fill"
+                />
             </div>
         )
     }
