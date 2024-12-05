@@ -1,13 +1,13 @@
 'use client';
 import React, { FC, useState } from 'react';
 import Image from 'next/image';
-import LandingPage from '../asset-generate/LandingPage';
-import LinkedInPage from '../asset-generate/LinkedinPage';
-import CallScriptPage from '../asset-generate/CallScriptPage';
 import { ListTypePage } from '@/data/dataGlobal';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { html_content } from '@/app/call-script/call-script-form/data/data';
 import { useAppData } from '@/context/AppContext';
+import LandingPage from '../asset-generate/LandingPage';
+import LinkedInPage from '../asset-generate/LinkedinPage';
+import CallScriptPage from '../asset-generate/CallScriptPage';
 import EmailPage from '../asset-generate/EmailPage';
 
 interface TemplateViewerProps {
@@ -107,7 +107,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
 
     const sidebarStep2 = () => {
         return (
-            <div className='w-full h-full flex items-center justify-center overflow-y-scroll'>
+            <div>
                 <img className='w-[350px] h-[550px]' src="/images/post-template.png" alt="" />
             </div>
         )
@@ -162,7 +162,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             </div>
                         </div>
                     }
-                    <div className={`bg-[#F5F5F7] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'} h-[70vh]`}>
+                    <div className={`bg-[#F5F5F7] h-[72vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
                         {contextData.assetGenerateStatus === 1 && sidebarStep1()}
                         {contextData.assetGenerateStatus === 2 && sidebarStep2()}
                         {contextData.assetGenerateStatus === 3 && sidebarStep3()}
