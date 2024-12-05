@@ -13,7 +13,7 @@ import EmailPage from '../asset-generate/EmailPage';
 interface TemplateViewerProps {
     params: {
         assetID?: string,
-        type_page?: string
+        type_page: string
     }
 }
 
@@ -116,7 +116,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const sidebarStep3 = () => {
         return (
             <>
-                {contextData.assetGenerateTemplate === "CALLSCRIPT" ? (
+                {[ListTypePage.Email, ListTypePage.CallScript].includes(params.type_page) ? (
                     <TransformWrapper
                         initialScale={0.4}
                         minScale={0.4}
@@ -129,7 +129,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                         <TransformComponent
                             wrapperStyle={{ width: '100%', height: '100%' }}
                         >
-                            <div dangerouslySetInnerHTML={{ __html: html_content }} />
+                            <div dangerouslySetInnerHTML={{ __html: contextData.HTMLContent }} />
                         </TransformComponent>
                     </TransformWrapper>
                 ) : (
