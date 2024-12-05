@@ -20,7 +20,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
             }
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
-            return `<div>${error}</div>`
+            return `<div style="font-size:30px;">${ApiService.handleError(error)}</div>`
         }
     }
     return {
