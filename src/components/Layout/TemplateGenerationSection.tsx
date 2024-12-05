@@ -162,7 +162,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             </div>
                         </div>
                     }
-                    <div className={`bg-[#F5F5F7] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'} h-[70vh]`}>
+                    <div className={`bg-[#F5F5F7] h-[72vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
                         {contextData.assetGenerateStatus === 1 && sidebarStep1()}
                         {contextData.assetGenerateStatus === 2 && sidebarStep2()}
                         {contextData.assetGenerateStatus === 3 && sidebarStep3()}
