@@ -43,8 +43,19 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     };
 
     const sidebarStep1 = () => {
+
+        const content = (title: string, content: string) => {
+            return (
+                <>
+                    <span className="font-semibold">{title}</span><br />
+                    <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">{content}<br /></span>
+                    <span className="[font-family:'Inter-Regular',Helvetica]"> <br /></span>
+                </>
+            )
+        }
+
         return (<div>
-            <div>
+            <div className='py-5'>
                 <Image
                     src={params.template?.templateImageURL || ""}
                     alt="call script"
@@ -52,55 +63,10 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                     height="360"
                 />
                 <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
-                    <span className="font-semibold">Prospect Details</span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
-                        Personalise the introduction based on the prospect’s background.
-                        <br />
-                    </span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica]">
-                        <br />
-                    </span>
-
-                    <span className="font-semibold">Solution Introduction</span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
-                        Explain how your product or service is relevant to the prospect’s
-                        needs.
-                        <br />
-                    </span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica]">
-                        <br />
-                    </span>
-
-                    <span className="font-semibold">Value Proposition</span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
-                        Showcase the primary benefits of your product or service that directly
-                        address the prospect’s pain points.
-                        <br />
-                    </span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica]">
-                        <br />
-                    </span>
-
-                    <span className="font-semibold">The Next Steps</span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica]"> </span>
-
-                    <span className="[font-family:'Inter-Regular',Helvetica] text-[10px]">
-                        Encourage the prospect to take action to move the conversation
-                        forward.
-                    </span>
+                    {content("Section 1: Event Overview", "Overview of essential details: title, date, location, purpose, and a CTA to attract attendees.")}
+                    {content("Section 2: Event Agenda", "Detailed event schedule: session timings, key activities, speakers, and closing plans.")}
+                    {content("Section 3: Key Benefits and Highlights", "Event value summary: main benefits, featured technologies, and the target audience.")}
+                    {content("Section 4: Partnership and Sponsorship", "Sponsor recognition: list of sponsors by level with logos and optional sponsor descriptions.")}
                 </p>
             </div>
         </div>)
