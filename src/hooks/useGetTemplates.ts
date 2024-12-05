@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { ApiService } from '@/lib/axios_generic';
 import { nkey } from '@/data/keyStore';
 import { urls } from '@/apis/urls';
-import { Template } from '../../types/templates';
+import { Template } from '../types/templates';
 import { ListTypePage } from '@/data/dataGlobal';
 import { useSearchParams } from 'next/navigation';
 

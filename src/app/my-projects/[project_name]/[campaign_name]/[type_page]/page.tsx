@@ -23,7 +23,7 @@ const ProjectAssetPage: FC<ProjectAssetProp> = async ({ params }) => {
   return (
     <>
       <AssetGenerationHeader params={{ project_name, campaign_name }} />
-      <div>
+      <div className="overflow-x-hidden">
         <ProgressSection params={{ campaign_name, type_page }} />
       </div>
     </>

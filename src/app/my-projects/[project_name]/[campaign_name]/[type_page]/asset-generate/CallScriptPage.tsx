@@ -1,20 +1,16 @@
 'use client';
 import React, { useState } from 'react';
-import LayoutWrapper from "@/layout/LayoutWrapper";
-import Breadcrumb from "@/components/global/Breadcrumb";
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
 import DropDown from '@/components/global/DropDown';
 import RangeSlider from '@/components/global/RangeSlider';
 import { useRouter } from 'next/navigation';
-// import { html_content } from './data/data';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import ChildrenTitle from '../global/ChildrenTitle';
-import ChooseLabel from '../global/ChooseLabel';
+import ChooseLabel from '@/components/global/ChooseLabel';
 import { useAppData } from '@/context/AppContext';
+import ChildrenTitle from '@/components/global/ChildrenTitle';
 
 
 const CallScriptPage = () => {

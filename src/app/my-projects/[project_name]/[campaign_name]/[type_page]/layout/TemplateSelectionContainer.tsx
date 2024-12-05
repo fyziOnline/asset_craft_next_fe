@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { FC } from "react"
-import { Template } from "../../../types/templates"
+import { Template } from "@/types/templates"
 
 interface TemplateViewerProps {
   templateData?: Template[]
