@@ -1,7 +1,6 @@
-import AssetGenerationHeader from "@/components/layout/AssetGenerationHeader"
 import { FC } from "react"
 import ProgressSection from "./components/progressSection"
-
+import AssetGenerationHeader from "./layout/AssetGenerationHeader"
 interface ProjectAssetProp {
   params: {
     project_name: string

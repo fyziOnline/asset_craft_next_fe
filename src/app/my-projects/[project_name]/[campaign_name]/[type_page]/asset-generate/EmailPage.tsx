@@ -11,7 +11,6 @@ import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 
 const EmailPage = () => {
-    const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
@@ -86,13 +85,11 @@ const EmailPage = () => {
 
         if (newStep > 3) { // Reset after completing step 3
             newStep = 1;
-            setIsOpen(false);
             setIsShowList([]);
             setCheckedList([]);
             setDisableList([2, 3, 4]);
             setContextData({ assetTemplateShow: false });
         } else {
-            setIsOpen(true);
             setContextData({ assetTemplateShow: true });
 
             if (newStep === 2) {
@@ -100,9 +97,9 @@ const EmailPage = () => {
                 setDisableList([1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
-                const HTMLContent = await generateHTML()
+                const res = await generateHTML()
                 setGenerateStep(3);
-                setContextData({ assetGenerateStatus: 3, HTMLContent: HTMLContent });
+                setContextData({ assetGenerateStatus: 3, HTMLContent: res?.html, isShowEdit_Save_Button: res?.isSuccess });
                 return
             }
         }
