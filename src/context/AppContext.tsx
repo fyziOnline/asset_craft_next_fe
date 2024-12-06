@@ -7,7 +7,8 @@ interface AppData {
     assetGenerateTemplate: string;
     assetGenerateStatus: number;
     layoutType: 'main' | 'home';
-    HTMLContent: string
+    isShowEdit_Save_Button: boolean;
+    HTMLContent: string;
 }
 
 interface AppDataContextType {
@@ -27,6 +28,7 @@ const APP_DATA: AppData = {
     assetGenerateStatus: 1,
     layoutType: 'main',
     HTMLContent: "",
+    isShowEdit_Save_Button: false,
 };
 
 // Create a provider component
