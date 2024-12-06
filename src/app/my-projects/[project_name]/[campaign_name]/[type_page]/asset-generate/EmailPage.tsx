@@ -10,12 +10,18 @@ import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 
-const EmailPage = () => {
+interface EmailPageProps {
+    params: {
+        assetID: string
+    }
+}
+
+const EmailPage = ({ params }: EmailPageProps) => {
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const { generateHTML } = useGenerateTemplate({ params: { assetID: "b26bf18a-c0b2-ef11-ac7b-0a9328dfcacd" } })
+    const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID } })
 
     const { setContextData } = useAppData();
 

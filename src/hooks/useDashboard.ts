@@ -46,36 +46,36 @@ export const useDashboard = () => {
             setShowLoading(true)
 
             const client_ID = Cookies.get(nkey.client_ID)
-            // const res = await ApiService.get<any>(`${urls.clientAssetType_select_all}?clientID=${client_ID}`);
-            const res = {
-                isSuccess: true,
-                clientAssetTypes: [
-                    {
-                        "clientAssetTypeID": "b743c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-                        "clientID": "a643c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-                        "assetTypeID": "ab43c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-                        "isEnabled": true,
-                        "assetTypeName": "Email",
-                        "description": "Email"
-                    },
-                    {
-                        "clientAssetTypeID": "b843c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-                        "clientID": "a643c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-                        "assetTypeID": "ac43c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-                        "isEnabled": true,
-                        "assetTypeName": "Landing Page",
-                        "description": "Landing Page"
-                    },
-                    {
-                        "clientAssetTypeID": "b943c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-                        "clientID": "a643c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-                        "assetTypeID": "ad43c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-                        "isEnabled": true,
-                        "assetTypeName": "LinkedIn Post",
-                        "description": "LinkedIn Post"
-                    }
-                ]
-            }
+            const res = await ApiService.get<any>(`${urls.clientAssetType_select_all}?clientID=${client_ID}`);
+            // const res = {
+            //     isSuccess: true,
+            //     clientAssetTypes: [
+            //         {
+            //             "clientAssetTypeID": "b743c23c-a4ac-ef11-ac7b-0a9328dfcacd",
+            //             "clientID": "a643c23c-a4ac-ef11-ac7b-0a9328dfcacd",
+            //             "assetTypeID": "ab43c23c-a4ac-ef11-ac7b-0a9328dfcacd",
+            //             "isEnabled": true,
+            //             "assetTypeName": "Email",
+            //             "description": "Email"
+            //         },
+            //         {
+            //             "clientAssetTypeID": "b843c23c-a4ac-ef11-ac7b-0a9328dfcacd",
+            //             "clientID": "a643c23c-a4ac-ef11-ac7b-0a9328dfcacd",
+            //             "assetTypeID": "ac43c23c-a4ac-ef11-ac7b-0a9328dfcacd",
+            //             "isEnabled": true,
+            //             "assetTypeName": "Landing Page",
+            //             "description": "Landing Page"
+            //         },
+            //         {
+            //             "clientAssetTypeID": "b943c23c-a4ac-ef11-ac7b-0a9328dfcacd",
+            //             "clientID": "a643c23c-a4ac-ef11-ac7b-0a9328dfcacd",
+            //             "assetTypeID": "ad43c23c-a4ac-ef11-ac7b-0a9328dfcacd",
+            //             "isEnabled": true,
+            //             "assetTypeName": "LinkedIn Post",
+            //             "description": "LinkedIn Post"
+            //         }
+            //     ]
+            // }
 
             if (res.isSuccess) {
                 setClientAssetTypes([{ assetTypeName: "All in One" }, ...res.clientAssetTypes])

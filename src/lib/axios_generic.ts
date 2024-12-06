@@ -21,7 +21,7 @@ const apiClient: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 seconds
+  timeout: 30000, // 30 seconds
 });
 
 // Request interceptor for adding auth token
@@ -145,7 +145,9 @@ export const ApiService = {
       // Handle specific API errors
       switch (error.status) {
         case 400: return 'Bad Request: Invalid data provided';
-        case 401: return 'Unauthorized: Please log in again';
+        case 401:
+          window.location.href = '/'
+          return 'Unauthorized: Please log in again';
         case 403: return 'Forbidden: You do not have permission';
         case 404: return 'Not Found: Resource does not exist';
         case 500: return 'Server Error: Something went wrong';

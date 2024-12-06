@@ -26,7 +26,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const total_steps: number = 2
   const [currentStep, setCurrentStep] = useState<number>(0)
   const { listTemplates } = useGetTemplates({ type_page: params.type_page })
-  const assetIDTemplateRef = useRef("b26bf18a-c0b2-ef11-ac7b-0a9328dfcacd")
+  const assetIDTemplateRef = useRef("")
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
 
@@ -37,26 +37,26 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         const client_ID = Cookies.get(nkey.client_ID);
         const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
 
-        // const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
-        //   "clientID": client_ID,
-        //   "campaignName": params.campaign_name,
-        //   "country": "",
-        //   "squad": "",
-        //   "startDate": currentDate,
-        //   "endDate": "",
-        //   "status": ""
-        // });
-        const res_campaign_add = { isSuccess: true, campaignID: "70b77f95-0fb2-ef11-ac7b-0a9328dfcacd" }
+        const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
+          "clientID": client_ID,
+          "campaignName": params.campaign_name,
+          "country": "",
+          "squad": "",
+          "startDate": currentDate,
+          "endDate": "",
+          "status": ""
+        });
+        // const res_campaign_add = { isSuccess: true, campaignID: "70b77f95-0fb2-ef11-ac7b-0a9328dfcacd" }
 
         if (res_campaign_add.isSuccess) {
-          // const resAddWithTemplate = await ApiService.post<any>(urls.asset_addWithTemplate, {
-          //       "campaignID": res_campaign_add.campaignID,
-          //       "assetName": params.asset_name,
-          // "templateID": selectedTemplate.templateID,
-          //       "language": "",
-          //       "assetAIPrompt": ""
-          //   });
-          const resAddWithTemplate = { isSuccess: true, assetID: "" }
+          const resAddWithTemplate = await ApiService.post<any>(urls.asset_addWithTemplate, {
+            "campaignID": res_campaign_add.campaignID,
+            "assetName": params.asset_name,
+            "templateID": selectedTemplate.templateID,
+            "language": "",
+            "assetAIPrompt": ""
+          });
+          // const resAddWithTemplate = { isSuccess: true, assetID: "" }
 
           if (resAddWithTemplate.isSuccess) {
             assetIDTemplateRef.current = resAddWithTemplate.assetID
