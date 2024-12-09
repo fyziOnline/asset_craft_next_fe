@@ -1,61 +1,29 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React from 'react';
 import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
-import LayoutWrapper from "@/layout/LayoutWrapper";
 import Search from '@/components/global/Search';
 import TextField from '@/components/global/TextField';
 import AddVersionModel from './components/AddVersionModel';
-import { nkey } from '@/data/keyStore';
+import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
+import { useAppData } from '@/context/AppContext';
 
 const Page = () => {
-    const searchParams = useSearchParams();
-    const contentType = searchParams.get('type') || '';
+    const { contextData } = useAppData();
+    console.log('contextData AssetHtml: ', contextData.AssetHtml);
 
-    const [htmlContent, setHtmlContent] = useState("");
-    const [isShowSave, setShowSave] = useState(false)
-    const [isShowAddVer, setIsShowAddVer] = useState(false)
-    const [versionList, setVersionList] = useState(["Version 1", "Version 2", "Version 3"])
-    const [versionSelected, setVersionSelected] = useState("Version 1")
-    const refVersion = useRef('')
-
-    useEffect(() => {
-        const savedData = sessionStorage.getItem(nkey.html_content);
-        if (savedData) {
-            setHtmlContent(savedData);
-        }
-    }, []);
-
-    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        const target = event.target as HTMLElement;
-
-        const svgElement = target.closest('svg[data-id]') as SVGElement | null;
-        if (svgElement) {
-            const id = svgElement.dataset.id;
-            console.log(`Click SVG with ID: ${id}`);
-            setHtmlContent(htmlContent.replace("Prospect Details", "Test Demo"))
-        }
-    };
-
-    const handleSave = (type: number) => {
-        if (type === 1) {
-            setIsShowAddVer(true)
-        }
-        setShowSave(!isShowSave)
-    }
-
-    const handleChangeTextVersion = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        refVersion.current = event.target.value;
-    };
-
-    const handleAddVersion = () => {
-        if (refVersion.current.trim().length === 0) { return }
-        setVersionList([...versionList, refVersion.current])
-        setIsShowAddVer(false)
-    };
-
-
+    const {
+        isShowAddVer,
+        versionSelected,
+        isShowSave,
+        versionList,
+        setShowSave,
+        setVersionSelected,
+        handleAddVersion,
+        handleChangeTextVersion,
+        handleSave,
+        handleClick,
+        setIsShowAddVer } = useEditHTMLContent()
 
     return (
         <>
@@ -121,7 +89,7 @@ const Page = () => {
                 <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
                     <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide relative">
                         <div>
-                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: htmlContent }} onClick={handleClick} />
+                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetContentVersions?.[0]?.assetHTML || "" }} onClick={handleClick} />
                         </div>
 
                         {isShowAddVer ? <div className='fixed left-0 right-0 h-[70vh] bg-black bg-opacity-55 flex items-center justify-center'>

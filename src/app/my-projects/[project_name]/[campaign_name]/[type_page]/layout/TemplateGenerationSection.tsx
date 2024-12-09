@@ -101,7 +101,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                         <TransformComponent
                             wrapperStyle={{ width: '100%', height: '100%' }}
                         >
-                            <div dangerouslySetInnerHTML={{ __html: contextData.HTMLContent }} />
+                            <div dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetContentVersions?.[0]?.assetHTML || "" }} />
                         </TransformComponent>
                     </TransformWrapper>
                 ) : (
