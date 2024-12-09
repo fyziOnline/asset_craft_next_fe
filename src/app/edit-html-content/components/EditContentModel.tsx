@@ -6,8 +6,7 @@ import { materialRenderers, materialCells, } from '@jsonforms/material-renderers
 import { AssetBlockProps } from '@/types/templates';
 import Button from '@/components/global/Button';
 
-const EditContentModel = ({ isShowModelEdit, setIsShowModelEdit }: any) => {
-    const modalRef = useRef<HTMLDivElement | null>(null);
+const EditContentModel = ({ setIsShowModelEdit }: any) => {
     const { contextData } = useAppData();
     const [assetHTML, setAssetHTML] = useState(contextData.AssetHtml)
     const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(contextData.AssetHtml?.assetBlocks?.[0] as AssetBlockProps)
@@ -15,27 +14,11 @@ const EditContentModel = ({ isShowModelEdit, setIsShowModelEdit }: any) => {
     const [blockData, setBlockData] = useState(JSON.parse(contextData.AssetHtml?.assetBlocks?.[0]?.assetBlockDataVersions?.[0]?.blockData as string))
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-                setIsShowModelEdit(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [setIsShowModelEdit]);
-
-    useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = '';
         };
     }, []);
-
-    if (!isShowModelEdit) return null;
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation();
@@ -53,7 +36,7 @@ const EditContentModel = ({ isShowModelEdit, setIsShowModelEdit }: any) => {
 
     return (
         <div onClick={handleClick} className="fixed z-[1000] left-0 right-0 top-0 bottom-0 bg-black bg-opacity-55 flex items-center justify-center">
-            <div ref={modalRef} className='w-[90vw] h-[94vh] bg-white rounded-md relative flex flex-col'>
+            <div className='w-[90vw] h-[94vh] bg-white rounded-md relative flex flex-col'>
                 <div className='border-b border-solid border-[#D9D9D9] px-4 pb-4 flex flex-wrap'>
                     {assetHTML?.assetBlocks?.map((item, index) => {
                         return (
