@@ -140,7 +140,9 @@ const Page = () => {
                             handleChangeTextVersion={handleChangeTextVersion} /> : null}
                     </div>
                 </div>
-                {isShowModelEdit ? <EditContentModel /> : null}
+                {isShowModelEdit ? <EditContentModel
+                    isShowModelEdit={isShowModelEdit}
+                    setIsShowModelEdit={setIsShowModelEdit} /> : null}
             </div>
         </>
     );
