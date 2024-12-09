@@ -1,6 +1,6 @@
 'use client';
 import { useAppData } from '@/context/AppContext';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers, materialCells, } from '@jsonforms/material-renderers';
 import { AssetBlockProps } from '@/types/templates';
@@ -12,6 +12,7 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
     const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(contextData.AssetHtml?.assetBlocks?.[0] as AssetBlockProps)
     const [schema, setSchema] = useState(JSON.parse(contextData.AssetHtml?.assetBlocks?.[0]?.schema as string))
     const [blockData, setBlockData] = useState(JSON.parse(contextData.AssetHtml?.assetBlocks?.[0]?.assetBlockDataVersions?.[0]?.blockData as string))
+    const refIndexBlockSelected = useRef(0)
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -24,10 +25,36 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
         e.stopPropagation();
     }
 
-    const onSelectBlock = (item: AssetBlockProps) => {
+    const onSelectBlock = (item: AssetBlockProps, index: number) => {
+        refIndexBlockSelected.current = index
         setAssetBlockSelected(item)
         setSchema(JSON.parse(item.schema as string))
         setBlockData(JSON.parse(item.assetBlockDataVersions?.[0]?.blockData as string))
+    }
+
+    const onHandleEditData = ({ data, errors }: any) => {
+        try {
+            let newAssetBlockDataVersions = assetBlockSelected.assetBlockDataVersions
+            if (newAssetBlockDataVersions && newAssetBlockDataVersions?.length > 0) {
+                newAssetBlockDataVersions[0].blockData = JSON.stringify(data);
+            }
+
+            const newAssetBlockSelected = {
+                ...assetBlockSelected,
+                assetBlockDataVersions: newAssetBlockDataVersions
+            }
+
+            const newAssetBlocks = assetHTML?.assetBlocks
+            if (newAssetBlocks && newAssetBlocks[refIndexBlockSelected.current]) {
+                newAssetBlocks[refIndexBlockSelected.current] = newAssetBlockSelected
+            }
+
+            setBlockData(data)
+            setAssetBlockSelected(newAssetBlockSelected)
+            setAssetHTML({ ...assetHTML, assetBlocks: newAssetBlocks })
+        } catch (ex) {
+
+        }
     }
 
     const onSaveAllAndClose = () => {
@@ -40,7 +67,7 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
                 <div className='border-b border-solid border-[#D9D9D9] px-4 pb-4 flex flex-wrap'>
                     {assetHTML?.assetBlocks?.map((item, index) => {
                         return (
-                            <div onClick={() => { onSelectBlock(item) }}
+                            <div onClick={() => { onSelectBlock(item, index) }}
                                 className={`p-2 mr-2 mt-4 rounded-md cursor-pointer ${assetBlockSelected.assetBlockDataVersionID === item.assetBlockDataVersionID ? `text-white bg-[#01A982]` : `text-black bg-[#e4e4e4]`}`}
                                 key={index}>{item.name?.replaceAll("_", " ")}</div>
                         )
@@ -54,10 +81,7 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
                         renderers={materialRenderers}
                         cells={materialCells}
                         // uischema={uiSChema}
-                        onChange={({ data, errors }) => {
-                            console.log('data: ', data)
-                            // setData(data)
-                        }}
+                        onChange={onHandleEditData}
                     />
                 </div>
                 <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-end'>
