@@ -10,9 +10,10 @@ export const useEditHTMLContent = () => {
     const [isShowAddVer, setIsShowAddVer] = useState(false)
     const [versionList, setVersionList] = useState(["Version 1", "Version 2", "Version 3"])
     const [versionSelected, setVersionSelected] = useState("Version 1")
+    const [isShowModelEdit, setIsShowModelEdit] = useState(false)
     const refVersion = useRef('')
 
-    const handleClick = () => {
+    const handleCopy = () => {
 
     };
 
@@ -37,12 +38,14 @@ export const useEditHTMLContent = () => {
         versionSelected,
         isShowSave,
         versionList,
+        isShowModelEdit,
         setShowSave,
         setVersionSelected,
         handleAddVersion,
         handleChangeTextVersion,
         handleSave,
-        handleClick,
-        setIsShowAddVer
+        handleCopy,
+        setIsShowAddVer,
+        setIsShowModelEdit
     };
 };
