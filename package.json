@@ -9,6 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@jsonforms/core": "^3.4.1",
+    "@jsonforms/material-renderers": "^3.4.1",
+    "@jsonforms/react": "^3.4.1",
+    "@mui/icons-material": "^6.1.10",
+    "@mui/material": "^6.1.10",
+    "@mui/x-date-pickers": "^7.23.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "axios": "^1.7.8",
