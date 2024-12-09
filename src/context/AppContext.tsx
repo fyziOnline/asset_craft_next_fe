@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useState, useContext, ReactNode, FC } from "react";
+import { AssetHtmlProps } from "@/types/templates";
 
 interface AppData {
     assetTemplateShow: boolean;
@@ -8,7 +9,7 @@ interface AppData {
     assetGenerateStatus: number;
     layoutType: 'main' | 'home';
     isShowEdit_Save_Button: boolean;
-    HTMLContent: string;
+    AssetHtml: AssetHtmlProps;
 }
 
 interface AppDataContextType {
@@ -27,7 +28,7 @@ const APP_DATA: AppData = {
     assetGenerateTemplate: "LANDINGPAGE",
     assetGenerateStatus: 1,
     layoutType: 'main',
-    HTMLContent: "",
+    AssetHtml: {},
     isShowEdit_Save_Button: false,
 };
 

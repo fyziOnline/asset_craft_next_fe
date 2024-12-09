@@ -6,10 +6,13 @@ import Search from '@/components/global/Search';
 import TextField from '@/components/global/TextField';
 import AddVersionModel from './components/AddVersionModel';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
+import { useAppData } from '@/context/AppContext';
 
 const Page = () => {
+    const { contextData } = useAppData();
+    console.log('contextData AssetHtml: ', contextData.AssetHtml);
+
     const {
-        htmlContent,
         isShowAddVer,
         versionSelected,
         isShowSave,
@@ -86,7 +89,7 @@ const Page = () => {
                 <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
                     <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide relative">
                         <div>
-                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: htmlContent }} onClick={handleClick} />
+                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetContentVersions?.[0]?.assetHTML || "" }} onClick={handleClick} />
                         </div>
 
                         {isShowAddVer ? <div className='fixed left-0 right-0 h-[70vh] bg-black bg-opacity-55 flex items-center justify-center'>

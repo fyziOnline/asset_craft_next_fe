@@ -9,6 +9,7 @@ import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
+import { AssetHtmlProps } from '@/types/templates';
 
 interface EmailPageProps {
     params: {
@@ -105,7 +106,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setGenerateStep(newStep);
                 const res = await generateHTML()
                 setGenerateStep(3);
-                setContextData({ assetGenerateStatus: 3, HTMLContent: res?.html, isShowEdit_Save_Button: res?.isSuccess });
+                setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess });
                 return
             }
         }

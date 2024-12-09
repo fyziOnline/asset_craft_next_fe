@@ -1,5 +1,6 @@
 import { urls } from '@/apis/urls';
 import { ApiService } from '@/lib/axios_generic';
+import { AssetHtmlProps } from '@/types/templates';
 
 interface GenerateTemplateProp {
     params: {
@@ -16,15 +17,25 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                 if (resGenerate.isSuccess) {
                     const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${params.assetID}`);
                     if (resAssetSelect.isSuccess && resAssetSelect.assetContentVersions.length > 0) {
-                        return { isSuccess: true, html: resAssetSelect.assetContentVersions[0].assetHTML }
+                        return resAssetSelect as AssetHtmlProps
                     } else {
-                        return { isSuccess: false, html: `<div style="font-size:30px;">An error occurred please try again later.</div>` }
+                        return {
+                            isSuccess: false,
+                            assetContentVersions: [{
+                                assetHTML: `<div style="font-size:30px;">An error occurred please try again later.</div>`
+                            }]
+                        }
                     }
                 }
             }
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
-            return { isSuccess: false, html: `<div style="font-size:30px;">${ApiService.handleError(error)}</div>` }
+            return {
+                isSuccess: false,
+                assetContentVersions: [{
+                    assetHTML: `<div style="font-size:30px;">${ApiService.handleError(error)}</div>`
+                }]
+            }
         }
     }
     return {
