@@ -86,8 +86,17 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
                 </div>
                 <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-end'>
                     <Button
+                        handleClick={() => { setIsShowModelEdit(false) }}
+                        buttonText='Close'
+                        showIcon={false}
+                        textStyle='text-[1rem] font-base'
+                        textColor="text-[#00A881]"
+                        backgroundColor="bg-[#fff]"
+                        customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
+
+                    <Button
                         handleClick={onSaveAllAndClose}
-                        buttonText='Save All & Close'
+                        buttonText='Save All'
                         showIcon={false}
                         textStyle='text-[1rem] font-base text-[#00A881]'
                         textColor="text-[#fff]"
