@@ -12,11 +12,11 @@ import { urls } from '@/apis/urls';
 const EditContentModel = ({ setIsShowModelEdit }: any) => {
     const { contextData, setContextData } = useAppData();
     const [assetHTML, setAssetHTML] = useState(contextData.AssetHtml)
+    const [isLoading, setIsLoading] = useState(false);
     const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(contextData.AssetHtml?.assetBlocks?.[0] as AssetBlockProps)
     const [schema, setSchema] = useState(JSON.parse(contextData.AssetHtml?.assetBlocks?.[0]?.schema as string))
     const [blockData, setBlockData] = useState(JSON.parse(contextData.AssetHtml?.assetBlocks?.[0]?.assetBlockDataVersions?.[0]?.blockData as string))
     const refIndexBlockSelected = useRef(0)
-    const { setShowLoading } = useLoading()
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -63,7 +63,7 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
 
     const onSaveAllAndClose = async () => {
         try {
-            setShowLoading(true);
+            setIsLoading(true);
 
             if (assetHTML.assetBlocks) {
                 const promises = assetHTML.assetBlocks.map(async (item) => {
@@ -87,10 +87,13 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
                 const allSuccess = results.every((res) => res.isSuccess);
 
                 if (allSuccess) {
-                    const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${assetHTML.assetID}`);
-                    if (resAssetSelect.isSuccess && resAssetSelect.assetContentVersions.length > 0) {
-                        setContextData({ AssetHtml: resAssetSelect as AssetHtmlProps });
-                        setIsShowModelEdit(false);
+                    const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${assetHTML.assetID}`);
+                    if (resGenerate.isSuccess) {
+                        const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${assetHTML.assetID}`);
+                        if (resAssetSelect.isSuccess && resAssetSelect.assetContentVersions.length > 0) {
+                            setContextData({ AssetHtml: resAssetSelect as AssetHtmlProps });
+                            setIsShowModelEdit(false);
+                        }
                     }
                 }
             }
@@ -98,7 +101,7 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
             console.error('API Error:', ApiService.handleError(error));
             alert(ApiService.handleError(error));
         } finally {
-            setShowLoading(false);
+            setIsLoading(false);
         }
     };
 
@@ -134,13 +137,14 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
                         textColor="text-[#00A881]"
                         backgroundColor="bg-[#fff]"
                         customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
-
                     <Button
                         handleClick={onSaveAllAndClose}
-                        buttonText='Save All'
+                        disabled={isLoading}
+                        buttonText={isLoading ? 'Saving...' : 'Save All'}
                         showIcon={false}
                         textStyle='text-[1rem] font-base text-[#00A881]'
                         textColor="text-[#fff]"
+                        backgroundColor={isLoading ? "bg-[#00A881]" : "bg-custom-gradient-green"}
                         customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
                 </div>
             </div>
