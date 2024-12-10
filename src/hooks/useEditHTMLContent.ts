@@ -8,7 +8,7 @@ export const useEditHTMLContent = () => {
 
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
-    const [versionList, setVersionList] = useState(["Version 1", "Version 2", "Version 3"])
+    const [versionList, setVersionList] = useState(["Version 1"])
     const [versionSelected, setVersionSelected] = useState("Version 1")
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
     const refVersion = useRef('')

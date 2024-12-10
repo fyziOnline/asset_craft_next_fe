@@ -1,36 +1,28 @@
 'use client'
 
-import { FC } from "react"
+import React, { FC, useMemo } from 'react';
 import ProgressSection from "./components/progressSection"
 import AssetGenerationHeader from "./layout/AssetGenerationHeader"
-import { useRouter } from "next/navigation"
+
 interface ProjectAssetProp {
-  params: {
+  params: Promise<{
     project_name: string
     campaign_name: string
     asset_name: string
     type_page: string
-  }
+  }>
 }
 
-const ProjectAssetPage: FC<ProjectAssetProp> = async ({ params }) => {
-  const router = useRouter();
+const ProjectAssetPage: FC<ProjectAssetProp> = ({ params }) => {
+  const resolvedParams = React.use(params) // unwrap the Promise
 
-  const takeData = async () => {
-    return params
-  }
-  const data = await takeData()
-  const project_name = decodeURIComponent(data.project_name)
-  const campaign_name = decodeURIComponent(data.campaign_name)
-  const type_page = decodeURIComponent(data.type_page) //use ListTypePage
-
-  const onEdit = () => {
-    router.push("/edit-html-content")
-  }
+  const project_name = useMemo(() => decodeURIComponent(resolvedParams.project_name), [resolvedParams])
+  const campaign_name = useMemo(() => decodeURIComponent(resolvedParams.campaign_name), [resolvedParams])
+  const type_page = useMemo(() => decodeURIComponent(resolvedParams.type_page), [resolvedParams]) // use ListTypePage
 
   return (
     <>
-      <AssetGenerationHeader params={{ project_name, campaign_name }} handleEdit={onEdit} />
+      <AssetGenerationHeader params={{ project_name, campaign_name }} />
       <div className="overflow-x-hidden">
         <ProgressSection params={{ campaign_name, type_page }} />
       </div>
