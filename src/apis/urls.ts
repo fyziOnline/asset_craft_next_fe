@@ -9,5 +9,5 @@ export const urls = {
     asset_select: "/asset/select",
     asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
     asset_generate: "/asset/generate",
-
+    assetBlock_dataVersion_update: "/assetBlock/dataVersion/update",
 };
