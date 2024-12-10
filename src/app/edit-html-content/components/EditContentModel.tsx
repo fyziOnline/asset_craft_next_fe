@@ -7,9 +7,7 @@ import { AssetBlockProps, AssetHtmlProps } from '@/types/templates';
 import Button from '@/components/global/Button';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
-
 import { createTheme, ThemeProvider } from '@mui/material';
-
 
 const customTheme = createTheme({
     palette: {
