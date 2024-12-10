@@ -1,25 +1,24 @@
 'use client'
 
-import { FC } from "react"
+import React, { FC, useMemo } from 'react';
 import ProgressSection from "./components/progressSection"
 import AssetGenerationHeader from "./layout/AssetGenerationHeader"
+
 interface ProjectAssetProp {
-  params: {
+  params: Promise<{
     project_name: string
     campaign_name: string
     asset_name: string
     type_page: string
-  }
+  }>
 }
 
-const ProjectAssetPage: FC<ProjectAssetProp> = async ({ params }) => {
-  const takeData = async () => {
-    return params
-  }
-  const data = await takeData()
-  const project_name = decodeURIComponent(data.project_name)
-  const campaign_name = decodeURIComponent(data.campaign_name)
-  const type_page = decodeURIComponent(data.type_page) //use ListTypePage
+const ProjectAssetPage: FC<ProjectAssetProp> = ({ params }) => {
+  const resolvedParams = React.use(params) // unwrap the Promise
+
+  const project_name = useMemo(() => decodeURIComponent(resolvedParams.project_name), [resolvedParams])
+  const campaign_name = useMemo(() => decodeURIComponent(resolvedParams.campaign_name), [resolvedParams])
+  const type_page = useMemo(() => decodeURIComponent(resolvedParams.type_page), [resolvedParams]) // use ListTypePage
 
   return (
     <>
