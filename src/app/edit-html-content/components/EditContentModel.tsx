@@ -3,16 +3,20 @@ import { useAppData } from '@/context/AppContext';
 import React, { useEffect, useState, useRef } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers, materialCells, } from '@jsonforms/material-renderers';
-import { AssetBlockProps } from '@/types/templates';
+import { AssetBlockProps, AssetHtmlProps } from '@/types/templates';
 import Button from '@/components/global/Button';
+import { useLoading } from '@/components/global/Loading/LoadingContext';
+import { ApiService } from '@/lib/axios_generic';
+import { urls } from '@/apis/urls';
 
 const EditContentModel = ({ setIsShowModelEdit }: any) => {
-    const { contextData } = useAppData();
+    const { contextData, setContextData } = useAppData();
     const [assetHTML, setAssetHTML] = useState(contextData.AssetHtml)
     const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(contextData.AssetHtml?.assetBlocks?.[0] as AssetBlockProps)
     const [schema, setSchema] = useState(JSON.parse(contextData.AssetHtml?.assetBlocks?.[0]?.schema as string))
     const [blockData, setBlockData] = useState(JSON.parse(contextData.AssetHtml?.assetBlocks?.[0]?.assetBlockDataVersions?.[0]?.blockData as string))
     const refIndexBlockSelected = useRef(0)
+    const { setShowLoading } = useLoading()
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -57,9 +61,46 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
         }
     }
 
-    const onSaveAllAndClose = () => {
-        setIsShowModelEdit(false);
-    }
+    const onSaveAllAndClose = async () => {
+        try {
+            setShowLoading(true);
+
+            if (assetHTML.assetBlocks) {
+                const promises = assetHTML.assetBlocks.map(async (item) => {
+                    try {
+                        const resUpdate = await ApiService.put<any>(urls.assetBlock_dataVersion_update, {
+                            assetBlockDataVersionID: item.assetBlockDataVersionID,
+                            assetBlockID: item.assetBlockID,
+                            assetID: item.assetID,
+                            version: item.assetBlockDataVersions?.[0]?.version,
+                            blockData: item.assetBlockDataVersions?.[0]?.blockData,
+                        });
+                        return resUpdate;
+                    } catch (innerError) {
+                        console.error('API Error for item:', item, ApiService.handleError(innerError));
+                        return { isSuccess: false };
+                    }
+                });
+
+                const results = await Promise.all(promises);
+
+                const allSuccess = results.every((res) => res.isSuccess);
+
+                if (allSuccess) {
+                    const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${assetHTML.assetID}`);
+                    if (resAssetSelect.isSuccess && resAssetSelect.assetContentVersions.length > 0) {
+                        setContextData({ AssetHtml: resAssetSelect as AssetHtmlProps });
+                        setIsShowModelEdit(false);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        } finally {
+            setShowLoading(false);
+        }
+    };
 
     return (
         <div onClick={handleClick} className="fixed z-[1000] left-0 right-0 top-0 bottom-0 bg-black bg-opacity-55 flex items-center justify-center">
@@ -86,8 +127,17 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
                 </div>
                 <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-end'>
                     <Button
+                        handleClick={() => { setIsShowModelEdit(false) }}
+                        buttonText='Close'
+                        showIcon={false}
+                        textStyle='text-[1rem] font-base'
+                        textColor="text-[#00A881]"
+                        backgroundColor="bg-[#fff]"
+                        customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
+
+                    <Button
                         handleClick={onSaveAllAndClose}
-                        buttonText='Save All & Close'
+                        buttonText='Save All'
                         showIcon={false}
                         textStyle='text-[1rem] font-base text-[#00A881]'
                         textColor="text-[#fff]"
