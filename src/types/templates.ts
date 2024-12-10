@@ -60,3 +60,27 @@ export interface AssetHtmlProps {
         }
     ]
 }
+
+export interface AssetBlockProps {
+    assetBlockID?: string,
+    assetID?: string,
+    blockID?: string,
+    assetBlockDataVersionID?: string,
+    type?: string,
+    name?: string,
+    html?: string,
+    schema?: string,
+    uiSchema?: string,
+    description?: string,
+    sortOrder?: number,
+    assetBlockDataVersions?: [
+        {
+            assetBlockDataVersionID?: string,
+            assetBlockID?: string,
+            version?: number,
+            aiPrompt?: string,
+            blockData?: string,
+            blockHTMLGenerated?: string
+        }
+    ]
+}
