@@ -14,32 +14,29 @@ interface ProjectAssetProp {
     project_name: string
     campaign_name: string
   }
-  handleEdit?: () => void
 }
 
 const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
   const router = useRouter();
+  const { contextData } = useAppData();
+  const { project_name, campaign_name } = params
   const queryParams = useSearchParams()
   const asset_name = queryParams.get('asset_name') ?? 'default'
 
-  const accessParams = () => {
-    return params
-  }
-
   const handleEdit = () => {
     sessionStorage.setItem(nkey.html_content, html_content);
-    router.push("/edit-html-content?type=call-script")
+    router.push("/edit-html-content")
   }
 
-  const { project_name, campaign_name } = accessParams()
+  const handleBack = () => {
+    console.log('back');
 
-  const { contextData } = useAppData();
-
+  }
 
   return (
     <div className="flex items-center justify-between border-grey-200 border-b-[1px] border-solid pt-[2rem] pb-5 px-[1.5rem]">
       <div>
-        <Breadcrumb projectName={project_name.split('%20').join(' ')} TaskName={campaign_name.split('%20').join(' ')} TaskType={asset_name.split('%20').join(' ')} />
+        <Breadcrumb onClickBack={handleBack} projectName={project_name.split('%20').join(' ')} TaskName={campaign_name.split('%20').join(' ')} TaskType={asset_name.split('%20').join(' ')} />
       </div>
       {contextData.assetGenerateStatus === 3 && contextData.isShowEdit_Save_Button &&
         <div className="flex">
