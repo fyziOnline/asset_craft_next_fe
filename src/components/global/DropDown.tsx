@@ -17,6 +17,7 @@ import TextField from './TextField';
  * @param {string} [props.customClass] - Optional custom CSS classes for styling the dropdown container.
  * @param {string} [props.dropdownWidthClass] - Optional CSS classes for controlling the dropdown width.
  * @param {Array.<{ label: string, value: string }>} props.optionLists - Array of options for the dropdown.
+ * @param {(valueSelected: options) => void} props.onSelected - Select value
  *  Each option includes a label (display text) and a value to be selected.
  *
  * @returns {JSX.Element} A dropdown component with selectable options and an "Other" input field.
@@ -33,9 +34,10 @@ interface DropDownProps {
     customClass?: string;
     dropdownWidthClass?: string;
     optionLists: options[];
+    onSelected?: (valueSelected: options) => void;
 }
 
-const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, customClass = "", dropdownWidthClass = "" }) => {
+const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, customClass = "", dropdownWidthClass = "", onSelected = () => { } }) => {
     const [selectedOption, setSelectedOption] = useState('')
     const [showOptionList, setShowOptionList] = useState(false)
     const [isOtherSelected, setIsOtherSelected] = useState(false)
@@ -46,16 +48,26 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
         setShowOptionList((prev) => !prev)
     }
 
-    const handleSelectList = (value: string) => {
-        setSelectedOption(value)
+    const handleSelectList = (options: options) => {
+        setSelectedOption(options.value)
         setShowOptionList(false)
         setIsOtherSelected(false)
+        onSelected(options)
     }
 
     const hanleOtherSelectedOption = (value: string) => {
         setIsOtherSelected(true)
         setShowOptionList(false)
         setSelectedOption(value)
+        onSelected({ value: "", label: "Other" })
+    }
+
+    const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const options = {
+            value: e.target.value,
+            label: 'Other'
+        }
+        onSelected(options)
     }
 
     useEffect(() => {
@@ -82,7 +94,7 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
                         {optionLists.map((options, index) => (
                             <div
                                 key={index}
-                                onClick={() => handleSelectList(options.value)}
+                                onClick={() => handleSelectList(options)}
                                 className='h-11 px-4 py-3 flex items-center text-base cursor-pointer'
                             >
                                 {options.label}
@@ -93,7 +105,7 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
                 }
             </div>
             {isOtherSelected &&
-                <TextField customClass='h-11' customAreaClass="whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide" placeholder='Specify other target audiences' />
+                <TextField handleChange={onChangeText} customClass='h-11' customAreaClass="whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide" placeholder='Specify other target audiences' />
             }
         </div>
     )

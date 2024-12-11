@@ -150,12 +150,26 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         <div className='flex items-center gap-[16%]'>
                             <div>
                                 <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
-                                <DropDown selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
+                                <DropDown
+                                    onSelected={(optionSelected) => {
+                                        refFormData.current = {
+                                            ...refFormData.current,
+                                            campaignGoal: optionSelected.value
+                                        }
+                                    }}
+                                    selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
                             <div>
                                 <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
-                                <DropDown selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
+                                <DropDown
+                                    onSelected={(optionSelected) => {
+                                        refFormData.current = {
+                                            ...refFormData.current,
+                                            targetAudience: optionSelected.value
+                                        }
+                                    }}
+                                    selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
                         </div>
 
