@@ -206,17 +206,33 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     isShowContent={isShowList.includes(2)}>
                     <div className='max-w-[90%]'>
                         <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
-                        <TextField placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField
+                            handleChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                                refFormData.current = {
+                                    ...refFormData.current,
+                                    topic: e.target.value
+                                }
+                            }} placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-center gap-[16%]'>
                             <div>
                                 <ChildrenTitle title='Email Type' customClass='mt-5' />
-                                <DropDown selectPlaceHolder="Select Post Type" optionLists={emailType} />
+                                <DropDown onSelected={(optionSelected) => {
+                                    refFormData.current = {
+                                        ...refFormData.current,
+                                        type: optionSelected.value
+                                    }
+                                }} selectPlaceHolder="Select Post Type" optionLists={emailType} />
                             </div>
 
                             <div>
                                 <ChildrenTitle title='Key Points' customClass='mt-5' />
-                                <DropDown selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
+                                <DropDown onSelected={(optionSelected) => {
+                                    refFormData.current = {
+                                        ...refFormData.current,
+                                        keyPoints: optionSelected.value
+                                    }
+                                }} selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
                             </div>
                         </div>
 
@@ -256,7 +272,12 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         <DragAndDrop />
 
                         <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
-                        <TextField placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField handleChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                            refFormData.current = {
+                                ...refFormData.current,
+                                webUrl: e.target.value
+                            }
+                        }} placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                         <Button
