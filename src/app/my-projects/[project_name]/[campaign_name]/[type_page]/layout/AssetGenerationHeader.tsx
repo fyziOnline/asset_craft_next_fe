@@ -25,8 +25,8 @@ const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
 
   const handleEdit = () => {
     sessionStorage.setItem(nkey.html_content, html_content);
-    setContextData({ isShowEdit_Save_Button: false })
     router.push("/edit-html-content")
+    setContextData({ isShowEdit_Save_Button: false })
   }
 
   const handleBack = () => {
