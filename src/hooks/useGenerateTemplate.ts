@@ -1,4 +1,5 @@
 import { urls } from '@/apis/urls';
+import { FormEmailDataProps } from '@/app/my-projects/[project_name]/[campaign_name]/[type_page]/asset-generate/EmailPage';
 import { ApiService } from '@/lib/axios_generic';
 import { AssetHtmlProps } from '@/types/templates';
 
@@ -9,7 +10,7 @@ interface GenerateTemplateProp {
 }
 
 export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
-    const generateHTML = async () => {
+    const generateHTML = async (FormData: FormEmailDataProps) => {
         try {
             const resGenerateUsingAI = await ApiService.get<any>(`${urls.asset_getAssetDataUsingAI}?assetID=${params.assetID}`);
             if (resGenerateUsingAI.isSuccess) {

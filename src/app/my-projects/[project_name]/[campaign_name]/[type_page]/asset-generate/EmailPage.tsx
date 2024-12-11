@@ -17,7 +17,7 @@ interface EmailPageProps {
     }
 }
 
-interface FormDataProps {
+export interface FormEmailDataProps {
     product?: string,
     campaignGoal?: string,
     targetAudience?: string,
@@ -39,7 +39,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID } })
-    const refFormData = useRef<FormDataProps>()
+    const refFormData = useRef<FormEmailDataProps>()
 
     const { setContextData } = useAppData();
 
@@ -100,7 +100,6 @@ const EmailPage = ({ params }: EmailPageProps) => {
         }
     };
 
-
     const handleGenerate = async () => {
         if (generateStep === 2 || checkedList.length !== 4) {
             return;
@@ -122,7 +121,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setDisableList([1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
-                const res = await generateHTML()
+                const res = await generateHTML(refFormData.current as FormEmailDataProps)
                 setGenerateStep(3);
                 setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess });
                 return
