@@ -27,6 +27,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const [currentStep, setCurrentStep] = useState<number>(0)
   const { listTemplates } = useGetTemplates({ type_page: params.type_page })
   const assetIDTemplateRef = useRef("")
+  const campaignIDTemplateRef = useRef("")
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
 
@@ -59,6 +60,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
           // const resAddWithTemplate = { isSuccess: true, assetID: "" }
 
           if (resAddWithTemplate.isSuccess) {
+            campaignIDTemplateRef.current = res_campaign_add.campaignID
             assetIDTemplateRef.current = resAddWithTemplate.assetID
             selectedTemplateRef.current = selectedTemplate
             setCurrentStep(pre => pre + 1)
@@ -93,6 +95,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         params={{
           type_page: params.type_page,
           assetID: assetIDTemplateRef.current,
+          campaignID: campaignIDTemplateRef.current,
           template: selectedTemplateRef.current
         }}
       />

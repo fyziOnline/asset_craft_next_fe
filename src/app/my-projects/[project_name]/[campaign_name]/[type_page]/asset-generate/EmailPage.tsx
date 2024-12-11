@@ -13,11 +13,12 @@ import { AssetHtmlProps } from '@/types/templates';
 
 interface EmailPageProps {
     params: {
-        assetID: string
+        assetID: string,
+        campaignID: string,
     }
 }
 
-interface FormDataProps {
+export interface FormEmailDataProps {
     product?: string,
     campaignGoal?: string,
     targetAudience?: string,
@@ -25,8 +26,12 @@ interface FormDataProps {
     topic?: string,
     type?: string,
     keyPoints?: string,
-    imageUrl?: string,
-    webUrl?: string
+    fileSelected?: File,
+    webUrl?: string,
+    section1?: string,
+    section2?: string,
+    section3?: string,
+    section4?: string,
 }
 
 const EmailPage = ({ params }: EmailPageProps) => {
@@ -34,8 +39,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID } })
-    const refFormData = useRef<FormDataProps>()
+    const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID, campaignID: params.campaignID } })
+    const refFormData = useRef<FormEmailDataProps>()
 
     const { setContextData } = useAppData();
 
@@ -63,6 +68,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
     ]
 
     const onNext = (step: number): void => {
+        console.log('refFormData.current: ', refFormData.current);
+
         if (step === 1) {
             setDisableList([1, 3])
             setIsShowList([2])
@@ -94,7 +101,6 @@ const EmailPage = ({ params }: EmailPageProps) => {
         }
     };
 
-
     const handleGenerate = async () => {
         if (generateStep === 2 || checkedList.length !== 4) {
             return;
@@ -116,7 +122,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setDisableList([1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
-                const res = await generateHTML()
+                const res = await generateHTML(refFormData.current as FormEmailDataProps)
                 setGenerateStep(3);
                 setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess });
                 return
@@ -125,6 +131,13 @@ const EmailPage = ({ params }: EmailPageProps) => {
         setContextData({ assetGenerateStatus: newStep });
         setGenerateStep(newStep);
     };
+
+    const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement>, key: string) => {
+        refFormData.current = {
+            ...refFormData.current,
+            [key]: e.target.value
+        }
+    }
 
     return (
         <div>
@@ -138,12 +151,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     isShowContent={isShowList.includes(1)}>
                     <div>
                         <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
-                        <TextField handleChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                            refFormData.current = {
-                                ...refFormData.current,
-                                product: e.target.value
-                            }
-                        }}
+                        <TextField handleChange={(e) => { handleInputText(e, "product") }}
                             placeholder="Enter the name of the product or solution."
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
@@ -206,17 +214,28 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     isShowContent={isShowList.includes(2)}>
                     <div className='max-w-[90%]'>
                         <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
-                        <TextField placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField handleChange={(e) => { handleInputText(e, "topic") }}
+                            placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-center gap-[16%]'>
                             <div>
                                 <ChildrenTitle title='Email Type' customClass='mt-5' />
-                                <DropDown selectPlaceHolder="Select Post Type" optionLists={emailType} />
+                                <DropDown onSelected={(optionSelected) => {
+                                    refFormData.current = {
+                                        ...refFormData.current,
+                                        type: optionSelected.value
+                                    }
+                                }} selectPlaceHolder="Select Post Type" optionLists={emailType} />
                             </div>
 
                             <div>
                                 <ChildrenTitle title='Key Points' customClass='mt-5' />
-                                <DropDown selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
+                                <DropDown onSelected={(optionSelected) => {
+                                    refFormData.current = {
+                                        ...refFormData.current,
+                                        keyPoints: optionSelected.value
+                                    }
+                                }} selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
                             </div>
                         </div>
 
@@ -253,10 +272,16 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([3]) }}
                     isShowContent={isShowList.includes(3)}>
                     <div>
-                        <DragAndDrop />
+                        <DragAndDrop onFileSelect={(file) => {
+                            refFormData.current = {
+                                ...refFormData.current,
+                                fileSelected: file
+                            }
+                        }} />
 
                         <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
-                        <TextField placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField handleChange={(e) => { handleInputText(e, "webUrl") }}
+                            placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                         <Button
@@ -293,19 +318,23 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     <div>
                         <ChildrenTitle title='Section 1: Event Overview ' customClass="text-[18px]" />
                         <ChildrenTitle title='What are the key details for the event, including the title, date, location, a brief overview, and any call-to-action text?' customClass="text-[14px]" />
-                        <TextField customClass='h-16' placeholder={`“Event Title: HPE Discover More AI Singapore 2024. Date and Time: Thursday, 14 November 2024, 11:00 AM - 5:25 PM”`} />
+                        <TextField handleChange={(e) => { handleInputText(e, "section1") }}
+                            customClass='h-16' placeholder={`“Event Title: HPE Discover More AI Singapore 2024. Date and Time: Thursday, 14 November 2024, 11:00 AM - 5:25 PM”`} />
 
                         <ChildrenTitle title='Section 2: Event Agenda' customClass="text-[18px] mt-[20px]" />
                         <ChildrenTitle title='Can you outline the event agenda, including session timings, special sessions, notable speakers, and closing activities?' customClass="text-[14px] w-[85%] text-wrap" />
-                        <TextField placeholder={`“11:00 - 13:00: Registration and HPE Discover More AI Showcase (Lunch provided). 13:00 - 15:30: Plenary Session 15:30 - 16:30: Breakout Tracks “`} rows={2} />
+                        <TextField handleChange={(e) => { handleInputText(e, "section2") }}
+                            placeholder={`“11:00 - 13:00: Registration and HPE Discover More AI Showcase (Lunch provided). 13:00 - 15:30: Plenary Session 15:30 - 16:30: Breakout Tracks “`} rows={2} />
 
                         <ChildrenTitle title='Section 3: Key Benefits and Highlights' customClass="text-[18px] mt-[20px]" />
                         <ChildrenTitle title='What are the main benefits and highlights of the event for attendees, including key takeaways, showcased technologies, and target industries?' customClass="text-[14px] w-[95%] text-wrap" />
-                        <TextField placeholder={`"Generate Key Benefits and Highlights, including takeaways, showcased technologies, and target industries."`} rows={1} />
+                        <TextField handleChange={(e) => { handleInputText(e, "section3") }}
+                            placeholder={`"Generate Key Benefits and Highlights, including takeaways, showcased technologies, and target industries."`} rows={1} />
 
                         <ChildrenTitle title='Section 4: Partnership and Sponsorship' customClass="text-[18px] mt-[20px]" />
                         <ChildrenTitle title='Who are the event partners or sponsors, and what sponsorship levels and logo specifications would you like to include?' customClass="text-[14px] w-[95%] text-wrap" />
-                        <TextField placeholder={`“Platinum Sponsors: Intel NVIDIA. Gold Sponsors: AMD, Cohesity, Commvault, Ekahau, Nutanix, Red Hat, Veeam”`} rows={1} />
+                        <TextField handleChange={(e) => { handleInputText(e, "section4") }}
+                            placeholder={`“Platinum Sponsors: Intel NVIDIA. Gold Sponsors: AMD, Cohesity, Commvault, Ekahau, Nutanix, Red Hat, Veeam”`} rows={1} />
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                         <Button

@@ -10,4 +10,7 @@ export const urls = {
     asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
     asset_generate: "/asset/generate",
     assetBlock_dataVersion_update: "/assetBlock/dataVersion/update",
+    aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
+    aiPrompt_Campaign_insert: "/aiPrompt/Campaign/insert",
+    aiPrompt_image_update: "/aiPrompt/image/update",
 };
