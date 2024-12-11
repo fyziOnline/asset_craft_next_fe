@@ -25,7 +25,7 @@ export interface FormEmailDataProps {
     topic?: string,
     type?: string,
     keyPoints?: string,
-    imageUrl?: string,
+    fileSelected?: File,
     webUrl?: string,
     section1?: string,
     section2?: string,
@@ -271,7 +271,12 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([3]) }}
                     isShowContent={isShowList.includes(3)}>
                     <div>
-                        <DragAndDrop />
+                        <DragAndDrop onFileSelect={(file) => {
+                            refFormData.current = {
+                                ...refFormData.current,
+                                fileSelected: file
+                            }
+                        }} />
 
                         <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
                         <TextField handleChange={(e) => { handleInputText(e, "webUrl") }}
