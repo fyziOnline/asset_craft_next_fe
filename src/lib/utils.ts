@@ -5,13 +5,19 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const convertFileToBase64 = (file: File): Promise<{ isSuccess: boolean, base64String?: string, error?: any }> => {
+export const convertFileToBase64 = (
+  file: File,
+  isType: boolean = false
+): Promise<{ isSuccess: boolean; base64String?: string; error?: any }> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onloadend = () => {
       const base64String = reader.result as string;
-      resolve({ isSuccess: true, base64String });
+
+      const resultBase64 = isType ? base64String : base64String.split(',')[1];
+
+      resolve({ isSuccess: true, base64String: resultBase64 });
     };
 
     reader.onerror = (error) => {
@@ -22,4 +28,5 @@ export const convertFileToBase64 = (file: File): Promise<{ isSuccess: boolean, b
     reader.readAsDataURL(file);
   });
 };
+
 

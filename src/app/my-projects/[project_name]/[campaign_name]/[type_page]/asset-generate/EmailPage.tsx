@@ -13,7 +13,8 @@ import { AssetHtmlProps } from '@/types/templates';
 
 interface EmailPageProps {
     params: {
-        assetID: string
+        assetID: string,
+        campaignID: string,
     }
 }
 
@@ -38,7 +39,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID } })
+    const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID, campaignID: params.campaignID } })
     const refFormData = useRef<FormEmailDataProps>()
 
     const { setContextData } = useAppData();
