@@ -15,14 +15,15 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     const generateHTML = async (FormData: FormEmailDataProps) => {
         try {
             const resAssetInsert = await ApiService.post<any>(urls.aiPrompt_Asset_insert, {
-                "assetID": params.assetID,
-                "topic": FormData.topic,
-                "type": FormData.type,
-                "keyPoints": FormData.keyPoints,
+                "assetID": params?.assetID || "",
+                "topic": FormData?.topic || "",
+                "type": FormData?.type || "",
+                "keyPoints": FormData?.keyPoints || "",
             });
             if (resAssetInsert.isSuccess) {
                 let fileID = 0
-                if (FormData.fileSelected) {
+                if (FormData?.fileSelected) {
+
                     const resBase64 = await convertFileToBase64(FormData.fileSelected)
                     if (resBase64.isSuccess) {
                         const resImageUpdate = await ApiService.put<any>(urls.aiPrompt_image_update, {
@@ -35,13 +36,13 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                     }
                 }
                 const resCampaignInsert = await ApiService.post<any>(urls.aiPrompt_Campaign_insert, {
-                    "campaignID": params.campaignID,
-                    "product": FormData.product,
-                    "campaignGoal": FormData.campaignGoal,
-                    "targetAudience": FormData.targetAudience,
-                    "outputScale": FormData.outputScale,
+                    "campaignID": params?.campaignID,
+                    "product": FormData?.product || "",
+                    "campaignGoal": FormData?.campaignGoal || "",
+                    "targetAudience": FormData?.targetAudience || "",
+                    "outputScale": FormData?.outputScale || 0,
                     "fileID": fileID,
-                    "webUrl": FormData.webUrl
+                    "webUrl": FormData?.webUrl || ""
                 });
                 if (resCampaignInsert.isSuccess) {
                     const resGenerateUsingAI = await ApiService.get<any>(`${urls.asset_getAssetDataUsingAI}?assetID=${params.assetID}`);

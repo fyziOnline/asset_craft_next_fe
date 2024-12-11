@@ -10,6 +10,7 @@ import { FC, ReactNode, useRef, useState } from 'react'
 import Cookies from 'js-cookie';
 import moment from 'moment';
 import { Template } from '@/types/templates'
+import { useAppData } from '@/context/AppContext'
 
 type ProgressComponent = ReactNode;
 interface ProjectAssetProp {
@@ -30,6 +31,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const campaignIDTemplateRef = useRef("")
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
+  const { setContextData } = useAppData();
 
   const handleNext = async (selectedTemplate: Template) => {
     if (currentStep < total_steps) {
@@ -64,6 +66,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
             assetIDTemplateRef.current = resAddWithTemplate.assetID
             selectedTemplateRef.current = selectedTemplate
             setCurrentStep(pre => pre + 1)
+            setContextData({ assetGenerateStatus: 1, assetTemplateShow: false })
           }
         }
       } catch (error) {
