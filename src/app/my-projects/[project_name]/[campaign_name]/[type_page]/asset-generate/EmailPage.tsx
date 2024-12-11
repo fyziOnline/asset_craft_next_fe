@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
@@ -17,12 +17,25 @@ interface EmailPageProps {
     }
 }
 
+interface FormDataProps {
+    product?: string,
+    campaignGoal?: string,
+    targetAudience?: string,
+    outputScale?: number,
+    topic?: string,
+    type?: string,
+    keyPoints?: string,
+    imageUrl?: string,
+    webUrl?: string
+}
+
 const EmailPage = ({ params }: EmailPageProps) => {
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID } })
+    const refFormData = useRef<FormDataProps>()
 
     const { setContextData } = useAppData();
 
@@ -48,7 +61,6 @@ const EmailPage = ({ params }: EmailPageProps) => {
         { label: 'Performance', value: 'Performance' },
         { label: 'Increased Security', value: 'Increased Security' },
     ]
-
 
     const onNext = (step: number): void => {
         if (step === 1) {
@@ -126,7 +138,14 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     isShowContent={isShowList.includes(1)}>
                     <div>
                         <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
-                        <TextField placeholder="Enter the name of the product or solution." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField handleChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                            refFormData.current = {
+                                ...refFormData.current,
+                                product: e.target.value
+                            }
+                        }}
+                            placeholder="Enter the name of the product or solution."
+                            customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-center gap-[16%]'>
                             <div>
