@@ -18,13 +18,14 @@ interface ProjectAssetProp {
 
 const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
   const router = useRouter();
-  const { contextData } = useAppData();
+  const { contextData, setContextData } = useAppData();
   const { project_name, campaign_name } = params
   const queryParams = useSearchParams()
   const asset_name = queryParams.get('asset_name') ?? 'default'
 
   const handleEdit = () => {
     sessionStorage.setItem(nkey.html_content, html_content);
+    setContextData({ isShowEdit_Save_Button: false })
     router.push("/edit-html-content")
   }
 

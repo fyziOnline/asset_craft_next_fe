@@ -155,7 +155,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             placeholder="Enter the name of the product or solution."
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <div className='flex items-center gap-[16%]'>
+                        <div className='flex items-start gap-[16%]'>
                             <div>
                                 <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown
@@ -217,7 +217,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         <TextField handleChange={(e) => { handleInputText(e, "topic") }}
                             placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <div className='flex items-center gap-[16%]'>
+                        <div className='flex items-start gap-[16%]'>
                             <div>
                                 <ChildrenTitle title='Email Type' customClass='mt-5' />
                                 <DropDown onSelected={(optionSelected) => {
