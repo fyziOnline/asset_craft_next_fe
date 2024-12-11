@@ -175,7 +175,12 @@ const EmailPage = ({ params }: EmailPageProps) => {
 
                         <div className='w-[300px]'>
                             <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
-                            <RangeSlider></RangeSlider>
+                            <RangeSlider onSelectValue={(value) => {
+                                refFormData.current = {
+                                    ...refFormData.current,
+                                    outputScale: value
+                                }
+                            }}></RangeSlider>
                         </div>
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
