@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import Search from '@/components/global/Search';
@@ -8,9 +8,16 @@ import AddVersionModel from './components/AddVersionModel';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import { useAppData } from '@/context/AppContext';
 import EditContentModel from './components/EditContentModel';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const Page = () => {
     const { contextData } = useAppData();
+    const queryParams = useSearchParams()
+    const router = useRouter();
+
+    const project_name = useMemo(() => { return queryParams.get('project_name') ?? 'default' }, [])
+    const campaign_name = useMemo(() => { return queryParams.get('campaign_name') ?? 'default' }, [])
+    const asset_name = useMemo(() => { return queryParams.get('asset_name') ?? 'default' }, [])
 
     const {
         isShowAddVer,
@@ -32,7 +39,7 @@ const Page = () => {
             <div className='overflow-hidden'>
                 <div className="flex pt-[2rem] pb-2 px-[1.5rem]">
                     <div className='flex-1'>
-                        <Breadcrumb projectName="GreenLake" TaskName="Storage Asia 2024" TaskType="SalesCall_1" />
+                        <Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={asset_name} />
                     </div>
                     <div className='flex items-center'>
                         <div className='flex items-center'>
@@ -71,6 +78,7 @@ const Page = () => {
                         <Button
                             buttonText='Submit'
                             showIcon
+                            handleClick={() => { router.replace("/dashboard") }}
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#fff]"
                             iconColor="#fff"

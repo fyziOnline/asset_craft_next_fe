@@ -25,13 +25,12 @@ const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
 
   const handleEdit = () => {
     sessionStorage.setItem(nkey.html_content, html_content);
-    router.push("/edit-html-content")
+    router.replace(`/edit-html-content?project_name=${project_name}&campaign_name=${campaign_name}&asset_name=${asset_name}`)
     setContextData({ isShowEdit_Save_Button: false })
   }
 
   const handleBack = () => {
-    console.log('back');
-
+    router.back()
   }
 
   return (
@@ -52,6 +51,7 @@ const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
             customClass='min-w-[180px] static border-[3px] border-[#00A881] px-[1.4rem] py-2 group-hover:border-white mr-[70px]' />
           <Button
             buttonText='Save'
+            handleClick={() => { router.replace("/dashboard") }}
             showIcon
             textStyle='text-[1rem] font-base text-[#00A881]'
             textColor="text-[#00A881]"
