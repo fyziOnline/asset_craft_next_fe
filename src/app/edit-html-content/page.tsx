@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import Search from '@/components/global/Search';
@@ -144,7 +144,7 @@ const Page = () => {
                             handleChangeTextVersion={handleChangeTextVersion} /> : null}
                     </div>
                 </div>
-                {isShowModelEdit ? <EditContentModel setIsShowModelEdit={setIsShowModelEdit} /> : null}
+                {isShowModelEdit ? <EditContentModel assetBlocks={versionSelected.assetVersionBlocks} setIsShowModelEdit={setIsShowModelEdit} /> : null}
             </div>
         </>
     );

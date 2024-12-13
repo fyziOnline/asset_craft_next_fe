@@ -1,5 +1,4 @@
 'use client';
-import { useAppData } from '@/context/AppContext';
 import React, { useEffect, useState, useRef } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers, materialCells, } from '@jsonforms/material-renderers';
@@ -8,6 +7,7 @@ import Button from '@/components/global/Button';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { useAppData } from '@/context/AppContext';
 
 const customTheme = createTheme({
     palette: {
@@ -57,13 +57,18 @@ const customTheme = createTheme({
     },
 });
 
-const EditContentModel = ({ setIsShowModelEdit }: any) => {
+interface EditContentModelProps {
+    setIsShowModelEdit: any,
+    assetBlocks: AssetBlockProps[]
+}
+
+const EditContentModel = ({ setIsShowModelEdit, assetBlocks }: EditContentModelProps) => {
     const { contextData, setContextData } = useAppData();
-    const [assetHTML, setAssetHTML] = useState(contextData.AssetHtml)
     const [isLoading, setIsLoading] = useState(false);
-    const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(contextData.AssetHtml?.assetBlocks?.[0] as AssetBlockProps)
-    const [schema, setSchema] = useState(JSON.parse(contextData.AssetHtml?.assetBlocks?.[0]?.schema as string))
-    const [blockData, setBlockData] = useState(JSON.parse(contextData.AssetHtml?.assetBlocks?.[0]?.assetBlockDataVersions?.[0]?.blockData as string))
+    const [listAssetBlocks, setListAssetBlocks] = useState(assetBlocks)
+    const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(assetBlocks[0])
+    const [schema, setSchema] = useState(JSON.parse(assetBlocks[0].schema as string))
+    const [blockData, setBlockData] = useState(JSON.parse(assetBlocks[0].blockData as string))
     const refIndexBlockSelected = useRef(0)
 
     useEffect(() => {
@@ -81,14 +86,14 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
         refIndexBlockSelected.current = index
         setAssetBlockSelected(item)
         setSchema(JSON.parse(item.schema as string))
-        setBlockData(JSON.parse(item.assetBlockDataVersions?.[0]?.blockData as string))
+        setBlockData(JSON.parse(item.blockData as string))
     }
 
     const onHandleEditData = ({ data, errors }: any) => {
         try {
-            let newAssetBlockDataVersions = assetBlockSelected.assetBlockDataVersions
-            if (newAssetBlockDataVersions && newAssetBlockDataVersions?.length > 0) {
-                newAssetBlockDataVersions[0].blockData = JSON.stringify(data);
+            let newAssetBlockDataVersions = assetBlockSelected
+            if (newAssetBlockDataVersions) {
+                newAssetBlockDataVersions.blockData = JSON.stringify(data);
             }
 
             const newAssetBlockSelected = {
@@ -96,14 +101,14 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
                 assetBlockDataVersions: newAssetBlockDataVersions
             }
 
-            const newAssetBlocks = assetHTML?.assetBlocks
-            if (newAssetBlocks && newAssetBlocks[refIndexBlockSelected.current]) {
-                newAssetBlocks[refIndexBlockSelected.current] = newAssetBlockSelected
+            const newListAssetBlocks = listAssetBlocks
+            if (newListAssetBlocks && newListAssetBlocks[refIndexBlockSelected.current]) {
+                newListAssetBlocks[refIndexBlockSelected.current] = newAssetBlockSelected
             }
 
             setBlockData(data)
             setAssetBlockSelected(newAssetBlockSelected)
-            setAssetHTML({ ...assetHTML, assetBlocks: newAssetBlocks })
+            setListAssetBlocks(newListAssetBlocks)
         } catch (ex) {
 
         }
@@ -113,15 +118,15 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
         try {
             setIsLoading(true);
 
-            if (assetHTML.assetBlocks) {
-                const promises = assetHTML.assetBlocks.map(async (item) => {
+            if (listAssetBlocks) {
+                const promises = listAssetBlocks.map(async (item) => {
                     try {
-                        const resUpdate = await ApiService.put<any>(urls.assetBlock_dataVersion_update, {
-                            assetBlockDataVersionID: item.assetBlockDataVersionID,
-                            assetBlockID: item.assetBlockID,
-                            assetID: item.assetID,
-                            version: item.assetBlockDataVersions?.[0]?.version,
-                            blockData: item.assetBlockDataVersions?.[0]?.blockData,
+                        const resUpdate = await ApiService.put<any>(urls.assetVersionBlock_update, {
+                            "assetVersionBlockID": item.assetVersionBlockID,
+                            "blockName": item.blockName,
+                            "aiPrompt": item.aiPrompt,
+                            "blockData": item.blockData,
+                            "blockHTMLGenerated": item.blockHTMLGenerated
                         });
                         return resUpdate;
                     } catch (innerError) {
@@ -135,14 +140,16 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
                 const allSuccess = results.every((res) => res.isSuccess);
 
                 if (allSuccess) {
-                    const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${assetHTML.assetID}`);
+                    const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${contextData.AssetHtml.assetID}`);
                     if (resGenerate.isSuccess) {
-                        const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${assetHTML.assetID}`);
-                        if (resAssetSelect.isSuccess && resAssetSelect.assetContentVersions.length > 0) {
+                        const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${contextData.AssetHtml.assetID}`);
+                        if (resAssetSelect.isSuccess && resAssetSelect.assetVersions.length > 0) {
                             setContextData({ AssetHtml: resAssetSelect as AssetHtmlProps });
                             setIsShowModelEdit(false);
                         }
                     }
+                } else {
+                    alert("Save data failed, please try again later.");
                 }
             }
         } catch (error) {
@@ -158,11 +165,11 @@ const EditContentModel = ({ setIsShowModelEdit }: any) => {
             <div onClick={handleClick} className="fixed z-[1000] left-0 right-0 top-0 bottom-0 bg-black bg-opacity-55 flex items-center justify-center">
                 <div className='w-[90vw] h-[94vh] bg-white rounded-md relative flex flex-col'>
                     <div className='border-b border-solid border-[#D9D9D9] px-4 pb-4 flex flex-wrap'>
-                        {assetHTML?.assetBlocks?.map((item, index) => {
+                        {listAssetBlocks?.map((item, index) => {
                             return (
                                 <div onClick={() => { onSelectBlock(item, index) }}
-                                    className={`p-2 mr-2 mt-4 rounded-md cursor-pointer ${assetBlockSelected.assetBlockDataVersionID === item.assetBlockDataVersionID ? `text-white bg-[#01A982]` : `text-black bg-[#e4e4e4]`}`}
-                                    key={index}>{item.name?.replaceAll("_", " ")}</div>
+                                    className={`p-2 mr-2 mt-4 rounded-md cursor-pointer ${assetBlockSelected.assetVersionBlockID === item.assetVersionBlockID ? `text-white bg-[#01A982]` : `text-black bg-[#e4e4e4]`}`}
+                                    key={index}>{item.blockName?.replaceAll("_", " ")}</div>
                             )
                         })}
                     </div>
