@@ -55,25 +55,17 @@ export interface AssetHtmlProps {
 }
 
 export interface AssetBlockProps {
-    assetBlockID?: string,
-    assetID?: string,
-    blockID?: string,
-    assetBlockDataVersionID?: string,
-    type?: string,
-    name?: string,
-    html?: string,
-    schema?: string,
-    uiSchema?: string,
-    description?: string,
-    sortOrder?: number,
-    assetBlockDataVersions?: [
-        {
-            assetBlockDataVersionID?: string,
-            assetBlockID?: string,
-            version?: number,
-            aiPrompt?: string,
-            blockData?: string,
-            blockHTMLGenerated?: string
-        }
-    ]
+    assetVersionBlockID: string,
+    assetVersionID: string,
+    blockID: string,
+    blockName: string,
+    aiPrompt: string,
+    blockData: string,
+    blockHTMLGenerated: string,
+    sortOrder: number,
+    description: string,
+    type: string,
+    schema: string,
+    uiSchema: string,
+    html: string
 }
