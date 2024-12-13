@@ -3,7 +3,6 @@ import React, { FC, useState } from 'react';
 import Image from 'next/image';
 import { ListTypePage } from '@/data/dataGlobal';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { html_content } from '@/app/call-script/call-script-form/data/data';
 import { useAppData } from '@/context/AppContext';
 import LandingPage from '../asset-generate/LandingPage';
 import LinkedInPage from '../asset-generate/LinkedinPage';
@@ -102,7 +101,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                         <TransformComponent
                             wrapperStyle={{ width: '100%', height: '100%' }}
                         >
-                            <div dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetContentVersions?.[0]?.assetHTML || "" }} />
+                            <div dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
                         </TransformComponent>
                     </TransformWrapper>
                 ) : (

@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import Search from '@/components/global/Search';
@@ -89,10 +89,10 @@ const Page = () => {
                     {versionList.map((item, index) => {
                         return (
                             <button
-                                key={item + index}
+                                key={item.assetID + index}
                                 onClick={() => { setVersionSelected(item) }}
-                                className={`${versionSelected === item ? "text-white bg-[#01A982]" : "text-black bg-[#e4e4e4]"} inline-block h-[42px] mx-1 text-center text-lg font-normal  rounded-tl-[20px] rounded-tr-[20px] px-[30px] py-2`}>
-                                {item}
+                                className={`${versionSelected.assetID === item.assetID ? "text-white bg-[#01A982]" : "text-black bg-[#e4e4e4]"} inline-block h-[42px] mx-1 text-center text-lg font-normal  rounded-tl-[20px] rounded-tr-[20px] px-[30px] py-2`}>
+                                {item.versionName}
                             </button>)
                     })}
                 </div>
@@ -100,11 +100,7 @@ const Page = () => {
                     <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide relative">
                         <div>
                             <div className='flex w-[100%] items-center justify-end pr-52 absolute mt-9 z-10' >
-                                <div className='mr-[20px] mt-1' onClick={() => {
-                                    console.log('aaaa');
-
-                                    setIsShowModelEdit(true)
-                                }}>
+                                <div className='mr-[20px] mt-1' onClick={() => { setIsShowModelEdit(true) }}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none" data-id="101">
                                         <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                         <path d="M30.0625 4.06433C30.709 3.41787 31.5858 3.05469 32.5 3.05469C33.4142 3.05469 34.291 3.41787 34.9375 4.06433C35.584 4.7108 35.9471 5.58759 35.9471 6.50183C35.9471 7.41607 35.584 8.29287 34.9375 8.93933L19.5 24.3768L13 26.0018L14.625 19.5018L30.0625 4.06433Z" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -117,7 +113,7 @@ const Page = () => {
                                     </svg>
                                 </div> */}
                             </div>
-                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetContentVersions?.[0]?.assetHTML || "" }} />
+                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: versionSelected?.htmlGenerated || "" }} />
                         </div>
 
                         {isShowAddVer ? <div className='fixed left-0 right-0 h-[70vh] bg-black bg-opacity-55 flex items-center justify-center'>
@@ -148,7 +144,7 @@ const Page = () => {
                             handleChangeTextVersion={handleChangeTextVersion} /> : null}
                     </div>
                 </div>
-                {isShowModelEdit ? <EditContentModel setIsShowModelEdit={setIsShowModelEdit} /> : null}
+                {isShowModelEdit ? <EditContentModel assetBlocks={versionSelected.assetVersionBlocks} setIsShowModelEdit={setIsShowModelEdit} /> : null}
             </div>
         </>
     );

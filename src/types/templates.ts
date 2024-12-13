@@ -10,51 +10,44 @@ export interface Template {
 }
 
 export interface AssetHtmlProps {
-    isSuccess?: boolean,
-    errorOnFailure?: string,
-    assetID?: string,
-    clientID?: string,
-    campaignID?: string,
-    assetContentVersionID?: string,
-    assetName?: string,
-    language?: string,
-    assetAIPrompt?: string,
-    isVisible?: number,
-    layoutID?: string,
-    layoutName?: string,
-    layoutHTML?: string,
-    assetContentVersions?: [
+    isSuccess: boolean,
+    errorOnFailure: string,
+    assetID: string,
+    clientID: string,
+    campaignID: string,
+    assetVersionID: string,
+    assetName: string,
+    language: string,
+    assetAIPrompt: string,
+    isVisible: number,
+    layoutID: string,
+    layoutName: string,
+    layoutHTML: string,
+    assetVersions: [
         {
-            assetContentVersionID?: string,
-            assetID?: string,
-            version?: number,
-            assetHTML?: string,
-            layoutHTML?: string,
-            htmlFileID?: number,
-            zipFileID?: number
-        }
-    ],
-    assetBlocks?: [
-        {
-            assetBlockID?: string,
-            assetID?: string,
-            blockID?: string,
-            assetBlockDataVersionID?: string,
-            type?: string,
-            name?: string,
-            html?: string,
-            schema?: string,
-            uiSchema?: string,
-            description?: string,
-            sortOrder?: number,
-            assetBlockDataVersions?: [
+            assetVersionID: string,
+            assetID: string,
+            versionNumber: number,
+            versionName: string,
+            htmlGenerated: string,
+            layoutHTMLGenerated: string,
+            htmlFileURL: string,
+            zipFileURL: string,
+            assetVersionBlocks: [
                 {
-                    assetBlockDataVersionID?: string,
-                    assetBlockID?: string,
-                    version?: number,
-                    aiPrompt?: string,
-                    blockData?: string,
-                    blockHTMLGenerated?: string
+                    assetVersionBlockID: string,
+                    assetVersionID: string,
+                    blockID: string,
+                    blockName: string,
+                    aiPrompt: string,
+                    blockData: string,
+                    blockHTMLGenerated: string,
+                    sortOrder: number,
+                    description: string,
+                    type: string,
+                    schema: string,
+                    uiSchema: string,
+                    html: string
                 }
             ]
         }
@@ -62,25 +55,17 @@ export interface AssetHtmlProps {
 }
 
 export interface AssetBlockProps {
-    assetBlockID?: string,
-    assetID?: string,
-    blockID?: string,
-    assetBlockDataVersionID?: string,
-    type?: string,
-    name?: string,
-    html?: string,
-    schema?: string,
-    uiSchema?: string,
-    description?: string,
-    sortOrder?: number,
-    assetBlockDataVersions?: [
-        {
-            assetBlockDataVersionID?: string,
-            assetBlockID?: string,
-            version?: number,
-            aiPrompt?: string,
-            blockData?: string,
-            blockHTMLGenerated?: string
-        }
-    ]
+    assetVersionBlockID: string,
+    assetVersionID: string,
+    blockID: string,
+    blockName: string,
+    aiPrompt: string,
+    blockData: string,
+    blockHTMLGenerated: string,
+    sortOrder: number,
+    description: string,
+    type: string,
+    schema: string,
+    uiSchema: string,
+    html: string
 }
