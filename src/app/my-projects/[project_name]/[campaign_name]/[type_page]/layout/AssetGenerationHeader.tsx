@@ -4,8 +4,6 @@ import { FC } from "react"
 import { useSearchParams } from "next/navigation"
 import { useAppData } from "@/context/AppContext"
 import { useRouter } from "next/navigation"
-import { nkey } from '@/data/keyStore';
-import { html_content } from "@/app/call-script/call-script-form/data/data"
 import Breadcrumb from "@/components/global/Breadcrumb"
 import Button from "@/components/global/Button"
 
@@ -24,9 +22,11 @@ const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
   const asset_name = queryParams.get('asset_name') ?? 'default'
 
   const handleEdit = () => {
-    sessionStorage.setItem(nkey.html_content, html_content);
     router.replace(`/edit-html-content?project_name=${project_name}&campaign_name=${campaign_name}&asset_name=${asset_name}`)
-    setContextData({ isShowEdit_Save_Button: false })
+
+    setTimeout(() => {
+      setContextData({ isShowEdit_Save_Button: false })
+    }, 5000);
   }
 
   const handleBack = () => {

@@ -117,7 +117,7 @@ const Page = () => {
                                     </svg>
                                 </div> */}
                             </div>
-                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetContentVersions?.[0]?.assetHTML || "" }} />
+                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
                         </div>
 
                         {isShowAddVer ? <div className='fixed left-0 right-0 h-[70vh] bg-black bg-opacity-55 flex items-center justify-center'>

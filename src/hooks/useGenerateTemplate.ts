@@ -50,13 +50,13 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                         const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${params.assetID}`);
                         if (resGenerate.isSuccess) {
                             const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${params.assetID}`);
-                            if (resAssetSelect.isSuccess && resAssetSelect.assetContentVersions.length > 0) {
+                            if (resAssetSelect.isSuccess && resAssetSelect.assetVersions.length > 0) {
                                 return resAssetSelect as AssetHtmlProps
                             } else {
                                 return {
                                     isSuccess: false,
-                                    assetContentVersions: [{
-                                        assetHTML: `<div style="font-size:30px;">An error occurred please try again later.</div>`
+                                    assetVersions: [{
+                                        htmlGenerated: `<div style="font-size:30px;">An error occurred please try again later.</div>`
                                     }]
                                 }
                             }

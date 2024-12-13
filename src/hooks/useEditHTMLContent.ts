@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { nkey } from '@/data/keyStore';
 
 export const useEditHTMLContent = () => {
     const searchParams = useSearchParams();
