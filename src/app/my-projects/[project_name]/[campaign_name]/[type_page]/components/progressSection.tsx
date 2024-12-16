@@ -42,6 +42,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
 
         const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
           "clientID": client_ID,
+          "project": params.project_name,
           "campaignName": params.campaign_name,
           "country": "",
           "squad": "",
