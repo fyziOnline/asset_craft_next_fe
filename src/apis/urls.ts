@@ -4,6 +4,7 @@ export const urls = {
     client_select_all: "/client/select/all",
     clientAssetType_select_all: "/clientAssetType/select/all",
     template_select_all: "/template/select/all",
+    template_select: "template/select",
     campaign_add: "/campaign/add",
     asset_addWithTemplate: "/asset/addWithTemplate",
     asset_select: "/asset/select",

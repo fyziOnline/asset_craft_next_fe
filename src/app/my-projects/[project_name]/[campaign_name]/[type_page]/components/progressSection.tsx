@@ -100,7 +100,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
           type_page: params.type_page,
           assetID: assetIDTemplateRef.current,
           campaignID: campaignIDTemplateRef.current,
-          template: selectedTemplateRef.current
+          template: selectedTemplateRef.current as Template
         }}
       />
     )
