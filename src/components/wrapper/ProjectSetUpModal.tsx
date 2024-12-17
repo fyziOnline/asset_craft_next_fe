@@ -12,17 +12,19 @@ interface ProjectSetUpModalProps {
 
 const ProjectSetUpModal: React.FC<ProjectSetUpModalProps> = ({ children, title, isOpen, onClose, onNext, selectedValue = "" }) => {
     const modalRef = useRef<HTMLDivElement>(null);
-    
+
     useEffect(() => {
         // Close modal if clicking outside of it
         const handleClickOutside = (event: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 onClose();
+                document.body.style.overflow = '';
             }
         };
 
         // Add event listener when the modal is open
         if (isOpen) {
+            document.body.style.overflow = 'hidden';
             document.addEventListener('mousedown', handleClickOutside);
         }
         return () => {
