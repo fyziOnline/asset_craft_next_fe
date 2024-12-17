@@ -15,7 +15,8 @@ interface TemplateViewerProps {
         assetID: string,
         campaignID: string,
         template: Template
-        type_page: string
+        type_page: string,
+        assetVersionID: string
     }
 }
 
@@ -30,7 +31,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const renderAssetGenerateContent = () => {
         switch (params.type_page) {
             case ListTypePage.Email:
-                return <EmailPage params={{ assetID: params.assetID, campaignID: params.campaignID, template: params.template }} />;
+                return <EmailPage params={params} />;
             case ListTypePage.LandingPage:
                 return <LandingPage />;
             case ListTypePage.LinkedIn:

@@ -15,7 +15,8 @@ interface EmailPageProps {
     params: {
         assetID: string,
         campaignID: string,
-        template: Template
+        template: Template,
+        assetVersionID: string
     }
 }
 
