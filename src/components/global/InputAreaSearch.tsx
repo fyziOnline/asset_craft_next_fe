@@ -2,41 +2,24 @@ import React, { useState } from "react";
 import TextField from "./TextField";
 
 type Props = {
-    placeholder:string,
-    name:string,
+  placeholder: string,
+  name: string,
+  listData?: string[]
 }
 
-const InputAreaSearch: React.FC<Props> = ({placeholder,name}) => {
+const InputAreaSearch: React.FC<Props> = ({ placeholder, name, listData = [] }) => {
   const [searchValue, setSearchValue] = useState<string>("");
-
-  const dummyData = [
-    {
-      id: 1,
-      value: "GreenLake Marketing",
-    },
-    {
-      id: 2,
-      value: "BlueOcean Solutions",
-    },
-    {
-      id: 3,
-      value: "Tech Innovators",
-    },
-    {
-        id: 4,
-        value: "GreenLake Marketing 2",
-    },
-  ];
+  const [matchedItems, setMatchedItems] = useState<string[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setSearchValue(e.target.value);
-  };
 
-  const words = searchValue.trim().split(/\s+/).filter(Boolean)
-  
-  const matchedItems = dummyData.filter((item) =>
-    words.every((word) => item.value.toLowerCase().includes(word.toLowerCase()))
-  );
+    const words = e.target.value.trim().split(/\s+/).filter(Boolean)
+    const newMatchedItems = listData.filter((item) =>
+      words.every((word) => item.toLowerCase().includes(word.toLowerCase()))
+    );
+    setMatchedItems(newMatchedItems)
+  };
 
   return (
     <div className="border border-[#DCD8E8] w-full rounded-[10px]">
@@ -44,17 +27,22 @@ const InputAreaSearch: React.FC<Props> = ({placeholder,name}) => {
         customClass="h-12 border-none"
         placeholder={placeholder}
         name={name}
+        value={searchValue}
         handleChange={handleChange}
       />
 
       {searchValue && matchedItems.length > 0 && (
         <div className="flex flex-wrap">
-          {matchedItems.map((matchedItem) => (
+          {matchedItems.map((matchedItem, index) => (
             <div
-              key={matchedItem.id}
-              className="bg-off-white-primary w-fit px-3 py-1 rounded-full mx-2 mb-2 text-sm"
+              key={matchedItem + index}
+              onClick={() => {
+                setMatchedItems([])
+                setSearchValue(matchedItem)
+              }}
+              className="bg-off-white-primary px-5 py-1 rounded-full ml-3 mb-2 mt-[-10px] text-sm cursor-pointer"
             >
-              <h3>{matchedItem.value}</h3>
+              <h3>{matchedItem}</h3>
             </div>
           ))}
         </div>
