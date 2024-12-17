@@ -341,9 +341,9 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             }
                             return (
                                 <div key={index}>
-                                    <ChildrenTitle title={`Section ${index + 1}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
-                                    <ChildrenTitle title={item.aiTitle || ''} customClass="text-[14px]" />
-                                    <TextField handleChange={(e) => { handleInputSection(e, index) }} customClass='h-16' placeholder={item.aiDescription || ''} />
+                                    <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
+                                    <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
+                                    <TextField handleChange={(e) => { handleInputSection(e, index) }} customClass='h-16' placeholder={item.aiPrompt || ''} />
                                 </div>
                             )
                         })}
