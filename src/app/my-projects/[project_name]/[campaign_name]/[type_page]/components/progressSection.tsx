@@ -53,7 +53,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
             "endDate": "",
             "status": ""
           });
-          // const res_campaign_add = { isSuccess: true, campaignID: "70b77f95-0fb2-ef11-ac7b-0a9328dfcacd" }
+          // const res_campaign_add = { isSuccess: true, campaignID: "bbaa8216-20bc-ef11-ac7b-0a9328dfcacd" }
 
           if (res_campaign_add.isSuccess) {
             const resAddWithTemplate = await ApiService.post<any>(urls.asset_addWithTemplate, {
@@ -63,7 +63,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
               "language": "",
               "assetAIPrompt": ""
             });
-            // const resAddWithTemplate = { isSuccess: true, assetID: "" }
+            // const resAddWithTemplate = { isSuccess: true, assetID: "bcaa8216-20bc-ef11-ac7b-0a9328dfcacd" }
 
             if (resAddWithTemplate.isSuccess) {
               const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${resAddWithTemplate.assetID}`);
