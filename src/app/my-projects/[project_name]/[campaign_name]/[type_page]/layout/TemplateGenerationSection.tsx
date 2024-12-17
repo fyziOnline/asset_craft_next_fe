@@ -55,8 +55,8 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
             )
         }
 
-        return (<div>
-            <div className='py-5'>
+        return (
+            <div className='py-5 h-[100%]'>
                 <Image
                     src={params.template?.templateImageURL || ""}
                     alt="call script"
@@ -70,17 +70,17 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                     {content("Section 4: Partnership and Sponsorship", "Sponsor recognition: list of sponsors by level with logos and optional sponsor descriptions.")}
                 </p>
             </div>
-        </div>)
+        )
     }
 
     const sidebarStep2 = () => {
         return (
-            <div className='w-[70%] h-[90%] relative'>
+            <div className='w-[94%] h-[94%] relative'>
                 <Image
                     src={params.template?.templateImageURL || ""}
                     alt=""
                     fill
-                    className="object-fill"
+                    className="object-contain"
                 />
             </div>
         )
@@ -123,7 +123,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             Please provide the necessary information to generate AI content
                         </p>
                     </div>
-                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[62vh]'>
+                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[66vh]'>
                         {renderAssetGenerateContent()}
                     </div>
                 </div>
