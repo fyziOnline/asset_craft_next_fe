@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useAppData } from '@/context/AppContext';
 
 export const useEditHTMLContent = () => {
-    const searchParams = useSearchParams();
-    const contentType = searchParams.get('type') || '';
     const { contextData } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
