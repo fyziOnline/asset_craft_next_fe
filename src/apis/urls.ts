@@ -3,6 +3,8 @@ export const urls = {
     finalise: "/user/login/finalise",
     client_select_all: "/client/select/all",
     clientAssetType_select_all: "/clientAssetType/select/all",
+    campaign_getProjectsList: "/campaign/getProjectsList",
+    campaign_select_all: "campaign/select/all",
     template_select_all: "/template/select/all",
     template_select: "template/select",
     campaign_add: "/campaign/add",

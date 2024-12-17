@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
 import { ListTypePage } from '@/data/dataGlobal';
+import { debounce } from 'lodash';
 
 interface ClientAssetTypeProps {
     clientAssetTypeID?: string,
@@ -31,6 +32,8 @@ export const useDashboard = () => {
     const [chooseAssetModal, setChooseAssetModal] = useState<boolean>(false);
     const [selectedButton, setSelectedButton] = useState<ClientAssetTypeProps>()
     const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
+    const [listProjects, setListProjects] = useState<string[]>([]);
+    const [listCampaigns, setListCampaigns] = useState<string[]>([]);
     const [assetDetails, setAssetDetails] = useState<AssetDetails>({
         project_name: '',
         campaign_name: '',
@@ -38,8 +41,38 @@ export const useDashboard = () => {
     })
 
     useEffect(() => {
+        getListProjects()
         getAssetTypes()
     }, [])
+
+    const getListProjects = async () => {
+        try {
+            const res = await ApiService.get<any>(urls.campaign_getProjectsList);
+            if (res.isSuccess) {
+                setListProjects(res.projects as string[])
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        }
+    }
+
+    const getListCampaign = async (projectName: string) => {
+        try {
+            if (projectName.trim().length === 0) {
+                setListCampaigns([])
+                return
+            }
+            const client_ID = Cookies.get(nkey.client_ID)
+            const res = await ApiService.get<any>(`${urls.campaign_select_all}?clientId=${client_ID}&project=${projectName}`);
+            if (res.isSuccess) {
+                setListCampaigns(res.campaigns as string[])
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        }
+    }
 
     const getAssetTypes = async () => {
         try {
@@ -85,12 +118,16 @@ export const useDashboard = () => {
         handleChangeAssetDetails(name, value)
     }
 
-    const handleChangeAssetDetails = (key: string, value: string) => {
+    const handleChangeAssetDetails = debounce((key: string, value: string) => {
         setAssetDetails(pre => ({
             ...pre,
             [key]: value
         }))
-    }
+
+        if (key === "project_name") {
+            getListCampaign(value)
+        }
+    }, 500)
 
     const handleNext = () => {
         if (selectedButton?.assetTypeName === "All in One") {
@@ -106,6 +143,8 @@ export const useDashboard = () => {
     }
 
     return {
+        listProjects,
+        listCampaigns,
         clientAssetTypes,
         isModalOpen,
         chooseAssetModal,
