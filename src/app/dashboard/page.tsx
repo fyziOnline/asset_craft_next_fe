@@ -92,7 +92,8 @@ const Dashboard: FC = () => {
     closeAssetModal,
     onChangeAssetDetails,
     handleShowPopup,
-    onSelect } = useDashboard()
+    onSelect,
+    handleChangeAssetDetails } = useDashboard()
 
   const options = [
     { id: 1, label: "Email", icon: <EmailIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(1) ? "white" : "black"} /> },
@@ -107,11 +108,11 @@ const Dashboard: FC = () => {
         <div className='w-full flex flex-col gap-3 px-12 pb-7'>
           <div className='pt-[15px] flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
-            <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here."/>
+            <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here." listData={dummydata} onChange={(value) => { handleChangeAssetDetails("project_name", value) }} />
           </div>
           <div className='flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
-            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here."/>
+            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here." listData={dummydata} onChange={(value) => { handleChangeAssetDetails("campaign_name", value) }} />
           </div>
           {selectedButton?.assetTypeName !== "All in One" &&
             <div className='flex flex-col gap-3'>
