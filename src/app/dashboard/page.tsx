@@ -10,6 +10,7 @@ import ProjectSetUpModal from "@/components/wrapper/ProjectSetUpModal";
 import TextField from "@/components/global/TextField";
 import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 import { useDashboard } from "@/hooks/useDashboard";
+import InputAreaSearch from "@/components/global/InputAreaSearch";
 
 const dashboardData = [
   { projectName: "All Projects", allProjectDate: "as of 04.10.2024", totalAssets: 15, underReview: 4, inProgress: 11 },
@@ -106,11 +107,11 @@ const Dashboard: FC = () => {
         <div className='w-full flex flex-col gap-3 px-12 pb-7'>
           <div className='pt-[15px] flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
-            <TextField customClass='h-12' placeholder='Type the name of your Project/Solution here.' name="project_name" handleChange={onChangeAssetDetails} />
+            <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here."/>
           </div>
           <div className='flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
-            <TextField customClass='h-12' placeholder='Type the name of your Campaign here.' name="campaign_name" handleChange={onChangeAssetDetails} />
+            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here."/>
           </div>
           {selectedButton?.assetTypeName !== "All in One" &&
             <div className='flex flex-col gap-3'>
