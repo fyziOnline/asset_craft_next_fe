@@ -73,8 +73,6 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const { setContextData } = useAppData();
 
     const onNext = (step: number): void => {
-        console.log('refFormData.current: ', refFormData.current);
-
         if (step === 1) {
             setDisableList([1, 3])
             setIsShowList([2])

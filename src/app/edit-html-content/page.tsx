@@ -6,12 +6,10 @@ import Search from '@/components/global/Search';
 import TextField from '@/components/global/TextField';
 import AddVersionModel from './components/AddVersionModel';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
-import { useAppData } from '@/context/AppContext';
 import EditContentModel from './components/EditContentModel';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const Page = () => {
-    const { contextData } = useAppData();
     const queryParams = useSearchParams()
     const router = useRouter();
 
@@ -91,7 +89,7 @@ const Page = () => {
                             <button
                                 key={item.assetID + index}
                                 onClick={() => { setVersionSelected(item) }}
-                                className={`${versionSelected.assetID === item.assetID ? "text-white bg-[#01A982]" : "text-black bg-[#e4e4e4]"} inline-block h-[42px] mx-1 text-center text-lg font-normal  rounded-tl-[20px] rounded-tr-[20px] px-[30px] py-2`}>
+                                className={`${versionSelected.assetVersionID === item.assetVersionID ? "text-white bg-[#01A982]" : "text-black bg-[#e4e4e4]"} inline-block h-[42px] mx-1 text-center text-lg font-normal  rounded-tl-[20px] rounded-tr-[20px] px-[30px] py-2`}>
                                 {item.versionName}
                             </button>)
                     })}

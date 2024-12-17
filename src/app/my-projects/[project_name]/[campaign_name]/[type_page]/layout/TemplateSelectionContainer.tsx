@@ -35,8 +35,8 @@ const TemplateSelectionContainer: FC<TemplateViewerProps> = ({ templateData = []
                   onClick={() => onTemplateSelection(template)}
                 >
                   <Image
-                    src={template.templateImageURL}
-                    alt={template.description}
+                    src={template.templateImageURL || ""}
+                    alt={template.description || ""}
                     fill
                     className="object-fill"
                   />
