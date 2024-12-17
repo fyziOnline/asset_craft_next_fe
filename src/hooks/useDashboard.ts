@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
 import { ListTypePage } from '@/data/dataGlobal';
+import { debounce } from 'lodash';
 
 interface ClientAssetTypeProps {
     clientAssetTypeID?: string,
@@ -31,6 +32,8 @@ export const useDashboard = () => {
     const [chooseAssetModal, setChooseAssetModal] = useState<boolean>(false);
     const [selectedButton, setSelectedButton] = useState<ClientAssetTypeProps>()
     const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
+    const [listProjects, setListProjects] = useState<string[]>([]);
+    const [listCampaigns, setListCampaigns] = useState<string[]>([]);
     const [assetDetails, setAssetDetails] = useState<AssetDetails>({
         project_name: '',
         campaign_name: '',
@@ -38,8 +41,38 @@ export const useDashboard = () => {
     })
 
     useEffect(() => {
+        getListProjects()
         getAssetTypes()
     }, [])
+
+    const getListProjects = async () => {
+        try {
+            const res = await ApiService.get<any>(urls.campaign_getProjectsList);
+            if (res.isSuccess) {
+                setListProjects(res.projects as string[])
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        }
+    }
+
+    const getListCampaign = async (projectName: string) => {
+        try {
+            if (projectName.trim().length === 0) {
+                setListCampaigns([])
+                return
+            }
+            const client_ID = Cookies.get(nkey.client_ID)
+            const res = await ApiService.get<any>(`${urls.campaign_select_all}?clientId=${client_ID}&project=${projectName}`);
+            if (res.isSuccess) {
+                setListCampaigns(res.campaigns as string[])
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        }
+    }
 
     const getAssetTypes = async () => {
         try {
@@ -47,36 +80,6 @@ export const useDashboard = () => {
 
             const client_ID = Cookies.get(nkey.client_ID)
             const res = await ApiService.get<any>(`${urls.clientAssetType_select_all}?clientID=${client_ID}`);
-            // const res = {
-            //     isSuccess: true,
-            //     clientAssetTypes: [
-            //         {
-            //             "clientAssetTypeID": "b743c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-            //             "clientID": "a643c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-            //             "assetTypeID": "ab43c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-            //             "isEnabled": true,
-            //             "assetTypeName": "Email",
-            //             "description": "Email"
-            //         },
-            //         {
-            //             "clientAssetTypeID": "b843c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-            //             "clientID": "a643c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-            //             "assetTypeID": "ac43c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-            //             "isEnabled": true,
-            //             "assetTypeName": "Landing Page",
-            //             "description": "Landing Page"
-            //         },
-            //         {
-            //             "clientAssetTypeID": "b943c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-            //             "clientID": "a643c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-            //             "assetTypeID": "ad43c23c-a4ac-ef11-ac7b-0a9328dfcacd",
-            //             "isEnabled": true,
-            //             "assetTypeName": "LinkedIn Post",
-            //             "description": "LinkedIn Post"
-            //         }
-            //     ]
-            // }
-
             if (res.isSuccess) {
                 setClientAssetTypes([{ assetTypeName: "All in One" }, ...res.clientAssetTypes])
             }
@@ -100,17 +103,31 @@ export const useDashboard = () => {
         );
     }
 
-    const closeModal = () => setModalOpen(false);
+    const closeModal = () => {
+        setAssetDetails({
+            project_name: '',
+            campaign_name: '',
+            asset_name: ''
+        })
+        setModalOpen(false)
+    };
     const closeAssetModal = () => setChooseAssetModal(false)
 
     const onChangeAssetDetails = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value } = e.target
+        handleChangeAssetDetails(name, value)
+    }
+
+    const handleChangeAssetDetails = debounce((key: string, value: string) => {
         setAssetDetails(pre => ({
             ...pre,
-            [name]: value
+            [key]: value
         }))
 
-    }
+        if (key === "project_name") {
+            getListCampaign(value)
+        }
+    }, 500)
 
     const handleNext = () => {
         if (selectedButton?.assetTypeName === "All in One") {
@@ -126,6 +143,8 @@ export const useDashboard = () => {
     }
 
     return {
+        listProjects,
+        listCampaigns,
         clientAssetTypes,
         isModalOpen,
         chooseAssetModal,
@@ -136,6 +155,7 @@ export const useDashboard = () => {
         closeAssetModal,
         onChangeAssetDetails,
         handleShowPopup,
-        onSelect
+        onSelect,
+        handleChangeAssetDetails
     };
 };

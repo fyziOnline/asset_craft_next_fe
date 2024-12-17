@@ -3,6 +3,8 @@ export const urls = {
     finalise: "/user/login/finalise",
     client_select_all: "/client/select/all",
     clientAssetType_select_all: "/clientAssetType/select/all",
+    campaign_getProjectsList: "/campaign/getProjectsList",
+    campaign_select_all: "campaign/select/all",
     template_select_all: "/template/select/all",
     template_select: "template/select",
     campaign_add: "/campaign/add",
@@ -12,7 +14,9 @@ export const urls = {
     asset_generate: "/asset/generate",
     assetVersionBlock_update: "/AssetVersionBlock/update",
     aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
+    aiPrompt_Asset_update: "/aiPrompt/Asset/update",
     aiPrompt_Campaign_insert: "/aiPrompt/Campaign/insert",
+    aiPrompt_Campaign_update: "/aiPrompt/Campaign/update",
     aiPrompt_image_update: "/aiPrompt/image/update",
     assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID"
 };
