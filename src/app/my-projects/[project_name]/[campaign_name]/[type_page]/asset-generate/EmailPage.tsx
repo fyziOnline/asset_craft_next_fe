@@ -9,12 +9,14 @@ import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
-import { AssetHtmlProps } from '@/types/templates';
+import { AssetHtmlProps, Template } from '@/types/templates';
 
 interface EmailPageProps {
     params: {
         assetID: string,
         campaignID: string,
+        template: Template,
+        assetVersionID: string
     }
 }
 
@@ -27,12 +29,37 @@ export interface FormEmailDataProps {
     type?: string,
     keyPoints?: string,
     fileSelected?: File,
-    webUrl?: string,
-    section1?: string,
-    section2?: string,
-    section3?: string,
-    section4?: string,
+    webUrl?: string
 }
+
+export interface SectionProps {
+    assetVersionID: string,
+    templateBlockID: string,
+    aiPrompt: string
+}
+
+const ListTargetAudience = [
+    { label: 'General Public', value: 'General Public' },
+    { label: 'Existing Customers', value: 'Existing Customers' },
+    { label: 'Prospective Customers', value: 'Prospective Customers' }
+]
+
+const listofcampains = [
+    { label: 'Product Launch', value: 'Product Launch' },
+    { label: 'Event Promotion', value: 'Event Promotion' },
+    { label: 'Brand Awareness', value: 'Brand Awareness' }
+]
+const emailType = [
+    { label: 'Announcement', value: 'Announcement' },
+    { label: 'Newsletter', value: 'Newsletter' },
+    { label: 'Promotional Email', value: 'Promotional Email' }
+]
+
+const keyPoints = [
+    { label: 'Innovation', value: 'Innovation' },
+    { label: 'Performance', value: 'Performance' },
+    { label: 'Increased Security', value: 'Increased Security' },
+]
 
 const EmailPage = ({ params }: EmailPageProps) => {
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
@@ -41,35 +68,11 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID, campaignID: params.campaignID } })
     const refFormData = useRef<FormEmailDataProps>()
+    const refSection = useRef<SectionProps[]>([])
 
     const { setContextData } = useAppData();
 
-    const ListTargetAudience = [
-        { label: 'General Public', value: 'General Public' },
-        { label: 'Existing Customers', value: 'Existing Customers' },
-        { label: 'Prospective Customers', value: 'Prospective Customers' }
-    ]
-
-    const listofcampains = [
-        { label: 'Product Launch', value: 'Product Launch' },
-        { label: 'Event Promotion', value: 'Event Promotion' },
-        { label: 'Brand Awareness', value: 'Brand Awareness' }
-    ]
-    const emailType = [
-        { label: 'Announcement', value: 'Announcement' },
-        { label: 'Newsletter', value: 'Newsletter' },
-        { label: 'Promotional Email', value: 'Promotional Email' }
-    ]
-
-    const keyPoints = [
-        { label: 'Innovation', value: 'Innovation' },
-        { label: 'Performance', value: 'Performance' },
-        { label: 'Increased Security', value: 'Increased Security' },
-    ]
-
     const onNext = (step: number): void => {
-        console.log('refFormData.current: ', refFormData.current);
-
         if (step === 1) {
             setDisableList([1, 3])
             setIsShowList([2])
@@ -122,7 +125,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setDisableList([1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
-                const res = await generateHTML(refFormData.current as FormEmailDataProps)
+                const res = await generateHTML(refFormData.current as FormEmailDataProps, refSection.current as SectionProps[])
                 setGenerateStep(3);
                 setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess });
                 return
@@ -137,6 +140,16 @@ const EmailPage = ({ params }: EmailPageProps) => {
             ...refFormData.current,
             [key]: e.target.value
         }
+    }
+
+    const handleInputSection = (e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
+        if (refSection.current && refSection.current[index]) {
+            refSection.current[index] = {
+                ...refSection.current[index],
+                aiPrompt: e.target.value
+            }
+        }
+        console.log('refSection.current: ', refSection.current);
     }
 
     return (
@@ -316,7 +329,23 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([4]) }}
                     isShowContent={isShowList.includes(4)}>
                     <div>
-                        <ChildrenTitle title='Section 1: Event Overview ' customClass="text-[18px]" />
+                        {params.template.templatesBlocks && params.template.templatesBlocks.map((item, index) => {
+                            if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
+                                refSection.current = [...refSection.current as SectionProps[], {
+                                    assetVersionID: params.assetVersionID,
+                                    templateBlockID: item.templateBlockID as string,
+                                    aiPrompt: ""
+                                }]
+                            }
+                            return (
+                                <div key={index}>
+                                    <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
+                                    <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
+                                    <TextField handleChange={(e) => { handleInputSection(e, index) }} customClass='h-16' placeholder={item.aiPrompt || ''} />
+                                </div>
+                            )
+                        })}
+                        {/* <ChildrenTitle title='Section 1: Event Overview ' customClass="text-[18px]" />
                         <ChildrenTitle title='What are the key details for the event, including the title, date, location, a brief overview, and any call-to-action text?' customClass="text-[14px]" />
                         <TextField handleChange={(e) => { handleInputText(e, "section1") }}
                             customClass='h-16' placeholder={`“Event Title: HPE Discover More AI Singapore 2024. Date and Time: Thursday, 14 November 2024, 11:00 AM - 5:25 PM”`} />
@@ -334,7 +363,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         <ChildrenTitle title='Section 4: Partnership and Sponsorship' customClass="text-[18px] mt-[20px]" />
                         <ChildrenTitle title='Who are the event partners or sponsors, and what sponsorship levels and logo specifications would you like to include?' customClass="text-[14px] w-[95%] text-wrap" />
                         <TextField handleChange={(e) => { handleInputText(e, "section4") }}
-                            placeholder={`“Platinum Sponsors: Intel NVIDIA. Gold Sponsors: AMD, Cohesity, Commvault, Ekahau, Nutanix, Red Hat, Veeam”`} rows={1} />
+                            placeholder={`“Platinum Sponsors: Intel NVIDIA. Gold Sponsors: AMD, Cohesity, Commvault, Ekahau, Nutanix, Red Hat, Veeam”`} rows={1} /> */}
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                         <Button

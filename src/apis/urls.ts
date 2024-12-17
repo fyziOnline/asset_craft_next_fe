@@ -4,6 +4,7 @@ export const urls = {
     client_select_all: "/client/select/all",
     clientAssetType_select_all: "/clientAssetType/select/all",
     template_select_all: "/template/select/all",
+    template_select: "template/select",
     campaign_add: "/campaign/add",
     asset_addWithTemplate: "/asset/addWithTemplate",
     asset_select: "/asset/select",
@@ -13,4 +14,5 @@ export const urls = {
     aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
     aiPrompt_Campaign_insert: "/aiPrompt/Campaign/insert",
     aiPrompt_image_update: "/aiPrompt/image/update",
+    assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID"
 };

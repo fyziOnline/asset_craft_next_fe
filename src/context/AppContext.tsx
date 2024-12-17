@@ -28,7 +28,7 @@ const APP_DATA: AppData = {
     assetGenerateTemplate: "LANDINGPAGE",
     assetGenerateStatus: 1,
     layoutType: 'main',
-    AssetHtml: {},
+    AssetHtml: {} as AssetHtmlProps,
     isShowEdit_Save_Button: false,
 };
 

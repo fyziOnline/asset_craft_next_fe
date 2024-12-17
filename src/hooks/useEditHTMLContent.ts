@@ -15,7 +15,7 @@ export const useEditHTMLContent = () => {
 
     useEffect(() => {
         try {
-            const findSelected = contextData.AssetHtml.assetVersions?.filter((item) => item.assetID === versionSelected.assetID)
+            const findSelected = contextData.AssetHtml.assetVersions?.filter((item) => item.assetVersionID === versionSelected.assetVersionID)
             if (findSelected.length > 0) {
                 setVersionSelected(findSelected[0])
             } else {
