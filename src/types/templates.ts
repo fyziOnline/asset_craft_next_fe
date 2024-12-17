@@ -7,7 +7,7 @@ export interface Template {
     templateID?: string,
     templateImageURL?: string,
     templateName?: string,
-    templatesBlocks: {
+    templatesBlocks?: {
         templateBlockID?: string;
         templateID?: string;
         blockID?: string;

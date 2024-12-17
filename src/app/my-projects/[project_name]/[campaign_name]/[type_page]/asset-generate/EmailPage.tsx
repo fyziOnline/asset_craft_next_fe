@@ -329,8 +329,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([4]) }}
                     isShowContent={isShowList.includes(4)}>
                     <div>
-                        {params.template.templatesBlocks.map((item, index) => {
-                            if (refSection.current.length < params.template.templatesBlocks.length) {
+                        {params.template.templatesBlocks && params.template.templatesBlocks.map((item, index) => {
+                            if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
                                     assetVersionID: params.assetVersionID,
                                     templateBlockID: item.templateBlockID as string,
