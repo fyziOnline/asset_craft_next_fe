@@ -66,6 +66,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
+    const [isRegenerateHTML, setIsRegenerateHTML] = useState<boolean>(false);
     const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID, campaignID: params.campaignID } })
     const refFormData = useRef<FormEmailDataProps>()
     const refSection = useRef<SectionProps[]>([])
@@ -113,6 +114,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
 
         if (newStep > 3) { // Reset after completing step 3
             newStep = 1;
+            setIsRegenerateHTML(true)
             setIsShowList([]);
             setCheckedList([]);
             setDisableList([2, 3, 4]);
@@ -125,7 +127,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setDisableList([1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
-                const res = await generateHTML(refFormData.current as FormEmailDataProps, refSection.current as SectionProps[])
+                const res = await generateHTML(refFormData.current as FormEmailDataProps, refSection.current as SectionProps[], isRegenerateHTML)
                 setGenerateStep(3);
                 setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess });
                 return
