@@ -33,9 +33,9 @@ export interface FormEmailDataProps {
 }
 
 interface SectionProps {
-    assetVersionBlockID: string,
-    fieldName: string,
-    fieldValue: string
+    assetVersionID: string,
+    templateBlockID: string,
+    aiPrompt: string
 }
 
 const ListTargetAudience = [
@@ -148,7 +148,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
         if (refSection.current && refSection.current[index]) {
             refSection.current[index] = {
                 ...refSection.current[index],
-                fieldValue: e.target.value
+                aiPrompt: e.target.value
             }
         }
         console.log('refSection.current: ', refSection.current);
@@ -334,9 +334,9 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         {params.template.templatesBlocks.map((item, index) => {
                             if (refSection.current.length < params.template.templatesBlocks.length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
-                                    assetVersionBlockID: "",
-                                    fieldName: item.aiTitle || "",
-                                    fieldValue: ""
+                                    assetVersionID: params.assetVersionID,
+                                    templateBlockID: item.templateBlockID as string,
+                                    aiPrompt: ""
                                 }]
                             }
                             return (
