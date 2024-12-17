@@ -14,4 +14,5 @@ export const urls = {
     aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
     aiPrompt_Campaign_insert: "/aiPrompt/Campaign/insert",
     aiPrompt_image_update: "/aiPrompt/image/update",
+    assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID"
 };

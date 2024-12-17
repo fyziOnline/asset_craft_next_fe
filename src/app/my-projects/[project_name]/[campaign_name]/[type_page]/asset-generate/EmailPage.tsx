@@ -32,7 +32,7 @@ export interface FormEmailDataProps {
     webUrl?: string
 }
 
-interface SectionProps {
+export interface SectionProps {
     assetVersionID: string,
     templateBlockID: string,
     aiPrompt: string
@@ -127,7 +127,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setDisableList([1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
-                const res = await generateHTML(refFormData.current as FormEmailDataProps)
+                const res = await generateHTML(refFormData.current as FormEmailDataProps, refSection.current as SectionProps[])
                 setGenerateStep(3);
                 setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess });
                 return
