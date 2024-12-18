@@ -5,7 +5,6 @@ import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
 import DropDown from '@/components/global/DropDown';
 import RangeSlider from '@/components/global/RangeSlider';
-import { useRouter } from 'next/navigation';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
 import ChooseLabel from '@/components/global/ChooseLabel';
@@ -14,8 +13,7 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 
 
 const CallScriptPage = () => {
-    const router = useRouter();
-    const [isOpen, setIsOpen] = useState(false);
+    // const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3]);
@@ -69,7 +67,7 @@ const CallScriptPage = () => {
         let newStep = generateStep + 1
         if (newStep === 4) {
             newStep = 1
-            setIsOpen(false)
+            // setIsOpen(false)
             setIsShowList([])
             setCheckedList([])
             setDisableList([2, 3])
@@ -89,7 +87,7 @@ const CallScriptPage = () => {
                     setContextData({ assetGenerateStatus: 3 });
                 }, 1000);
             }
-            setIsOpen(true)
+            // setIsOpen(true)
             setContextData({ assetTemplateShow: true });
 
         }

@@ -1,3 +1,5 @@
+import { CloseIcon, FileIcon } from "@/assets/icons/AssetIcons";
+import formatFileSize from "@/utils/formatFileSize";
 import React, { useState } from "react";
 
 /**
@@ -37,10 +39,12 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect , dragAndDropOut
     if (selectedFile) {
       setSelectedFile(selectedFile.name);
       setFiles(selectedFile);
+      console.log('====================================');
+      console.log('filenmae :',selectedFile);
+      console.log('====================================');
       if (onFileSelect) onFileSelect(selectedFile);
     }
   };
-
   // Handles drop events for drag-and-drop functionality.
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -79,30 +83,43 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect , dragAndDropOut
 
       <div className={`w-full flex-1 p-8 flex items-center relative ${activeButton === 'upload' ? "bg-[#F7F9FB] justify-center" : "bg-white"}`}>
         {activeButton === "upload" && (
-          <>
-            <div
-              className={`w-full h-full max-w-full flex items-center justify-center border-2 border-dashed rounded-3xl ${dragActive ? "border-[#004031]" : "border-[#E2E6EA]"} `}
-              onDragOver={(e) => handleDrag(e, true)}
-              onDragEnter={(e) => handleDrag(e, true)}
-              onDragLeave={(e) => handleDrag(e, false)}
-              onDrop={handleDrop}
-            >
-              <div className="flex flex-col items-center">
-                <p className="text-sm text-[#242634] opacity-50">Click to browse or</p>
-                <p className="text-sm text-[#242634] opacity-50">drag and drop your files</p>
+          <div className="w-full h-fit"> 
+          {/* // w-full h-full */}
+            <div className="h-[70%]" >
+              <div
+                className={`w-full h-full max-w-full flex items-center justify-center border-2 border-dashed rounded-3xl ${dragActive ? "border-[#004031]" : "border-[#E2E6EA]"} `}
+                onDragOver={(e) => handleDrag(e, true)}
+                onDragEnter={(e) => handleDrag(e, true)}
+                onDragLeave={(e) => handleDrag(e, false)}
+                onDrop={handleDrop}
+              >
+                <div className="flex flex-col items-center">
+                  <p className="text-sm text-[#242634] opacity-50">Click to browse or</p>
+                  <p className="text-sm text-[#242634] opacity-50">drag and drop your files</p>
+                </div>
               </div>
+              <input
+                type="file"
+                onChange={handleFileInputChange}
+                className="hidden"
+                id="file-input"
+              />
+              <label
+                htmlFor="file-input"
+                className="absolute w-full h-full top-0 left-0 cursor-pointer"
+              ></label>
             </div>
-            <input
-              type="file"
-              onChange={handleFileInputChange}
-              className="hidden"
-              id="file-input"
-            />
-            <label
-              htmlFor="file-input"
-              className="absolute w-full h-full top-0 left-0 cursor-pointer"
-            ></label>
-          </>
+            {files && <div className=" mt-2 bg-slate-100 p-1 rounded-sm relative">
+              <div className="flex items-end">
+                <FileIcon color="#EDEDED" text={files.type.split('/')[1]} />
+                <div className="text-xs text-[#242634] opacity-50">
+                  <p>{files.name}</p>
+                  <p>{formatFileSize(files.size)}</p>
+                </div>
+              </div>
+              <CloseIcon className="absolute top-0 right-1 w-4" color="#BCB8B8" />
+            </div>}
+          </div>
         )}
 
         {activeButton === "recent" && (
