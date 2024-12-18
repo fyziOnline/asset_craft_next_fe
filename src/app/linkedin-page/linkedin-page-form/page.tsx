@@ -8,7 +8,6 @@ import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
 import DropDown from '@/components/global/DropDown';
 import ChildrenTitle from '@/components/global/ChildrenTitle';
-import ChooseLabel from '@/components/global/ChooseLabel';
 import RangeSlider from '@/components/global/RangeSlider';
 import { useRouter } from 'next/navigation';
 import DragAndDrop from '@/components/global/DragAndDrop';

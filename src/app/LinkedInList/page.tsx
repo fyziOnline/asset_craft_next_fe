@@ -1,7 +1,5 @@
 import { FC } from "react"
-import { GridIcon } from "@/assets/icons/AppIcons"
 import Breadcrumb from "@/components/global/Breadcrumb"
-import LayoutWrapper from "@/layout/LayoutWrapper"
 import Table from "@/components/global/Table"
 import { LinkedinIcon } from "@/assets/icons/TableIcon"
 
