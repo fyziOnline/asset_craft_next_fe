@@ -7,6 +7,7 @@ import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
 import { ListTypePage } from '@/data/dataGlobal';
 import { debounce } from 'lodash';
+import { DropDownOptions } from '@/components/global/DropDown';
 
 interface ClientAssetTypeProps {
     clientAssetTypeID?: string,
@@ -17,6 +18,17 @@ interface ClientAssetTypeProps {
     description?: string
 }
 
+interface CampaignsProps {
+    campaignID: string,
+    project: string,
+    campaignName: string,
+    country: string,
+    squad: string,
+    startDate: string,
+    endDate: string,
+    status: string,
+    isVisible: number
+}
 
 type AssetDetails = {
     project_name: string;
@@ -29,11 +41,12 @@ export const useDashboard = () => {
     const { setShowLoading } = useLoading()
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
+    const [isCampNameExists, setIsCampNameExists] = useState<boolean>(false);
     const [chooseAssetModal, setChooseAssetModal] = useState<boolean>(false);
     const [selectedButton, setSelectedButton] = useState<ClientAssetTypeProps>()
     const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
-    const [listProjects, setListProjects] = useState<string[]>([]);
-    const [listCampaigns, setListCampaigns] = useState<string[]>([]);
+    const [listProjects, setListProjects] = useState<DropDownOptions[]>([]);
+    const [listCampaigns, setListCampaigns] = useState<CampaignsProps[]>([]);
     const [assetDetails, setAssetDetails] = useState<AssetDetails>({
         project_name: '',
         campaign_name: '',
@@ -49,7 +62,16 @@ export const useDashboard = () => {
         try {
             const res = await ApiService.get<any>(urls.campaign_getProjectsList);
             if (res.isSuccess) {
-                setListProjects(res.projects as string[])
+                const listProjects = res.projects as string[]
+                const newListProjects: DropDownOptions[] = []
+                listProjects.forEach(element => {
+                    newListProjects.push({
+                        label: element,
+                        value: element
+                    })
+                });
+
+                setListProjects(newListProjects)
             }
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
@@ -66,7 +88,8 @@ export const useDashboard = () => {
             const client_ID = Cookies.get(nkey.client_ID)
             const res = await ApiService.get<any>(`${urls.campaign_select_all}?clientId=${client_ID}&project=${projectName}`);
             if (res.isSuccess) {
-                setListCampaigns(res.campaigns as string[])
+                setListCampaigns(res.campaigns as CampaignsProps[])
+                handleCheckCampNameExists(res.campaigns as CampaignsProps[], assetDetails.campaign_name)
             }
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
@@ -119,6 +142,7 @@ export const useDashboard = () => {
     }
 
     const handleChangeAssetDetails = debounce((key: string, value: string) => {
+        setIsCampNameExists(false)
         setAssetDetails(pre => ({
             ...pre,
             [key]: value
@@ -126,10 +150,20 @@ export const useDashboard = () => {
 
         if (key === "project_name") {
             getListCampaign(value)
+        } else if (key === "campaign_name") {
+            handleCheckCampNameExists(listCampaigns, value)
         }
     }, 500)
 
-    const handleNext = () => {
+    const handleCheckCampNameExists = (listCampaigns: CampaignsProps[], value: string) => {
+        const checkCampNameExists = listCampaigns.filter((item) => item.campaignName.toLowerCase() === value.toLowerCase())
+        if (checkCampNameExists.length > 0) {
+            setIsCampNameExists(true)
+        }
+    }
+
+    const handleNext = async () => {
+        if (isCampNameExists) { return }
         if (selectedButton?.assetTypeName === "All in One") {
             setChooseAssetModal(true)
             setModalOpen(false)
@@ -143,6 +177,7 @@ export const useDashboard = () => {
     }
 
     return {
+        isCampNameExists,
         listProjects,
         listCampaigns,
         clientAssetTypes,
