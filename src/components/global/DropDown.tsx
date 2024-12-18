@@ -17,14 +17,14 @@ import TextField from './TextField';
  * @param {string} [props.customClass] - Optional custom CSS classes for styling the dropdown container.
  * @param {string} [props.dropdownWidthClass] - Optional CSS classes for controlling the dropdown width.
  * @param {Array.<{ label: string, value: string }>} props.optionLists - Array of options for the dropdown.
- * @param {(valueSelected: options) => void} props.onSelected - Select value
+ * @param {(valueSelected: DropDownOptions) => void} props.onSelected - Select value
  *  Each option includes a label (display text) and a value to be selected.
  *
  * @returns {JSX.Element} A dropdown component with selectable options and an "Other" input field.
  */
 
 
-interface options {
+export interface DropDownOptions {
     label: string;
     value: string;
 }
@@ -33,11 +33,18 @@ interface DropDownProps {
     selectPlaceHolder: string;
     customClass?: string;
     dropdownWidthClass?: string;
-    optionLists: options[];
-    onSelected?: (valueSelected: options) => void;
+    optionLists: DropDownOptions[];
+    isShowOther?: boolean;
+    onSelected?: (valueSelected: DropDownOptions) => void;
 }
 
-const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, customClass = "", dropdownWidthClass = "", onSelected = () => { } }) => {
+const DropDown: React.FC<DropDownProps> = ({
+    optionLists,
+    selectPlaceHolder,
+    customClass = "",
+    dropdownWidthClass = "",
+    onSelected = () => { },
+    isShowOther = true }) => {
     const [selectedOption, setSelectedOption] = useState('')
     const [showOptionList, setShowOptionList] = useState(false)
     const [isOtherSelected, setIsOtherSelected] = useState(false)
@@ -48,7 +55,7 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
         setShowOptionList((prev) => !prev)
     }
 
-    const handleSelectList = (options: options) => {
+    const handleSelectList = (options: DropDownOptions) => {
         setSelectedOption(options.value)
         setShowOptionList(false)
         setIsOtherSelected(false)
@@ -83,12 +90,12 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
     }, [])
 
     return (
-        <div ref={dropdownRef} className={`relative flex flex-col gap-[7px] w-[260px] ${dropdownWidthClass}`}>
+        <div ref={dropdownRef} className={`relative flex flex-col gap-[7px] ${dropdownWidthClass}`}>
             <div onClick={handleDropDownList} className={`h-[60px] shadow-dropdown-shadow rounded-lg flex items-center justify-between px-4 py-5 cursor-pointer ${customClass}`}>
                 <p className={`text-base ${!selectedOption ? "text-[#666666]" : ""}`}>{selectedOption || selectPlaceHolder}</p>
                 <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
             </div>
-            <div className={`w-[260px] z-[100] h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all relative duration-300 ease-in-out ${showOptionList ? 'max-h-[140px] overflow-y-scroll opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
+            <div className={`z-[100] h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all relative duration-300 ease-in-out ${showOptionList ? 'max-h-[140px] overflow-y-scroll opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
                 {showOptionList &&
                     <>
                         {optionLists.map((options, index) => (
@@ -100,7 +107,7 @@ const DropDown: React.FC<DropDownProps> = ({ optionLists, selectPlaceHolder, cus
                                 {options.label}
                             </div>
                         ))}
-                        <div onClick={() => hanleOtherSelectedOption("Other")} className='h-11 px-4 py-3 flex items-center text-base cursor-pointer'>Other</div>
+                        {isShowOther ? <div onClick={() => hanleOtherSelectedOption("Other")} className='h-11 px-4 py-3 flex items-center text-base cursor-pointer'>Other</div> : null}
                     </>
                 }
             </div>

@@ -11,6 +11,7 @@ import TextField from "@/components/global/TextField";
 import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 import { useDashboard } from "@/hooks/useDashboard";
 import InputAreaSearch from "@/components/global/InputAreaSearch";
+import DropDown from "@/components/global/DropDown";
 
 const dashboardData = [
   { projectName: "All Projects", allProjectDate: "as of 04.10.2024", totalAssets: 15, underReview: 4, inProgress: 11 },
@@ -83,8 +84,8 @@ const tableHeading = ["Project Name", "Campaign Name", "Asset Details", "Created
 
 const Dashboard: FC = () => {
   const {
+    isCampNameExists,
     listProjects,
-    listCampaigns,
     clientAssetTypes,
     isModalOpen,
     chooseAssetModal,
@@ -111,11 +112,16 @@ const Dashboard: FC = () => {
         <div className='w-full flex flex-col gap-3 px-12 pb-7'>
           <div className='pt-[15px] flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
-            <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here." listData={listProjects} onChange={(value) => { handleChangeAssetDetails("project_name", value) }} />
+            <DropDown
+              isShowOther={false}
+              onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value) }}
+              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} ></DropDown>
+            {/* <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here." listData={listProjects} onChange={(value) => { handleChangeAssetDetails("project_name", value) }} /> */}
           </div>
           <div className='flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
-            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here." listData={listCampaigns} onChange={(value) => { handleChangeAssetDetails("campaign_name", value) }} />
+            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here." onChange={(value) => { handleChangeAssetDetails("campaign_name", value) }} />
+            {isCampNameExists ? <p className='text-red-500 text-[12px] mt-[-10px]'>Campaign name already exists, please enter another campaign name.</p> : null}
           </div>
           {selectedButton?.assetTypeName !== "All in One" &&
             <div className='flex flex-col gap-3'>
