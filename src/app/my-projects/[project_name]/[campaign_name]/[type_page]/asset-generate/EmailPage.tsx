@@ -171,7 +171,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>
-                            <div>
+                            <div className='w-[260px]'>
                                 <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown
                                     onSelected={(optionSelected) => {
@@ -183,7 +183,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                     selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
-                            <div>
+                            <div className='w-[260px]'>
                                 <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown
                                     onSelected={(optionSelected) => {
@@ -233,7 +233,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>
-                            <div>
+                            <div className='w-[260px]'>
                                 <ChildrenTitle title='Email Type' customClass='mt-5' />
                                 <DropDown onSelected={(optionSelected) => {
                                     refFormData.current = {
@@ -243,7 +243,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                 }} selectPlaceHolder="Select Post Type" optionLists={emailType} />
                             </div>
 
-                            <div>
+                            <div className='w-[260px]'>
                                 <ChildrenTitle title='Key Points' customClass='mt-5' />
                                 <DropDown onSelected={(optionSelected) => {
                                     refFormData.current = {
