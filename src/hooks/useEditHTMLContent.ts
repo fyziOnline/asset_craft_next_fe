@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useAppData } from '@/context/AppContext';
 
 export const useEditHTMLContent = () => {
-    const searchParams = useSearchParams();
-    const contentType = searchParams.get('type') || '';
     const { contextData } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
@@ -15,7 +12,7 @@ export const useEditHTMLContent = () => {
 
     useEffect(() => {
         try {
-            const findSelected = contextData.AssetHtml.assetVersions?.filter((item) => item.assetID === versionSelected.assetID)
+            const findSelected = contextData.AssetHtml.assetVersions?.filter((item) => item.assetVersionID === versionSelected.assetVersionID)
             if (findSelected.length > 0) {
                 setVersionSelected(findSelected[0])
             } else {

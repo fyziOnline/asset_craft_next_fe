@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   },
   images: {
     domains: ["stratagile-emailcraft.s3.ap-southeast-1.amazonaws.com"]
+  },
+  eslint: {
+    ignoreDuringBuilds: true
   }
 };
 

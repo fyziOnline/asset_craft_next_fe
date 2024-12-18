@@ -11,6 +11,7 @@ import Cookies from 'js-cookie';
 import moment from 'moment';
 import { Template } from '@/types/templates'
 import { useAppData } from '@/context/AppContext'
+import { useYesNoPopup } from '@/components/global/Popup/YesNoPopupContext'
 
 type ProgressComponent = ReactNode;
 interface ProjectAssetProp {
@@ -29,59 +30,72 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const { listTemplates } = useGetTemplates({ type_page: params.type_page })
   const assetIDTemplateRef = useRef("")
   const campaignIDTemplateRef = useRef("")
+  const assetVersionIDRef = useRef("")
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
   const { setContextData } = useAppData();
+  const { openPopup } = useYesNoPopup();
 
   const handleNext = async (selectedTemplate: Template) => {
-    if (currentStep < total_steps) {
-      try {
-        setShowLoading(true)
-        const client_ID = Cookies.get(nkey.client_ID);
-        const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
+    openPopup(
+      'Confirmation',
+      'Once confirmed, you will not be able to re-select the template.',
+      'Next',
+      'Cancel',
+      async () => {
+        if (currentStep < total_steps) {
+          try {
+            setShowLoading(true)
+            const client_ID = Cookies.get(nkey.client_ID);
+            const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
+            const res_Template = await ApiService.get<any>(`${urls.template_select}?templateID=${selectedTemplate.templateID}`)
 
-        const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
-          "clientID": client_ID,
-          "campaignName": params.campaign_name,
-          "country": "",
-          "squad": "",
-          "startDate": currentDate,
-          "endDate": "",
-          "status": ""
-        });
-        // const res_campaign_add = { isSuccess: true, campaignID: "70b77f95-0fb2-ef11-ac7b-0a9328dfcacd" }
+            if (res_Template.isSuccess) {
+              const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
+                "clientID": client_ID,
+                "project": params.project_name,
+                "campaignName": params.campaign_name,
+                "country": "",
+                "squad": "",
+                "startDate": currentDate,
+                "endDate": "",
+                "status": ""
+              });
+              // const res_campaign_add = { isSuccess: true, campaignID: "bbaa8216-20bc-ef11-ac7b-0a9328dfcacd" }
 
-        if (res_campaign_add.isSuccess) {
-          const resAddWithTemplate = await ApiService.post<any>(urls.asset_addWithTemplate, {
-            "campaignID": res_campaign_add.campaignID,
-            "assetName": params.asset_name,
-            "templateID": selectedTemplate.templateID,
-            "language": "",
-            "assetAIPrompt": ""
-          });
-          // const resAddWithTemplate = { isSuccess: true, assetID: "" }
+              if (res_campaign_add.isSuccess) {
+                const resAddWithTemplate = await ApiService.post<any>(urls.asset_addWithTemplate, {
+                  "campaignID": res_campaign_add.campaignID,
+                  "assetName": params.asset_name,
+                  "templateID": selectedTemplate.templateID,
+                  "language": "",
+                  "assetAIPrompt": ""
+                });
+                // const resAddWithTemplate = { isSuccess: true, assetID: "bcaa8216-20bc-ef11-ac7b-0a9328dfcacd" }
 
-          if (resAddWithTemplate.isSuccess) {
-            campaignIDTemplateRef.current = res_campaign_add.campaignID
-            assetIDTemplateRef.current = resAddWithTemplate.assetID
-            selectedTemplateRef.current = selectedTemplate
-            setCurrentStep(pre => pre + 1)
-            setContextData({ assetGenerateStatus: 1, assetTemplateShow: false })
+                if (resAddWithTemplate.isSuccess) {
+                  const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${resAddWithTemplate.assetID}`);
+                  if (resAssetSelect.isSuccess) {
+                    campaignIDTemplateRef.current = res_campaign_add.campaignID
+                    assetIDTemplateRef.current = resAddWithTemplate.assetID
+                    assetVersionIDRef.current = resAssetSelect.assetVersionID
+                    selectedTemplateRef.current = res_Template as Template
+                    setCurrentStep(pre => pre + 1)
+                    setContextData({ assetGenerateStatus: 1, assetTemplateShow: false })
+                  }
+                }
+              }
+            }
+
+          } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+          } finally {
+            setShowLoading(false)
           }
         }
-      } catch (error) {
-        console.error('API Error:', ApiService.handleError(error));
-        alert(ApiService.handleError(error));
-      } finally {
-        setShowLoading(false)
       }
-    }
-  }
-
-  const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(pre => pre - 1)
-    }
+    )
   }
 
   const pageProgressComponents: { [key: number]: ProgressComponent } = {
@@ -99,7 +113,8 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
           type_page: params.type_page,
           assetID: assetIDTemplateRef.current,
           campaignID: campaignIDTemplateRef.current,
-          template: selectedTemplateRef.current
+          template: selectedTemplateRef.current as Template,
+          assetVersionID: assetVersionIDRef.current
         }}
       />
     )

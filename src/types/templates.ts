@@ -1,13 +1,23 @@
 export interface Template {
     assetTypeID?: string,
     assetTypeName?: string,
-    description: string,
+    description?: string,
     isActive?: number,
     layoutID?: string,
-    templateID: string,
-    templateImageURL: string,
-    templateName: string,
+    templateID?: string,
+    templateImageURL?: string,
+    templateName?: string,
+    templatesBlocks?: {
+        templateBlockID?: string;
+        templateID?: string;
+        blockID?: string;
+        order?: number;
+        aiTitle?: string;
+        aiPrompt?: string | null;
+        aiDescription?: string;
+    }[]
 }
+
 
 export interface AssetHtmlProps {
     isSuccess: boolean,

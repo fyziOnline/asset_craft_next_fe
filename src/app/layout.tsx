@@ -3,6 +3,7 @@ import { AppDataProvider } from "@/context/AppContext";
 import "./globals.css";
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import { LoadingProvider } from "@/components/global/Loading/LoadingContext";
+import { YesNoPopupProvider } from "@/components/global/Popup/YesNoPopupContext";
 
 export const metadata: Metadata = {
   title: "HPE Brand Central AI",
@@ -19,9 +20,11 @@ export default function RootLayout({
       <body className="font-inter bg-background">
         <AppDataProvider>
           <LoadingProvider>
-            <LayoutWrapper>
-              {children}
-            </LayoutWrapper>
+            <YesNoPopupProvider>
+              <LayoutWrapper>
+                {children}
+              </LayoutWrapper>
+            </YesNoPopupProvider>
           </LoadingProvider>
         </AppDataProvider>
       </body>

@@ -1,0 +1,10 @@
+services:
+  brandcentralaiapp:
+    build: .
+    ports:
+      - "3002:3002"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    command: npm start

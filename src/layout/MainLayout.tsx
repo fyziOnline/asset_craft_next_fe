@@ -3,18 +3,18 @@ import Header from "@/components/layout/Header";
 import Navbar from "@/components/layout/Navbar";
 
 interface LayoutProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
-const MainLayout:React.FC<LayoutProps> = ({children}) => {
+const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
-        <Header />
-        <Navbar />
-        <main className="ml-[5.5rem] mt-[3.5rem] pb-[2rem] overflow-auto">
-            {children}
-        </main>
-        <Footer />
+      <Header />
+      <Navbar />
+      <main className="ml-[5.5rem] mt-[3.5rem] pb-[2rem] overflow-auto">
+        {children}
+      </main>
+      <Footer />
     </>
   )
 }
