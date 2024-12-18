@@ -163,7 +163,14 @@ export const useDashboard = () => {
     }
 
     const handleNext = async () => {
-        if (isCampNameExists) { return }
+        if (isCampNameExists ||
+            assetDetails.asset_name.trim().length === 0 ||
+            assetDetails.campaign_name.trim().length === 0 ||
+            assetDetails.project_name.trim().length === 0
+        ) {
+            return
+        }
+
         if (selectedButton?.assetTypeName === "All in One") {
             setChooseAssetModal(true)
             setModalOpen(false)
