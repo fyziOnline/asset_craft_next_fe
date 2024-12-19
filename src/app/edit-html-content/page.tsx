@@ -110,6 +110,17 @@ const Page = () => {
                                         <path d="M30.0625 4.06433C30.709 3.41787 31.5858 3.05469 32.5 3.05469C33.4142 3.05469 34.291 3.41787 34.9375 4.06433C35.584 4.7108 35.9471 5.58759 35.9471 6.50183C35.9471 7.41607 35.584 8.29287 34.9375 8.93933L19.5 24.3768L13 26.0018L14.625 19.5018L30.0625 4.06433Z" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </div>
+                                <Button
+                                    // handleClick={onGenerateWithAI}
+                                    // disabled={isLoadingGenerate}
+                                    // buttonText={isLoadingGenerate ? 'Generating...' : 'Generate with AI'}
+                                    // backgroundColor={isLoadingGenerate ? "bg-[#00A881]" : "bg-custom-gradient-green"}
+                                    buttonText={'Generate with AI'}
+                                    backgroundColor={"bg-custom-gradient-green"}
+                                    showIcon={false}
+                                    textStyle='text-[1rem] font-base text-[#00A881]'
+                                    textColor="text-[#fff]"
+                                    customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
                                 {/* <div className='mr-2 mt-1'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none" data-id="102">
                                         <path d="M32.5 14.625H17.875C16.0801 14.625 14.625 16.0801 14.625 17.875V32.5C14.625 34.2949 16.0801 35.75 17.875 35.75H32.5C34.2949 35.75 35.75 34.2949 35.75 32.5V17.875C35.75 16.0801 34.2949 14.625 32.5 14.625Z" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
