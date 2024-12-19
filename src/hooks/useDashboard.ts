@@ -31,6 +31,18 @@ interface CampaignsProps {
     isVisible: number
 }
 
+interface AssetsProps {
+    assetName: string,
+    language: string,
+    assetAIPrompt: string,
+    isVisible: number,
+    layoutID: string,
+    assetTypeID: string,
+    assetTypeName: string,
+    modifiedOn: string,
+    assetID: string
+}
+
 type AssetDetails = {
     project_name: string;
     campaign_name: string;
@@ -42,11 +54,13 @@ export const useDashboard = () => {
     const { setShowLoading } = useLoading()
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
+    const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
     const [chooseAssetModal, setChooseAssetModal] = useState<boolean>(false);
     const [selectedButton, setSelectedButton] = useState<ClientAssetTypeProps>()
     const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
     const [listProjects, setListProjects] = useState<DropDownOptions[]>([]);
     const [listCampaigns, setListCampaigns] = useState<CampaignsProps[]>([]);
+    const [listAssets, setListAssets] = useState<AssetsProps[]>([]);
     const campaignIDRef = useRef("")
 
     const [assetDetails, setAssetDetails] = useState<AssetDetails>({
@@ -134,8 +148,10 @@ export const useDashboard = () => {
             campaign_name: '',
             asset_name: ''
         })
+        setIsAssetNameExists(false)
         setModalOpen(false)
     };
+
     const closeAssetModal = () => setChooseAssetModal(false)
 
     const onChangeAssetDetails = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -153,6 +169,13 @@ export const useDashboard = () => {
             getListCampaign(value)
         } else if (key === "campaign_name") {
             handleCheckCampNameExists(listCampaigns, value)
+        } else if (key === "asset_name") {
+            const checkAssetNameExists = listAssets.filter((item) => item.assetName.toLowerCase() === value.toLowerCase())
+            if (checkAssetNameExists.length > 0) {
+                setIsAssetNameExists(true)
+            } else {
+                setIsAssetNameExists(false)
+            }
         }
     }, 500)
 
@@ -160,13 +183,25 @@ export const useDashboard = () => {
         const checkCampNameExists = listCampaigns.filter((item) => item.campaignName.toLowerCase() === value.toLowerCase())
         if (checkCampNameExists.length > 0) {
             campaignIDRef.current = checkCampNameExists[0].campaignID
+            getAssetAll(checkCampNameExists[0].campaignID)
         } else {
             campaignIDRef.current = ""
         }
     }
 
+    const getAssetAll = async (campaignID: string) => {
+        try {
+            const res_assets = await ApiService.get<any>(`${urls.asset_select_all}?campaignID=${campaignID}`);
+            if (res_assets.isSuccess) {
+                setListAssets(res_assets.assets as AssetsProps[])
+            }
+        } catch (error) {
+            console.log('getAssetAll: ', ApiService.handleError(error));
+        }
+    }
+
     const handleNext = async () => {
-        if (
+        if (isAssetNameExists ||
             assetDetails.asset_name.trim().length === 0 ||
             assetDetails.campaign_name.trim().length === 0 ||
             assetDetails.project_name.trim().length === 0
@@ -221,6 +256,7 @@ export const useDashboard = () => {
     }
 
     return {
+        isAssetNameExists,
         listProjects,
         listCampaigns,
         clientAssetTypes,

@@ -84,6 +84,7 @@ const tableHeading = ["Project Name", "Campaign Name", "Asset Details", "Created
 
 const Dashboard: FC = () => {
   const {
+    isAssetNameExists,
     listProjects,
     listCampaigns,
     clientAssetTypes,
@@ -126,6 +127,7 @@ const Dashboard: FC = () => {
             <div className='flex flex-col gap-3'>
               <p className='text-[#160647] text-base tracking-wide font-semibold'>Digital Marketing Asset Name</p>
               <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here.' name="asset_name" handleChange={onChangeAssetDetails} />
+              {isAssetNameExists ? <p className='text-red-500 text-[12px] mt-[-10px]'>Asset name already exists, please enter another asset name.</p> : null}
             </div>
           }
         </div>

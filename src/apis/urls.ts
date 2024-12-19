@@ -8,6 +8,7 @@ export const urls = {
     template_select_all: "/template/select/all",
     template_select: "template/select",
     campaign_add: "/campaign/add",
+    asset_select_all: "/asset/select/all",
     asset_addWithTemplate: "/asset/addWithTemplate",
     asset_select: "/asset/select",
     asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
