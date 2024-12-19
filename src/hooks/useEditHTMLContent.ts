@@ -31,6 +31,14 @@ export const useEditHTMLContent = () => {
     const handleSave = (type: number) => {
         if (type === 1) {
             setIsShowAddVer(true)
+        } else {
+            if (typeof window !== 'undefined') {
+                if (type === 2) {
+                    window.open(versionSelected.htmlFileURL, '_blank', 'noopener,noreferrer');
+                } else if (type === 3) {
+                    window.open(versionSelected.zipFileURL, '_blank', 'noopener,noreferrer');
+                }
+            }
         }
         setShowSave(!isShowSave)
     }

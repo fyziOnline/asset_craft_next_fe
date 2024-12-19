@@ -16,7 +16,7 @@ interface EmailPageProps {
         assetID: string,
         campaignID: string,
         template: Template,
-        assetVersionID: string
+        assetSelect: AssetHtmlProps
     }
 }
 
@@ -33,7 +33,7 @@ export interface FormEmailDataProps {
 }
 
 export interface SectionProps {
-    assetVersionID: string,
+    assetVersionID?: string,
     templateBlockID: string,
     aiPrompt: string
 }
@@ -67,7 +67,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const [isRegenerateHTML, setIsRegenerateHTML] = useState<boolean>(false);
-    const { generateHTML } = useGenerateTemplate({ params: { assetID: params.assetID, campaignID: params.campaignID } })
+    const { generateHTML } = useGenerateTemplate({ params: { assetSelect: params.assetSelect, assetID: params.assetID, campaignID: params.campaignID } })
     const refFormData = useRef<FormEmailDataProps>()
     const refSection = useRef<SectionProps[]>([])
 
@@ -334,7 +334,6 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         {params.template.templatesBlocks && params.template.templatesBlocks.map((item, index) => {
                             if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
-                                    assetVersionID: params.assetVersionID,
                                     templateBlockID: item.templateBlockID as string,
                                     aiPrompt: ""
                                 }]

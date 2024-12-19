@@ -64,6 +64,34 @@ export interface AssetHtmlProps {
     ]
 }
 
+export interface AssetVersionProps {
+    assetVersionID: string,
+    assetID: string,
+    versionNumber: number,
+    versionName: string,
+    htmlGenerated: string,
+    layoutHTMLGenerated: string,
+    htmlFileURL: string,
+    zipFileURL: string,
+    assetVersionBlocks: [
+        {
+            assetVersionBlockID: string,
+            assetVersionID: string,
+            blockID: string,
+            blockName: string,
+            aiPrompt: string,
+            blockData: string,
+            blockHTMLGenerated: string,
+            sortOrder: number,
+            description: string,
+            type: string,
+            schema: string,
+            uiSchema: string,
+            html: string
+        }
+    ]
+}
+
 export interface AssetBlockProps {
     assetVersionBlockID: string,
     assetVersionID: string,

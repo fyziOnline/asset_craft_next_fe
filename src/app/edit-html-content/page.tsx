@@ -72,6 +72,9 @@ const Page = () => {
                                         <span className="text-black text-lg font-normal font-['Inter']">HTML File</span>
                                     </button>
                                     <button onClick={() => handleSave(3)} className="h-[43px] flex items-center justify-start px-4 rounded-b-[14px] border-t-[0.5px] border-[#7F7F7F] border-solid">
+                                        <span className="text-black text-lg font-normal font-['Inter']">Zip File</span>
+                                    </button>
+                                    <button onClick={() => handleSave(4)} className="h-[43px] flex items-center justify-start px-4 rounded-b-[14px] border-t-[0.5px] border-[#7F7F7F] border-solid">
                                         <span className="text-black text-lg font-normal font-['Inter']">PDF File</span>
                                     </button>
                                 </div> : null}
@@ -145,7 +148,7 @@ const Page = () => {
                             handleChangeTextVersion={handleChangeTextVersion} /> : null}
                     </div>
                 </div>
-                {isShowModelEdit ? <EditContentModel assetBlocks={versionSelected.assetVersionBlocks} setIsShowModelEdit={setIsShowModelEdit} /> : null}
+                {isShowModelEdit ? <EditContentModel assetBlocks={versionSelected.assetVersionBlocks} assetVersion={versionSelected} setIsShowModelEdit={setIsShowModelEdit} /> : null}
             </div>
         </Suspense>
     );
