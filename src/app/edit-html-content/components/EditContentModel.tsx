@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers, materialCells, } from '@jsonforms/material-renderers';
-import { AssetBlockProps, AssetHtmlProps } from '@/types/templates';
+import { AssetBlockProps, AssetHtmlProps, AssetVersionProps } from '@/types/templates';
 import Button from '@/components/global/Button';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
@@ -59,10 +59,11 @@ const customTheme = createTheme({
 
 interface EditContentModelProps {
     setIsShowModelEdit: any,
-    assetBlocks: AssetBlockProps[]
+    assetBlocks: AssetBlockProps[],
+    assetVersion: AssetVersionProps
 }
 
-const EditContentModel = ({ setIsShowModelEdit, assetBlocks }: EditContentModelProps) => {
+const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: EditContentModelProps) => {
     const { contextData, setContextData } = useAppData();
     const [isLoading, setIsLoading] = useState(false);
     const [listAssetBlocks, setListAssetBlocks] = useState(assetBlocks)
@@ -140,7 +141,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks }: EditContentModelP
                 const allSuccess = results.every((res) => res.isSuccess);
 
                 if (allSuccess) {
-                    const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${contextData.AssetHtml.assetID}`);
+                    const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${contextData.AssetHtml.assetID}&assetVersionID=${assetVersion.assetVersionID}`);
                     if (resGenerate.isSuccess) {
                         const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${contextData.AssetHtml.assetID}`);
                         if (resAssetSelect.isSuccess && resAssetSelect.assetVersions.length > 0) {

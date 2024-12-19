@@ -148,7 +148,7 @@ const Page = () => {
                             handleChangeTextVersion={handleChangeTextVersion} /> : null}
                     </div>
                 </div>
-                {isShowModelEdit ? <EditContentModel assetBlocks={versionSelected.assetVersionBlocks} setIsShowModelEdit={setIsShowModelEdit} /> : null}
+                {isShowModelEdit ? <EditContentModel assetBlocks={versionSelected.assetVersionBlocks} assetVersion={versionSelected} setIsShowModelEdit={setIsShowModelEdit} /> : null}
             </div>
         </Suspense>
     );
