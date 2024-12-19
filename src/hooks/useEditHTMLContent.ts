@@ -1,3 +1,4 @@
+import generatePDF, { Options, Resolution } from "react-to-pdf";
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppData } from '@/context/AppContext';
 
@@ -28,6 +29,8 @@ export const useEditHTMLContent = () => {
 
     };
 
+    const getTargetElement = () => document.getElementById("container");
+
     const handleSave = (type: number) => {
         if (type === 1) {
             setIsShowAddVer(true)
@@ -37,6 +40,11 @@ export const useEditHTMLContent = () => {
                     window.open(versionSelected.htmlFileURL, '_blank', 'noopener,noreferrer');
                 } else if (type === 3) {
                     window.open(versionSelected.zipFileURL, '_blank', 'noopener,noreferrer');
+                } else if (type === 4) {
+                    const options: Options = {
+                        filename: `${contextData.AssetHtml.assetName as string}${versionSelected.versionName as string}.pdf`
+                    };
+                    generatePDF(getTargetElement, options);
                 }
             }
         }
