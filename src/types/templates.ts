@@ -106,5 +106,6 @@ export interface AssetBlockProps {
     type: string,
     schema: string,
     uiSchema: string,
-    html: string
+    html: string,
+    isStatic: boolean
 }

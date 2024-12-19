@@ -167,6 +167,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
                 <div className='w-[90vw] h-[94vh] bg-white rounded-md relative flex flex-col'>
                     <div className='border-b border-solid border-[#D9D9D9] px-4 pb-4 flex flex-wrap'>
                         {listAssetBlocks?.map((item, index) => {
+                            if (item.isStatic) { return }
                             return (
                                 <div onClick={() => { onSelectBlock(item, index) }}
                                     className={`p-2 mr-2 mt-4 rounded-md cursor-pointer ${assetBlockSelected.assetVersionBlockID === item.assetVersionBlockID ? `text-white bg-[#01A982]` : `text-black bg-[#e4e4e4]`}`}
