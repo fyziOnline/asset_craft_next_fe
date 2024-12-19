@@ -15,6 +15,7 @@ export interface Template {
         aiTitle?: string;
         aiPrompt?: string | null;
         aiDescription?: string;
+        isStatic?: boolean
     }[]
 }
 
@@ -57,7 +58,8 @@ export interface AssetHtmlProps {
                     type: string,
                     schema: string,
                     uiSchema: string,
-                    html: string
+                    html: string,
+                    isStatic: boolean
                 }
             ]
         }
@@ -105,5 +107,6 @@ export interface AssetBlockProps {
     type: string,
     schema: string,
     uiSchema: string,
-    html: string
+    html: string,
+    isStatic: boolean
 }

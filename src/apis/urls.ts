@@ -8,6 +8,7 @@ export const urls = {
     template_select_all: "/template/select/all",
     template_select: "template/select",
     campaign_add: "/campaign/add",
+    asset_select_all: "/asset/select/all",
     asset_addWithTemplate: "/asset/addWithTemplate",
     asset_select: "/asset/select",
     asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
@@ -15,8 +16,13 @@ export const urls = {
     assetVersionBlock_update: "/AssetVersionBlock/update",
     aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
     aiPrompt_Asset_update: "/aiPrompt/Asset/update",
+    aiPrompt_Campaign_select: "/aiPrompt/Campaign/select",
     aiPrompt_Campaign_insert: "/aiPrompt/Campaign/insert",
     aiPrompt_Campaign_update: "/aiPrompt/Campaign/update",
     aiPrompt_image_update: "/aiPrompt/image/update",
-    assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID"
+    assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID",
+    asset_version_getDataUsingAI: "/asset/version/getDataUsingAI",
+    asset_version_generate: "/asset/version/generate",
+    asset_version_select: "/asset/version/select",
+    asset_version_copy: "/asset/version/copy",
 };

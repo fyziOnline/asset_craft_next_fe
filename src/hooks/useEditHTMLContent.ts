@@ -1,11 +1,14 @@
-import generatePDF, { Options, Resolution } from "react-to-pdf";
+import generatePDF, { Options } from "react-to-pdf";
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppData } from '@/context/AppContext';
+import { ApiService } from "@/lib/axios_generic";
+import { urls } from "@/apis/urls";
 
 export const useEditHTMLContent = () => {
-    const { contextData } = useAppData();
+    const { contextData, setContextData } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
+    const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
     const [versionList, setVersionList] = useState(contextData.AssetHtml.assetVersions || [])
     const [versionSelected, setVersionSelected] = useState(contextData.AssetHtml.assetVersions?.[0])
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
@@ -55,12 +58,57 @@ export const useEditHTMLContent = () => {
         refVersion.current = event.target.value;
     };
 
-    const handleAddVersion = () => {
+    const handleAddVersion = async () => {
         if (refVersion.current.trim().length === 0) { return }
-        // setVersionList([...versionList, refVersion.current])
-        setIsShowAddVer(false)
+        try {
+            const resAddNewVersion = await ApiService.post<any>(urls.asset_version_copy, { assetVersionID: versionSelected.assetVersionID })
+            if (resAddNewVersion.isSuccess) {
+                const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${resAddNewVersion.assetVersionID}`)
+                if (resSelect.isSuccess) {
+                    const AssetHtml = contextData.AssetHtml
+                    const assetVersions = contextData.AssetHtml.assetVersions
+                    assetVersions.push(resSelect)
+                    AssetHtml.assetVersions = assetVersions
+                    setVersionSelected(resSelect)
+                    setContextData({ AssetHtml: AssetHtml })
+                    setIsShowAddVer(false)
+                }
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        }
     };
+
+    const onGenerateWithAI = async () => {
+        try {
+            setIsLoadingGenerate(true)
+            const resGenerateWithAI = await ApiService.get<any>(`${urls.asset_version_getDataUsingAI}?assetVersionID=${versionSelected.assetVersionID}`)
+            if (resGenerateWithAI.isSuccess) {
+                const resGenerate = await ApiService.get<any>(`${urls.asset_version_generate}?assetVersionID=${versionSelected.assetVersionID}`)
+                if (resGenerate.isSuccess) {
+                    const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${versionSelected.assetVersionID}`)
+                    if (resSelect.isSuccess) {
+                        const AssetHtml = contextData.AssetHtml
+                        const indexVersion = contextData.AssetHtml.assetVersions.findIndex((item) => item.assetVersionID === versionSelected.assetVersionID)
+                        const assetVersions = contextData.AssetHtml.assetVersions
+                        assetVersions[indexVersion] = resSelect
+                        AssetHtml.assetVersions = assetVersions
+                        setContextData({ AssetHtml: AssetHtml })
+                    }
+                }
+
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        } finally {
+            setIsLoadingGenerate(false);
+        }
+    }
+
     return {
+        isLoadingGenerate,
         isShowAddVer,
         versionSelected,
         isShowSave,
@@ -73,6 +121,7 @@ export const useEditHTMLContent = () => {
         handleSave,
         handleCopy,
         setIsShowAddVer,
-        setIsShowModelEdit
+        setIsShowModelEdit,
+        onGenerateWithAI
     };
 };

@@ -1,13 +1,14 @@
 import { urls } from '@/apis/urls';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { ApiService } from '@/lib/axios_generic';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Cookies from 'js-cookie';
 import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
 import { ListTypePage } from '@/data/dataGlobal';
 import { debounce } from 'lodash';
 import { DropDownOptions } from '@/components/global/DropDown';
+import moment from 'moment';
 
 interface ClientAssetTypeProps {
     clientAssetTypeID?: string,
@@ -30,6 +31,18 @@ interface CampaignsProps {
     isVisible: number
 }
 
+interface AssetsProps {
+    assetName: string,
+    language: string,
+    assetAIPrompt: string,
+    isVisible: number,
+    layoutID: string,
+    assetTypeID: string,
+    assetTypeName: string,
+    modifiedOn: string,
+    assetID: string
+}
+
 type AssetDetails = {
     project_name: string;
     campaign_name: string;
@@ -41,12 +54,15 @@ export const useDashboard = () => {
     const { setShowLoading } = useLoading()
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
-    const [isCampNameExists, setIsCampNameExists] = useState<boolean>(false);
+    const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
     const [chooseAssetModal, setChooseAssetModal] = useState<boolean>(false);
     const [selectedButton, setSelectedButton] = useState<ClientAssetTypeProps>()
     const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
     const [listProjects, setListProjects] = useState<DropDownOptions[]>([]);
     const [listCampaigns, setListCampaigns] = useState<CampaignsProps[]>([]);
+    const [listAssets, setListAssets] = useState<AssetsProps[]>([]);
+    const campaignIDRef = useRef("")
+
     const [assetDetails, setAssetDetails] = useState<AssetDetails>({
         project_name: '',
         campaign_name: '',
@@ -132,8 +148,10 @@ export const useDashboard = () => {
             campaign_name: '',
             asset_name: ''
         })
+        setIsAssetNameExists(false)
         setModalOpen(false)
     };
+
     const closeAssetModal = () => setChooseAssetModal(false)
 
     const onChangeAssetDetails = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -142,7 +160,6 @@ export const useDashboard = () => {
     }
 
     const handleChangeAssetDetails = debounce((key: string, value: string) => {
-        setIsCampNameExists(false)
         setAssetDetails(pre => ({
             ...pre,
             [key]: value
@@ -152,18 +169,39 @@ export const useDashboard = () => {
             getListCampaign(value)
         } else if (key === "campaign_name") {
             handleCheckCampNameExists(listCampaigns, value)
+        } else if (key === "asset_name") {
+            const checkAssetNameExists = listAssets.filter((item) => item.assetName.toLowerCase() === value.toLowerCase())
+            if (checkAssetNameExists.length > 0) {
+                setIsAssetNameExists(true)
+            } else {
+                setIsAssetNameExists(false)
+            }
         }
     }, 500)
 
     const handleCheckCampNameExists = (listCampaigns: CampaignsProps[], value: string) => {
         const checkCampNameExists = listCampaigns.filter((item) => item.campaignName.toLowerCase() === value.toLowerCase())
         if (checkCampNameExists.length > 0) {
-            setIsCampNameExists(true)
+            campaignIDRef.current = checkCampNameExists[0].campaignID
+            getAssetAll(checkCampNameExists[0].campaignID)
+        } else {
+            campaignIDRef.current = ""
+        }
+    }
+
+    const getAssetAll = async (campaignID: string) => {
+        try {
+            const res_assets = await ApiService.get<any>(`${urls.asset_select_all}?campaignID=${campaignID}`);
+            if (res_assets.isSuccess) {
+                setListAssets(res_assets.assets as AssetsProps[])
+            }
+        } catch (error) {
+            console.log('getAssetAll: ', ApiService.handleError(error));
         }
     }
 
     const handleNext = async () => {
-        if (isCampNameExists ||
+        if (isAssetNameExists ||
             assetDetails.asset_name.trim().length === 0 ||
             assetDetails.campaign_name.trim().length === 0 ||
             assetDetails.project_name.trim().length === 0
@@ -174,17 +212,51 @@ export const useDashboard = () => {
         if (selectedButton?.assetTypeName === "All in One") {
             setChooseAssetModal(true)
             setModalOpen(false)
-        } else if (selectedButton?.assetTypeName.includes("Email")) {
-            router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.Email}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}`)
-        } else if (selectedButton?.assetTypeName.includes('Landing')) {
-            router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LandingPage}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}`)
-        } else if (selectedButton?.assetTypeName.includes('LinkedIn')) {
-            router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LinkedIn}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}`)
+        } else {
+            if (campaignIDRef.current.length === 0) {
+                const resAddCampaign = await addCampaign()
+                if (!resAddCampaign) { return }
+            }
+            if (selectedButton?.assetTypeName.includes("Email")) {
+                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.Email}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}`)
+            } else if (selectedButton?.assetTypeName.includes('Landing')) {
+                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LandingPage}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}`)
+            } else if (selectedButton?.assetTypeName.includes('LinkedIn')) {
+                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LinkedIn}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}`)
+            }
+        }
+    }
+
+    const addCampaign = async () => {
+        try {
+            setShowLoading(true)
+            const client_ID = Cookies.get(nkey.client_ID);
+            const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
+            const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
+                "clientID": client_ID,
+                "project": assetDetails.project_name,
+                "campaignName": assetDetails.campaign_name,
+                "country": "",
+                "squad": "",
+                "startDate": currentDate,
+                "endDate": "",
+                "status": ""
+            });
+            if (res_campaign_add.isSuccess) {
+                campaignIDRef.current = res_campaign_add.campaignID || ""
+            }
+            return res_campaign_add.isSuccess
+        } catch (error) {
+            alert(ApiService.handleError(error));
+            return false
+        }
+        finally {
+            setShowLoading(false)
         }
     }
 
     return {
-        isCampNameExists,
+        isAssetNameExists,
         listProjects,
         listCampaigns,
         clientAssetTypes,

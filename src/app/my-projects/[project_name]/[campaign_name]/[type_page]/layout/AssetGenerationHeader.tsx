@@ -25,12 +25,18 @@ const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
     router.replace(`/edit-html-content?project_name=${project_name}&campaign_name=${campaign_name}&asset_name=${asset_name}`)
 
     setTimeout(() => {
-      setContextData({ isShowEdit_Save_Button: false })
+      //reset state
+      setContextData({ isShowEdit_Save_Button: false, isRegenerateHTML: false })
     }, 5000);
   }
 
   const handleBack = () => {
-    router.back()
+    if (contextData.stepGenerate === 1) {
+      if (contextData.isRegenerateHTML) { return }
+      setContextData({ stepGenerate: 0 })
+    } else {
+      router.back()
+    }
   }
 
   return (

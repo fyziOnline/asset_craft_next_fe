@@ -20,7 +20,7 @@ const InputAreaSearch: React.FC<Props> = ({ placeholder, name, listData = [], on
     const newMatchedItems = listData.filter((item) =>
       words.every((word) => item.toLowerCase().includes(word.toLowerCase()))
     );
-    setMatchedItems(newMatchedItems)
+    setMatchedItems(newMatchedItems.splice(0, 5))
   };
 
   return (
@@ -43,7 +43,7 @@ const InputAreaSearch: React.FC<Props> = ({ placeholder, name, listData = [], on
                 onChange(matchedItem)
                 setSearchValue(matchedItem)
               }}
-              className="bg-off-white-primary px-5 py-1 rounded-full ml-3 mb-2 mt-[-10px] text-sm cursor-pointer"
+              className="bg-off-white-primary px-5 py-1 rounded-full ml-3 mb-2 mt-[-5px] text-sm cursor-pointer"
             >
               <h3>{matchedItem}</h3>
             </div>

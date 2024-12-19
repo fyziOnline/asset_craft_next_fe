@@ -12,11 +12,8 @@ import { AssetHtmlProps, Template } from '@/types/templates';
 
 interface TemplateViewerProps {
     params: {
-        assetID: string,
-        campaignID: string,
         template: Template
-        type_page: string,
-        assetSelect: AssetHtmlProps
+        type_page: string
     }
 }
 

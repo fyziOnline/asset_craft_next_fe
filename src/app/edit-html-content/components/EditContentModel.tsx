@@ -66,6 +66,7 @@ interface EditContentModelProps {
 const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: EditContentModelProps) => {
     const { contextData, setContextData } = useAppData();
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
     const [listAssetBlocks, setListAssetBlocks] = useState(assetBlocks)
     const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(assetBlocks[0])
     const [schema, setSchema] = useState(JSON.parse(assetBlocks[0].schema as string))
@@ -73,11 +74,24 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
     const refIndexBlockSelected = useRef(0)
 
     useEffect(() => {
+        setDataDefault()
         document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = '';
         };
     }, []);
+
+    const setDataDefault = () => {
+        try {
+            const newListAssetBlocks = assetBlocks.filter((item) => !item.isStatic && item.type !== "_global")
+            setListAssetBlocks(newListAssetBlocks)
+            setAssetBlockSelected(newListAssetBlocks[0])
+            setSchema(JSON.parse(newListAssetBlocks[0].schema as string))
+            setBlockData(JSON.parse(newListAssetBlocks[0].blockData as string))
+        } catch (error) {
+
+        }
+    }
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation();
@@ -112,6 +126,24 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
             setListAssetBlocks(newListAssetBlocks)
         } catch (ex) {
 
+        }
+    }
+
+    const onGenerateWithAI = async () => {
+        try {
+            setIsLoadingGenerate(true)
+            const resUpdate = await ApiService.get<any>(`${urls.asset_version_getDataUsingAI}?assetVersionID=${assetBlockSelected.assetVersionID}&assetVersionBlockID=${assetBlockSelected.assetVersionBlockID}`)
+            if (resUpdate.isSuccess) {
+                const dataJson = JSON.parse(resUpdate.jsonData as string)
+                if (dataJson.blocks && dataJson.blocks.length > 0) {
+                    setBlockData(JSON.parse(dataJson.blocks[0].data as string))
+                }
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        } finally {
+            setIsLoadingGenerate(false);
         }
     }
 
@@ -167,6 +199,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
                 <div className='w-[90vw] h-[94vh] bg-white rounded-md relative flex flex-col'>
                     <div className='border-b border-solid border-[#D9D9D9] px-4 pb-4 flex flex-wrap'>
                         {listAssetBlocks?.map((item, index) => {
+                            if (item.isStatic || item.type === "_global") { return }
                             return (
                                 <div onClick={() => { onSelectBlock(item, index) }}
                                     className={`p-2 mr-2 mt-4 rounded-md cursor-pointer ${assetBlockSelected.assetVersionBlockID === item.assetVersionBlockID ? `text-white bg-[#01A982]` : `text-black bg-[#e4e4e4]`}`}
@@ -185,24 +218,36 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
                             onChange={onHandleEditData}
                         />
                     </div>
-                    <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-end'>
+                    <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-between'>
                         <Button
-                            handleClick={() => { setIsShowModelEdit(false) }}
-                            buttonText='Close'
-                            showIcon={false}
-                            textStyle='text-[1rem] font-base'
-                            textColor="text-[#00A881]"
-                            backgroundColor="bg-[#fff]"
-                            customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
-                        <Button
-                            handleClick={onSaveAllAndClose}
-                            disabled={isLoading}
-                            buttonText={isLoading ? 'Saving...' : 'Save All'}
+                            handleClick={onGenerateWithAI}
+                            disabled={isLoadingGenerate}
+                            buttonText={isLoadingGenerate ? 'Generating...' : 'Generate with AI'}
                             showIcon={false}
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#fff]"
-                            backgroundColor={isLoading ? "bg-[#00A881]" : "bg-custom-gradient-green"}
+                            backgroundColor={isLoadingGenerate ? "bg-[#00A881]" : "bg-custom-gradient-green"}
                             customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+
+                        <div className='flex'>
+                            <Button
+                                handleClick={() => { setIsShowModelEdit(false) }}
+                                buttonText='Close'
+                                showIcon={false}
+                                textStyle='text-[1rem] font-base'
+                                textColor="text-[#00A881]"
+                                backgroundColor="bg-[#fff]"
+                                customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
+                            <Button
+                                handleClick={onSaveAllAndClose}
+                                disabled={isLoading}
+                                buttonText={isLoading ? 'Saving...' : 'Save All'}
+                                showIcon={false}
+                                textStyle='text-[1rem] font-base text-[#00A881]'
+                                textColor="text-[#fff]"
+                                backgroundColor={isLoading ? "bg-[#00A881]" : "bg-custom-gradient-green"}
+                                customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+                        </div>
                     </div>
                 </div>
             </div>
