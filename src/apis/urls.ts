@@ -16,6 +16,7 @@ export const urls = {
     assetVersionBlock_update: "/AssetVersionBlock/update",
     aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
     aiPrompt_Asset_update: "/aiPrompt/Asset/update",
+    aiPrompt_Campaign_select: "/aiPrompt/Campaign/select",
     aiPrompt_Campaign_insert: "/aiPrompt/Campaign/insert",
     aiPrompt_Campaign_update: "/aiPrompt/Campaign/update",
     aiPrompt_image_update: "/aiPrompt/image/update",

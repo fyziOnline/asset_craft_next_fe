@@ -10,13 +10,11 @@ import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { AssetHtmlProps, Template } from '@/types/templates';
+import { useLoading } from '@/components/global/Loading/LoadingContext';
 
 interface EmailPageProps {
     params: {
-        assetID: string,
-        campaignID: string,
-        template: Template,
-        assetSelect: AssetHtmlProps
+        template: Template
     }
 }
 
@@ -67,10 +65,10 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const [isRegenerateHTML, setIsRegenerateHTML] = useState<boolean>(false);
-    const { generateHTML } = useGenerateTemplate({ params: { assetSelect: params.assetSelect, assetID: params.assetID, campaignID: params.campaignID } })
+    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template.templateID as string } })
     const refFormData = useRef<FormEmailDataProps>()
     const refSection = useRef<SectionProps[]>([])
-
+    const { setShowLoading } = useLoading()
     const { setContextData } = useAppData();
 
     const onNext = (step: number): void => {
@@ -127,7 +125,9 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setDisableList([1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
+                setShowLoading(true)
                 const res = await generateHTML(refFormData.current as FormEmailDataProps, refSection.current as SectionProps[], isRegenerateHTML)
+                setShowLoading(false)
                 setGenerateStep(3);
                 setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess });
                 return
@@ -334,37 +334,21 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         {params.template.templatesBlocks && params.template.templatesBlocks.map((item, index) => {
                             if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
-                                    templateBlockID: item.templateBlockID as string,
-                                    aiPrompt: ""
+                                    templateBlockID: item.templateBlockID || "",
+                                    aiPrompt: item.aiPrompt || ""
                                 }]
                             }
+
+                            if (item.isStatic) { return null }
+
                             return (
                                 <div key={index}>
                                     <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
                                     <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
-                                    <TextField handleChange={(e) => { handleInputSection(e, index) }} customClass='h-16' placeholder={item.aiPrompt || ''} />
+                                    <TextField handleChange={(e) => { handleInputSection(e, index) }} customClass='h-16' value={item.aiPrompt || ''} />
                                 </div>
                             )
                         })}
-                        {/* <ChildrenTitle title='Section 1: Event Overview ' customClass="text-[18px]" />
-                        <ChildrenTitle title='What are the key details for the event, including the title, date, location, a brief overview, and any call-to-action text?' customClass="text-[14px]" />
-                        <TextField handleChange={(e) => { handleInputText(e, "section1") }}
-                            customClass='h-16' placeholder={`“Event Title: HPE Discover More AI Singapore 2024. Date and Time: Thursday, 14 November 2024, 11:00 AM - 5:25 PM”`} />
-
-                        <ChildrenTitle title='Section 2: Event Agenda' customClass="text-[18px] mt-[20px]" />
-                        <ChildrenTitle title='Can you outline the event agenda, including session timings, special sessions, notable speakers, and closing activities?' customClass="text-[14px] w-[85%] text-wrap" />
-                        <TextField handleChange={(e) => { handleInputText(e, "section2") }}
-                            placeholder={`“11:00 - 13:00: Registration and HPE Discover More AI Showcase (Lunch provided). 13:00 - 15:30: Plenary Session 15:30 - 16:30: Breakout Tracks “`} rows={2} />
-
-                        <ChildrenTitle title='Section 3: Key Benefits and Highlights' customClass="text-[18px] mt-[20px]" />
-                        <ChildrenTitle title='What are the main benefits and highlights of the event for attendees, including key takeaways, showcased technologies, and target industries?' customClass="text-[14px] w-[95%] text-wrap" />
-                        <TextField handleChange={(e) => { handleInputText(e, "section3") }}
-                            placeholder={`"Generate Key Benefits and Highlights, including takeaways, showcased technologies, and target industries."`} rows={1} />
-
-                        <ChildrenTitle title='Section 4: Partnership and Sponsorship' customClass="text-[18px] mt-[20px]" />
-                        <ChildrenTitle title='Who are the event partners or sponsors, and what sponsorship levels and logo specifications would you like to include?' customClass="text-[14px] w-[95%] text-wrap" />
-                        <TextField handleChange={(e) => { handleInputText(e, "section4") }}
-                            placeholder={`“Platinum Sponsors: Intel NVIDIA. Gold Sponsors: AMD, Cohesity, Commvault, Ekahau, Nutanix, Red Hat, Veeam”`} rows={1} /> */}
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                         <Button

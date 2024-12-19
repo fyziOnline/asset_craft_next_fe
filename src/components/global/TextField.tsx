@@ -25,7 +25,7 @@ interface TextFieldProps {
   customAreaClass?: string;
   disabled?: boolean;
   readOnly?: boolean;
-  placeholder: string;
+  placeholder?: string;
   rows?: number;
   handleChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }

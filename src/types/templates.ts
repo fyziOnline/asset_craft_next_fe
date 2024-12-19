@@ -15,6 +15,7 @@ export interface Template {
         aiTitle?: string;
         aiPrompt?: string | null;
         aiDescription?: string;
+        isStatic?: boolean
     }[]
 }
 
