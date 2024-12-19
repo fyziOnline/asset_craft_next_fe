@@ -102,7 +102,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                         <TransformComponent
                             wrapperStyle={{ width: '100%', height: '100%' }}
                         >
-                            <div dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
+                            <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
                         </TransformComponent>
                     </TransformWrapper>
                 ) : (
