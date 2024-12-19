@@ -8,7 +8,8 @@ import { useRef } from 'react';
 interface GenerateTemplateProp {
     params: {
         assetID: string,
-        campaignID: string
+        campaignID: string,
+        assetSelect: AssetHtmlProps
     }
 }
 
@@ -27,36 +28,71 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
     const updateSections = async (Sections: SectionProps[]) => {
         try {
-            const promises = Sections.map(async (item) => {
+            const promises = params.assetSelect.assetVersions.flatMap((assetVersion) => {
+                return Sections.map(async (item) => {
+                    try {
+                        const resSectionInsert = await ApiService.post<any>(
+                            urls.assetVersionBlock_aiPromptUpdateByTemplateID,
+                            {
+                                ...item,
+                                assetVersionID: assetVersion.assetVersionID,
+                            }
+                        );
+                        return resSectionInsert;
+                    } catch (innerError) {
+                        console.error('API Error for item:', item, ApiService.handleError(innerError));
+                        return { isSuccess: false };
+                    }
+                });
+            });
+
+            const results = await Promise.all(promises);
+            const allSuccess = results.every((res) => res.isSuccess);
+            return allSuccess;
+        } catch (error) {
+            console.error('Unexpected error in updateSections:', error);
+            return false;
+        }
+    };
+
+    const generateHTMLWithAI = async () => {
+        try {
+            const promises = params.assetSelect.assetVersions.map(async (assetVersion) => {
                 try {
-                    const resSectionInsert = await ApiService.post<any>(urls.assetVersionBlock_aiPromptUpdateByTemplateID, item)
-                    return resSectionInsert;
+                    const resGenerateUsingAI = await ApiService.get<any>(
+                        `${urls.asset_getAssetDataUsingAI}?assetID=${params.assetID}&assetVersionID=${assetVersion.assetVersionID}`
+                    );
+
+                    if (resGenerateUsingAI.isSuccess) {
+                        const resGenerate = await ApiService.get<any>(
+                            `${urls.asset_generate}?assetID=${params.assetID}&assetVersionID=${assetVersion.assetVersionID}`
+                        );
+                        return resGenerate
+                    }
                 } catch (innerError) {
-                    console.error('API Error for item:', item, ApiService.handleError(innerError));
+                    console.error('API Error for item:', ApiService.handleError(innerError));
                     return { isSuccess: false };
                 }
             });
 
             const results = await Promise.all(promises);
             const allSuccess = results.every((res) => res.isSuccess);
-            return allSuccess
+            return allSuccess;
         } catch (error) {
-            return false
+            console.error('Unexpected error in generateHTMLWithAI:', error);
+            return false;
         }
-    }
+    };
 
     const getAssetHTML = async () => {
         try {
-            const resGenerateUsingAI = await ApiService.get<any>(`${urls.asset_getAssetDataUsingAI}?assetID=${params.assetID}`);
-            if (resGenerateUsingAI.isSuccess) {
-                const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${params.assetID}`);
-                if (resGenerate.isSuccess) {
-                    const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${params.assetID}`);
-                    if (resAssetSelect.isSuccess && resAssetSelect.assetVersions.length > 0) {
-                        return resAssetSelect as AssetHtmlProps
-                    } else {
-                        return returnError("An error occurred please try again later.")
-                    }
+            const resGenerateUsingAI = await generateHTMLWithAI()
+            if (resGenerateUsingAI) {
+                const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${params.assetID}`);
+                if (resAssetSelect.isSuccess && resAssetSelect.assetVersions.length > 0) {
+                    return resAssetSelect as AssetHtmlProps
+                } else {
+                    return returnError("An error occurred please try again later.")
                 }
             }
         } catch (error) {

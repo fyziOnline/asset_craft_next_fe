@@ -8,7 +8,7 @@ import LandingPage from '../asset-generate/LandingPage';
 import LinkedInPage from '../asset-generate/LinkedinPage';
 import CallScriptPage from '../asset-generate/CallScriptPage';
 import EmailPage from '../asset-generate/EmailPage';
-import { Template } from '@/types/templates';
+import { AssetHtmlProps, Template } from '@/types/templates';
 
 interface TemplateViewerProps {
     params: {
@@ -16,7 +16,7 @@ interface TemplateViewerProps {
         campaignID: string,
         template: Template
         type_page: string,
-        assetVersionID: string
+        assetSelect: AssetHtmlProps
     }
 }
 

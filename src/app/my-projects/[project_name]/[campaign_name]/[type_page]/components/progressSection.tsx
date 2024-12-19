@@ -9,7 +9,7 @@ import { ApiService } from '@/lib/axios_generic'
 import { FC, ReactNode, useRef, useState } from 'react'
 import Cookies from 'js-cookie';
 import moment from 'moment';
-import { Template } from '@/types/templates'
+import { AssetHtmlProps, Template } from '@/types/templates'
 import { useAppData } from '@/context/AppContext'
 import { useYesNoPopup } from '@/components/global/Popup/YesNoPopupContext'
 
@@ -30,7 +30,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const { listTemplates } = useGetTemplates({ type_page: params.type_page })
   const assetIDTemplateRef = useRef("")
   const campaignIDTemplateRef = useRef("")
-  const assetVersionIDRef = useRef("")
+  const assetSelect = useRef<AssetHtmlProps>()
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
   const { setContextData } = useAppData();
@@ -78,7 +78,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
                   if (resAssetSelect.isSuccess) {
                     campaignIDTemplateRef.current = res_campaign_add.campaignID
                     assetIDTemplateRef.current = resAddWithTemplate.assetID
-                    assetVersionIDRef.current = resAssetSelect.assetVersionID
+                    assetSelect.current = resAssetSelect as AssetHtmlProps
                     selectedTemplateRef.current = res_Template as Template
                     setCurrentStep(pre => pre + 1)
                     setContextData({ assetGenerateStatus: 1, assetTemplateShow: false })
@@ -114,7 +114,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
           assetID: assetIDTemplateRef.current,
           campaignID: campaignIDTemplateRef.current,
           template: selectedTemplateRef.current as Template,
-          assetVersionID: assetVersionIDRef.current
+          assetSelect: assetSelect.current as AssetHtmlProps
         }}
       />
     )
