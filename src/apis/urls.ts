@@ -23,5 +23,6 @@ export const urls = {
     assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID",
     asset_version_getDataUsingAI: "/asset/version/getDataUsingAI",
     asset_version_generate: "/asset/version/generate",
-    asset_version_select: "/asset/version/select"
+    asset_version_select: "/asset/version/select",
+    asset_version_copy: "/asset/version/copy",
 };

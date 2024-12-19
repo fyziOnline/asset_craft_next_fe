@@ -58,10 +58,26 @@ export const useEditHTMLContent = () => {
         refVersion.current = event.target.value;
     };
 
-    const handleAddVersion = () => {
+    const handleAddVersion = async () => {
         if (refVersion.current.trim().length === 0) { return }
-        // setVersionList([...versionList, refVersion.current])
-        setIsShowAddVer(false)
+        try {
+            const resAddNewVersion = await ApiService.post<any>(urls.asset_version_copy, { assetVersionID: versionSelected.assetVersionID })
+            if (resAddNewVersion.isSuccess) {
+                const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${resAddNewVersion.assetVersionID}`)
+                if (resSelect.isSuccess) {
+                    const AssetHtml = contextData.AssetHtml
+                    const assetVersions = contextData.AssetHtml.assetVersions
+                    assetVersions.push(resSelect)
+                    AssetHtml.assetVersions = assetVersions
+                    setVersionSelected(resSelect)
+                    setContextData({ AssetHtml: AssetHtml })
+                    setIsShowAddVer(false)
+                }
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        }
     };
 
     const onGenerateWithAI = async () => {
