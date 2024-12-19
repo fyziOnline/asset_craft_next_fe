@@ -21,6 +21,7 @@ const Page = () => {
     const router = useRouter();
 
     const {
+        isLoadingGenerate,
         isShowAddVer,
         versionSelected,
         isShowSave,
@@ -33,7 +34,8 @@ const Page = () => {
         handleSave,
         handleCopy,
         setIsShowModelEdit,
-        setIsShowAddVer } = useEditHTMLContent()
+        setIsShowAddVer,
+        onGenerateWithAI } = useEditHTMLContent()
 
     return (
         <Suspense>
@@ -111,12 +113,10 @@ const Page = () => {
                                     </svg>
                                 </div>
                                 <Button
-                                    // handleClick={onGenerateWithAI}
-                                    // disabled={isLoadingGenerate}
-                                    // buttonText={isLoadingGenerate ? 'Generating...' : 'Generate with AI'}
-                                    // backgroundColor={isLoadingGenerate ? "bg-[#00A881]" : "bg-custom-gradient-green"}
-                                    buttonText={'Generate with AI'}
-                                    backgroundColor={"bg-custom-gradient-green"}
+                                    handleClick={onGenerateWithAI}
+                                    disabled={isLoadingGenerate}
+                                    buttonText={isLoadingGenerate ? 'Generating...' : 'Generate with AI'}
+                                    backgroundColor={isLoadingGenerate ? "bg-[#00A881]" : "bg-custom-gradient-green"}
                                     showIcon={false}
                                     textStyle='text-[1rem] font-base text-[#00A881]'
                                     textColor="text-[#fff]"

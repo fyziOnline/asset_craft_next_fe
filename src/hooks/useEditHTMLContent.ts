@@ -1,11 +1,14 @@
 import generatePDF, { Options, Resolution } from "react-to-pdf";
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppData } from '@/context/AppContext';
+import { ApiService } from "@/lib/axios_generic";
+import { urls } from "@/apis/urls";
 
 export const useEditHTMLContent = () => {
     const { contextData } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
+    const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
     const [versionList, setVersionList] = useState(contextData.AssetHtml.assetVersions || [])
     const [versionSelected, setVersionSelected] = useState(contextData.AssetHtml.assetVersions?.[0])
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
@@ -60,7 +63,32 @@ export const useEditHTMLContent = () => {
         // setVersionList([...versionList, refVersion.current])
         setIsShowAddVer(false)
     };
+
+    const onGenerateWithAI = async () => {
+        try {
+            setIsLoadingGenerate(true)
+            const resGenerateWithAI = await ApiService.get<any>(`${urls.asset_version_getDataUsingAI}?assetVersionID=${versionSelected.assetVersionID}`)
+            if (resGenerateWithAI.isSuccess) {
+                const resGenerate = await ApiService.get<any>(`${urls.asset_version_generate}?assetVersionID=${versionSelected.assetVersionID}`)
+                if (resGenerate.isSuccess) {
+                    const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${versionSelected.assetVersionID}`)
+                    console.log('resSelect: ', resSelect);
+                    if (resSelect.isSuccess) {
+                        setVersionSelected(resSelect)
+                    }
+                }
+
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        } finally {
+            setIsLoadingGenerate(false);
+        }
+    }
+
     return {
+        isLoadingGenerate,
         isShowAddVer,
         versionSelected,
         isShowSave,
@@ -73,6 +101,7 @@ export const useEditHTMLContent = () => {
         handleSave,
         handleCopy,
         setIsShowAddVer,
-        setIsShowModelEdit
+        setIsShowModelEdit,
+        onGenerateWithAI
     };
 };
