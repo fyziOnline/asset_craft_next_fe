@@ -5,7 +5,7 @@ import TemplateGenerationSection from '@/app/my-projects/[project_name]/[campaig
 import TemplateSelectionContainer from '@/app/my-projects/[project_name]/[campaign_name]/[type_page]/layout/TemplateSelectionContainer'
 import { useGetTemplates } from '@/hooks/useGetTemplates'
 import { ApiService } from '@/lib/axios_generic'
-import { FC, ReactNode, useRef, useState } from 'react'
+import { FC, ReactNode, useRef } from 'react'
 import { Template } from '@/types/templates'
 import { useAppData } from '@/context/AppContext'
 

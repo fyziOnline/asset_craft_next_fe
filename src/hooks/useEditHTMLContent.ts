@@ -1,4 +1,4 @@
-import generatePDF, { Options, Resolution } from "react-to-pdf";
+import generatePDF, { Options } from "react-to-pdf";
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppData } from '@/context/AppContext';
 import { ApiService } from "@/lib/axios_generic";
