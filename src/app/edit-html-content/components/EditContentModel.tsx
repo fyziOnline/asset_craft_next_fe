@@ -66,6 +66,7 @@ interface EditContentModelProps {
 const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: EditContentModelProps) => {
     const { contextData, setContextData } = useAppData();
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
     const [listAssetBlocks, setListAssetBlocks] = useState(assetBlocks)
     const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(assetBlocks[0])
     const [schema, setSchema] = useState(JSON.parse(assetBlocks[0].schema as string))
@@ -113,6 +114,9 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
         } catch (ex) {
 
         }
+    }
+
+    const onGenerateWithAI = async () => {
     }
 
     const onSaveAllAndClose = async () => {
@@ -186,24 +190,36 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
                             onChange={onHandleEditData}
                         />
                     </div>
-                    <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-end'>
+                    <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-between'>
                         <Button
-                            handleClick={() => { setIsShowModelEdit(false) }}
-                            buttonText='Close'
-                            showIcon={false}
-                            textStyle='text-[1rem] font-base'
-                            textColor="text-[#00A881]"
-                            backgroundColor="bg-[#fff]"
-                            customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
-                        <Button
-                            handleClick={onSaveAllAndClose}
-                            disabled={isLoading}
-                            buttonText={isLoading ? 'Saving...' : 'Save All'}
+                            handleClick={onGenerateWithAI}
+                            disabled={isLoadingGenerate}
+                            buttonText={isLoadingGenerate ? 'Generating...' : 'Generate with AI'}
                             showIcon={false}
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#fff]"
-                            backgroundColor={isLoading ? "bg-[#00A881]" : "bg-custom-gradient-green"}
+                            backgroundColor={isLoadingGenerate ? "bg-[#00A881]" : "bg-custom-gradient-green"}
                             customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+
+                        <div className='flex'>
+                            <Button
+                                handleClick={() => { setIsShowModelEdit(false) }}
+                                buttonText='Close'
+                                showIcon={false}
+                                textStyle='text-[1rem] font-base'
+                                textColor="text-[#00A881]"
+                                backgroundColor="bg-[#fff]"
+                                customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
+                            <Button
+                                handleClick={onSaveAllAndClose}
+                                disabled={isLoading}
+                                buttonText={isLoading ? 'Saving...' : 'Save All'}
+                                showIcon={false}
+                                textStyle='text-[1rem] font-base text-[#00A881]'
+                                textColor="text-[#fff]"
+                                backgroundColor={isLoading ? "bg-[#00A881]" : "bg-custom-gradient-green"}
+                                customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+                        </div>
                     </div>
                 </div>
             </div>
