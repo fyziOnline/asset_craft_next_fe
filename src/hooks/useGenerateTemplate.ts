@@ -205,7 +205,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                             let fileID = await uploadImage(FormData)
                             const resCampaignInsert = await aiPromptCampaignInsert(FormData, fileID)
                             if (resCampaignInsert.isSuccess) {
-                                campaignPromptIDRef.current = resCampaignInsert?.campaignPromptID || ""
                                 return await generateAssetHTML()
                             }
                         }

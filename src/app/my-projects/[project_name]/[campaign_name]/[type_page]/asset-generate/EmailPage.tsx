@@ -64,12 +64,11 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const [isRegenerateHTML, setIsRegenerateHTML] = useState<boolean>(false);
     const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template.templateID as string } })
     const refFormData = useRef<FormEmailDataProps>()
     const refSection = useRef<SectionProps[]>([])
     const { setShowLoading } = useLoading()
-    const { setContextData } = useAppData();
+    const { contextData, setContextData } = useAppData();
 
     const onNext = (step: number): void => {
         if (step === 1) {
@@ -112,7 +111,6 @@ const EmailPage = ({ params }: EmailPageProps) => {
 
         if (newStep > 3) { // Reset after completing step 3
             newStep = 1;
-            setIsRegenerateHTML(true)
             setIsShowList([]);
             setCheckedList([]);
             setDisableList([2, 3, 4]);
@@ -126,10 +124,10 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
                 setShowLoading(true)
-                const res = await generateHTML(refFormData.current as FormEmailDataProps, refSection.current as SectionProps[], isRegenerateHTML)
+                const res = await generateHTML(refFormData.current as FormEmailDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
                 setShowLoading(false)
                 setGenerateStep(3);
-                setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess });
+                setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
                 return
             }
         }

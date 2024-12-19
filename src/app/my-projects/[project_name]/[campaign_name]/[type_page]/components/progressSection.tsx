@@ -22,23 +22,21 @@ interface ProjectAssetProp {
 
 const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const total_steps: number = 2
-  const [currentStep, setCurrentStep] = useState<number>(0)
   const { listTemplates } = useGetTemplates({ type_page: params.type_page })
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
-  const { setContextData } = useAppData();
+  const { contextData, setContextData } = useAppData();
 
 
   const handleNext = async (selectedTemplate: Template) => {
-    if (currentStep < total_steps) {
+    if (contextData.stepGenerate < total_steps) {
       try {
         setShowLoading(true)
         const res_Template = await ApiService.get<any>(`${urls.template_select}?templateID=${selectedTemplate.templateID}`)
 
         if (res_Template.isSuccess) {
           selectedTemplateRef.current = res_Template as Template
-          setCurrentStep(pre => pre + 1)
-          setContextData({ assetGenerateStatus: 1, assetTemplateShow: false })
+          setContextData({ assetGenerateStatus: 1, assetTemplateShow: false, stepGenerate: 1 })
         }
       } catch (error) {
         console.error('API Error:', ApiService.handleError(error));
@@ -68,7 +66,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
     )
   }
 
-  return pageProgressComponents[currentStep]
+  return pageProgressComponents[contextData.stepGenerate]
 }
 
 export default ProgressSection

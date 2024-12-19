@@ -10,6 +10,8 @@ interface AppData {
     layoutType: 'main' | 'home';
     isShowEdit_Save_Button: boolean;
     AssetHtml: AssetHtmlProps;
+    stepGenerate: number; //step 0 or 1
+    isRegenerateHTML: boolean
 }
 
 interface AppDataContextType {
@@ -27,9 +29,11 @@ const APP_DATA: AppData = {
     assetTemplateShow: false,
     assetGenerateTemplate: "LANDINGPAGE",
     assetGenerateStatus: 1,
+    stepGenerate: 0,
     layoutType: 'main',
     AssetHtml: {} as AssetHtmlProps,
     isShowEdit_Save_Button: false,
+    isRegenerateHTML: false
 };
 
 // Create a provider component
