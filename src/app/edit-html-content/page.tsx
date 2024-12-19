@@ -64,7 +64,7 @@ const Page = () => {
                                 handleClick={() => { setShowSave(!isShowSave) }}
                                 customClass='static border-[3px] border-[#00A881] px-[1.4rem] mx-[40px] py-2 group-hover:border-white' />
                             {isShowSave ?
-                                <div className="w-[170px] h-[130px] ml-[40px] absolute z-10 rounded-[14px] bg-[#fdfdfd] flex flex-col">
+                                <div className="w-[170px] h-[130px] ml-[40px] absolute z-[1000] rounded-[14px] bg-[#fdfdfd] flex flex-col">
                                     <button onClick={() => handleSave(1)} className="h-[43px] flex items-center justify-start px-4 rounded-t-[14px]">
                                         <span className="text-black text-lg font-normal font-['Inter']">New Version</span>
                                     </button>
@@ -117,7 +117,7 @@ const Page = () => {
                                     </svg>
                                 </div> */}
                             </div>
-                            <div className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: versionSelected?.htmlGenerated || "" }} />
+                            <div id="container" className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: versionSelected?.htmlGenerated || "" }} />
                         </div>
 
                         {isShowAddVer ? <div className='fixed left-0 right-0 h-[70vh] bg-black bg-opacity-55 flex items-center justify-center'>
