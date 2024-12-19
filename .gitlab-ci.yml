@@ -11,7 +11,7 @@ deploy_staging:
     - ssh-keyscan $VM_IPADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $SSH_USER@$VM_IPADDRESS "cd /var/www/AssetCraft-AI/brandcentral-ai-app/.script; echo 'entered into the script directory';chmod a+x service.sh;./service.sh;"
+    - ssh -o StrictHostKeyChecking=no $SSH_USER@$VM_IPADDRESS "cd /var/www/AssetCraft-AI/brandcentral-ai-app/.script; echo 'entered into the script directory';chmod a+x .script/service.sh; .script/service.sh;"
     - echo 'Staging Code Pipeline Execution completed successfully'
   environment:
     name: staging

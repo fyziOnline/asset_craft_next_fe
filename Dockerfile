@@ -7,6 +7,10 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY . .
+
+#if .env not found then copy .env.example to .env
+RUN test -f .env || cp .env.example .env
+
 RUN yarn build
 
 # Stage 2: Production
