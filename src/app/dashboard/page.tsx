@@ -84,8 +84,8 @@ const tableHeading = ["Project Name", "Campaign Name", "Asset Details", "Created
 
 const Dashboard: FC = () => {
   const {
-    isCampNameExists,
     listProjects,
+    listCampaigns,
     clientAssetTypes,
     isModalOpen,
     chooseAssetModal,
@@ -120,8 +120,7 @@ const Dashboard: FC = () => {
           </div>
           <div className='flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
-            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here." onChange={(value) => { handleChangeAssetDetails("campaign_name", value) }} />
-            {isCampNameExists ? <p className='text-red-500 text-[12px] mt-[-10px]'>Campaign name already exists, please enter another campaign name.</p> : null}
+            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here." listData={listCampaigns.map((value) => value.campaignName)} onChange={(value) => { handleChangeAssetDetails("campaign_name", value) }} />
           </div>
           {selectedButton?.assetTypeName !== "All in One" &&
             <div className='flex flex-col gap-3'>
