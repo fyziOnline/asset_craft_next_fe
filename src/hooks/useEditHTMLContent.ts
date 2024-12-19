@@ -5,7 +5,7 @@ import { ApiService } from "@/lib/axios_generic";
 import { urls } from "@/apis/urls";
 
 export const useEditHTMLContent = () => {
-    const { contextData } = useAppData();
+    const { contextData, setContextData } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
     const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
@@ -72,9 +72,13 @@ export const useEditHTMLContent = () => {
                 const resGenerate = await ApiService.get<any>(`${urls.asset_version_generate}?assetVersionID=${versionSelected.assetVersionID}`)
                 if (resGenerate.isSuccess) {
                     const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${versionSelected.assetVersionID}`)
-                    console.log('resSelect: ', resSelect);
                     if (resSelect.isSuccess) {
-                        setVersionSelected(resSelect)
+                        const AssetHtml = contextData.AssetHtml
+                        const indexVersion = contextData.AssetHtml.assetVersions.findIndex((item) => item.assetVersionID === versionSelected.assetVersionID)
+                        const assetVersions = contextData.AssetHtml.assetVersions
+                        assetVersions[indexVersion] = resSelect
+                        AssetHtml.assetVersions = assetVersions
+                        setContextData({ AssetHtml: AssetHtml })
                     }
                 }
 
