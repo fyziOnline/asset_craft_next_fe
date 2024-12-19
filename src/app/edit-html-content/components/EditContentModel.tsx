@@ -74,11 +74,24 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
     const refIndexBlockSelected = useRef(0)
 
     useEffect(() => {
+        setDataDefault()
         document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = '';
         };
     }, []);
+
+    const setDataDefault = () => {
+        try {
+            const newListAssetBlocks = assetBlocks.filter((item) => !item.isStatic && item.type !== "_global")
+            setListAssetBlocks(newListAssetBlocks)
+            setAssetBlockSelected(newListAssetBlocks[0])
+            setSchema(JSON.parse(newListAssetBlocks[0].schema as string))
+            setBlockData(JSON.parse(newListAssetBlocks[0].blockData as string))
+        } catch (error) {
+
+        }
+    }
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation();
@@ -117,6 +130,21 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
     }
 
     const onGenerateWithAI = async () => {
+        try {
+            setIsLoadingGenerate(true)
+            const resUpdate = await ApiService.get<any>(`${urls.asset_version_getDataUsingAI}?assetVersionID=${assetBlockSelected.assetVersionID}&assetVersionBlockID=${assetBlockSelected.assetVersionBlockID}`)
+            if (resUpdate.isSuccess) {
+                const dataJson = JSON.parse(resUpdate.jsonData as string)
+                if (dataJson.blocks && dataJson.blocks.length > 0) {
+                    setBlockData(JSON.parse(dataJson.blocks[0].data as string))
+                }
+            }
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        } finally {
+            setIsLoadingGenerate(false);
+        }
     }
 
     const onSaveAllAndClose = async () => {

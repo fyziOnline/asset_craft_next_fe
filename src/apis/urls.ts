@@ -20,5 +20,6 @@ export const urls = {
     aiPrompt_Campaign_insert: "/aiPrompt/Campaign/insert",
     aiPrompt_Campaign_update: "/aiPrompt/Campaign/update",
     aiPrompt_image_update: "/aiPrompt/image/update",
-    assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID"
+    assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID",
+    asset_version_getDataUsingAI: "/asset/version/getDataUsingAI"
 };
