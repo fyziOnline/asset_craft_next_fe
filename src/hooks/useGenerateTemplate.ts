@@ -16,6 +16,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     const queryParams = useSearchParams()
     const campaignID = queryParams.get('campaignID') as string
     const asset_name = queryParams.get('asset_name') as string
+    const isCampaignSelect = queryParams.get('isCampaignSelect') as string
     const assetPromptIDRef = useRef("")
     const campaignPromptIDRef = useRef("")
     const assetIDTemplateRef = useRef("")
@@ -114,10 +115,12 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
     const aiPromptCampaignInsert = async (FormData: FormEmailDataProps, fileID: number) => {
         try {
-            const resAIPromptCampaign = await ApiService.get<any>(`${urls.aiPrompt_Campaign_select}?CampaignID=${campaignID}`);
-            if (resAIPromptCampaign.isSuccess) {
-                campaignPromptIDRef.current = resAIPromptCampaign.aIPromptCampaign.campaignPromptID
-                return await aiPromptCampaignUpdate(FormData, fileID)
+            if (isCampaignSelect == "true") {
+                const resAIPromptCampaign = await ApiService.get<any>(`${urls.aiPrompt_Campaign_select}?CampaignID=${campaignID}`);
+                if (resAIPromptCampaign.isSuccess) {
+                    campaignPromptIDRef.current = resAIPromptCampaign.aIPromptCampaign.campaignPromptID
+                    return await aiPromptCampaignUpdate(FormData, fileID)
+                }
             } else {
                 const resCampaignInsert = await ApiService.post<any>(urls.aiPrompt_Campaign_insert, {
                     "campaignID": campaignID,
@@ -128,8 +131,12 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                     "fileID": fileID,
                     "webUrl": FormData?.webUrl || ""
                 });
+                if (resCampaignInsert.isSuccess) {
+                    campaignPromptIDRef.current = resCampaignInsert.campaignPromptID
+                }
                 return resCampaignInsert
             }
+            return { isSuccess: false }
         } catch (error) {
             return { isSuccess: false }
         }
