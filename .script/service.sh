@@ -9,7 +9,7 @@ git pull
 
 # Build the Docker images without cache
 echo "Building Docker images"
-docker compose build
+docker compose build --no-cache
 
 # Start the containers in detached mode
 echo "Starting containers in detached mode..."
