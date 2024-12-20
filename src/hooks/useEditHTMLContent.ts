@@ -59,9 +59,11 @@ export const useEditHTMLContent = () => {
     };
 
     const handleAddVersion = async () => {
-        // if (refVersion.current.trim().length === 0) { return }
         try {
-            const resAddNewVersion = await ApiService.post<any>(urls.asset_version_copy, { assetVersionID: versionSelected.assetVersionID })
+            const resAddNewVersion = await ApiService.post<any>(urls.asset_version_copy, {
+                assetVersionID: versionSelected.assetVersionID,
+                versionName: refVersion.current
+            })
             if (resAddNewVersion.isSuccess) {
                 const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${resAddNewVersion.assetVersionID}`)
                 if (resSelect.isSuccess) {
