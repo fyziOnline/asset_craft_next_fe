@@ -62,6 +62,7 @@ export const useDashboard = () => {
     const [listCampaigns, setListCampaigns] = useState<CampaignsProps[]>([]);
     const [listAssets, setListAssets] = useState<AssetsProps[]>([]);
     const campaignIDRef = useRef("")
+    const isCampaignSelect = useRef(false)
 
     const [assetDetails, setAssetDetails] = useState<AssetDetails>({
         project_name: '',
@@ -183,9 +184,13 @@ export const useDashboard = () => {
         const checkCampNameExists = listCampaigns.filter((item) => item.campaignName.toLowerCase() === value.toLowerCase())
         if (checkCampNameExists.length > 0) {
             campaignIDRef.current = checkCampNameExists[0].campaignID
+            isCampaignSelect.current = true
             getAssetAll(checkCampNameExists[0].campaignID)
         } else {
             campaignIDRef.current = ""
+            isCampaignSelect.current = false
+            setListAssets([])
+            setIsAssetNameExists(false)
         }
     }
 
@@ -218,11 +223,11 @@ export const useDashboard = () => {
                 if (!resAddCampaign) { return }
             }
             if (selectedButton?.assetTypeName.includes("Email")) {
-                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.Email}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}`)
+                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.Email}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
             } else if (selectedButton?.assetTypeName.includes('Landing')) {
-                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LandingPage}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}`)
+                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LandingPage}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
             } else if (selectedButton?.assetTypeName.includes('LinkedIn')) {
-                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LinkedIn}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}`)
+                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LinkedIn}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
             }
         }
     }
@@ -244,6 +249,7 @@ export const useDashboard = () => {
             });
             if (res_campaign_add.isSuccess) {
                 campaignIDRef.current = res_campaign_add.campaignID || ""
+                isCampaignSelect.current = false
             }
             return res_campaign_add.isSuccess
         } catch (error) {
