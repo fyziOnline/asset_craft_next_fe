@@ -1,86 +1,60 @@
 'use client'
 
-import { GridIcon, ListIcon } from "@/assets/icons/AppIcons"
-import Breadcrumb from "@/components/global/Breadcrumb"
-import Table from "@/components/global/Table"
-import AssetCard from "@/components/wrapper/AssetCard"
-import LayoutWrapper from "@/layout/LayoutWrapper"
+import { nkey } from "@/data/keyStore"
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
-import { FC, useState } from "react"
+import { AssetInProgressProps } from "@/types/asset"
+import React, { FC, useEffect, useState } from "react"
 
-  
-const AssetInProgress:FC = () => {
+interface Asset {
+  [key: string]: string
+}
 
-  const tableData = [
+const AssetInProgress: FC = () => {
+  const [tableData, setTableData] = useState<Asset[]>([
     {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Lorem Ipsum',
-      assetName: 'Email_1',
-      creadedOn: '18.01.2024',
-      approvedBy: 'Prakash C.',
-      approvedOn: '20.01.2024',
-      currentStatus: 'In Progress',
-    },
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Lorem Ipsum',
-      assetName: 'LinkedIn_1',
-      creadedOn: '18.01.2024',
-      approvedBy: 'Avish J.',
-      approvedOn: '20.01.2024',
-      currentStatus: 'Pending Approval',
-    },
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Campaign X',
-      assetName: 'SalesCall_1',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Prakash C.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'Pending Approval',
-    },
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Campaign X',
-      assetName: 'LinkedIn_1',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Avish J.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'In Progress',
-    },
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Campaign X',
-      assetName: 'LinkedIn_1',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Avish J.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'In Progress',
-    },
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Campaign X',
-      assetName: 'LinkedIn_1',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Avish J.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'Pending Approval',
+      projectName: '',
+      campaignName: '',
+      assetName: '',
+      creadedOn: '',
+      approvedBy: '',
+      approvedOn: '',
+      currentStatus: '',
     }
-];
+  ])
+  useEffect(() => {
+    try {
+      const assetInProgressTemporary = JSON.parse(localStorage.getItem(nkey.assetInProgressTemporary) || "[]") as AssetInProgressProps[]
+      const newassetInProgress = assetInProgressTemporary.map((item) => {
+        return {
+          projectName: item.projectName,
+          campaignName: item.campaignName,
+          assetName: item.assetName,
+          creadedOn: item.createdOn,
+          approvedBy: item.approvedBy,
+          approvedOn: item.approvedOn,
+          currentStatus: item.currentStatus,
+        }
+      })
+      setTableData(newassetInProgress)
+    } catch (error) {
+      console.log('error: ', error);
+    }
 
-  const tableHeading = ["Project Name" , "Campaign Name", "Asset Name", "Created On" , "Approved By" , "Approved On" , "Current Status"]
+
+  }, [])
+
+  const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Approved By", "Approved On", "Current Status"]
 
   const headerHavingSortingToggle = ["Project Name", "Created On", "Approved On"]
- 
 
   return (
     <>
-       <AssetsPageLayout
-          campaign_data={tableData}
-          tableHeadings={tableHeading}
-          headersHavingToggle={headerHavingSortingToggle}
-          page="Asset In Progress"
-       />
+      <AssetsPageLayout
+        campaign_data={tableData}
+        tableHeadings={tableHeading}
+        headersHavingToggle={headerHavingSortingToggle}
+        page="Asset In Progress"
+      />
     </>
   )
 }
