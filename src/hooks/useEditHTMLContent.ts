@@ -45,7 +45,7 @@ export const useEditHTMLContent = () => {
                     window.open(versionSelected.zipFileURL, '_blank', 'noopener,noreferrer');
                 } else if (type === 4) {
                     const options: Options = {
-                        filename: `${contextData.AssetHtml.assetName as string}${versionSelected.versionName as string}.pdf`
+                        filename: `${contextData.AssetHtml.assetName as string} - ${versionSelected.versionName as string}.pdf`
                     };
                     generatePDF(getTargetElement, options);
                 }
