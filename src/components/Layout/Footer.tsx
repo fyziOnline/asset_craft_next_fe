@@ -28,7 +28,11 @@ const footerLinks: FooterLink[] = [
     href: '/',
     id: 'sitemap'
   }
+  
 ]
+
+// Get get environment variable from .env file to display the git version id
+const gitLabel = process.env.NEXT_PUBLIC_GIT_VERSION_ID ? `${process.env.NEXT_PUBLIC_GIT_VERSION_ID}` : ''
 
 const Footer: React.FC = () => {
   return (
@@ -46,6 +50,9 @@ const Footer: React.FC = () => {
       </div>
       <div className="flex justify-center">
         <HPE_Logo />
+      </div>
+      <div className="flex justify-center">
+        <p className="text-xs text-gray-400">{gitLabel}</p>
       </div>
     </footer>
   )
