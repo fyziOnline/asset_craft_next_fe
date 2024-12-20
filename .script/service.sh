@@ -3,6 +3,9 @@
 # Exit the script immediately if any command fails
 set -e
 
+# Change from .scrips to previous directory
+cd ..
+
 #function to update git version
 update_git_version() {
   echo "Updating NEXT_PUBLIC_GIT_VERSION_ID in .env file..."
