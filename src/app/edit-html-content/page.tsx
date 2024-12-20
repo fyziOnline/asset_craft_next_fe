@@ -47,7 +47,7 @@ const Page = () => {
             <div className='overflow-hidden'>
                 <div className="flex pt-[2rem] pb-2 px-[1.5rem]">
                     <div className='flex-1'>
-                        <Header versionNameChoose={versionSelected.versionName} />
+                        <Header versionNameChoose={versionSelected?.versionName || ""} />
                     </div>
                     <div className='flex items-center'>
                         <div className='flex items-center'>
