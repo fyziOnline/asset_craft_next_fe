@@ -6,41 +6,42 @@ import { GridIcon, ListIcon } from '@/assets/icons/AppIcons'
 import Table from '@/components/global/Table'
 
 interface Asset {
-  [key:string] : string
+  [key: string]: string
 }
 
 interface AssetsPageProps {
-  campaign_data : Asset[]
+  campaign_data: Asset[]
   // onSelectingCampaign : (campaign_name:string)=>void
-  tableHeadings : string[]
-  headersHavingToggle : string[]
-  page:string
+  tableHeadings: string[]
+  headersHavingToggle: string[]
+  page: string
 }
 
-const AssetsPageLayout:FC<AssetsPageProps> = ({campaign_data,tableHeadings,headersHavingToggle,page}) => {
-  const [isList,setIsList] = useState<Boolean>(true)
+const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, page }) => {
+  const [isList, setIsList] = useState<Boolean>(true)
   const toggleListType = () => {
-    setIsList(pre=>!pre)
+    setIsList(pre => !pre)
   }
+
   return (
     <>
       <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
-          <Breadcrumb TaskType={page}/>
-          <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
+        <Breadcrumb TaskType={page} />
+        <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
       </div>
       <div className="px-4 lg:px-16 xl:px-20">
-        { !isList ? 
-           <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
-            {campaign_data.map((data,index)=>( 
-              <div key={index} 
-              > 
+        {!isList ?
+          <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
+            {campaign_data.map((data, index) => (
+              <div key={index}
+              >
                 <AssetCard data={data} />
               </div>
             ))}
           </div>
           :
-          <Table listItems={campaign_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} 
-        />}
+          <Table listItems={campaign_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle}
+          />}
       </div>
     </>
   )

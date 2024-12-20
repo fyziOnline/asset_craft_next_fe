@@ -3,8 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAppData } from '@/context/AppContext';
 import { ApiService } from "@/lib/axios_generic";
 import { urls } from "@/apis/urls";
+import { useRouter } from "next/navigation";
+import { AssetInProgressProps } from "@/types/asset";
+import moment from "moment";
+import Cookies from 'js-cookie';
+import { nkey } from "@/data/keyStore";
 
 export const useEditHTMLContent = () => {
+    const router = useRouter();
     const { contextData, setContextData } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
@@ -109,6 +115,48 @@ export const useEditHTMLContent = () => {
         }
     }
 
+    const onSubmit = () => {
+        try {
+            let project_name = ""
+            let campaign_name = ""
+            let asset_name = ""
+            if (typeof window !== "undefined") {
+                const params = new URLSearchParams(window.location.search);
+                project_name = params.get("project_name") || ""
+                campaign_name = params.get("campaign_name") || ""
+                asset_name = params.get("asset_name") || ""
+            }
+            const currentDate = moment().format('DD.MM.YYYY')
+            const email_login = Cookies.get(nkey.email_login) || ""
+            let name = ""
+            try {
+                name = email_login.split("@")[0];
+            } catch (error) {
+
+            }
+
+            const asset: AssetInProgressProps = {
+                assetVersionId: versionSelected.assetVersionID,
+                projectName: project_name,
+                campaignName: campaign_name,
+                assetName: `${asset_name}_${versionSelected.versionName}`.replace(" ", ""),
+                assetType: "",
+                createdOn: currentDate,
+                approvedBy: name,
+                approvedOn: "",
+                currentStatus: "Pending Approval"
+            }
+
+
+            const assetInProgressTemporary = JSON.parse(localStorage.getItem(nkey.assetInProgressTemporary) || "[]") as AssetInProgressProps[]
+            assetInProgressTemporary.push(asset)
+            localStorage.setItem(nkey.assetInProgressTemporary, JSON.stringify(assetInProgressTemporary));
+        } catch (error) {
+            console.log('error: ', error);
+        }
+        router.replace("/dashboard")
+    }
+
     return {
         isLoadingGenerate,
         isShowAddVer,
@@ -124,6 +172,7 @@ export const useEditHTMLContent = () => {
         handleCopy,
         setIsShowAddVer,
         setIsShowModelEdit,
-        onGenerateWithAI
+        onGenerateWithAI,
+        onSubmit
     };
 };

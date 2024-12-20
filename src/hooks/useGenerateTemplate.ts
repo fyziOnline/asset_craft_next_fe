@@ -115,18 +115,26 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
     const aiPromptCampaignInsert = async (FormData: FormEmailDataProps, fileID: number) => {
         try {
-            const resCampaignInsert = await ApiService.post<any>(urls.aiPrompt_Campaign_insert, {
-                "campaignID": campaignID,
-                "product": FormData?.product || "",
-                "campaignGoal": FormData?.campaignGoal || "",
-                "targetAudience": FormData?.targetAudience || "",
-                "outputScale": FormData?.outputScale || 0,
-                "fileID": fileID,
-                "webUrl": FormData?.webUrl || ""
-            });
-            if (resCampaignInsert.isSuccess) {
-                campaignPromptIDRef.current = resCampaignInsert.campaignPromptID
-                return resCampaignInsert
+            if (isCampaignSelect == "true") {
+                const resAIPromptCampaign = await ApiService.get<any>(`${urls.aiPrompt_Campaign_select}?CampaignID=${campaignID}`);
+                if (resAIPromptCampaign.isSuccess) {
+                    campaignPromptIDRef.current = resAIPromptCampaign.aIPromptCampaign.campaignPromptID
+                    return await aiPromptCampaignUpdate(FormData, fileID)
+                }
+            } else {
+                const resCampaignInsert = await ApiService.post<any>(urls.aiPrompt_Campaign_insert, {
+                    "campaignID": campaignID,
+                    "product": FormData?.product || "",
+                    "campaignGoal": FormData?.campaignGoal || "",
+                    "targetAudience": FormData?.targetAudience || "",
+                    "outputScale": FormData?.outputScale || 0,
+                    "fileID": fileID,
+                    "webUrl": FormData?.webUrl || ""
+                });
+                if (resCampaignInsert.isSuccess) {
+                    campaignPromptIDRef.current = resCampaignInsert.campaignPromptID
+                    return resCampaignInsert
+                }
             }
             return { isSuccess: false }
         } catch (error) {
