@@ -35,7 +35,9 @@ const AssetInProgress: FC = () => {
           currentStatus: item.currentStatus,
         }
       })
-      setTableData(newassetInProgress)
+      if (newassetInProgress.length > 0) {
+        setTableData(newassetInProgress)
+      }
     } catch (error) {
       console.log('error: ', error);
     }

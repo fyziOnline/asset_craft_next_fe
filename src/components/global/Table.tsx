@@ -36,7 +36,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   const [sortArrows, setSortArrows] = useState<{ [key: string]: boolean }>({ ...tableHeadings.reduce((acc, heading) => ({ ...acc, [heading]: true }), {}) });
 
   // Extract column names from the first item in the list
-  const getListItemsHeadings = Object.keys(listItems[0]);
+  const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]) : []
 
   useEffect(() => {
     setSortListData(listItems)
