@@ -16,6 +16,7 @@ update_git_version() {
   if grep -q "NEXT_PUBLIC_GIT_VERSION_ID" .env; then
     sed -i.bak "s/NEXT_PUBLIC_GIT_VERSION_ID=.*/NEXT_PUBLIC_GIT_VERSION_ID=$GIT_VERSION_ID/" .env
   else
+    echo "" >> .env
     echo "NEXT_PUBLIC_GIT_VERSION_ID=$GIT_VERSION_ID" >> .env
   fi
 }
