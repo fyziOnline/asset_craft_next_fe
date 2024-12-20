@@ -8,13 +8,18 @@ import AddVersionModel from './components/AddVersionModel';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import EditContentModel from './components/EditContentModel';
 import { useRouter, useSearchParams } from 'next/navigation';
+import ShadowDomContainer from './components/ShadowDomContainer';
 
-const Header = () => {
+interface HeaderProps {
+    versionNameChoose: string
+}
+
+const Header = ({ versionNameChoose }: HeaderProps) => {
     const queryParams = useSearchParams()
     const project_name = queryParams.get('project_name') ?? 'default'
     const campaign_name = queryParams.get('campaign_name') ?? 'default'
     const asset_name = queryParams.get('asset_name') ?? 'default'
-    return (<Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={asset_name} />)
+    return (<Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={`${asset_name}_${versionNameChoose}`.replace(" ", "")} />)
 }
 
 const Page = () => {
@@ -42,7 +47,7 @@ const Page = () => {
             <div className='overflow-hidden'>
                 <div className="flex pt-[2rem] pb-2 px-[1.5rem]">
                     <div className='flex-1'>
-                        <Header />
+                        <Header versionNameChoose={versionSelected.versionName} />
                     </div>
                     <div className='flex items-center'>
                         <div className='flex items-center'>
@@ -105,7 +110,7 @@ const Page = () => {
                 <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
                     <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide relative">
                         <div>
-                            <div className='flex w-[100%] items-center justify-end pr-52 absolute mt-9 z-10' >
+                            <div className='flex w-[100%] items-center justify-end pr-52 absolute mt-9 z-20' >
                                 <div className='mr-[20px] mt-1' onClick={() => { setIsShowModelEdit(true) }}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none" data-id="101">
                                         <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -128,7 +133,7 @@ const Page = () => {
                                     </svg>
                                 </div> */}
                             </div>
-                            <div id="container" className="w-full h-full px-52 py-9" dangerouslySetInnerHTML={{ __html: versionSelected?.htmlGenerated || "" }} />
+                            <ShadowDomContainer htmlContent={versionSelected?.htmlGenerated || ""}></ShadowDomContainer>
                         </div>
 
                         {isShowAddVer ? <div className='fixed left-0 right-0 h-[70vh] bg-black bg-opacity-55 flex items-center justify-center'>
