@@ -33,7 +33,7 @@ update_git_version
 
 # Build the Docker images without cache
 echo "Building Docker images"
-docker compose build --no-cache
+docker compose build
 
 # Start the containers in detached mode
 echo "Starting containers in detached mode..."
