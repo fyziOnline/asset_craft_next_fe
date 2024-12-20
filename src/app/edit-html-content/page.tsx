@@ -7,7 +7,7 @@ import TextField from '@/components/global/TextField';
 import AddVersionModel from './components/AddVersionModel';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import EditContentModel from './components/EditContentModel';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 
 interface HeaderProps {
@@ -23,8 +23,6 @@ const Header = ({ versionNameChoose }: HeaderProps) => {
 }
 
 const Page = () => {
-    const router = useRouter();
-
     const {
         isLoadingGenerate,
         isShowAddVer,
@@ -40,7 +38,9 @@ const Page = () => {
         handleCopy,
         setIsShowModelEdit,
         setIsShowAddVer,
-        onGenerateWithAI } = useEditHTMLContent()
+        onGenerateWithAI,
+        onSubmit
+    } = useEditHTMLContent()
 
     return (
         <Suspense>
@@ -89,7 +89,7 @@ const Page = () => {
                         <Button
                             buttonText='Submit'
                             showIcon
-                            handleClick={() => { router.replace("/dashboard") }}
+                            handleClick={onSubmit}
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#fff]"
                             iconColor="#fff"

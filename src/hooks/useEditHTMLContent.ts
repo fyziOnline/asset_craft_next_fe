@@ -3,8 +3,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAppData } from '@/context/AppContext';
 import { ApiService } from "@/lib/axios_generic";
 import { urls } from "@/apis/urls";
+import { useRouter } from "next/navigation";
 
 export const useEditHTMLContent = () => {
+    const router = useRouter();
     const { contextData, setContextData } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
@@ -109,6 +111,8 @@ export const useEditHTMLContent = () => {
         }
     }
 
+    const onSubmit = () => { router.replace("/dashboard") }
+
     return {
         isLoadingGenerate,
         isShowAddVer,
@@ -124,6 +128,7 @@ export const useEditHTMLContent = () => {
         handleCopy,
         setIsShowAddVer,
         setIsShowModelEdit,
-        onGenerateWithAI
+        onGenerateWithAI,
+        onSubmit
     };
 };
