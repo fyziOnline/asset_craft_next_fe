@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAppData } from '@/context/AppContext';
 import { ApiService } from "@/lib/axios_generic";
 import { urls } from "@/apis/urls";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { AssetInProgressProps } from "@/types/asset";
 import moment from "moment";
 import Cookies from 'js-cookie';
@@ -117,11 +117,15 @@ export const useEditHTMLContent = () => {
 
     const onSubmit = () => {
         try {
-            const queryParams = useSearchParams()
-            // assetInProgressTemporary
-            const project_name = queryParams.get('project_name') ?? 'default'
-            const campaign_name = queryParams.get('campaign_name') ?? 'default'
-            const asset_name = queryParams.get('asset_name') ?? 'default'
+            let project_name = ""
+            let campaign_name = ""
+            let asset_name = ""
+            if (typeof window !== "undefined") {
+                const params = new URLSearchParams(window.location.search);
+                project_name = params.get("project_name") || ""
+                campaign_name = params.get("campaign_name") || ""
+                asset_name = params.get("asset_name") || ""
+            }
             const currentDate = moment().format('DD.MM.YYYY')
             const email_login = Cookies.get(nkey.email_login) || ""
             let name = ""
