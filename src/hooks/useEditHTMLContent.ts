@@ -11,7 +11,6 @@ import { nkey } from "@/data/keyStore";
 
 export const useEditHTMLContent = () => {
     const router = useRouter();
-    const queryParams = useSearchParams()
     const { contextData, setContextData } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
@@ -118,6 +117,7 @@ export const useEditHTMLContent = () => {
 
     const onSubmit = () => {
         try {
+            const queryParams = useSearchParams()
             // assetInProgressTemporary
             const project_name = queryParams.get('project_name') ?? 'default'
             const campaign_name = queryParams.get('campaign_name') ?? 'default'
