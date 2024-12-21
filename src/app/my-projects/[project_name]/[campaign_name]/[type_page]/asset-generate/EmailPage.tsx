@@ -64,7 +64,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template.templateID as string } })
+    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template.templateID??'' as string } })
     const refFormData = useRef<FormEmailDataProps>()
     const refSection = useRef<SectionProps[]>([])
     const { setShowLoading } = useLoading()
