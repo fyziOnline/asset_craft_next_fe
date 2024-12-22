@@ -9,6 +9,7 @@ import { ListTypePage } from '@/data/dataGlobal';
 import { debounce } from 'lodash';
 import { DropDownOptions } from '@/components/global/DropDown';
 import moment from 'moment';
+import { useAppData } from '@/context/AppContext';
 
 interface ClientAssetTypeProps {
     clientAssetTypeID?: string,
@@ -52,6 +53,7 @@ type AssetDetails = {
 export const useDashboard = () => {
     const [clientAssetTypes, setClientAssetTypes] = useState<ClientAssetTypeProps[]>([])
     const { setShowLoading } = useLoading()
+    const { setContextData } = useAppData();
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
@@ -222,6 +224,8 @@ export const useDashboard = () => {
                 const resAddCampaign = await addCampaign()
                 if (!resAddCampaign) { return }
             }
+            setContextData({ isShowEdit_Save_Button: false, isRegenerateHTML: false, stepGenerate: 0 })
+
             if (selectedButton?.assetTypeName.includes("Email")) {
                 router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.Email}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
             } else if (selectedButton?.assetTypeName.includes('Landing')) {
