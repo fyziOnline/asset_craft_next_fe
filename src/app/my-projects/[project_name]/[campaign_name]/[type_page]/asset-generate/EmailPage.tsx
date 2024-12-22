@@ -260,8 +260,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             buttonText='Back'
                             showIcon
                             textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
+                            textColor="text-[#000]"
+                            iconColor="#000"
                             backgroundColor='bg-[#fff]'
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(2) }}
@@ -303,8 +303,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             buttonText='Back'
                             showIcon
                             textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
+                            textColor="text-[#000]"
+                            iconColor="#000"
                             backgroundColor='bg-[#fff]'
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(3) }}
@@ -353,8 +353,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             buttonText='Back'
                             showIcon
                             textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
+                            textColor="text-[#000]"
+                            iconColor="#000"
                             backgroundColor='bg-[#fff]'
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(4) }}
