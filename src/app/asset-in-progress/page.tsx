@@ -30,8 +30,8 @@ const AssetInProgress: FC = () => {
           campaignName: item.campaignName,
           assetName: item.assetName,
           creadedOn: item.createdOn,
-          approvedBy: item.approvedBy,
-          approvedOn: item.approvedOn,
+          approvedBy: "",
+          approvedOn: "",
           currentStatus: item.currentStatus,
         }
       })
