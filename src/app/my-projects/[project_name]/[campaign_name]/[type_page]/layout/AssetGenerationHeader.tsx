@@ -26,7 +26,7 @@ const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
 
     setTimeout(() => {
       //reset state
-      setContextData({ isShowEdit_Save_Button: false, isRegenerateHTML: false })
+      setContextData({ isShowEdit_Save_Button: false, isRegenerateHTML: false, stepGenerate: 0 })
     }, 5000);
   }
 
