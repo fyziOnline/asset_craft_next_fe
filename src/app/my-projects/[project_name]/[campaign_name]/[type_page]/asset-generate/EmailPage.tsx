@@ -64,7 +64,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template.templateID??'' as string } })
+    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template.templateID ?? '' as string } })
     const refFormData = useRef<FormEmailDataProps>()
     const refSection = useRef<SectionProps[]>([])
     const { setShowLoading } = useLoading()
@@ -343,7 +343,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                 <div key={index}>
                                     <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
                                     <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
-                                    <TextField handleChange={(e) => { handleInputSection(e, index) }} customClass='h-16' value={item.aiPrompt || ''} />
+                                    <TextField handleChange={(e) => { handleInputSection(e, index) }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
                                 </div>
                             )
                         })}
