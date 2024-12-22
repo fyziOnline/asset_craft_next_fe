@@ -157,6 +157,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
             <div className='mt-[40px]'>
                 {/* step 1 */}
                 <Accordion
+                    isRequire={true}
                     HeaderTitle="Campaign Overview"
                     checked={checkedList.includes(1)}
                     disableShowContent={disableList.includes(1)}
@@ -220,6 +221,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
             <div className='mt-[25px]'>
                 {/* step 2 */}
                 <Accordion
+                    isRequire={true}
                     HeaderTitle="Email - Key Messages & Content"
                     checked={checkedList.includes(2)}
                     disableShowContent={disableList.includes(2)}
@@ -329,15 +331,13 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([4]) }}
                     isShowContent={isShowList.includes(4)}>
                     <div>
-                        {params.template.templatesBlocks && params.template.templatesBlocks.map((item, index) => {
+                        {params.template.templatesBlocks && params.template.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
                             if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
                                     templateBlockID: item.templateBlockID || "",
                                     aiPrompt: item.aiPrompt || ""
                                 }]
                             }
-
-                            if (item.isStatic) { return null }
 
                             return (
                                 <div key={index}>

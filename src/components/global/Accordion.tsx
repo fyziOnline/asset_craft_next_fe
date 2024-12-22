@@ -33,10 +33,11 @@ interface AccordionProps {
   children: React.ReactNode;
   disableShowContent?: boolean;
   isShowContent?: boolean;
+  isRequire?: boolean;
   handleShowContent?: () => void;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = false, disableShowContent = false, isShowContent = false, handleShowContent = () => { } }) => {
+const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = false, disableShowContent = false, isShowContent = false, isRequire = false, handleShowContent = () => { } }) => {
   const [showContent, setShowContent] = useState(isShowContent)
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -67,8 +68,9 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
               </div>
             </label>
           </div>
-          <div>
+          <div className="flex">
             <p className="font-semibold text-lg text-wrap tracking-normal">{HeaderTitle}</p>
+            {isRequire ? <p className="text-red-500">*</p> : null}
           </div>
         </div>
         <div className={`cursor-pointer transition-transform ${showContent ? "rotate-180" : ""}`}>
