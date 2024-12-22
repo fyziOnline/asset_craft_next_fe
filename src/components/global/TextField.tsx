@@ -6,6 +6,7 @@ import React from "react";
  * @param {string} [name] - The name of the textarea field, used for form submission.
  * @param {string} [id] - The id of the textarea field, useful for associating a label.
  * @param {string} [value] - The current value of the textarea field.
+ * @param {string} [defaultValue] - The default value of the textarea field.
  * @param {string} [customClass] - Custom CSS class(es) to apply to the textarea container.
  * @param {string} [customAreaClass] - Custom CSS class(es) to apply to the textarea.
  * @param {boolean} [disabled=false] - Whether the textarea is disabled.
@@ -21,6 +22,7 @@ interface TextFieldProps {
   name?: string;
   id?: string;
   value?: string;
+  defaultValue?: string;
   customClass?: string;
   customAreaClass?: string;
   disabled?: boolean;
@@ -34,6 +36,7 @@ const TextField: React.FC<TextFieldProps> = ({
   name,
   id,
   value,
+  defaultValue,
   customClass = "",
   customAreaClass = "",
   disabled = false,
@@ -53,6 +56,7 @@ const TextField: React.FC<TextFieldProps> = ({
         placeholder={placeholder}
         rows={rows}
         onChange={handleChange}
+        defaultValue={defaultValue}
         className={`w-full h-full border-none px-3 py-3 rounded-[10px] text-sm italic outline-none resize-none ${customAreaClass}`}
       />
     </div>
