@@ -1,10 +1,10 @@
 "use client"
 
-import { FC, useState } from "react";
+import { FC, useLayoutEffect } from "react";
 import { UserIcon } from "@/assets/icons/AppIcons";
-// import LayoutWrapper from "@/layout/LayoutWrapper";
 import { useLogin } from "@/hooks/useLogin";
 import Button from "@/components/global/Button";
+import { useRouter } from "next/navigation";
 
 type TaglineObj = {
   title: string
@@ -34,11 +34,18 @@ const TaglineContents: TaglineObj[] = [
 const Home: FC = () => {
   const {
     isLoading, isOtpVisible, emailLoginDefault, handleLogin, onChangeEmail,
-    handleOtpSubmit, onChangeOtp, handleCancelOtp,
+    handleOtpSubmit, onChangeOtp, handleCancelOtp,checkIsUserAuthorized
   } = useLogin();
 
+  const router = useRouter()
+  useLayoutEffect(() => {
+    if (checkIsUserAuthorized()) {
+      router.push('/dashboard');
+    } 
+  }, [])
+
   return (
-    <>
+    <div>
       <div className="h-full pt-7">
         <div className="flex relative justify-evenly items-center gap-[2rem] ">
           <section className="text-white w-[25rem]">
@@ -126,9 +133,10 @@ const Home: FC = () => {
         </div>
       )}
 
-    </>
-  );
+    </div>
+  ); 
 }
+
 
 export default Home
 
