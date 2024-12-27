@@ -98,9 +98,9 @@ export const useDashboard = () => {
         }
     }
 
-    const getListCampaign = async (projectName: string) => {
+    const getListCampaign = async (projectName: string,label : string) => {
         try {
-            if (projectName.trim().length === 0) {
+            if (projectName.trim().length === 0 || label === 'Other') {
                 setListCampaigns([])
                 return
             }
@@ -162,14 +162,14 @@ export const useDashboard = () => {
         handleChangeAssetDetails(name, value)
     }
 
-    const handleChangeAssetDetails = debounce((key: string, value: string) => {
+    const handleChangeAssetDetails = debounce((key: string, value: string, label:string) => {
         setAssetDetails(pre => ({
             ...pre,
             [key]: value
         }))
 
         if (key === "project_name") {
-            getListCampaign(value)
+            getListCampaign(value,label)
         } else if (key === "campaign_name") {
             handleCheckCampNameExists(listCampaigns, value)
         } else if (key === "asset_name") {

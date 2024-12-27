@@ -114,9 +114,8 @@ const Dashboard: FC = () => {
           <div className='pt-[15px] flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
             <DropDown
-              isShowOther={false}
-              onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value) }}
-              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} ></DropDown>
+              onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value,optionSelected.label || '') }}
+              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name" ></DropDown>
             {/* <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here." listData={listProjects} onChange={(value) => { handleChangeAssetDetails("project_name", value) }} /> */}
           </div>
           <div className='flex flex-col gap-3'>
