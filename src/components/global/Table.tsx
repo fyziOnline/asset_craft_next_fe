@@ -40,7 +40,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
 
   useEffect(() => {
     setSortListData(listItems)
-  }, [listItems])
+  }, [listItems])  
 
   // Function to get the status class based on the status value for styling purposes
   const getStatusClass = (status: string) => {
@@ -119,7 +119,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
 
       <div className='grid gap-[10px]'>
         {sortListData.map((data, index) => (
-          <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: gridColumnStyle }}>
+          <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl cursor-pointer`} style={{ gridTemplateColumns: gridColumnStyle }}>
             {getListItemsHeadings.map((heading, idx) => (
               <div key={idx} className={`flex items-center gap-2 text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
                 {heading === IconAssetName && IconComponent}

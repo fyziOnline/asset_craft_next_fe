@@ -21,8 +21,8 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const [isList, setIsList] = useState<Boolean>(true)
   const toggleListType = () => {
     setIsList(pre => !pre)
-  }
-
+  }  
+  
   return (
     <>
       <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">

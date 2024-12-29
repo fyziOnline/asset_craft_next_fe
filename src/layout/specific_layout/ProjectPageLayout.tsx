@@ -16,9 +16,10 @@ interface ProjectSectionProps {
     tableHeadings : string[]
     headersHavingToggle : string[]
     page:string
+    viewType :'project' | 'campaign'
 }
 
-const ProjectPageLayout:FC<ProjectSectionProps> = ({project_data,onSelectingProjects,tableHeadings,headersHavingToggle,page}) => {
+const ProjectPageLayout:FC<ProjectSectionProps> = ({project_data,onSelectingProjects,tableHeadings,headersHavingToggle,page,viewType}) => {
   const [isList,setIsList] = useState<Boolean>(true)
   const toggleListType = () => {
     setIsList(pre=>!pre)
@@ -36,12 +37,13 @@ const ProjectPageLayout:FC<ProjectSectionProps> = ({project_data,onSelectingProj
             <div className="asset-grid-layout mt-4  justify-center overflow-auto">
             {project_data.map((data,index)=>(
               <div key={index}> 
-                <MyProjectCard data={data} handleSelectProject={onSelectingProjects} />
+                <MyProjectCard viewType={viewType} data={data} handleSelectProject={onSelectingProjects} />
               </div>
             ))}
             </div>
             :
-          <Table columnWidths={['9fr', '1.5fr', '1fr']} listItems={project_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />
+          // <Table columnWidths={['8fr', '2fr', '1fr']} listItems={project_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />
+          <Table columnWidths={['8fr', '2fr', '1fr']}  listItems={project_data.map(({ campaignID, ...rest }) => rest)} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />
         }
       </div>
 
