@@ -33,18 +33,19 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
       </div>
       <div className="px-4 lg:px-16 xl:px-20">
-        {!isList ?
-          <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
-            {campaign_data.map((data, index) => (
-              <div key={index}
-              >
-                <AssetCard data={data} />
-              </div>
-            ))}
-          </div>
-          :
-          <Table columnWidths={columnWidthsTable} handleClick={handleClick} fieldClick={fieldClick} listItems={campaign_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle}
-          />}
+        {campaign_data.length === 0 ?
+          <div className='flex items-center justify-center'>No data available</div>
+          : !isList ?
+            <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
+              {campaign_data.map((data, index) => (
+                <div key={index}
+                >
+                  <AssetCard data={data} />
+                </div>
+              ))}
+            </div>
+            :
+            <Table columnWidths={columnWidthsTable} handleClick={handleClick} fieldClick={fieldClick} listItems={campaign_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />}
       </div>
     </>
   )
