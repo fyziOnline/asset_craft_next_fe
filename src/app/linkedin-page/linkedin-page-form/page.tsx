@@ -33,7 +33,8 @@ const Page = () => {
     const listofcampains = [
         { label: 'Product Launch', value: 'Product Launch' },
         { label: 'Event Promotion', value: 'Event Promotion' },
-        { label: 'Brand Awareness', value: 'Brand Awareness' }
+        { label: 'Brand Awareness', value: 'Brand Awareness' },
+        {label: 'Demand Generation' , value: 'Demand Generation'}
     ]
 
     const emailType = [

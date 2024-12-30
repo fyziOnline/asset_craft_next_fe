@@ -29,7 +29,8 @@ const LinkedInPage = () => {
     const listofcampains = [
         { label: 'Product Launch', value: 'Product Launch' },
         { label: 'Event Promotion', value: 'Event Promotion' },
-        { label: 'Brand Awareness', value: 'Brand Awareness' }
+        { label: 'Brand Awareness', value: 'Brand Awareness' },
+        { label: 'Demand Generation', value: 'Demand Generation' }
     ]
 
     const emailType = [
@@ -96,7 +97,7 @@ const LinkedInPage = () => {
                 setDisableList([1, 2, 3, 4]);
                 setTimeout(() => {
                     setGenerateStep(3);
-                    setContextData({ assetGenerateStatus: 3});
+                    setContextData({ assetGenerateStatus: 3 });
                 }, 3000);
             }
             setIsOpen(true);
