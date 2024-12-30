@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { ApiService } from '@/lib/axios_generic';
@@ -26,8 +26,9 @@ export const useLogin = () => {
     }, [])
 
     const handleLogin = async () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         try {
-            if (emailRef.current.trim().length === 0) {
+            if (emailRef.current.trim().length === 0 || !emailRegex.test(emailRef.current)) {
                 return;
             }
 
@@ -98,6 +99,11 @@ export const useLogin = () => {
         otpRef.current = ""
     }
 
+    const checkIsUserAuthorized = ():boolean => {
+        const accessToken = Cookies.get(nkey.auth_token);
+        return !!accessToken;
+    }
+
     return {
         emailLoginDefault,
         isLoading,
@@ -106,6 +112,7 @@ export const useLogin = () => {
         onChangeEmail,
         handleOtpSubmit,
         onChangeOtp,
-        handleCancelOtp
+        handleCancelOtp,
+        checkIsUserAuthorized
     };
 };
