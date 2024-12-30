@@ -89,7 +89,8 @@ export interface AssetVersionProps {
             type: string,
             schema: string,
             uiSchema: string,
-            html: string
+            html: string,
+            isStatic: boolean
         }
     ]
 }

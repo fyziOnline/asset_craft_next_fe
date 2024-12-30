@@ -8,6 +8,7 @@ import { AssetInProgressProps } from "@/types/asset";
 import moment from "moment";
 import Cookies from 'js-cookie';
 import { nkey } from "@/data/keyStore";
+import { AssetVersionProps } from "@/types/templates";
 
 export const useEditHTMLContent = () => {
     const router = useRouter();
@@ -15,8 +16,8 @@ export const useEditHTMLContent = () => {
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
     const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
-    const [versionList, setVersionList] = useState(contextData.AssetHtml.assetVersions || [])
-    const [versionSelected, setVersionSelected] = useState(contextData.AssetHtml.assetVersions?.[0])
+    const [versionList, setVersionList] = useState<AssetVersionProps[]>(contextData.AssetHtml.assetVersions || [])
+    const [versionSelected, setVersionSelected] = useState<AssetVersionProps>(contextData.AssetHtml.assetVersions?.[0])
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
     const refVersion = useRef('')
 
@@ -105,7 +106,6 @@ export const useEditHTMLContent = () => {
                         setContextData({ AssetHtml: AssetHtml })
                     }
                 }
-
             }
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
@@ -137,9 +137,11 @@ export const useEditHTMLContent = () => {
 
             const asset: AssetInProgressProps = {
                 assetVersionId: versionSelected.assetVersionID,
+                assetVersion: versionSelected,
                 projectName: project_name,
                 campaignName: campaign_name,
-                assetName: `${asset_name}_${versionSelected.versionName}`.replace(" ", ""),
+                assetName: asset_name,
+                versionName: versionSelected.versionName,
                 assetType: "",
                 createdOn: currentDate,
                 approvedBy: name,
@@ -147,8 +149,8 @@ export const useEditHTMLContent = () => {
                 currentStatus: "Pending Approval"
             }
 
-
-            const assetInProgressTemporary = JSON.parse(localStorage.getItem(nkey.assetInProgressTemporary) || "[]") as AssetInProgressProps[]
+            let assetInProgressTemporary = JSON.parse(localStorage.getItem(nkey.assetInProgressTemporary) || "[]") as AssetInProgressProps[]
+            assetInProgressTemporary = assetInProgressTemporary.filter((item) => item.assetVersionId !== asset.assetVersionId)
             assetInProgressTemporary.push(asset)
             localStorage.setItem(nkey.assetInProgressTemporary, JSON.stringify(assetInProgressTemporary));
         } catch (error) {
@@ -166,6 +168,7 @@ export const useEditHTMLContent = () => {
         isShowModelEdit,
         setShowSave,
         setVersionSelected,
+        setVersionList,
         handleAddVersion,
         handleChangeTextVersion,
         handleSave,
@@ -173,6 +176,6 @@ export const useEditHTMLContent = () => {
         setIsShowAddVer,
         setIsShowModelEdit,
         onGenerateWithAI,
-        onSubmit
+        onSubmit,
     };
 };
