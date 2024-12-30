@@ -60,6 +60,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
       <TemplateGenerationSection
         params={{
           type_page: params.type_page,
+          project_name : params.project_name,
           template: selectedTemplateRef.current as Template
         }}
       />

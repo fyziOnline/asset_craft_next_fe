@@ -15,6 +15,7 @@ import { useLoading } from '@/components/global/Loading/LoadingContext';
 interface EmailPageProps {
     params: {
         template: Template
+        project_name ?: string
     }
 }
 
@@ -165,9 +166,10 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([1]) }}
                     isShowContent={isShowList.includes(1)}>
                     <div>
-                        <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
+                        <ChildrenTitle title='Solution & Product' ></ChildrenTitle>
                         <TextField handleChange={(e) => { handleInputText(e, "product") }}
                             placeholder="Enter the name of the product or solution."
+                            value={params.project_name}
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>
