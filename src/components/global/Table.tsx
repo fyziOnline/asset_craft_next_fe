@@ -99,7 +99,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   };
 
   // Set dynamic widths for columns or fallback to equal width if not provided
-  const gridColumnStyle = columnWidths.length !== getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${getListItemsHeadings.length}, 1fr)`;
+  const gridColumnStyle = columnWidths.length === getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${getListItemsHeadings.length}, 1fr)`;
 
   return (
     <div className='w-full'>
