@@ -14,6 +14,7 @@ interface TemplateViewerProps {
     params: {
         template: Template
         type_page: string
+        project_name : string | undefined
     }
 }
 
