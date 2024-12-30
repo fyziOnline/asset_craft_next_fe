@@ -58,12 +58,14 @@ const customTheme = createTheme({
 });
 
 interface EditContentModelProps {
+    setVersionList?: (value: AssetVersionProps[]) => void,
+    setVersionSelected?: (value: AssetVersionProps) => void,
     setIsShowModelEdit: any,
     assetBlocks: AssetBlockProps[],
     assetVersion: AssetVersionProps
 }
 
-const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: EditContentModelProps) => {
+const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion, setVersionList = () => { }, setVersionSelected = () => { } }: EditContentModelProps) => {
     const { contextData, setContextData } = useAppData();
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
@@ -173,11 +175,16 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion }: Edi
                 const allSuccess = results.every((res) => res.isSuccess);
 
                 if (allSuccess) {
-                    const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${contextData.AssetHtml.assetID}&assetVersionID=${assetVersion.assetVersionID}`);
+                    const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${assetVersion.assetID}&assetVersionID=${assetVersion.assetVersionID}`);
                     if (resGenerate.isSuccess) {
-                        const resAssetSelect = await ApiService.get<any>(`${urls.asset_select}?assetID=${contextData.AssetHtml.assetID}`);
-                        if (resAssetSelect.isSuccess && resAssetSelect.assetVersions.length > 0) {
-                            setContextData({ AssetHtml: resAssetSelect as AssetHtmlProps });
+                        const resAssetSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersion.assetVersionID}`);
+                        if (resAssetSelect.isSuccess) {
+                            const assetHtml = contextData.AssetHtml
+                            const indexAssetVersion = assetHtml.assetVersions.findIndex((item) => item.assetVersionID === assetVersion.assetVersionID)
+                            assetHtml.assetVersions[indexAssetVersion] = resAssetSelect
+                            setVersionList(assetHtml.assetVersions)
+                            setVersionSelected(resAssetSelect)
+                            setContextData({ AssetHtml: assetHtml as AssetHtmlProps });
                             setIsShowModelEdit(false);
                         }
                     }

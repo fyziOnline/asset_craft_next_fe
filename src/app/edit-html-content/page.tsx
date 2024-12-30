@@ -9,6 +9,7 @@ import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import EditContentModel from './components/EditContentModel';
 import { useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
+import { AssetVersionProps } from '@/types/templates';
 
 interface HeaderProps {
     versionNameChoose: string
@@ -32,6 +33,7 @@ const Page = () => {
         isShowModelEdit,
         setShowSave,
         setVersionSelected,
+        setVersionList,
         handleAddVersion,
         handleChangeTextVersion,
         handleSave,
@@ -164,7 +166,12 @@ const Page = () => {
                             handleChangeTextVersion={handleChangeTextVersion} /> : null}
                     </div>
                 </div>
-                {isShowModelEdit ? <EditContentModel assetBlocks={versionSelected.assetVersionBlocks} assetVersion={versionSelected} setIsShowModelEdit={setIsShowModelEdit} /> : null}
+                {isShowModelEdit ? <EditContentModel
+                    setVersionList={setVersionList}
+                    setVersionSelected={setVersionSelected}
+                    assetBlocks={versionSelected.assetVersionBlocks}
+                    assetVersion={versionSelected}
+                    setIsShowModelEdit={setIsShowModelEdit} /> : null}
             </div>
         </Suspense>
     );
