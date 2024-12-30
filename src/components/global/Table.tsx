@@ -28,15 +28,17 @@ interface TableProps {
   arrowInHeadings?: string[];
   columnWidths?: string[];
   IconAssetName?: string;
+  fieldClick?: string;
+  handleClick?: (value: any) => void;
   IconComponent?: React.ReactNode;
 }
 
-const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [], IconAssetName, IconComponent }) => {
+const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [], IconAssetName, IconComponent, fieldClick, handleClick = () => { } }) => {
   const [sortListData, setSortListData] = useState<Options[]>(listItems);
   const [sortArrows, setSortArrows] = useState<{ [key: string]: boolean }>({ ...tableHeadings.reduce((acc, heading) => ({ ...acc, [heading]: true }), {}) });
 
   // Extract column names from the first item in the list
-  const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]) : []
+  const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]).filter((item) => item != fieldClick) : []
 
   useEffect(() => {
     setSortListData(listItems)
@@ -97,8 +99,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   };
 
   // Set dynamic widths for columns or fallback to equal width if not provided
-  const gridColumnStyle = columnWidths.length === getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${getListItemsHeadings.length}, 1fr)`;
-
+  const gridColumnStyle = columnWidths.length !== getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${getListItemsHeadings.length}, 1fr)`;
 
   return (
     <div className='w-full'>
@@ -118,17 +119,24 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
       </div>
 
       <div className='grid gap-[10px]'>
-        {sortListData.map((data, index) => (
-          <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: gridColumnStyle }}>
-            {getListItemsHeadings.map((heading, idx) => (
-              <div key={idx} className={`flex items-center gap-2 text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
-                {heading === IconAssetName && IconComponent}
-                {getIcon(data[heading])}
-                {data[heading]}
-              </div>
-            ))}
-          </div>
-        ))}
+        {sortListData.map((data, index) => {
+          if (getListItemsHeadings.length === 0) { return }
+          return (
+            <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: gridColumnStyle }}>
+              {getListItemsHeadings.map((heading, idx) => (
+                <div key={idx} onClick={() => {
+                  if (fieldClick !== undefined) {
+                    handleClick(data[fieldClick])
+                  }
+                }} className={`flex items-center gap-2 text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
+                  {heading === IconAssetName && IconComponent}
+                  {getIcon(data[heading])}
+                  {data[heading]}
+                </div>
+              ))}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
