@@ -9,7 +9,6 @@ import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import EditContentModel from './components/EditContentModel';
 import { useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
-import { AssetVersionProps } from '@/types/templates';
 
 interface HeaderProps {
     versionNameChoose: string

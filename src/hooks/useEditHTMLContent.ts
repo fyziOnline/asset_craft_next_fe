@@ -149,7 +149,8 @@ export const useEditHTMLContent = () => {
                 currentStatus: "Pending Approval"
             }
 
-            const assetInProgressTemporary = JSON.parse(localStorage.getItem(nkey.assetInProgressTemporary) || "[]") as AssetInProgressProps[]
+            let assetInProgressTemporary = JSON.parse(localStorage.getItem(nkey.assetInProgressTemporary) || "[]") as AssetInProgressProps[]
+            assetInProgressTemporary = assetInProgressTemporary.filter((item) => item.assetVersionId !== asset.assetVersionId)
             assetInProgressTemporary.push(asset)
             localStorage.setItem(nkey.assetInProgressTemporary, JSON.stringify(assetInProgressTemporary));
         } catch (error) {
