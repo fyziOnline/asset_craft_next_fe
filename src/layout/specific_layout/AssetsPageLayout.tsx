@@ -14,13 +14,13 @@ interface AssetsPageProps {
   // onSelectingCampaign : (campaign_name:string)=>void
   tableHeadings: string[]
   headersHavingToggle: string[]
-  fieldClick: string
+  fieldClick?: string
   columnWidthsTable?: string[]
   handleClick?: (value: any) => void;
   page: string
 }
 
-const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, fieldClick, page, handleClick, columnWidthsTable = [] }) => {
+const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, fieldClick = '', page, handleClick, columnWidthsTable = [] }) => {
   const [isList, setIsList] = useState<Boolean>(true)
   const toggleListType = () => {
     setIsList(pre => !pre)
