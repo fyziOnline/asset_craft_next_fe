@@ -13,6 +13,8 @@ interface TableProps {
   arrowInHeadings?: string[];
   columnWidths?: string[];
   IconAssetName?: string;
+  fieldClick?: string;
+  handleClick?: (value: any) => void;
   IconComponent?: React.ReactNode;
   viewType?: string;
   onSelectingProject?: (project_name: string) => void;
@@ -26,7 +28,7 @@ const Table: React.FC<TableProps> = ({
   IconAssetName,
   IconComponent,
   viewType,
-  onSelectingProject
+  onSelectingProject,
 }) => {
   const [sortListData, setSortListData] = useState<Options[]>(listItems);
 

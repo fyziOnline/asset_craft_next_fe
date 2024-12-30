@@ -114,19 +114,18 @@ const Dashboard: FC = () => {
           <div className='pt-[15px] flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
             <DropDown
-              isShowOther={false}
-              onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value) }}
-              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} ></DropDown>
+              onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value,optionSelected.label || '') }}
+              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name" ></DropDown>
             {/* <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here." listData={listProjects} onChange={(value) => { handleChangeAssetDetails("project_name", value) }} /> */}
           </div>
           <div className='flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
-            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here." listData={listCampaigns.map((value) => value.campaignName)} onChange={(value) => { handleChangeAssetDetails("campaign_name", value) }} />
+            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here, E.g. New year campaign, Launch campaign etc" listData={listCampaigns.map((value) => value.campaignName)} onChange={(value) => { handleChangeAssetDetails("campaign_name", value) }} />
           </div>
           {selectedButton?.assetTypeName !== "All in One" &&
             <div className='flex flex-col gap-3'>
               <p className='text-[#160647] text-base tracking-wide font-semibold'>Digital Marketing Asset Name</p>
-              <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here.' name="asset_name" handleChange={onChangeAssetDetails} />
+              <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here, E.g. Email_1, Linkedin_1 etc' name="asset_name" handleChange={onChangeAssetDetails} />
               {isAssetNameExists ? <p className='text-red-500 text-[12px] mt-[-10px]'>Asset name already exists, please enter another asset name.</p> : null}
             </div>
           }
