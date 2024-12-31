@@ -54,8 +54,8 @@ const MyProjects:FC = () => {
     }
 
   const onSelectingProject = (project_name:string) => {
+    console.log('project_name **', project_name);
     router.push(`my-projects/${encodeURIComponent(project_name)}`)
-    
   }
 
   const tableHeading = ["Project Name", "Created On", "Last Edited"]
@@ -65,7 +65,7 @@ const MyProjects:FC = () => {
 
   return (
     <>
-        <ProjectPageLayout project_data={tableData} onSelectingProjects={onSelectingProject} tableHeadings={tableHeading} headersHavingToggle={arrowshowItems} page="My Project"/>
+        <ProjectPageLayout viewType="project" project_data={tableData} onSelectingProjects={onSelectingProject} tableHeadings={tableHeading} headersHavingToggle={arrowshowItems} page="My Project"/>
     </>
   )
 }

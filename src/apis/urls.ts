@@ -27,4 +27,5 @@ export const urls = {
   asset_version_generate: "/asset/version/generate",
   asset_version_select: "/asset/version/select",
   asset_version_copy: "/asset/version/copy",
+  getCampaigns : "/campaign/select/all"
 };

@@ -34,7 +34,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
       </div>
       <div className="px-4 lg:px-16 xl:px-20">
         {campaign_data.length === 0 ?
-          <div className='flex items-center justify-center'>No data available</div>
+          <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
           : !isList ?
             <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
               {campaign_data.map((data, index) => (

@@ -20,12 +20,14 @@ import Link from 'next/link';
 interface BreadcrumbProps {
     projectName?: string;
     projectUrl?: string;
+    ProjectNameUrl?: string;
+    TaskNameUrl?: string;
     TaskName?: string;
     TaskType?: string | undefined;
     onClickBack?: () => void;
 }
 
-const Breadcrumb: React.FC<BreadcrumbProps> = ({ projectName, projectUrl = "", TaskName = "", TaskType = "", onClickBack = () => { } }) => {
+const Breadcrumb: React.FC<BreadcrumbProps> = ({ projectName, projectUrl = "", ProjectNameUrl="", TaskNameUrl="", TaskName = "", TaskType = "", onClickBack = () => { } }) => {
 
     return (
         <div className='flex items-center py-2'>
@@ -34,10 +36,10 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ projectName, projectUrl = "", T
                     <path d="M12 1L2 10.7959L12 20.5918" stroke="#BBBBBB" strokeWidth="2.5" />
                 </svg>
             </div>
-            <Link href={projectUrl} className='border-r-[1px] border-r-[#073634]'>
+            <Link href={ProjectNameUrl} className='border-r-[1px] border-r-[#073634]'>
                 <p className='text-xl text-[#7F7F7F] leading-normal font-bold px-[6px]'>{projectName}</p>
             </Link>
-            <Link href={projectUrl} className='border-r-[1px] border-r-[#073634]'>
+            <Link href={TaskNameUrl} className='border-r-[1px] border-r-[#073634]'>
                 <p className='text-xl leading-normal font-bold text-green-100 px-[6px]'>{TaskName}</p>
             </Link>
             <Link href={projectUrl}>
