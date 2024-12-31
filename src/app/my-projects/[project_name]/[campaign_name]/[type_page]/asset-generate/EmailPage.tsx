@@ -306,7 +306,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([4]) }}
                     isShowContent={isShowList.includes(4)}>
                     <div>
-                        {params.template.templatesBlocks && params.template.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
+                        {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
                             if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
                                     templateBlockID: item.templateBlockID || "",
