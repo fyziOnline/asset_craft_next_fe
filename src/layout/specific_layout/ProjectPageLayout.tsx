@@ -25,6 +25,7 @@ const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingP
   const toggleListType = () => {
     setIsList(pre => !pre)
   }
+  console.log('project_data', project_data);
 
   return (
     <>

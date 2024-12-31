@@ -122,13 +122,13 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         {sortListData.map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
           return (
-            <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: gridColumnStyle }}>
+            <div onClick={() => {
+              if (fieldClick !== undefined) {
+                handleClick(data[fieldClick])
+              }
+            }} key={index} className={`grid p-6 border border-[#00A881] rounded-xl cursor-pointer`} style={{ gridTemplateColumns: gridColumnStyle }}>
               {getListItemsHeadings.map((heading, idx) => (
-                <div key={idx} onClick={() => {
-                  if (fieldClick !== undefined) {
-                    handleClick(data[fieldClick])
-                  }
-                }} className={`flex items-center gap-2 text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
+                <div key={idx} className={`flex items-center gap-2 text-sm font-normal ${getStatusClass(data[heading] || '')}`}>
                   {heading === IconAssetName && IconComponent}
                   {getIcon(data[heading])}
                   {data[heading]}
