@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
@@ -9,6 +9,7 @@ import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { Template } from '@/types/templates';
+import { useLoading } from '@/components/global/Loading/LoadingContext';
 
 interface LandingPageProps {
     params: {
@@ -36,7 +37,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-
+    const { setShowLoading } = useLoading()
     const { setContextData } = useAppData();
 
     const onNext = (step: number): void => {
@@ -80,21 +81,27 @@ const LandingPage = ({ params }: LandingPageProps) => {
 
         if (newStep === 5) { // Reset after completing step 4
             newStep = 1;
-            setIsOpen(false);
             setIsShowList([]);
             setCheckedList([]);
             setDisableList([2, 3, 4]);
+            setContextData({ assetTemplateShow: false });
         } else {
+            setContextData({ assetTemplateShow: true });
+
             if (newStep === 2) {
                 setCheckedList([1, 2, 3, 4]);
                 setDisableList([1, 2, 3, 4]);
-                setTimeout(() => {
-                    setGenerateStep(3);
-                    setContextData({ assetGenerateStatus: 3 });
-                }, 3000);
+                setContextData({ assetGenerateStatus: newStep });
+                setGenerateStep(newStep);
+                setShowLoading(true)
+                //call api
+                // const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
+                setShowLoading(false)
+                setGenerateStep(3);
+                //next step
+                // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
+                return
             }
-            setIsOpen(true);
-            setContextData({ assetTemplateShow: true });
         }
         setContextData({ assetGenerateStatus: newStep });
         setGenerateStep(newStep);
