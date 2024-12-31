@@ -49,7 +49,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template.templateID ?? '' as string } })
+    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
@@ -306,7 +306,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([4]) }}
                     isShowContent={isShowList.includes(4)}>
                     <div>
-                        {params.template.templatesBlocks && params.template.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
+                        {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
                             if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
                                     templateBlockID: item.templateBlockID || "",

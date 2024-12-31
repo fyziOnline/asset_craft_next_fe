@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
@@ -8,8 +8,10 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
-import { Template } from '@/types/templates';
+import { AssetHtmlProps, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
+import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
+import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 
 interface LandingPageProps {
     params: {
@@ -32,13 +34,21 @@ const listofcampains = [
 ]
 
 const LandingPage = ({ params }: LandingPageProps) => {
-    const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
+    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
+    const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
-    const { setContextData } = useAppData();
+    const { contextData, setContextData } = useAppData();
+
+    useEffect(() => {
+        refFormData.current = {
+            ...refFormData.current,
+            product: params.project_name
+        }
+    }, [])
 
     const onNext = (step: number): void => {
         if (step === 1) {
@@ -72,14 +82,14 @@ const LandingPage = ({ params }: LandingPageProps) => {
         }
     };
 
-    const handleGenerate = (): void => {
+    const handleGenerate = async () => {
         if (generateStep === 2 || checkedList.length !== 4) {
             return;
         }
 
         let newStep = generateStep + 1;
 
-        if (newStep === 5) { // Reset after completing step 4
+        if (newStep > 3) { // Reset after completing step 3
             newStep = 1;
             setIsShowList([]);
             setCheckedList([]);
@@ -94,12 +104,10 @@ const LandingPage = ({ params }: LandingPageProps) => {
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
                 setShowLoading(true)
-                //call api
-                // const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
+                const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
                 setShowLoading(false)
                 setGenerateStep(3);
-                //next step
-                // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
+                setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
                 return
             }
         }
@@ -120,25 +128,46 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     isShowContent={isShowList.includes(1)}>
                     <div>
                         <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
-                        <TextField placeholder="Enter the name of the product or solution."
+                        <TextField
+                            handleChange={(e) => { handleInputText(e, "product") }}
+                            placeholder="Enter the name of the product or solution."
                             value={params.project_name}
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
                                 <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
-                                <DropDown selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
+                                <DropDown
+                                    onSelected={(optionSelected) => {
+                                        refFormData.current = {
+                                            ...refFormData.current,
+                                            campaignGoal: optionSelected.value
+                                        }
+                                    }}
+                                    selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
                             <div className='w-[260px]'>
                                 <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
-                                <DropDown selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
+                                <DropDown
+                                    onSelected={(optionSelected) => {
+                                        refFormData.current = {
+                                            ...refFormData.current,
+                                            targetAudience: optionSelected.value
+                                        }
+                                    }}
+                                    selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
                         </div>
 
                         <div className='w-[300px]'>
                             <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
-                            <RangeSlider></RangeSlider>
+                            <RangeSlider onSelectValue={(value) => {
+                                refFormData.current = {
+                                    ...refFormData.current,
+                                    outputScale: value
+                                }
+                            }}></RangeSlider>
                         </div>
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
@@ -165,10 +194,15 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     isShowContent={isShowList.includes(2)}>
                     <div>
                         <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
-                        <TextField placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField
+                            handleChange={(e) => { handleInputText(e, "topic") }}
+                            placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <ChildrenTitle customClass='mt-5' title='Provide additional information that supports the main message.'></ChildrenTitle>
-                        <TextField rows={4} placeholder={`HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility.\nFeature 1\nFeature 2\nFeature 3`}
+                        <TextField
+                            handleChange={(e) => { handleInputText(e, "keyPoints") }}
+                            rows={4}
+                            placeholder={`HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility.\nFeature 1\nFeature 2\nFeature 3`}
                             customAreaClass='whitespace-pre-line overflow-x-hidden overflow-y-auto scrollbar-hide'></TextField>
 
                     </div>
@@ -204,10 +238,17 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     handleShowContent={() => { setIsShowList([3]) }}
                     isShowContent={isShowList.includes(3)}>
                     <div>
-                        <DragAndDrop />
+                        <DragAndDrop onFileSelect={(file) => {
+                            refFormData.current = {
+                                ...refFormData.current,
+                                fileSelected: file
+                            }
+                        }} />
 
                         <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
-                        <TextField placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField
+                            handleChange={(e) => { handleInputText(e, "webUrl") }}
+                            placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                         <Button
@@ -242,6 +283,24 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     handleShowContent={() => { setIsShowList([4]) }}
                     isShowContent={isShowList.includes(4)}>
                     <div>
+                        {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
+                            if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
+                                refSection.current = [...refSection.current as SectionProps[], {
+                                    templateBlockID: item.templateBlockID || "",
+                                    aiPrompt: item.aiPrompt || ""
+                                }]
+                            }
+
+                            return (
+                                <div key={index}>
+                                    <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
+                                    <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
+                                    <TextField handleChange={(e) => { handleInputSection(e, index) }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
+                                </div>
+                            )
+                        })}
+                    </div>
+                    {/* <div>
                         <ChildrenTitle title='Section 1: Hero Section' customClass="text-[18px]" />
                         <ChildrenTitle title='Headline:' />
                         <TextField customClass='h-16' placeholder={`"Generate a compelling headline that captures attention and introduces the product. The product is [Product Name], and it is designed to help [Target Audience] with [Main Benefit]."`} />
@@ -259,7 +318,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                         <ChildrenTitle title='Section 3: Closing CTA' customClass="text-[18px] mt-[20px]" />
                         <ChildrenTitle title='Final Call-to-Action:' />
                         <TextField placeholder={`"Sign up for a free demo and experience cloud efficiency today!"`} rows={1} />
-                    </div>
+                    </div> */}
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                         <Button
                             buttonText='Back'
