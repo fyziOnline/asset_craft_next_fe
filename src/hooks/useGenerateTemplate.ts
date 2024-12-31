@@ -1,6 +1,6 @@
 import { urls } from "@/apis/urls";
 import {
-  FormEmailDataProps,
+  FormDataProps,
   SectionProps,
 } from "@/app/my-projects/[project_name]/[campaign_name]/[type_page]/asset-generate/EmailPage";
 import { ApiService } from "@/lib/axios_generic";
@@ -144,7 +144,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   const aiPromptCampaignInsert = async (
-    FormData: FormEmailDataProps,
+    FormData: FormDataProps,
     fileID: number
   ) => {
     try {
@@ -182,7 +182,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   const aiPromptCampaignUpdate = async (
-    FormData: FormEmailDataProps,
+    FormData: FormDataProps,
     fileID: number
   ) => {
     try {
@@ -215,7 +215,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     }
   };
 
-  const uploadImage = async (FormData: FormEmailDataProps) => {
+  const uploadImage = async (FormData: FormDataProps) => {
     try {
       if (FormData?.fileSelected) {
         const resBase64 = await convertFileToBase64(FormData.fileSelected);
@@ -239,7 +239,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   const generateHTML = async (
-    FormData: FormEmailDataProps,
+    FormData: FormDataProps,
     Sections: SectionProps[],
     isRegenerateHTML: boolean
   ) => {
@@ -299,7 +299,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   const reGenerateHTML = async (
-    FormData: FormEmailDataProps,
+    FormData: FormDataProps,
     Sections: SectionProps[]
   ) => {
     try {

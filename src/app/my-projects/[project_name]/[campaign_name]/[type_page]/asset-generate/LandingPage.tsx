@@ -17,6 +17,19 @@ interface LandingPageProps {
     }
 }
 
+const ListTargetAudience = [
+    { label: 'General Public', value: 'General Public' },
+    { label: 'Existing Customers', value: 'Existing Customers' },
+    { label: 'Prospective Customers', value: 'Prospective Customers' }
+]
+
+const listofcampains = [
+    { label: 'Product Launch', value: 'Product Launch' },
+    { label: 'Event Promotion', value: 'Event Promotion' },
+    { label: 'Brand Awareness', value: 'Brand Awareness' },
+    { label: 'Demand Generation', value: 'Demand Generation' }
+]
+
 const LandingPage = ({ params }: LandingPageProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
@@ -25,20 +38,6 @@ const LandingPage = ({ params }: LandingPageProps) => {
     const [isShowList, setIsShowList] = useState<number[]>([]);
 
     const { setContextData } = useAppData();
-
-    const ListTargetAudience = [
-        { label: 'General Public', value: 'General Public' },
-        { label: 'Existing Customers', value: 'Existing Customers' },
-        { label: 'Prospective Customers', value: 'Prospective Customers' }
-    ]
-
-    const listofcampains = [
-        { label: 'Product Launch', value: 'Product Launch' },
-        { label: 'Event Promotion', value: 'Event Promotion' },
-        { label: 'Brand Awareness', value: 'Brand Awareness' },
-        { label: 'Demand Generation', value: 'Demand Generation' }
-    ]
-
 
     const onNext = (step: number): void => {
         if (step === 1) {
@@ -71,7 +70,6 @@ const LandingPage = ({ params }: LandingPageProps) => {
             setCheckedList([]);
         }
     };
-
 
     const handleGenerate = (): void => {
         if (generateStep === 2 || checkedList.length !== 4) {
