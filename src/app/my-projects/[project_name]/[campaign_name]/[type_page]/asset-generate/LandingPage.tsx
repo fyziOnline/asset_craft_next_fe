@@ -8,8 +8,16 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
+import { Template } from '@/types/templates';
 
-const LandingPage = () => {
+interface LandingPageProps {
+    params: {
+        template: Template
+        project_name?: string
+    }
+}
+
+const LandingPage = ({ params }: LandingPageProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
@@ -28,7 +36,7 @@ const LandingPage = () => {
         { label: 'Product Launch', value: 'Product Launch' },
         { label: 'Event Promotion', value: 'Event Promotion' },
         { label: 'Brand Awareness', value: 'Brand Awareness' },
-        {label: 'Demand Generation' , value: 'Demand Generation'}
+        { label: 'Demand Generation', value: 'Demand Generation' }
     ]
 
 
@@ -99,6 +107,7 @@ const LandingPage = () => {
             <div className='mt-[40px]'>
                 {/* step 1 */}
                 <Accordion
+                    isRequire={true}
                     HeaderTitle="Campaign Overview"
                     checked={checkedList.includes(1)}
                     disableShowContent={disableList.includes(1)}
@@ -106,15 +115,17 @@ const LandingPage = () => {
                     isShowContent={isShowList.includes(1)}>
                     <div>
                         <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
-                        <TextField placeholder="Enter the name of the product or solution." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField placeholder="Enter the name of the product or solution."
+                            value={params.project_name}
+                            customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <div className='flex items-center gap-[16%]'>
-                            <div>
+                        <div className='flex items-start gap-[16%]'>
+                            <div className='w-[260px]'>
                                 <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
-                            <div>
+                            <div className='w-[260px]'>
                                 <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
@@ -141,6 +152,7 @@ const LandingPage = () => {
             <div className='mt-[25px]'>
                 {/* step 2 */}
                 <Accordion
+                    isRequire={true}
                     HeaderTitle="Key Message & Content"
                     checked={checkedList.includes(2)}
                     disableShowContent={disableList.includes(2)}
@@ -159,9 +171,9 @@ const LandingPage = () => {
                         <Button
                             buttonText='Back'
                             showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
+                            textStyle='text-[1rem] font-base text-[#000000]'
+                            textColor="text-[#000000]"
+                            iconColor="#000000"
                             backgroundColor='bg-[#fff]'
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(2) }}
@@ -196,9 +208,9 @@ const LandingPage = () => {
                         <Button
                             buttonText='Back'
                             showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
+                            textStyle='text-[1rem] font-base text-[#000000]'
+                            textColor="text-[#000000]"
+                            iconColor="#000000"
                             backgroundColor='bg-[#fff]'
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(3) }}
@@ -247,9 +259,9 @@ const LandingPage = () => {
                         <Button
                             buttonText='Back'
                             showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
+                            textStyle='text-[1rem] font-base text-[#000000]'
+                            textColor="text-[#000000]"
+                            iconColor="#000000"
                             backgroundColor='bg-[#fff]'
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(4) }}

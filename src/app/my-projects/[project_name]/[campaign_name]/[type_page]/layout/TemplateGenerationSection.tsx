@@ -14,7 +14,7 @@ interface TemplateViewerProps {
     params: {
         template: Template
         type_page: string
-        project_name : string | undefined
+        project_name: string | undefined
     }
 }
 
@@ -31,7 +31,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
             case ListTypePage.Email:
                 return <EmailPage params={params} />;
             case ListTypePage.LandingPage:
-                return <LandingPage />;
+                return <LandingPage params={params} />;
             case ListTypePage.LinkedIn:
                 return <LinkedInPage />;
             case ListTypePage.CallScript:
