@@ -59,7 +59,6 @@ const ProjectPage:FC = () => {
 
 const onSelectingProject = (campaign_id :string) => {
   console.log('campaign_id **', campaign_id);
-    // router.push(`/my-projects/${project_name}/${encodeURIComponent(campaign_name)}`)
     router.push(`/my-projects/${project_name}/${campaign_id}`)
   }
 

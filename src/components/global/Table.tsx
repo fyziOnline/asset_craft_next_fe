@@ -31,9 +31,11 @@ interface TableProps {
   fieldClick?: string;
   handleClick?: (value: any) => void;
   IconComponent?: React.ReactNode;
+  viewType?:string;
+  onSelectingProject?: (project_name: string) => void;
 }
 
-const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [], IconAssetName, IconComponent, fieldClick, handleClick = () => { } }) => {
+const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [], IconAssetName, IconComponent, fieldClick, handleClick = () => { },onSelectingProject = () => {},viewType}) => {
   const [sortListData, setSortListData] = useState<Options[]>(listItems);
   const [sortArrows, setSortArrows] = useState<{ [key: string]: boolean }>({ ...tableHeadings.reduce((acc, heading) => ({ ...acc, [heading]: true }), {}) });
 
@@ -101,6 +103,12 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   // Set dynamic widths for columns or fallback to equal width if not provided
   const gridColumnStyle = columnWidths.length === getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${getListItemsHeadings.length}, 1fr)`;
 
+  const handleRowCLick = (data: any) => {
+    console.log('clicked',data);
+    const identifier = viewType === 'project' ? data.projectName : data.campaignID;
+    onSelectingProject(identifier)
+  }
+
   return (
     <div className='w-full'>
       <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle }}>
@@ -122,7 +130,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         {sortListData.map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
           return (
-            <div key={index} className={`grid p-6 border border-[#00A881] rounded-xl`} style={{ gridTemplateColumns: gridColumnStyle }}>
+            <div onClick={() => handleRowCLick(data)} key={index} className={`grid p-6 border border-[#00A881] rounded-xl cursor-pointer`} style={{ gridTemplateColumns: gridColumnStyle }}>
               {getListItemsHeadings.map((heading, idx) => (
                 <div key={idx} onClick={() => {
                   if (fieldClick !== undefined) {

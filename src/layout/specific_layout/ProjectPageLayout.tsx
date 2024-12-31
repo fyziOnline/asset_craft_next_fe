@@ -24,6 +24,7 @@ const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingP
   const toggleListType = () => {
     setIsList(pre => !pre)
   }
+  console.log('project_data', project_data);
 
   return (
     <>
@@ -43,7 +44,7 @@ const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingP
             </div>
             : (
               project_data.length > 0 ?
-              <Table viewType={viewType} onSelectingProject={onSelectingProjects} columnWidths={['8fr', '2fr', '1fr']}  listItems={project_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />
+              <Table viewType={viewType} onSelectingProject={onSelectingProjects} columnWidths={['8fr', '2fr', '1fr']}  listItems={project_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} fieldClick='campaignID'/>
               : <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
             )
         }
