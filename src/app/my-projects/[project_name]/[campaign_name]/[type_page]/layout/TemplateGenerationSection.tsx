@@ -33,7 +33,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
             case ListTypePage.LandingPage:
                 return <LandingPage params={params} />;
             case ListTypePage.LinkedIn:
-                return <LinkedInPage />;
+                return <LinkedInPage params={params} />;
             case ListTypePage.CallScript:
                 return <CallScriptPage />;
             default:
@@ -74,7 +74,13 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             {content("Section 2: Feature Highlights", "Key features or benefits of the product/service.")}
                             {content("Section 3: Closing CTA", "Closing CTA Encourage users to take the final action.")}
                         </p> :
-                        null
+                        params.type_page === ListTypePage.LinkedIn ?
+                            <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
+                                {content("Hook/Headline & Introduction", "Create a compelling headline and brief introduction that captures attention and interest.")}
+                                {content("Main Message & Call-to-Action (CTA)", "Value Proposition and provide a clear call-to-action with event details.")}
+                                {content("Hashtags & Keywords", "Increase post visibility and SEO optimisation using relevant hashtags.")}
+                            </p> :
+                            null
                 }
             </div>
         )
