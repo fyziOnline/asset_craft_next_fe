@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
@@ -11,30 +11,13 @@ import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { AssetHtmlProps, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
+import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 
 interface EmailPageProps {
     params: {
         template: Template
-        project_name ?: string
+        project_name?: string
     }
-}
-
-export interface FormEmailDataProps {
-    product?: string,
-    campaignGoal?: string,
-    targetAudience?: string,
-    outputScale?: number,
-    topic?: string,
-    type?: string,
-    keyPoints?: string,
-    fileSelected?: File,
-    webUrl?: string
-}
-
-export interface SectionProps {
-    assetVersionID?: string,
-    templateBlockID: string,
-    aiPrompt: string
 }
 
 const ListTargetAudience = [
@@ -66,11 +49,17 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template.templateID ?? '' as string } })
-    const refFormData = useRef<FormEmailDataProps>()
-    const refSection = useRef<SectionProps[]>([])
+    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
+    const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
+
+    useEffect(() => {
+        refFormData.current = {
+            ...refFormData.current,
+            product: params.project_name
+        }
+    }, [])
 
     const onNext = (step: number): void => {
         if (step === 1) {
@@ -126,7 +115,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
                 setShowLoading(true)
-                const res = await generateHTML(refFormData.current as FormEmailDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
+                const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
                 setShowLoading(false)
                 setGenerateStep(3);
                 setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
@@ -136,23 +125,6 @@ const EmailPage = ({ params }: EmailPageProps) => {
         setContextData({ assetGenerateStatus: newStep });
         setGenerateStep(newStep);
     };
-
-    const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement>, key: string) => {
-        refFormData.current = {
-            ...refFormData.current,
-            [key]: e.target.value
-        }
-    }
-
-    const handleInputSection = (e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
-        if (refSection.current && refSection.current[index]) {
-            refSection.current[index] = {
-                ...refSection.current[index],
-                aiPrompt: e.target.value
-            }
-        }
-        console.log('refSection.current: ', refSection.current);
-    }
 
     return (
         <div>
@@ -334,7 +306,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([4]) }}
                     isShowContent={isShowList.includes(4)}>
                     <div>
-                        {params.template.templatesBlocks && params.template.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
+                        {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
                             if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
                                     templateBlockID: item.templateBlockID || "",

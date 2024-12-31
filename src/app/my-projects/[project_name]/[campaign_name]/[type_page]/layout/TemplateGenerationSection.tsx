@@ -14,7 +14,7 @@ interface TemplateViewerProps {
     params: {
         template: Template
         type_page: string
-        project_name : string | undefined
+        project_name: string | undefined
     }
 }
 
@@ -31,7 +31,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
             case ListTypePage.Email:
                 return <EmailPage params={params} />;
             case ListTypePage.LandingPage:
-                return <LandingPage />;
+                return <LandingPage params={params} />;
             case ListTypePage.LinkedIn:
                 return <LinkedInPage />;
             case ListTypePage.CallScript:
@@ -57,16 +57,25 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
             <div className='py-5 h-[100%]'>
                 <Image
                     src={params.template?.templateImageURL || ""}
-                    alt="call script"
+                    alt={params.type_page}
                     width="267"
                     height="360"
                 />
-                <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
-                    {content("Section 1: Event Overview", "Overview of essential details: title, date, location, purpose, and a CTA to attract attendees.")}
-                    {content("Section 2: Event Agenda", "Detailed event schedule: session timings, key activities, speakers, and closing plans.")}
-                    {content("Section 3: Key Benefits and Highlights", "Event value summary: main benefits, featured technologies, and the target audience.")}
-                    {content("Section 4: Partnership and Sponsorship", "Sponsor recognition: list of sponsors by level with logos and optional sponsor descriptions.")}
-                </p>
+                {params.type_page === ListTypePage.Email ?
+                    <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
+                        {content("Section 1: Event Overview", "Overview of essential details: title, date, location, purpose, and a CTA to attract attendees.")}
+                        {content("Section 2: Event Agenda", "Detailed event schedule: session timings, key activities, speakers, and closing plans.")}
+                        {content("Section 3: Key Benefits and Highlights", "Event value summary: main benefits, featured technologies, and the target audience.")}
+                        {content("Section 4: Partnership and Sponsorship", "Sponsor recognition: list of sponsors by level with logos and optional sponsor descriptions.")}
+                    </p> :
+                    params.type_page === ListTypePage.LandingPage ?
+                        <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
+                            {content("Section 1: Hero Section", "Headline: Generate a powerful headline that captures attention and highlights the core message. Subheading: Briefly elaborate on the core offering with a supporting statement. Call-to-Action (CTA): Clearly instruct users on what action to take.")}
+                            {content("Section 2: Feature Highlights", "Key features or benefits of the product/service.")}
+                            {content("Section 3: Closing CTA", "Closing CTA Encourage users to take the final action.")}
+                        </p> :
+                        null
+                }
             </div>
         )
     }

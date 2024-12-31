@@ -1,8 +1,11 @@
 'use client'
 
+import { useAppData } from "@/context/AppContext"
 import { nkey } from "@/data/keyStore"
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 import { AssetInProgressProps } from "@/types/asset"
+import { AssetHtmlProps, AssetVersionProps } from "@/types/templates"
+import { useRouter } from "next/navigation"
 import React, { FC, useEffect, useState } from "react"
 
 interface Asset {
@@ -10,6 +13,8 @@ interface Asset {
 }
 
 const AssetInProgress: FC = () => {
+  const router = useRouter();
+  const { setContextData } = useAppData();
   const [tableData, setTableData] = useState<Asset[]>([])
 
   useEffect(() => {
@@ -19,12 +24,17 @@ const AssetInProgress: FC = () => {
         return {
           projectName: item.projectName,
           campaignName: item.campaignName,
-          assetName: item.assetName,
+          assetName: `${item.assetName}_${item.versionName}`.replace(" ", ""),
           creadedOn: item.createdOn,
           approvedBy: "",
           approvedOn: "",
           currentStatus: item.currentStatus,
-          dataClick: item.assetVersionId || "",
+          dataItem: JSON.stringify({
+            assetVersion: item.assetVersion,
+            projectName: item.projectName,
+            campaignName: item.campaignName,
+            assetName: item.assetName
+          }),
         }
       })
       if (newassetInProgress.length > 0) {
@@ -37,10 +47,19 @@ const AssetInProgress: FC = () => {
 
   const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Approved By", "Approved On", "Current Status"]
   const headerHavingSortingToggle = ["Project Name", "Created On", "Approved On"]
-  const fieldClick = "dataClick"
+  const fieldClick = "dataItem"
 
-  const handleClick = (value: any) => {
-    console.log('value: ', value);
+  const handleClick = (item: any) => {
+    try {
+      const dataItem = JSON.parse(item)
+      const assetHtml = {} as AssetHtmlProps
+      assetHtml.assetVersions = [dataItem.assetVersion]
+      setContextData({ AssetHtml: assetHtml })
+      router.push(`/edit-html-content?project_name=${dataItem.projectName}&campaign_name=${dataItem.campaignName}&asset_name=${dataItem.assetName}`)
+
+    } catch (error) {
+
+    }
   }
 
   return (
