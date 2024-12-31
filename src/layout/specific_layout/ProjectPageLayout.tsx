@@ -15,11 +15,12 @@ interface ProjectSectionProps {
   onSelectingProjects: (project_name: string) => void
   tableHeadings: string[]
   headersHavingToggle: string[]
+  fieldClick?: string
   page: string
   viewType: 'project' | 'campaign'
 }
 
-const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingProjects, tableHeadings, headersHavingToggle, page, viewType }) => {
+const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingProjects, tableHeadings, headersHavingToggle, fieldClick = '', page, viewType }) => {
   const [isList, setIsList] = useState<Boolean>(true)
   const toggleListType = () => {
     setIsList(pre => !pre)
@@ -44,8 +45,8 @@ const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingP
             </div>
             : (
               project_data.length > 0 ?
-              <Table viewType={viewType} onSelectingProject={onSelectingProjects} columnWidths={['8fr', '2fr', '1fr']}  listItems={project_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} fieldClick='campaignID'/>
-              : <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
+                <Table columnWidths={['8fr', '2fr', '1fr']} handleClick={onSelectingProjects} fieldClick={fieldClick} listItems={project_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />
+                : <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
             )
         }
       </div>
