@@ -160,11 +160,11 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     isShowContent={isShowList.includes(2)}>
                     <div>
                         <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
-                        <TextField placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?”" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
-                        <TextField placeholder="HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility. Feature 1, Feature 2, Feature 3"
-                            customAreaClass='whitespace-nowrap overflow-x-hidden overflow-y-auto h-28 scrollbar-hide'></TextField>
+                        <ChildrenTitle customClass='mt-5' title='Provide additional information that supports the main message.'></ChildrenTitle>
+                        <TextField rows={4} placeholder={`HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility.\nFeature 1\nFeature 2\nFeature 3`}
+                            customAreaClass='whitespace-pre-line overflow-x-hidden overflow-y-auto scrollbar-hide'></TextField>
 
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
