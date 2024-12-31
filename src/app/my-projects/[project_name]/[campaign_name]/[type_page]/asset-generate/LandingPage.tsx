@@ -12,6 +12,7 @@ import { AssetHtmlProps, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
+import { listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 
 interface LandingPageProps {
     params: {
@@ -19,19 +20,6 @@ interface LandingPageProps {
         project_name?: string
     }
 }
-
-const ListTargetAudience = [
-    { label: 'General Public', value: 'General Public' },
-    { label: 'Existing Customers', value: 'Existing Customers' },
-    { label: 'Prospective Customers', value: 'Prospective Customers' }
-]
-
-const listofcampains = [
-    { label: 'Product Launch', value: 'Product Launch' },
-    { label: 'Event Promotion', value: 'Event Promotion' },
-    { label: 'Brand Awareness', value: 'Brand Awareness' },
-    { label: 'Demand Generation', value: 'Demand Generation' }
-]
 
 const LandingPage = ({ params }: LandingPageProps) => {
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate

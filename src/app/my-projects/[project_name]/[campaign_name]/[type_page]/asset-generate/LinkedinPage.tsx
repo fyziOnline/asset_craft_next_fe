@@ -12,6 +12,7 @@ import { AssetHtmlProps, Template } from '@/types/templates';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
+import { emailType, keyPoints, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 
 interface LinkedInPageProps {
     params: {
@@ -19,31 +20,6 @@ interface LinkedInPageProps {
         project_name?: string
     }
 }
-
-const ListTargetAudience = [
-    { label: 'General Public', value: 'General Public' },
-    { label: 'Existing Customers', value: 'Existing Customers' },
-    { label: 'Prospective Customers', value: 'Prospective Customers' }
-]
-
-const listofcampains = [
-    { label: 'Product Launch', value: 'Product Launch' },
-    { label: 'Event Promotion', value: 'Event Promotion' },
-    { label: 'Brand Awareness', value: 'Brand Awareness' },
-    { label: 'Demand Generation', value: 'Demand Generation' }
-]
-
-const emailType = [
-    { label: 'Announcement', value: 'Announcement' },
-    { label: 'Newsletter', value: 'Newsletter' },
-    { label: 'Promotional Email', value: 'Promotional Email' }
-]
-
-const keyPoints = [
-    { label: 'Innovation', value: 'Innovation' },
-    { label: 'Performance', value: 'Performance' },
-    { label: 'Increased Security', value: 'Increased Security' },
-]
 
 const LinkedInPage = ({ params }: LinkedInPageProps) => {
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate

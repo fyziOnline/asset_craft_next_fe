@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
@@ -12,6 +12,7 @@ import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { AssetHtmlProps, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
+import { emailType, keyPoints, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 
 interface EmailPageProps {
     params: {
@@ -19,30 +20,6 @@ interface EmailPageProps {
         project_name?: string
     }
 }
-
-const ListTargetAudience = [
-    { label: 'General Public', value: 'General Public' },
-    { label: 'Existing Customers', value: 'Existing Customers' },
-    { label: 'Prospective Customers', value: 'Prospective Customers' }
-]
-
-const listofcampains = [
-    { label: 'Product Launch', value: 'Product Launch' },
-    { label: 'Event Promotion', value: 'Event Promotion' },
-    { label: 'Brand Awareness', value: 'Brand Awareness' },
-    { label: 'Demand Generation', value: 'Demand Generation' }
-]
-const emailType = [
-    { label: 'Announcement', value: 'Announcement' },
-    { label: 'Newsletter', value: 'Newsletter' },
-    { label: 'Promotional Email', value: 'Promotional Email' }
-]
-
-const keyPoints = [
-    { label: 'Innovation', value: 'Innovation' },
-    { label: 'Performance', value: 'Performance' },
-    { label: 'Increased Security', value: 'Increased Security' },
-]
 
 const EmailPage = ({ params }: EmailPageProps) => {
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
