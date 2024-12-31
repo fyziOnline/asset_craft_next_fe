@@ -8,9 +8,10 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
-import { Template } from '@/types/templates';
+import { AssetHtmlProps, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
-import { SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
+import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
+import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 
 interface LandingPageProps {
     params: {
@@ -37,9 +38,10 @@ const LandingPage = ({ params }: LandingPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
+    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
-    const { setContextData } = useAppData();
+    const { contextData, setContextData } = useAppData();
 
     useEffect(() => {
         refFormData.current = {
@@ -80,7 +82,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
         }
     };
 
-    const handleGenerate = (): void => {
+    const handleGenerate = async () => {
         if (generateStep === 2 || checkedList.length !== 4) {
             return;
         }
@@ -102,12 +104,10 @@ const LandingPage = ({ params }: LandingPageProps) => {
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
                 setShowLoading(true)
-                //call api
-                // const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
+                const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
                 setShowLoading(false)
                 setGenerateStep(3);
-                //next step
-                // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
+                setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
                 return
             }
         }
