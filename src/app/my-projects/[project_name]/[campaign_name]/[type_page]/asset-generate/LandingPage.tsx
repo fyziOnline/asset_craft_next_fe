@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
@@ -8,29 +8,37 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
+import { Template } from '@/types/templates';
+import { useLoading } from '@/components/global/Loading/LoadingContext';
 
-const LandingPage = () => {
+interface LandingPageProps {
+    params: {
+        template: Template
+        project_name?: string
+    }
+}
+
+const ListTargetAudience = [
+    { label: 'General Public', value: 'General Public' },
+    { label: 'Existing Customers', value: 'Existing Customers' },
+    { label: 'Prospective Customers', value: 'Prospective Customers' }
+]
+
+const listofcampains = [
+    { label: 'Product Launch', value: 'Product Launch' },
+    { label: 'Event Promotion', value: 'Event Promotion' },
+    { label: 'Brand Awareness', value: 'Brand Awareness' },
+    { label: 'Demand Generation', value: 'Demand Generation' }
+]
+
+const LandingPage = ({ params }: LandingPageProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-
+    const { setShowLoading } = useLoading()
     const { setContextData } = useAppData();
-
-    const ListTargetAudience = [
-        { label: 'General Public', value: 'General Public' },
-        { label: 'Existing Customers', value: 'Existing Customers' },
-        { label: 'Prospective Customers', value: 'Prospective Customers' }
-    ]
-
-    const listofcampains = [
-        { label: 'Product Launch', value: 'Product Launch' },
-        { label: 'Event Promotion', value: 'Event Promotion' },
-        { label: 'Brand Awareness', value: 'Brand Awareness' },
-        {label: 'Demand Generation' , value: 'Demand Generation'}
-    ]
-
 
     const onNext = (step: number): void => {
         if (step === 1) {
@@ -64,7 +72,6 @@ const LandingPage = () => {
         }
     };
 
-
     const handleGenerate = (): void => {
         if (generateStep === 2 || checkedList.length !== 4) {
             return;
@@ -74,21 +81,27 @@ const LandingPage = () => {
 
         if (newStep === 5) { // Reset after completing step 4
             newStep = 1;
-            setIsOpen(false);
             setIsShowList([]);
             setCheckedList([]);
             setDisableList([2, 3, 4]);
+            setContextData({ assetTemplateShow: false });
         } else {
+            setContextData({ assetTemplateShow: true });
+
             if (newStep === 2) {
                 setCheckedList([1, 2, 3, 4]);
                 setDisableList([1, 2, 3, 4]);
-                setTimeout(() => {
-                    setGenerateStep(3);
-                    setContextData({ assetGenerateStatus: 3 });
-                }, 3000);
+                setContextData({ assetGenerateStatus: newStep });
+                setGenerateStep(newStep);
+                setShowLoading(true)
+                //call api
+                // const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
+                setShowLoading(false)
+                setGenerateStep(3);
+                //next step
+                // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
+                return
             }
-            setIsOpen(true);
-            setContextData({ assetTemplateShow: true });
         }
         setContextData({ assetGenerateStatus: newStep });
         setGenerateStep(newStep);
@@ -99,6 +112,7 @@ const LandingPage = () => {
             <div className='mt-[40px]'>
                 {/* step 1 */}
                 <Accordion
+                    isRequire={true}
                     HeaderTitle="Campaign Overview"
                     checked={checkedList.includes(1)}
                     disableShowContent={disableList.includes(1)}
@@ -106,15 +120,17 @@ const LandingPage = () => {
                     isShowContent={isShowList.includes(1)}>
                     <div>
                         <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
-                        <TextField placeholder="Enter the name of the product or solution." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField placeholder="Enter the name of the product or solution."
+                            value={params.project_name}
+                            customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <div className='flex items-center gap-[16%]'>
-                            <div>
+                        <div className='flex items-start gap-[16%]'>
+                            <div className='w-[260px]'>
                                 <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
-                            <div>
+                            <div className='w-[260px]'>
                                 <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
@@ -141,6 +157,7 @@ const LandingPage = () => {
             <div className='mt-[25px]'>
                 {/* step 2 */}
                 <Accordion
+                    isRequire={true}
                     HeaderTitle="Key Message & Content"
                     checked={checkedList.includes(2)}
                     disableShowContent={disableList.includes(2)}
@@ -148,20 +165,20 @@ const LandingPage = () => {
                     isShowContent={isShowList.includes(2)}>
                     <div>
                         <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
-                        <TextField placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?”" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <TextField placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
-                        <TextField placeholder="HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility. Feature 1, Feature 2, Feature 3"
-                            customAreaClass='whitespace-nowrap overflow-x-hidden overflow-y-auto h-28 scrollbar-hide'></TextField>
+                        <ChildrenTitle customClass='mt-5' title='Provide additional information that supports the main message.'></ChildrenTitle>
+                        <TextField rows={4} placeholder={`HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility.\nFeature 1\nFeature 2\nFeature 3`}
+                            customAreaClass='whitespace-pre-line overflow-x-hidden overflow-y-auto scrollbar-hide'></TextField>
 
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                         <Button
                             buttonText='Back'
                             showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
+                            textStyle='text-[1rem] font-base text-[#000000]'
+                            textColor="text-[#000000]"
+                            iconColor="#000000"
                             backgroundColor='bg-[#fff]'
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(2) }}
@@ -196,9 +213,9 @@ const LandingPage = () => {
                         <Button
                             buttonText='Back'
                             showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
+                            textStyle='text-[1rem] font-base text-[#000000]'
+                            textColor="text-[#000000]"
+                            iconColor="#000000"
                             backgroundColor='bg-[#fff]'
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(3) }}
@@ -247,9 +264,9 @@ const LandingPage = () => {
                         <Button
                             buttonText='Back'
                             showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
+                            textStyle='text-[1rem] font-base text-[#000000]'
+                            textColor="text-[#000000]"
+                            iconColor="#000000"
                             backgroundColor='bg-[#fff]'
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(4) }}

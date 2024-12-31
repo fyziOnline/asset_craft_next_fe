@@ -1,13 +1,10 @@
 import { urls } from "@/apis/urls";
-import {
-  FormEmailDataProps,
-  SectionProps,
-} from "@/app/my-projects/[project_name]/[campaign_name]/[type_page]/asset-generate/EmailPage";
 import { ApiService } from "@/lib/axios_generic";
 import { convertFileToBase64 } from "@/lib/utils";
 import { AssetHtmlProps } from "@/types/templates";
 import { useSearchParams } from "next/navigation";
 import { useRef } from "react";
+import { FormDataProps, SectionProps } from "./useInputFormDataGenerate";
 
 interface GenerateTemplateProp {
   params: {
@@ -144,7 +141,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   const aiPromptCampaignInsert = async (
-    FormData: FormEmailDataProps,
+    FormData: FormDataProps,
     fileID: number
   ) => {
     try {
@@ -182,7 +179,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   const aiPromptCampaignUpdate = async (
-    FormData: FormEmailDataProps,
+    FormData: FormDataProps,
     fileID: number
   ) => {
     try {
@@ -215,7 +212,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     }
   };
 
-  const uploadImage = async (FormData: FormEmailDataProps) => {
+  const uploadImage = async (FormData: FormDataProps) => {
     try {
       if (FormData?.fileSelected) {
         const resBase64 = await convertFileToBase64(FormData.fileSelected);
@@ -239,7 +236,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   const generateHTML = async (
-    FormData: FormEmailDataProps,
+    FormData: FormDataProps,
     Sections: SectionProps[],
     isRegenerateHTML: boolean
   ) => {
@@ -299,7 +296,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   const reGenerateHTML = async (
-    FormData: FormEmailDataProps,
+    FormData: FormDataProps,
     Sections: SectionProps[]
   ) => {
     try {
