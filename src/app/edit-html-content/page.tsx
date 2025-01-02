@@ -137,7 +137,7 @@ const Page = () => {
                                     </svg>
                                 </div> */}
                             </div>
-                            <div id="container" >
+                            <div id="container">
                                 {versionSelected.assetVersionBlocks.map((item, idx) => {
                                     return (
                                         <div key={idx}>
