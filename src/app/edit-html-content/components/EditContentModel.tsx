@@ -126,11 +126,11 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
             setIsLoading(true);
 
             const resUpdate = await ApiService.put<any>(urls.assetVersionBlock_update, {
-                "assetVersionBlockID": assetBlock.assetVersionBlockID,
-                "blockName": assetBlock.blockName,
-                "aiPrompt": assetBlock.aiPrompt,
-                "blockData": assetBlock.blockData,
-                "blockHTMLGenerated": assetBlock.blockHTMLGenerated
+                "assetVersionBlockID": assetBlockSelected.assetVersionBlockID,
+                "blockName": assetBlockSelected.blockName,
+                "aiPrompt": assetBlockSelected.aiPrompt,
+                "blockData": assetBlockSelected.blockData,
+                "blockHTMLGenerated": assetBlockSelected.blockHTMLGenerated
             });
 
             if (resUpdate.isSuccess) {
