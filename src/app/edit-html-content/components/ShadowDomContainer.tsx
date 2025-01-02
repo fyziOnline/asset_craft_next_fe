@@ -48,9 +48,7 @@ const ShadowDomContainer: React.FC<ShadowDomContainerProps> = ({ htmlContent, cs
     }
   }, [htmlContent, cssContent]);
 
-  return <div
-    id="container" // don't remove this
-    ref={containerRef}></div>;
+  return <div ref={containerRef}></div>;
 };
 
 export default ShadowDomContainer;
