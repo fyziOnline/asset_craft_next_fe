@@ -9,6 +9,7 @@ import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import EditContentModel from './components/EditContentModel';
 import { useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
+import { AssetBlockProps } from '@/types/templates';
 
 interface HeaderProps {
     versionNameChoose: string
@@ -24,6 +25,7 @@ const Header = ({ versionNameChoose }: HeaderProps) => {
 
 const Page = () => {
     const {
+        sectionEdit,
         isLoadingGenerate,
         isShowAddVer,
         versionSelected,
@@ -40,7 +42,8 @@ const Page = () => {
         setIsShowModelEdit,
         setIsShowAddVer,
         onGenerateWithAI,
-        onSubmit
+        onSubmit,
+        setSectionEdit
     } = useEditHTMLContent()
 
     return (
@@ -139,7 +142,10 @@ const Page = () => {
                                     return (
                                         <div key={idx}>
                                             {!item.isStatic ? <div className='flex w-[100%] items-center justify-end absolute mt-9 z-20' >
-                                                <div className='mr-[20px] mt-1' onClick={() => { setIsShowModelEdit(true) }}>
+                                                <div className='mr-[20px] mt-1' onClick={() => {
+                                                    setSectionEdit(item)
+                                                    setIsShowModelEdit(true)
+                                                }}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none" data-id="101">
                                                         <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                                         <path d="M30.0625 4.06433C30.709 3.41787 31.5858 3.05469 32.5 3.05469C33.4142 3.05469 34.291 3.41787 34.9375 4.06433C35.584 4.7108 35.9471 5.58759 35.9471 6.50183C35.9471 7.41607 35.584 8.29287 34.9375 8.93933L19.5 24.3768L13 26.0018L14.625 19.5018L30.0625 4.06433Z" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -184,7 +190,7 @@ const Page = () => {
                 {isShowModelEdit ? <EditContentModel
                     setVersionList={setVersionList}
                     setVersionSelected={setVersionSelected}
-                    assetBlocks={versionSelected.assetVersionBlocks}
+                    assetBlock={sectionEdit as AssetBlockProps}
                     assetVersion={versionSelected}
                     setIsShowModelEdit={setIsShowModelEdit} /> : null}
             </div>

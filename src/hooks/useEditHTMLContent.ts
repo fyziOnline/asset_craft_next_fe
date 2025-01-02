@@ -8,7 +8,7 @@ import { AssetInProgressProps } from "@/types/asset";
 import moment from "moment";
 import Cookies from 'js-cookie';
 import { nkey } from "@/data/keyStore";
-import { AssetVersionProps } from "@/types/templates";
+import { AssetBlockProps, AssetVersionProps } from "@/types/templates";
 
 export const useEditHTMLContent = () => {
     const router = useRouter();
@@ -18,6 +18,7 @@ export const useEditHTMLContent = () => {
     const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
     const [versionList, setVersionList] = useState<AssetVersionProps[]>(contextData.AssetHtml.assetVersions || [])
     const [versionSelected, setVersionSelected] = useState<AssetVersionProps>(contextData.AssetHtml.assetVersions?.[0])
+    const [sectionEdit, setSectionEdit] = useState<AssetBlockProps>()
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
     const refVersion = useRef('')
 
@@ -160,6 +161,7 @@ export const useEditHTMLContent = () => {
     }
 
     return {
+        sectionEdit,
         isLoadingGenerate,
         isShowAddVer,
         versionSelected,
@@ -177,5 +179,6 @@ export const useEditHTMLContent = () => {
         setIsShowModelEdit,
         onGenerateWithAI,
         onSubmit,
+        setSectionEdit
     };
 };

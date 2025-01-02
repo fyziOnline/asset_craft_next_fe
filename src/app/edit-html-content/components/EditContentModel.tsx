@@ -8,6 +8,7 @@ import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { useAppData } from '@/context/AppContext';
+import ShadowDomContainer from './ShadowDomContainer';
 
 const customTheme = createTheme({
     palette: {
@@ -61,49 +62,26 @@ interface EditContentModelProps {
     setVersionList?: (value: AssetVersionProps[]) => void,
     setVersionSelected?: (value: AssetVersionProps) => void,
     setIsShowModelEdit: any,
-    assetBlocks: AssetBlockProps[],
+    assetBlock: AssetBlockProps,
     assetVersion: AssetVersionProps
 }
 
-const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion, setVersionList = () => { }, setVersionSelected = () => { } }: EditContentModelProps) => {
+const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVersionList = () => { }, setVersionSelected = () => { } }: EditContentModelProps) => {
     const { contextData, setContextData } = useAppData();
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
-    const [listAssetBlocks, setListAssetBlocks] = useState(assetBlocks)
-    const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(assetBlocks[0])
-    const [schema, setSchema] = useState(JSON.parse(assetBlocks[0].schema as string))
-    const [blockData, setBlockData] = useState(JSON.parse(assetBlocks[0].blockData as string))
-    const refIndexBlockSelected = useRef(0)
+    const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(assetBlock)
+    const [blockData, setBlockData] = useState(JSON.parse(assetBlock.blockData as string))
 
     useEffect(() => {
-        setDataDefault()
         document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = '';
         };
     }, []);
 
-    const setDataDefault = () => {
-        try {
-            const newListAssetBlocks = assetBlocks.filter((item) => !item.isStatic && item.type !== "_global")
-            setListAssetBlocks(newListAssetBlocks)
-            setAssetBlockSelected(newListAssetBlocks[0])
-            setSchema(JSON.parse(newListAssetBlocks[0].schema as string))
-            setBlockData(JSON.parse(newListAssetBlocks[0].blockData as string))
-        } catch (error) {
-
-        }
-    }
-
     const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation();
-    }
-
-    const onSelectBlock = (item: AssetBlockProps, index: number) => {
-        refIndexBlockSelected.current = index
-        setAssetBlockSelected(item)
-        setSchema(JSON.parse(item.schema as string))
-        setBlockData(JSON.parse(item.blockData as string))
     }
 
     const onHandleEditData = ({ data, errors }: any) => {
@@ -118,14 +96,8 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion, setVe
                 assetBlockDataVersions: newAssetBlockDataVersions
             }
 
-            const newListAssetBlocks = listAssetBlocks
-            if (newListAssetBlocks && newListAssetBlocks[refIndexBlockSelected.current]) {
-                newListAssetBlocks[refIndexBlockSelected.current] = newAssetBlockSelected
-            }
-
             setBlockData(data)
             setAssetBlockSelected(newAssetBlockSelected)
-            setListAssetBlocks(newListAssetBlocks)
         } catch (ex) {
 
         }
@@ -153,44 +125,30 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion, setVe
         try {
             setIsLoading(true);
 
-            if (listAssetBlocks) {
-                const promises = listAssetBlocks.map(async (item) => {
-                    try {
-                        const resUpdate = await ApiService.put<any>(urls.assetVersionBlock_update, {
-                            "assetVersionBlockID": item.assetVersionBlockID,
-                            "blockName": item.blockName,
-                            "aiPrompt": item.aiPrompt,
-                            "blockData": item.blockData,
-                            "blockHTMLGenerated": item.blockHTMLGenerated
-                        });
-                        return resUpdate;
-                    } catch (innerError) {
-                        console.error('API Error for item:', item, ApiService.handleError(innerError));
-                        return { isSuccess: false };
+            const resUpdate = await ApiService.put<any>(urls.assetVersionBlock_update, {
+                "assetVersionBlockID": assetBlock.assetVersionBlockID,
+                "blockName": assetBlock.blockName,
+                "aiPrompt": assetBlock.aiPrompt,
+                "blockData": assetBlock.blockData,
+                "blockHTMLGenerated": assetBlock.blockHTMLGenerated
+            });
+
+            if (resUpdate.isSuccess) {
+                const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${assetVersion.assetID}&assetVersionID=${assetVersion.assetVersionID}`);
+                if (resGenerate.isSuccess) {
+                    const resAssetSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersion.assetVersionID}`);
+                    if (resAssetSelect.isSuccess) {
+                        const assetHtml = contextData.AssetHtml
+                        const indexAssetVersion = assetHtml.assetVersions.findIndex((item) => item.assetVersionID === assetVersion.assetVersionID)
+                        assetHtml.assetVersions[indexAssetVersion] = resAssetSelect
+                        setVersionList(assetHtml.assetVersions)
+                        setVersionSelected(resAssetSelect)
+                        setContextData({ AssetHtml: assetHtml as AssetHtmlProps });
+                        setIsShowModelEdit(false);
                     }
-                });
-
-                const results = await Promise.all(promises);
-
-                const allSuccess = results.every((res) => res.isSuccess);
-
-                if (allSuccess) {
-                    const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${assetVersion.assetID}&assetVersionID=${assetVersion.assetVersionID}`);
-                    if (resGenerate.isSuccess) {
-                        const resAssetSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersion.assetVersionID}`);
-                        if (resAssetSelect.isSuccess) {
-                            const assetHtml = contextData.AssetHtml
-                            const indexAssetVersion = assetHtml.assetVersions.findIndex((item) => item.assetVersionID === assetVersion.assetVersionID)
-                            assetHtml.assetVersions[indexAssetVersion] = resAssetSelect
-                            setVersionList(assetHtml.assetVersions)
-                            setVersionSelected(resAssetSelect)
-                            setContextData({ AssetHtml: assetHtml as AssetHtmlProps });
-                            setIsShowModelEdit(false);
-                        }
-                    }
-                } else {
-                    alert("Save data failed, please try again later.");
                 }
+            } else {
+                alert("Save data failed, please try again later.");
             }
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
@@ -203,27 +161,21 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlocks, assetVersion, setVe
     return (
         <ThemeProvider theme={customTheme}>
             <div onClick={handleClick} className="fixed z-[1000] left-0 right-0 top-0 bottom-0 bg-black bg-opacity-55 flex items-center justify-center">
-                <div className='w-[90vw] h-[94vh] bg-white rounded-md relative flex flex-col'>
-                    <div className='border-b border-solid border-[#D9D9D9] px-4 pb-4 flex flex-wrap'>
-                        {listAssetBlocks?.map((item, index) => {
-                            if (item.isStatic || item.type === "_global") { return }
-                            return (
-                                <div onClick={() => { onSelectBlock(item, index) }}
-                                    className={`p-2 mr-2 mt-4 rounded-md cursor-pointer ${assetBlockSelected.assetVersionBlockID === item.assetVersionBlockID ? `text-white bg-[#01A982]` : `text-black bg-[#e4e4e4]`}`}
-                                    key={index}>{item.blockName?.replaceAll("_", " ")}</div>
-                            )
-                        })}
-                    </div>
-
-                    <div className='flex-1 overflow-y-scroll scrollbar-hide px-5 py-2'>
-                        <JsonForms
-                            schema={schema}
-                            data={blockData}
-                            renderers={materialRenderers}
-                            cells={materialCells}
-                            // uischema={uiSChema}
-                            onChange={onHandleEditData}
-                        />
+                <div className='w-[90vw] max-h-[94vh] min-h-[80vh] bg-white rounded-md relative flex flex-col'>
+                    <div className='flex flex-row flex-1'>
+                        <div className='p-1 border-r border-solid border-[#D9D9D9]'>
+                            <ShadowDomContainer htmlContent={assetBlock.blockHTMLGenerated || ""}></ShadowDomContainer>
+                        </div>
+                        <div className='flex-1 overflow-y-scroll scrollbar-hide px-5 py-2'>
+                            <JsonForms
+                                schema={JSON.parse(assetBlock.schema as string)}
+                                data={blockData}
+                                renderers={materialRenderers}
+                                cells={materialCells}
+                                // uischema={uiSChema}
+                                onChange={onHandleEditData}
+                            />
+                        </div>
                     </div>
                     <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-between'>
                         <Button
