@@ -138,7 +138,7 @@ const Page = () => {
                                 </div> */}
                             </div>
                             <div id="container">
-                                {versionSelected.assetVersionBlocks.map((item, idx) => {
+                                {versionSelected?.assetVersionBlocks && versionSelected.assetVersionBlocks.map((item, idx) => {
                                     return (
                                         <div key={idx}>
                                             {!item.isStatic ? <div className='flex w-[100%] items-center justify-end absolute mt-9 z-20' >
