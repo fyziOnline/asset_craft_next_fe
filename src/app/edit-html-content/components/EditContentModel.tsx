@@ -75,6 +75,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
     const [isEditPrompt, setIsEditPrompt] = useState(false);
     const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(assetBlock)
     const [blockData, setBlockData] = useState(JSON.parse(assetBlock.blockData as string))
+    const refAiPromptCurrent = useRef(assetBlock.aiPrompt)
     const { setShowLoading } = useLoading()
 
     useEffect(() => {
@@ -86,6 +87,14 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation();
+    }
+
+    const handleInputAIPrompt = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        let newAssetBlockDataVersions = {
+            ...assetBlockSelected,
+            aiPrompt: e.target.value
+        }
+        setAssetBlockSelected(newAssetBlockDataVersions)
     }
 
     const onHandleEditData = ({ data, errors }: any) => {
@@ -202,7 +211,10 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                         <div className='flex-1 overflow-y-scroll scrollbar-hide px-5 py-2'>
                             <div className='border-b border-solid border-[#D9D9D9] pb-3 mt-2'>
                                 <div className='flex flex-row mb-1 items-center'>
-                                    {!isEditPrompt ? <div onClick={() => { setIsEditPrompt(true) }} className='p-1'>
+                                    {!isEditPrompt ? <div onClick={() => {
+                                        refAiPromptCurrent.current = assetBlockSelected.aiPrompt
+                                        setIsEditPrompt(true)
+                                    }} className='p-1'>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 30 30" fill="none">
                                             <path d="M21.459 2.79243C22.2215 2.02993 23.2557 1.60156 24.334 1.60156C25.4123 1.60156 26.4465 2.02993 27.209 2.79243C27.9715 3.55492 28.3998 4.58909 28.3998 5.66743C28.3998 6.74576 27.9715 7.77993 27.209 8.54243L9.00065 26.7508L1.33398 28.6674L3.25065 21.0008L21.459 2.79243Z" stroke="#00A881" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
@@ -213,7 +225,8 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                     <TextField
                                         disabled={!isEditPrompt}
                                         customClass="h-12 border-none"
-                                        defaultValue={assetBlockSelected.aiPrompt} />
+                                        handleChange={handleInputAIPrompt}
+                                        value={assetBlockSelected.aiPrompt} />
                                 </div>
                                 <div className='flex justify-end mt-3'>
                                     {!isEditPrompt ? <Button
@@ -227,7 +240,14 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                         customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' /> :
                                         <div className='flex'>
                                             <Button
-                                                handleClick={() => { setIsEditPrompt(false) }}
+                                                handleClick={() => {
+                                                    let newAssetBlockDataVersions = {
+                                                        ...assetBlockSelected,
+                                                        aiPrompt: refAiPromptCurrent.current
+                                                    }
+                                                    setAssetBlockSelected(newAssetBlockDataVersions)
+                                                    setIsEditPrompt(false)
+                                                }}
                                                 buttonText='Close'
                                                 showIcon={false}
                                                 textStyle='text-[1rem] font-base'
