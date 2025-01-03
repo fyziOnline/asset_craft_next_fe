@@ -1,4 +1,3 @@
-import { HPE_Logo } from "@/assets/icons/HPE_Logo"
 import Link from "next/link"
 
 interface FooterLink {
@@ -38,7 +37,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="fixed right-0 left-0 bottom-0 z-50 bg-off-white-primary px-[2.5rem] py-[1.8rem]">
       <div className="flex justify-between align-bottom">
-        <p className="text-xs">© Copyright 2024 Hewlett Packard Enterprise Development LP</p>
+        <p className="text-xs">© Copyright 2025 Hewlett Packard Enterprise Development LP</p>
         <div className="flex gap-[7px]">
           {footerLinks.map((link, index) => (
             <div key={link.id} >
@@ -48,9 +47,7 @@ const Footer: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="flex justify-center">
-        <HPE_Logo />
-      </div>
+
       <div className="flex justify-center">
         <p className="text-xs text-gray-400">{gitLabel}</p>
       </div>
