@@ -80,8 +80,10 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
               const resGenerate = await ApiService.get<any>(
                 `${urls.asset_generate}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
               );
+
               return resGenerate;
             }
+            return { isSuccess: false };
           } catch (innerError) {
             console.error(
               "API Error for item:",
