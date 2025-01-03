@@ -205,8 +205,8 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
             <div onClick={handleClick} className="fixed z-[100] left-0 right-0 top-0 bottom-0 bg-black bg-opacity-55 flex items-center justify-center">
                 <div className='w-[90vw] bg-white rounded-md relative flex flex-col'>
                     <div className='flex flex-row flex-1'>
-                        <div className='p-1 h-[86vh] overflow-y-scroll scrollbar-hide relative border-r border-solid border-[#D9D9D9] flex items-center'>
-                            <ShadowDomContainer htmlContent={assetBlock.blockHTMLGenerated || ""}></ShadowDomContainer>
+                        <div className='p-1 max-w-[50vw] h-[86vh] overflow-y-scroll scrollbar-hide relative border-r border-solid border-[#D9D9D9]'>
+                            <ShadowDomContainer htmlContent={assetVersion.layoutHTMLGenerated.replace("[(blocks)]", assetBlock.blockHTMLGenerated || "")}></ShadowDomContainer>
                         </div>
                         <div className='flex-1 h-[86vh] overflow-y-scroll scrollbar-hide px-5 py-2'>
                             <div className='border-b border-solid border-[#D9D9D9] pb-3 mt-2'>
