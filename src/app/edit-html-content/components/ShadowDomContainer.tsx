@@ -3,9 +3,10 @@ import { useEffect, useRef } from "react";
 interface ShadowDomContainerProps {
   htmlContent: string;
   cssContent?: string;
+  onClick?: (event: Event) => void;
 }
 
-const ShadowDomContainer: React.FC<ShadowDomContainerProps> = ({ htmlContent, cssContent = "" }) => {
+const ShadowDomContainer: React.FC<ShadowDomContainerProps> = ({ htmlContent, cssContent = "", onClick }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,8 +46,22 @@ const ShadowDomContainer: React.FC<ShadowDomContainerProps> = ({ htmlContent, cs
 
       // Attach content to Shadow DOM
       shadowRoot.appendChild(tempContainer);
+
+      // Add event listener to the shadowRoot for click events
+      const handleClick = (event: Event) => {
+        if (onClick) {
+          onClick(event); // callback 
+        }
+      };
+
+      shadowRoot.addEventListener("click", handleClick);
+
+      // Cleanup function
+      return () => {
+        shadowRoot.removeEventListener("click", handleClick);
+      };
     }
-  }, [htmlContent, cssContent]);
+  }, [htmlContent, cssContent, onClick]);
 
   return <div ref={containerRef}></div>;
 };
