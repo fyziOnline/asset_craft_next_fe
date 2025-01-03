@@ -18,7 +18,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const asset_name = queryParams.get("asset_name") as string;
   const isCampaignSelect = queryParams.get("isCampaignSelect") as string;
   const assetPromptIDRef = useRef("");
-  const campaignPromptIDRef = useRef("");
   const assetIDTemplateRef = useRef("");
   const assetSelect = useRef<AssetHtmlProps>({} as AssetHtmlProps);
 
@@ -146,14 +145,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   ) => {
     try {
       if (isCampaignSelect == "true") {
-        const resAIPromptCampaign = await ApiService.get<any>(
-          `${urls.aiPrompt_Campaign_select}?CampaignID=${campaignID}`
-        );
-        if (resAIPromptCampaign.isSuccess) {
-          campaignPromptIDRef.current =
-            resAIPromptCampaign.aIPromptCampaign.campaignPromptID;
-          return await aiPromptCampaignUpdate(FormData, fileID);
-        }
+        return await aiPromptCampaignUpdate(FormData, fileID);
       } else {
         const resCampaignInsert = await ApiService.post<any>(
           urls.aiPrompt_Campaign_insert,
@@ -168,7 +160,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
           }
         );
         if (resCampaignInsert.isSuccess) {
-          campaignPromptIDRef.current = resCampaignInsert.campaignPromptID;
           return resCampaignInsert;
         }
       }
@@ -279,9 +270,11 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                 FormData,
                 fileID
               );
-              let resGenerate = await aiPromptGenerateForAsset();
               if (resCampaignInsert.isSuccess) {
-                return await generateAssetHTML();
+                let resGenerate = await aiPromptGenerateForAsset();
+                if (resGenerate.isSuccess) {
+                  return await generateAssetHTML();
+                }
               }
             }
           } else {
@@ -318,9 +311,11 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
             FormData,
             fileID
           );
-          let resGenerate = await aiPromptGenerateForAsset();
           if (resCampaignInsert.isSuccess) {
-            return await generateAssetHTML();
+            let resGenerate = await aiPromptGenerateForAsset();
+            if (resGenerate.isSuccess) {
+              return await generateAssetHTML();
+            }
           }
         }
       } else {
