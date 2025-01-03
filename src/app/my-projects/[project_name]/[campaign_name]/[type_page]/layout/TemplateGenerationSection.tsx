@@ -102,7 +102,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const sidebarStep3 = () => {
         return (
             <>
-                {[ListTypePage.Email, ListTypePage.CallScript].includes(params.type_page) ? (
+                {
                     <TransformWrapper
                         initialScale={0.4}
                         minScale={0.4}
@@ -118,11 +118,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
                         </TransformComponent>
                     </TransformWrapper>
-                ) : (
-                    <div className='w-full h-full flex items-center justify-center overflow-y-scroll'>
-                        <img className='w-[350px] h-[550px]' src="/images/Template1.png" alt="" />
-                    </div>
-                )}
+                }
             </>
         );
     }
