@@ -84,6 +84,7 @@ const tableHeading = ["Project Name", "Campaign Name", "Asset Details", "Created
 
 const Dashboard: FC = () => {
   const {
+    isProductNameValid,
     isAssetNameExists,
     listProjects,
     listCampaigns,
@@ -93,6 +94,7 @@ const Dashboard: FC = () => {
     selectedIndexes,
     selectedButton,
     handleNext,
+    projectName,
     closeModal,
     closeAssetModal,
     onChangeAssetDetails,
@@ -115,7 +117,7 @@ const Dashboard: FC = () => {
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
             <DropDown
               onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value,optionSelected.label || '') }}
-              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name" ></DropDown>
+              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name"  otherFieldErrorText={!isProductNameValid ? `Product/Solution name cannot be ${projectName}` : '' }></DropDown>
             {/* <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here." listData={listProjects} onChange={(value) => { handleChangeAssetDetails("project_name", value) }} /> */}
           </div>
           <div className='flex flex-col gap-3'>
