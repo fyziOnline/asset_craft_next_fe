@@ -3,9 +3,10 @@ import { useEffect, useRef } from "react";
 interface ShadowDomContainerProps {
   htmlContent: string;
   cssContent?: string;
+  onClick?: (event: Event) => void;
 }
 
-const ShadowDomContainer: React.FC<ShadowDomContainerProps> = ({ htmlContent, cssContent = "" }) => {
+const ShadowDomContainer: React.FC<ShadowDomContainerProps> = ({ htmlContent, cssContent = "", onClick }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,18 +17,53 @@ const ShadowDomContainer: React.FC<ShadowDomContainerProps> = ({ htmlContent, cs
         shadowRoot = containerRef.current.attachShadow({ mode: "open" });
       }
 
-      shadowRoot.innerHTML = `
-        <style>
-          ${cssContent}
-        </style>
-        ${htmlContent}
-      `;
-    }
-  }, [htmlContent, cssContent]);
+      // Clear old content
+      while (shadowRoot.firstChild) {
+        shadowRoot.removeChild(shadowRoot.firstChild);
+      }
 
-  return <div
-    id="container" // dont remove it
-    ref={containerRef}></div>;
+      // Create style element
+      const style = document.createElement("style");
+      style.textContent = cssContent;
+      shadowRoot.appendChild(style);
+
+      // Render HTML content
+      const tempContainer = document.createElement("div");
+      tempContainer.innerHTML = htmlContent;
+
+      // Process all <a> links
+      tempContainer.querySelectorAll("a").forEach((link) => {
+        link.target = "_blank"; // Open in a new tab
+        link.rel = "noopener noreferrer"; // Enhance security
+        link.addEventListener("click", (event) => {
+          event.preventDefault(); // Prevent default behavior
+          const href = link.getAttribute("href");
+          if (href) {
+            window.open(href, "_blank");
+          }
+        });
+      });
+
+      // Attach content to Shadow DOM
+      shadowRoot.appendChild(tempContainer);
+
+      // Add event listener to the shadowRoot for click events
+      const handleClick = (event: Event) => {
+        if (onClick) {
+          onClick(event); // callback 
+        }
+      };
+
+      shadowRoot.addEventListener("click", handleClick);
+
+      // Cleanup function
+      return () => {
+        shadowRoot.removeEventListener("click", handleClick);
+      };
+    }
+  }, [htmlContent, cssContent, onClick]);
+
+  return <div ref={containerRef}></div>;
 };
 
 export default ShadowDomContainer;
