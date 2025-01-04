@@ -44,6 +44,41 @@ interface AssetsProps {
     assetID: string
 }
 
+
+interface AllAssetsTypeProps {
+    project: string;
+    campaignName: string;
+    status: string;
+    assetID: string;
+    clientID: string;
+    campaignID: string;
+    assetVersionID: string;
+    assetName: string;
+    language: string;
+    createdOn: string;
+    assetAIPrompt: string;
+    isVisible: number;
+    layoutID: string;
+    layoutName: string;
+    layoutHTML: string;
+    assetVersions: AssetVersion[];
+    isSuccess: boolean;
+    errorOnFailure: string;
+}
+
+interface AssetVersion {
+    assetVersionID: string;
+    assetID: string;
+    templateID: string;
+    versionNumber: number;
+    versionName: string;
+    htmlGenerated: string;
+    htmlFileURL: string | null;
+    zipFileURL: string | null;
+    status: string;
+  }
+
+
 type AssetDetails = {
     project_name: string;
     campaign_name: string;
@@ -57,7 +92,7 @@ export const useDashboard = () => {
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
-    const [isProductNameValid,setIsProductNameValid] = useState<boolean>(true)
+    const [isProductNameValid, setIsProductNameValid] = useState<boolean>(true)
     const [chooseAssetModal, setChooseAssetModal] = useState<boolean>(false);
     const [selectedButton, setSelectedButton] = useState<ClientAssetTypeProps>()
     const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
@@ -73,9 +108,12 @@ export const useDashboard = () => {
         asset_name: ''
     })
 
+    const [dashboardAssets, setDashboardAssets] = useState<AllAssetsTypeProps[]>([])
+
     useEffect(() => {
         getListProjects()
         getAssetTypes()
+        getAssetAllAtDashboard()
     }, [])
 
     const getListProjects = async () => {
@@ -101,7 +139,7 @@ export const useDashboard = () => {
 
     const getListCampaign = async (projectName: string, label: string) => {
         try {
-            if (projectName.trim().length === 0 || label === 'Other' ) {
+            if (projectName.trim().length === 0 || label === 'Other') {
                 setListCampaigns([])
                 return
             }
@@ -170,7 +208,7 @@ export const useDashboard = () => {
         }))
 
         if (key === "project_name") {
-           ['other', 'others'].includes(value.trim().toLowerCase()) ? setIsProductNameValid(false) : setIsProductNameValid(true)
+            ['other', 'others'].includes(value.trim().toLowerCase()) ? setIsProductNameValid(false) : setIsProductNameValid(true)
             getListCampaign(value, label || "")
         } else if (key === "campaign_name") {
             handleCheckCampNameExists(listCampaigns, value)
@@ -268,6 +306,24 @@ export const useDashboard = () => {
         }
     }
 
+
+    const getAssetAllAtDashboard = async () => {
+        try {
+            setShowLoading(true)
+            const res_assets_dashboard = await ApiService.get<any>(`${urls.getAssetsAllDashboard}?timePeriod=${90}`)
+
+            console.log("response", res_assets_dashboard);
+
+            setDashboardAssets(res_assets_dashboard.assets)
+
+        } catch (error) {
+            alert(ApiService.handleError(error))
+            return false
+        } finally {
+            setShowLoading(false)
+        }
+    }
+
     return {
         isProductNameValid,
         isAssetNameExists,
@@ -284,7 +340,8 @@ export const useDashboard = () => {
         onChangeAssetDetails,
         handleShowPopup,
         onSelect,
+        dashboardAssets,
         projectName: assetDetails.project_name,
-        handleChangeAssetDetails
+        handleChangeAssetDetails,
     };
 };

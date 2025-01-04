@@ -12,6 +12,7 @@ import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/ass
 import { useDashboard } from "@/hooks/useDashboard";
 import InputAreaSearch from "@/components/global/InputAreaSearch";
 import DropDown from "@/components/global/DropDown";
+import { formatDate } from "@/utils/formatDate"
 
 const dashboardData = [
   { projectName: "All Projects", allProjectDate: "as of 04.10.2024", totalAssets: 15, underReview: 4, inProgress: 11 },
@@ -21,35 +22,6 @@ const dashboardData = [
   { projectName: "Landing Page", totalAssets: 15, underReview: 4, inProgress: 11 },
 ];
 
-const tableData = [
-  {
-    projectName: 'Lorem Ipsum',
-    campaignName: 'Lorem Ipsum',
-    assetName: 'Lorem',
-    creadedOn: '18.01.2024',
-    approvedBy: 'Prakash C.',
-    approvedOn: '20.01.2024',
-    currentStatus: 'In Progress',
-  },
-  {
-    projectName: 'Lorem Ipsum',
-    campaignName: 'Lorem Ipsum',
-    assetName: 'Lorem',
-    creadedOn: '18.01.2024',
-    approvedBy: 'Avish J.',
-    approvedOn: '20.01.2024',
-    currentStatus: 'Pending Approval',
-  },
-  {
-    projectName: 'Project Alpha',
-    campaignName: 'Campaign X',
-    assetName: 'Asset A',
-    creadedOn: '21.01.2024',
-    approvedBy: 'John D.',
-    approvedOn: '22.01.2024',
-    currentStatus: 'Completed',
-  }
-];
 
 const pendingApprovals = [
   {
@@ -80,7 +52,7 @@ const pendingApprovals = [
 ];
 
 
-const tableHeading = ["Project Name", "Campaign Name", "Asset Details", "Created On", "Approved By", "Approved On", "Current Status"]
+const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
 const Dashboard: FC = () => {
   const {
@@ -100,7 +72,38 @@ const Dashboard: FC = () => {
     onChangeAssetDetails,
     handleShowPopup,
     onSelect,
-    handleChangeAssetDetails } = useDashboard()
+    handleChangeAssetDetails,
+    dashboardAssets
+
+  } = useDashboard()
+
+  console.log("getAssetAllAtDashboard at dashboard", dashboardAssets);
+
+  const totalProject = dashboardAssets.length
+  const inProgressCount = dashboardAssets.filter((asset) => asset.status === "In Progress").length;
+  const onreview = dashboardAssets.filter((asset) => asset.status === "On review").length;
+
+  const assetsDisplayTable = dashboardAssets.slice(0, 10).map((data) => {
+    return {
+      assetName: data.assetName,
+      campaignName: data.campaignName,
+      projectName: data.project,
+      creadedOn: formatDate(data.createdOn),
+      currentStatus: data.status,
+    }
+  })
+
+  const updatedDashboardData = dashboardData.map((data) => {
+    if (data.projectName === "All Projects") {
+      return {
+        ...data,
+        underReview: onreview,
+        inProgress: inProgressCount,
+        totalAssets: totalProject
+      };
+    }
+    return data; // Keep other entries as is
+  });
 
   const options = [
     { id: 1, label: "Email", icon: <EmailIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(1) ? "white" : "black"} /> },
@@ -116,8 +119,8 @@ const Dashboard: FC = () => {
           <div className='pt-[15px] flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
             <DropDown
-              onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value,optionSelected.label || '') }}
-              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name"  otherFieldErrorText={!isProductNameValid ? `Product/Solution name cannot be ${projectName}` : '' }></DropDown>
+              onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value, optionSelected.label || '') }}
+              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name" otherFieldErrorText={!isProductNameValid ? `Product/Solution name cannot be ${projectName}` : ''}></DropDown>
             {/* <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here." listData={listProjects} onChange={(value) => { handleChangeAssetDetails("project_name", value) }} /> */}
           </div>
           <div className='flex flex-col gap-3'>
@@ -157,7 +160,7 @@ const Dashboard: FC = () => {
         <p className="text-base font-bold tracking-wide">Overview:</p>
       </div>
       <div className="px-8 flex items-center gap-9">
-        {dashboardData.map((data, index) => (
+        {updatedDashboardData.map((data, index) => (
           <DashboardCard
             key={index}
             projectName={data.projectName}
@@ -177,15 +180,15 @@ const Dashboard: FC = () => {
             </p>
 
             <div className="flex w-full overflow-x-auto gap-4 my-5 scrollbar-hide overflow-y-hidden">
-              {clientAssetTypes.map((item, index) => (
+              {clientAssetTypes.filter(item => item.assetTypeName !== "All in One").map((item, index) => (
                 <Button
                   key={index}
                   buttonText={item.assetTypeName}
                   showIcon={false}
                   IconComponent={item.assetTypeName === "All in One" && <ExpressIcon strokeColor="white" width="40" height="38" />}
-                  backgroundColor={item.assetTypeName === "All in One" ? "bg-green-300" : "bg-white"}
-                  customClass={item.assetTypeName === "All in One" ? "px-[50px] py-1" : "border-2 border-green-300 min-w-min px-[50px]"}
-                  textColor={item.assetTypeName === "All in One" ? undefined : "text-foreground"}
+                  backgroundColor={"bg-white"}
+                  customClass={"px-12 py-1 border-2 border-green-300 min-w-min px-[50px]"}
+                  textColor={"text-foreground"}
                   handleClick={() => handleShowPopup(item)}
                   textStyle={`font-normal text-sm text-center whitespace-nowrap`}
                 />
@@ -196,10 +199,14 @@ const Dashboard: FC = () => {
             <div className="mt-5">
               <p className="text-lg font-bold tracking-wide">Recent Assets:</p>
             </div>
-
             <div>
-              <Table listItems={tableData} tableHeadings={tableHeading} />
+              {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
+                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} />
+              ) : (
+                <p></p> // Optionally, display a message if no data is available
+              )}
             </div>
+
           </div>
         </div>
         <div className="w-[30%] bg-[#F9F9F9] rounded-[14px] ml-4">
