@@ -147,14 +147,14 @@ const Dashboard: FC = () => {
         </div>
       </ProjectSetUpModal>
 
-      <div className="px-8 pt-8 pb-4">
+      <div className="px-8 p-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-[30px] text-green-100 font-bold leading-normal">
+          <h1 className="text-2xl tracking-wide text-green-100 font-bold leading-normal">
             Welcome, Stan Lee.
           </h1>
           <SearchBox />
         </div>
-        <p className="text-lg font-bold">Overview:</p>
+        <p className="text-base font-bold tracking-wide">Overview:</p>
       </div>
       <div className="px-8 flex items-center gap-9">
         {dashboardData.map((data, index) => (
@@ -172,7 +172,7 @@ const Dashboard: FC = () => {
       <div className="pl-8 pt-5 flex w-full mb-32">
         <div className="w-[70%] border-t border-[#D9D9D9]">
           <div className="mt-5">
-            <p className="text-xl font-bold">
+            <p className="text-lg font-bold tracking-wide">
               What would you like to create today?
             </p>
 
@@ -194,7 +194,7 @@ const Dashboard: FC = () => {
           </div>
           <div className="border-t border-[#D9D9D9]">
             <div className="mt-5">
-              <p className="text-xl font-bold">Recent Assets:</p>
+              <p className="text-lg font-bold tracking-wide">Recent Assets:</p>
             </div>
 
             <div>
@@ -205,7 +205,7 @@ const Dashboard: FC = () => {
         <div className="w-[30%] bg-[#F9F9F9] rounded-[14px] ml-4">
           <div className="p-6">
             <div className="flex items-baseline justify-between">
-              <p className="text-xl font-bold">Pending Approval:</p>
+              <p className="text-lg font-bold">Pending Approval:</p>
               <p className="text-base font-normal underline">View all</p>
             </div>
             {pendingApprovals.map((data, index) => (
