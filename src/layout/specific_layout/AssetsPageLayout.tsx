@@ -1,9 +1,10 @@
 import { FC, useState } from 'react'
 // import LayoutWrapper from '../LayoutWrapper'
-import Breadcrumb from '@/components/global/Breadcrumb'
+// import Breadcrumb from '@/components/global/Breadcrumb'
 import AssetCard from '@/components/wrapper/AssetCard'
 import { GridIcon, ListIcon } from '@/assets/icons/AppIcons'
 import Table from '@/components/global/Table'
+import Title from '@/components/global/Title'
 
 interface Asset {
   [key: string]: string
@@ -30,7 +31,8 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   return (
     <>
       <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
-        <Breadcrumb TaskType={page} />
+        {/* <Breadcrumb TaskType={page} /> */}
+        <Title titleName={page} />
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
       </div>
       <div className="px-4 lg:px-16 xl:px-20">

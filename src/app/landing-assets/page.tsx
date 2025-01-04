@@ -1,5 +1,5 @@
 import { FC } from "react"
-import Breadcrumb from "@/components/global/Breadcrumb"
+// import Breadcrumb from "@/components/global/Breadcrumb"
 import LayoutWrapper from "@/layout/LayoutWrapper"
 import Table from "@/components/global/Table"
 import { LandingAssetIcon } from "@/assets/icons/TableIcon"
@@ -39,7 +39,7 @@ const page:FC = () => {
   return (
     <>
       <div className="pt-[2rem] px-[1.5rem]">
-          <Breadcrumb TaskType="Landing Page Assets"/>
+          {/* <Breadcrumb TaskType="Landing Page Assets"/> */}
       </div>
       <div className="px-16">
         <Table IconComponent={<LandingAssetIcon />} IconAssetName="assetName" columnWidths={["4fr" , "1fr" ,"1fr" ,"1fr" ,"1fr"]} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />

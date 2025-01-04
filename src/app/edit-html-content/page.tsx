@@ -1,6 +1,6 @@
 'use client';
 import React, { Suspense, useMemo } from 'react';
-import Breadcrumb from "@/components/global/Breadcrumb";
+// import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import Search from '@/components/global/Search';
 import TextField from '@/components/global/TextField';
@@ -16,13 +16,13 @@ interface HeaderProps {
     versionNameChoose: string
 }
 
-const Header = ({ versionNameChoose }: HeaderProps) => {
-    const queryParams = useSearchParams()
-    const project_name = queryParams.get('project_name') ?? 'default'
-    const campaign_name = queryParams.get('campaign_name') ?? 'default'
-    const asset_name = queryParams.get('asset_name') ?? 'default'
-    return (<Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={`${asset_name}_${versionNameChoose}`.replace(" ", "")} />)
-}
+// const Header = ({ versionNameChoose }: HeaderProps) => {
+//     const queryParams = useSearchParams()
+//     const project_name = queryParams.get('project_name') ?? 'default'
+//     const campaign_name = queryParams.get('campaign_name') ?? 'default'
+//     const asset_name = queryParams.get('asset_name') ?? 'default'
+//     return (<Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={`${asset_name}_${versionNameChoose}`.replace(" ", "")} />)
+// }
 
 const Page = () => {
     const { contextData } = useAppData();
@@ -129,7 +129,7 @@ const Page = () => {
             <div className='overflow-hidden'>
                 <div className="flex pt-[2rem] pb-2 px-[1.5rem]">
                     <div className='flex-1'>
-                        <Header versionNameChoose={versionSelected?.versionName || ""} />
+                        {/* <Header versionNameChoose={versionSelected?.versionName || ""} /> */}
                     </div>
                     <div className='flex items-center'>
                         <div className='flex items-center'>
