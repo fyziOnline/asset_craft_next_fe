@@ -50,6 +50,7 @@ interface AllAssetsTypeProps {
     campaignName: string;
     status: string;
     assetID: string;
+    assetTypeName: string;
     clientID: string;
     campaignID: string;
     assetVersionID: string;
@@ -76,7 +77,7 @@ interface AssetVersion {
     htmlFileURL: string | null;
     zipFileURL: string | null;
     status: string;
-  }
+}
 
 
 type AssetDetails = {
@@ -310,11 +311,11 @@ export const useDashboard = () => {
     const getAssetAllAtDashboard = async () => {
         try {
             setShowLoading(true)
-            const res_assets_dashboard = await ApiService.get<any>(`${urls.getAssetsAllDashboard}?timePeriod=${90}`)
+            const respone = await ApiService.get<any>(`${urls.getAssetsAllDashboard}?timePeriod=${90}`)
 
-            console.log("response", res_assets_dashboard);
-
-            setDashboardAssets(res_assets_dashboard.assets)
+            if (respone.isSuccess) {
+                setDashboardAssets(respone.assets)
+            }
 
         } catch (error) {
             alert(ApiService.handleError(error))

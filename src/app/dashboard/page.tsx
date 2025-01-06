@@ -13,14 +13,8 @@ import { useDashboard } from "@/hooks/useDashboard";
 import { formatDate } from "@/utils/formatDate"
 import InputAreaSearch from "@/components/global/InputAreaSearch";
 import DropDown from "@/components/global/DropDown";
+import processDashboardAssets from "@/app/dashboard/utils/dashboardFilters"
 
-const dashboardData = [
-  { projectName: "All Projects", allProjectDate: "as of 04.10.2024", totalAssets: 15, underReview: 4, inProgress: 11 },
-  { projectName: "Email", totalAssets: 15, underReview: 4, inProgress: 11 },
-  { projectName: "LinkedIn", totalAssets: 15, underReview: 4, inProgress: 11 },
-  { projectName: "Call Script", totalAssets: 15, underReview: 4, inProgress: 11 },
-  { projectName: "Landing Page", totalAssets: 15, underReview: 4, inProgress: 11 },
-];
 
 
 const pendingApprovals = [
@@ -76,33 +70,7 @@ const Dashboard: FC = () => {
     dashboardAssets
   } = useDashboard()
 
-  console.log("getAssetAllAtDashboard at dashboard", dashboardAssets);
-
-  const totalProject = dashboardAssets.length
-  const inProgressCount = dashboardAssets.filter((asset) => asset.status === "In Progress").length;
-  const onreview = dashboardAssets.filter((asset) => asset.status === "On review").length;
-
-  const assetsDisplayTable = dashboardAssets.slice(0, 10).map((data) => {
-    return {
-      assetName: data.assetName,
-      campaignName: data.campaignName,
-      projectName: data.project,
-      creadedOn: formatDate(data.createdOn),
-      currentStatus: data.status,
-    }
-  })
-
-  const updatedDashboardData = dashboardData.map((data) => {
-    if (data.projectName === "All Projects") {
-      return {
-        ...data,
-        underReview: onreview,
-        inProgress: inProgressCount,
-        totalAssets: totalProject
-      };
-    }
-    return data; // Keep other entries as is
-  });
+  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
 
   const options = [
     { id: 1, label: "Email", icon: <EmailIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(1) ? "white" : "black"} /> },
