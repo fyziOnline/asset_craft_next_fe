@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { jwtDecode } from "jwt-decode";
 import { ApiService } from '@/lib/axios_generic';
 import { nkey } from '@/data/keyStore';
 import { urls } from '@/apis/urls';
@@ -65,6 +66,13 @@ export const useLogin = () => {
             });
 
             if (resToken.isSuccess) {
+                const decodedToken:any = jwtDecode(resToken.loginToken);
+                console.log("Decoded Token:", decodedToken);
+                const { UserID , UserRole } = decodedToken;
+
+                Cookies.set(nkey.userID, UserID, { expires: 180 });
+                Cookies.set(nkey.userRole, UserRole, { expires: 180 });
+
                 Cookies.set(nkey.auth_token, resToken.loginToken, { expires: 180 });
                 const resClientID = await ApiService.get<any>(urls.client_select_all, {});
 

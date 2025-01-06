@@ -1,6 +1,6 @@
 'use client';
-import React, { Suspense } from 'react';
-import Breadcrumb from "@/components/global/Breadcrumb";
+import React, { Suspense, useMemo } from 'react';
+// import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import Search from '@/components/global/Search';
 import TextField from '@/components/global/TextField';
@@ -10,20 +10,24 @@ import EditContentModel from './components/EditContentModel';
 import { useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps } from '@/types/templates';
+import { useAppData } from '@/context/AppContext';
+import { UserIcon } from "@/assets/icons/AppIcons"
+import Link from 'next/link'
 
 interface HeaderProps {
     versionNameChoose: string
 }
 
-const Header = ({ versionNameChoose }: HeaderProps) => {
-    const queryParams = useSearchParams()
-    const project_name = queryParams.get('project_name') ?? 'default'
-    const campaign_name = queryParams.get('campaign_name') ?? 'default'
-    const asset_name = queryParams.get('asset_name') ?? 'default'
-    return (<Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={`${asset_name}_${versionNameChoose}`.replace(" ", "")} />)
-}
+// const Header = ({ versionNameChoose }: HeaderProps) => {
+//     const queryParams = useSearchParams()
+//     const project_name = queryParams.get('project_name') ?? 'default'
+//     const campaign_name = queryParams.get('campaign_name') ?? 'default'
+//     const asset_name = queryParams.get('asset_name') ?? 'default'
+//     return (<Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={`${asset_name}_${versionNameChoose}`.replace(" ", "")} />)
+// }
 
 const Page = () => {
+    const { contextData } = useAppData();
     const {
         sectionEdit,
         isLoadingGenerate,
@@ -38,7 +42,6 @@ const Page = () => {
         handleAddVersion,
         handleChangeTextVersion,
         handleSave,
-        handleCopy,
         setIsShowModelEdit,
         setIsShowAddVer,
         onGenerateWithAI,
@@ -46,12 +49,89 @@ const Page = () => {
         setSectionEdit
     } = useEditHTMLContent()
 
+    const htmlOtherAsset = () => {
+        let htmlContent = ''
+        versionSelected.assetVersionBlocks.forEach((item) => {
+            if (!item.isStatic) {
+                htmlContent += `
+                <div style="position:relative;">
+                <div style="right:-60px; z-index:100; position:absolute;">
+                    <div id="edit-button" data-block-id="${item.assetVersionBlockID}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none">
+                        <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M30.0625 4.06433C30.709 3.41787 31.5858 3.05469 32.5 3.05469C33.4142 3.05469 34.291 3.41787 34.9375 4.06433C35.584 4.7108 35.9471 5.58759 35.9471 6.50183C35.9471 7.41607 35.584 8.29287 34.9375 8.93933L19.5 24.3768L13 26.0018L14.625 19.5018L30.0625 4.06433Z" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                </div>
+                ` + item.blockHTMLGenerated + '</div>\n'
+            } else {
+                htmlContent += item.blockHTMLGenerated ?? ""
+            }
+        })
+
+        return versionSelected.layoutHTMLGenerated.replace("[(blocks)]", htmlContent)
+    }
+
+    const handleClickEdit = (event: Event) => {
+        const target = event.target as HTMLElement;
+
+        const container = target.id === "edit-button"
+            ? target
+            : target.closest("#edit-button") as HTMLElement;
+
+        if (container) {
+            const assetVersionBlockID = container.dataset.blockId;
+            const section = versionSelected.assetVersionBlocks.find((item) => item.assetVersionBlockID === assetVersionBlockID);
+            if (section) {
+                setSectionEdit(section)
+                setIsShowModelEdit(true)
+            } else {
+                alert(`Error selecting edit section, please try again later`);
+            }
+        }
+    };
+
+    const renderHTMLSelect = useMemo(() => {
+        if (!versionSelected?.assetVersionBlocks) {
+            return null;
+        }
+
+        // render other layout 
+        const listLayout = ["landing", "linkedin", "callscript"]
+        const hasMatchLayoutName = listLayout.some(substring => contextData.AssetHtml.layoutName.toLowerCase().includes(substring.toLowerCase()));
+        if (hasMatchLayoutName) {
+            return <div className='flex justify-center'>
+                <ShadowDomContainer onClick={handleClickEdit} htmlContent={htmlOtherAsset()}></ShadowDomContainer>
+            </div>
+        }
+
+        // render email layout
+        return (versionSelected.assetVersionBlocks.map((item, idx) => {
+            return (
+                <div key={idx} >
+                    {!item.isStatic ? <div className='flex w-[100%] items-center justify-center absolute ml-[350px] mt-9 z-20' >
+                        <div className='mt-1' onClick={() => {
+                            setSectionEdit(item)
+                            setIsShowModelEdit(true)
+                        }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none" data-id="101">
+                                <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M30.0625 4.06433C30.709 3.41787 31.5858 3.05469 32.5 3.05469C33.4142 3.05469 34.291 3.41787 34.9375 4.06433C35.584 4.7108 35.9471 5.58759 35.9471 6.50183C35.9471 7.41607 35.584 8.29287 34.9375 8.93933L19.5 24.3768L13 26.0018L14.625 19.5018L30.0625 4.06433Z" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </div>
+                    </div> : null}
+                    <ShadowDomContainer htmlContent={item.blockHTMLGenerated || ""}></ShadowDomContainer>
+                </div>
+            )
+        }))
+    }, [versionSelected])
+
     return (
         <Suspense>
             <div className='overflow-hidden'>
-                <div className="flex pt-[2rem] pb-2 px-[1.5rem]">
+                <div className="flex p-1 px-2">
                     <div className='flex-1'>
-                        <Header versionNameChoose={versionSelected?.versionName || ""} />
+                        {/* <Header versionNameChoose={versionSelected?.versionName || ""} /> */}
                     </div>
                     <div className='flex items-center'>
                         <div className='flex items-center'>
@@ -61,7 +141,7 @@ const Page = () => {
                                 <path d="M19.8429 16.0714V14.4047C19.8423 13.6661 19.5897 12.9487 19.1246 12.3649C18.6595 11.7812 18.0084 11.3643 17.2734 11.1797" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 <path d="M13.8477 1.28906C14.5846 1.47265 15.2378 1.88965 15.7042 2.47432C16.1706 3.059 16.4238 3.77809 16.4238 4.51823C16.4238 5.25837 16.1706 5.97746 15.7042 6.56214C15.2378 7.14681 14.5846 7.56381 13.8477 7.7474" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                            <div className="mx-2 text-black text-lg font-normal font-['Inter']">Assign Approver</div>
+                            <div className="mx-2 text-black text-base tracking-wide font-normal">Assign Approver</div>
                         </div>
                         <Search placeHolder=''></Search>
                         <div className='relative'>
@@ -98,9 +178,11 @@ const Page = () => {
                             textColor="text-[#fff]"
                             iconColor="#fff"
                             customClass='static mr-[80px] ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+
+                        <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
                     </div>
                 </div>
-                <div className='pl-[64px]'>
+                <div className='pl-28'>
                     {versionList.map((item, index) => {
                         return (
                             <button
@@ -111,51 +193,11 @@ const Page = () => {
                             </button>)
                     })}
                 </div>
-                <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9]">
-                    <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide relative">
+                <div className="min-h-[82vh] border-t border-solid border-[#D9D9D9] bg-[#e4e4e4]">
+                    <div className="flex flex-col h-[82vh] pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
                         <div>
-                            <div className='flex w-[100%] items-center justify-end pr-52 absolute mt-9 z-20' >
-                                {/* <div className='mr-[20px] mt-1' onClick={() => { setIsShowModelEdit(true) }}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none" data-id="101">
-                                        <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M30.0625 4.06433C30.709 3.41787 31.5858 3.05469 32.5 3.05469C33.4142 3.05469 34.291 3.41787 34.9375 4.06433C35.584 4.7108 35.9471 5.58759 35.9471 6.50183C35.9471 7.41607 35.584 8.29287 34.9375 8.93933L19.5 24.3768L13 26.0018L14.625 19.5018L30.0625 4.06433Z" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div> */}
-                                {/* <Button
-                                    handleClick={onGenerateWithAI}
-                                    disabled={isLoadingGenerate}
-                                    buttonText={isLoadingGenerate ? 'Generating...' : 'Generate with AI'}
-                                    backgroundColor={isLoadingGenerate ? "bg-[#00A881]" : "bg-custom-gradient-green"}
-                                    showIcon={false}
-                                    textStyle='text-[1rem] font-base text-[#00A881]'
-                                    textColor="text-[#fff]"
-                                    customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' /> */}
-                                {/* <div className='mr-2 mt-1'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none" data-id="102">
-                                        <path d="M32.5 14.625H17.875C16.0801 14.625 14.625 16.0801 14.625 17.875V32.5C14.625 34.2949 16.0801 35.75 17.875 35.75H32.5C34.2949 35.75 35.75 34.2949 35.75 32.5V17.875C35.75 16.0801 34.2949 14.625 32.5 14.625Z" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M8.125 24.375H6.5C5.63805 24.375 4.8114 24.0326 4.2019 23.4231C3.59241 22.8136 3.25 21.987 3.25 21.125V6.5C3.25 5.63805 3.59241 4.8114 4.2019 4.2019C4.8114 3.59241 5.63805 3.25 6.5 3.25H21.125C21.987 3.25 22.8136 3.59241 23.4231 4.2019C24.0326 4.8114 24.375 5.63805 24.375 6.5V8.125" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div> */}
-                            </div>
                             <div id="container">
-                                {versionSelected?.assetVersionBlocks && versionSelected.assetVersionBlocks.map((item, idx) => {
-                                    return (
-                                        <div key={idx}>
-                                            {!item.isStatic ? <div className='flex w-[100%] items-center justify-end absolute mt-9 z-20' >
-                                                <div className='mr-[20px] mt-1' onClick={() => {
-                                                    setSectionEdit(item)
-                                                    setIsShowModelEdit(true)
-                                                }}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none" data-id="101">
-                                                        <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                        <path d="M30.0625 4.06433C30.709 3.41787 31.5858 3.05469 32.5 3.05469C33.4142 3.05469 34.291 3.41787 34.9375 4.06433C35.584 4.7108 35.9471 5.58759 35.9471 6.50183C35.9471 7.41607 35.584 8.29287 34.9375 8.93933L19.5 24.3768L13 26.0018L14.625 19.5018L30.0625 4.06433Z" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                    </svg>
-                                                </div>
-                                            </div> : null}
-                                            <ShadowDomContainer htmlContent={item.blockHTMLGenerated || ""}></ShadowDomContainer>
-                                        </div>
-                                    )
-                                })}
+                                {renderHTMLSelect}
                             </div>
                         </div>
 

@@ -36,10 +36,6 @@ export const useEditHTMLContent = () => {
         }
     }, [contextData.AssetHtml])
 
-    const handleCopy = () => {
-
-    };
-
     const getTargetElement = () => document.getElementById("container");
 
     const handleSave = (type: number) => {
@@ -177,7 +173,6 @@ export const useEditHTMLContent = () => {
         handleAddVersion,
         handleChangeTextVersion,
         handleSave,
-        handleCopy,
         setIsShowAddVer,
         setIsShowModelEdit,
         onGenerateWithAI,
