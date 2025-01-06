@@ -24,8 +24,8 @@ const config: Config = {
         inter: ['Inter', 'sans-serif'],
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "#ffff",
+        foreground: "#191919",
         'black-translucent': 'rgba(0, 0, 0, 0.54)',
         'off-white-primary':'#EEEEEE', // ref : this is the background color used in header and footer
         'custom-light-blue': 'rgba(149, 206, 255, 0.32)',
