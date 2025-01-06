@@ -29,11 +29,12 @@ interface TableProps {
   columnWidths?: string[];
   IconAssetName?: string;
   fieldClick?: string;
+  tablePlaceitems?: string;
   handleClick?: (value: any) => void;
   IconComponent?: React.ReactNode;
 }
 
-const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [], IconAssetName, IconComponent, fieldClick, handleClick = () => { } }) => {
+const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [], IconAssetName, IconComponent, fieldClick, tablePlaceitems = "flex-start", handleClick = () => { } }) => {
   const [sortListData, setSortListData] = useState<Options[]>(listItems);
   const [sortArrows, setSortArrows] = useState<{ [key: string]: boolean }>({ ...tableHeadings.reduce((acc, heading) => ({ ...acc, [heading]: true }), {}) });
 
@@ -103,7 +104,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
 
   return (
     <div className='w-full'>
-      <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle, placeItems: 'center' }}>
+      <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}>
         {tableHeadings.map((heading, index) => (
           <div key={index} className='flex items-center gap-2 justify-center'>
             <p className='text-base font-semibold text-grey-800'>{heading}</p>
@@ -126,7 +127,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
               if (fieldClick !== undefined) {
                 handleClick(data[fieldClick])
               }
-            }} key={index} className={`grid p-6 border border-[#00A881] rounded-xl cursor-pointer`} style={{ gridTemplateColumns: gridColumnStyle, placeItems : 'center' }}>
+            }} key={index} className={`grid p-6 border border-[#00A881] rounded-xl cursor-pointer`} style={{ gridTemplateColumns: gridColumnStyle, placeItems : tablePlaceitems }}>
               {getListItemsHeadings.map((heading, idx) => (
                 <div key={idx} className={`flex items-center gap-2 text-sm font-normal justify-center ${getStatusClass(data[heading] || '')}`}>
                   {heading === IconAssetName && IconComponent}

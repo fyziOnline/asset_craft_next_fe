@@ -5,14 +5,14 @@ import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
-import { ExpressIcon } from "@/assets/icons/AppIcons";
 import ProjectSetUpModal from "@/components/wrapper/ProjectSetUpModal";
 import TextField from "@/components/global/TextField";
 import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
+import { ExpressIcon } from "@/assets/icons/AppIcons";
 import { useDashboard } from "@/hooks/useDashboard";
+import { formatDate } from "@/utils/formatDate"
 import InputAreaSearch from "@/components/global/InputAreaSearch";
 import DropDown from "@/components/global/DropDown";
-import { formatDate } from "@/utils/formatDate"
 
 const dashboardData = [
   { projectName: "All Projects", allProjectDate: "as of 04.10.2024", totalAssets: 15, underReview: 4, inProgress: 11 },
@@ -74,7 +74,6 @@ const Dashboard: FC = () => {
     onSelect,
     handleChangeAssetDetails,
     dashboardAssets
-
   } = useDashboard()
 
   console.log("getAssetAllAtDashboard at dashboard", dashboardAssets);
@@ -201,7 +200,7 @@ const Dashboard: FC = () => {
             </div>
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} />
+                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} tablePlaceitems="center" />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
