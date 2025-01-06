@@ -57,6 +57,7 @@ export const useDashboard = () => {
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
+    const [isProductNameValid,setIsProductNameValid] = useState<boolean>(true)
     const [chooseAssetModal, setChooseAssetModal] = useState<boolean>(false);
     const [selectedButton, setSelectedButton] = useState<ClientAssetTypeProps>()
     const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
@@ -100,7 +101,7 @@ export const useDashboard = () => {
 
     const getListCampaign = async (projectName: string, label: string) => {
         try {
-            if (projectName.trim().length === 0 || label === 'Other') {
+            if (projectName.trim().length === 0 || label === 'Other' ) {
                 setListCampaigns([])
                 return
             }
@@ -169,6 +170,7 @@ export const useDashboard = () => {
         }))
 
         if (key === "project_name") {
+           ['other', 'others'].includes(value.trim().toLowerCase()) ? setIsProductNameValid(false) : setIsProductNameValid(true)
             getListCampaign(value, label || "")
         } else if (key === "campaign_name") {
             handleCheckCampNameExists(listCampaigns, value)
@@ -209,6 +211,7 @@ export const useDashboard = () => {
 
     const handleNext = async () => {
         if (isAssetNameExists ||
+            !isProductNameValid ||
             assetDetails.asset_name.trim().length === 0 ||
             assetDetails.campaign_name.trim().length === 0 ||
             assetDetails.project_name.trim().length === 0
@@ -266,6 +269,7 @@ export const useDashboard = () => {
     }
 
     return {
+        isProductNameValid,
         isAssetNameExists,
         listProjects,
         listCampaigns,
@@ -280,6 +284,7 @@ export const useDashboard = () => {
         onChangeAssetDetails,
         handleShowPopup,
         onSelect,
+        projectName: assetDetails.project_name,
         handleChangeAssetDetails
     };
 };

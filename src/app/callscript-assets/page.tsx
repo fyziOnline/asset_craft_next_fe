@@ -1,5 +1,5 @@
 import { FC } from "react"
-import Breadcrumb from "@/components/global/Breadcrumb"
+// import Breadcrumb from "@/components/global/Breadcrumb"
 import LayoutWrapper from "@/layout/LayoutWrapper"
 import Table from "@/components/global/Table"
 import { SalesCallIcon } from "@/assets/icons/TableIcon"
@@ -40,7 +40,7 @@ const page:FC = () => {
     <>
         <LayoutWrapper layout="main" >
             <div className="pt-[2rem] px-[1.5rem]">
-                <Breadcrumb TaskType="Call Script Assets"/>
+                {/* <Breadcrumb TaskType="Call Script Assets"/> */}
             </div>
 
             <div className="px-16">

@@ -49,7 +49,7 @@ const Home: FC = () => {
       <div className="h-full pt-7">
         <div className="flex relative justify-evenly items-center gap-[2rem] ">
           <section className="text-white w-[25rem]">
-            <h1 className="text-[3.45rem] leading-[6rem]">BrandCentral<sup className="text-5xl">ai</sup></h1>
+            <h1 className="text-[3.45rem] md:text-5xl leading-[6rem]">BrandCentral<sup className="text-5xl">ai</sup></h1>
             <p className="text-wrap text-base">Simplifying Marketing Content with AI-Driven Precision</p>
           </section>
 

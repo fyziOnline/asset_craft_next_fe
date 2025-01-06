@@ -36,6 +36,7 @@ interface DropDownProps {
     optionLists: DropDownOptions[];
     isShowOther?: boolean;
     otherFieldText ?: string 
+    otherFieldErrorText ?: string
     onSelected?: (valueSelected: DropDownOptions) => void;
 }
 
@@ -45,6 +46,7 @@ const DropDown: React.FC<DropDownProps> = ({
     customClass = "",
     dropdownWidthClass = "",
     otherFieldText = 'Specify other target audiences',
+    otherFieldErrorText = '',
     onSelected = () => { },
     isShowOther = true }) => {
     const [selectedOption, setSelectedOption] = useState('')
@@ -116,6 +118,7 @@ const DropDown: React.FC<DropDownProps> = ({
             {isOtherSelected &&
                 <TextField handleChange={onChangeText} customClass='h-11' customAreaClass="whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide" placeholder={otherFieldText} />
             }
+            {otherFieldErrorText.length>0 && <p className='text-red-500 text-[12px] mt-[5px]'>{otherFieldErrorText}</p>}
         </div>
     )
 }

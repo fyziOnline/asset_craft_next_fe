@@ -1,10 +1,11 @@
 // this layout is used for /my-projects , /my-projects/[project] 
 
 import { FC, useState } from 'react'
-import Breadcrumb from '../../components/global/Breadcrumb'
+// import Breadcrumb from '../../components/global/Breadcrumb'
 import { GridIcon, ListIcon } from '@/assets/icons/AppIcons'
 import MyProjectCard from '../../components/wrapper/MyProjectCard'
 import Table from '../../components/global/Table'
+import Title from '@/components/global/Title'
 
 interface Project {
   [key: string]: string
@@ -30,7 +31,9 @@ const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingP
   return (
     <>
       <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
-        <Breadcrumb TaskType={page} />
+        {/* <Breadcrumb TaskType={page} /> */}
+        <Title titleName={page} />
+
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
       </div>
       <div className="asset-grid-padding">
