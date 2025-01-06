@@ -41,21 +41,27 @@ const EmailPage = ({ params }: EmailPageProps) => {
 
     const onNext = (step: number): void => {
         if (step === 0) {
-            setDisableList([0,2,3])
-            setIsShowList([1])
+            setDisableList([0, 2, 3,4]);
+            setIsShowList([1]);
         } else if (step === 1) {
-            setDisableList([0,1,3])
-            setIsShowList([2])
+            setDisableList([0, 1, 3,4]);
+            setIsShowList([2]);
         } else if (step === 2) {
-            setDisableList([0,1,2])
-            setIsShowList([3])
+            setDisableList([0, 1, 2,4]);
+            setIsShowList([3]);
         } else if (step === 3) {
-            setIsShowList([4])
+            setDisableList([0, 1, 2,3]);
+            setIsShowList([4]);
         } else if (step === 4) {
-            setIsShowList([])
-            if (checkedList.length === 4) { return }
+            setIsShowList([]);
+            if (checkedList.length === 5) {
+                return
+            }
         }
-        setCheckedList([...checkedList, step])
+        setCheckedList((prev) => {
+            const updatedList = [...prev, step];
+            return updatedList;
+        });
     };
 
     const onBack = (step: number): void => {
@@ -79,7 +85,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     };
 
     const handleGenerate = async () => {
-        if (generateStep === 2 || checkedList.length !== 4) {
+        if (generateStep === 2 || checkedList.length !== 5) {
             return;
         }
 
@@ -371,7 +377,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                     showIcon
                     textStyle='text-[1rem] font-base text-[#00A881]'
-                    backgroundColor={((checkedList.length === 4 && generateStep != 2) || generateStep === 4) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
+                    backgroundColor={((checkedList.length === 5 && generateStep != 2) || generateStep === 5) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
                     handleClick={handleGenerate}
                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
             </div>
