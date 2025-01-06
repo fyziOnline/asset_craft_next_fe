@@ -6,7 +6,7 @@ import { AssetBlockProps, AssetHtmlProps, AssetVersionProps } from '@/types/temp
 import Button from '@/components/global/Button';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, TextareaAutosize, ThemeProvider } from '@mui/material';
 import { useAppData } from '@/context/AppContext';
 import ShadowDomContainer from './ShadowDomContainer';
 import TextField from '@/components/global/TextField';
@@ -232,13 +232,14 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                         </div>
                                     </div>
                                 </div>
-                                <div className="border border-[#DCD8E8] w-full rounded-[10px]">
-                                    <TextField
-                                        disabled={!isEditPrompt}
-                                        customClass="h-12 border-none"
-                                        handleChange={handleInputAIPrompt}
-                                        value={assetBlockSelected.aiPrompt} />
-                                </div>
+                                <TextareaAutosize
+                                    disabled={!isEditPrompt}
+                                    value={assetBlockSelected.aiPrompt}
+                                    onChange={handleInputAIPrompt}
+                                    minRows={1}
+                                    maxRows={3}
+                                    className="w-full p-3 border rounded-[10px] resize-none"
+                                />
                                 <div className='flex justify-end mt-3'>
                                     {!isEditPrompt ? <Button
                                         handleClick={onGenerateWithAI}
