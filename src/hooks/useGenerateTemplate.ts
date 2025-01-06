@@ -19,10 +19,10 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const queryParams = useSearchParams();
   const campaignID = queryParams.get("campaignID") as string;
   const asset_name = queryParams.get("asset_name") as string;
-  const isCampaignSelect = queryParams.get("isCampaignSelect") as string;
   const assetPromptIDRef = useRef("");
   const assetIDTemplateRef = useRef("");
   const assetSelect = useRef<AssetHtmlProps>({} as AssetHtmlProps);
+  const isCampaignSelect = useRef(false)
 
   const returnError = (message: string) => {
     return {
@@ -150,7 +150,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     campaign_id : string
   ) => {
     try {
-      if (isCampaignSelect == "true") {
+      if (isCampaignSelect.current) {
         return await aiPromptCampaignUpdate(FormData, fileID,campaign_id);
       } else {
         const resCampaignInsert = await ApiService.post<any>(
@@ -165,7 +165,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
             webUrl: FormData?.webUrl || "",
           }
         );
-        console.log('new campaign :',resCampaignInsert);
 
         if (resCampaignInsert.isSuccess) {
           return resCampaignInsert;
@@ -275,6 +274,8 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     isRegenerateHTML: boolean
   ) => {
     let campaign_id = ProjectDetails.campaignID
+    campaign_id.length === 0 ? 
+      isCampaignSelect.current = false :  isCampaignSelect.current = true 
     try {
       if (isRegenerateHTML) {
         return await reGenerateHTML(FormData, Sections,campaign_id);
@@ -302,6 +303,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         const resAssetSelect = await getAssetHTML();
         if (resAssetSelect.isSuccess) {
           assetSelect.current = resAssetSelect as AssetHtmlProps;
+          // return
           const allSuccess = await updateSections(Sections);
           if (allSuccess) {
             const resAssetInsert = await ApiService.post<any>(
@@ -324,7 +326,9 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
               if (resCampaignInsert.isSuccess) {
                 let resGenerate = await aiPromptGenerateForAsset();
                 if (resGenerate.isSuccess) {
-                  return await generateAssetHTML();
+                  const res = await generateAssetHTML();
+                  return res
+
                 }
               }
             }
