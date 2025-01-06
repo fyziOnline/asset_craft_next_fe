@@ -9,9 +9,9 @@ import { urls } from '@/apis/urls';
 import { createTheme, TextareaAutosize, ThemeProvider } from '@mui/material';
 import { useAppData } from '@/context/AppContext';
 import ShadowDomContainer from './ShadowDomContainer';
-import TextField from '@/components/global/TextField';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import CloseIcon from '@mui/icons-material/Close';
+import { CustomTextArea, CustomTextTester } from './CustomTextArea';
 
 const customTheme = createTheme({
     palette: {
@@ -211,26 +211,16 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                         </div>
                         <div className='flex-1 h-[86vh] overflow-y-scroll scrollbar-hide px-5 py-2'>
                             <div className='border-b border-solid border-[#D9D9D9] pb-3 mt-2'>
-                                <div className='flex flex-row justify-between mt-2'>
-                                    <div className='flex flex-row mb-1 items-center'>
-                                        {!isEditPrompt ? <div onClick={() => {
-                                            refAiPromptCurrent.current = assetBlockSelected.aiPrompt
-                                            setIsEditPrompt(true)
-                                        }} className='p-1'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 30 30" fill="none">
-                                                <path d="M21.459 2.79243C22.2215 2.02993 23.2557 1.60156 24.334 1.60156C25.4123 1.60156 26.4465 2.02993 27.209 2.79243C27.9715 3.55492 28.3998 4.58909 28.3998 5.66743C28.3998 6.74576 27.9715 7.77993 27.209 8.54243L9.00065 26.7508L1.33398 28.6674L3.25065 21.0008L21.459 2.79243Z" stroke="#00A881" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        </div> : null}
-                                        <div className='text-[14px] font-bold'>AI Prompt:</div>
-                                    </div>
-                                    <div className='mt-[-10px] mr-[-10px]'>
-                                        <div
-                                            onClick={() => setIsShowModelEdit(false)}
-                                            className="p-1 cursor-pointer hover:bg-gray-200 rounded-full transition ease-in-out duration-200"
-                                        >
-                                            <CloseIcon className="text-gray-600" fontSize="medium" />
-                                        </div>
-                                    </div>
+                                <div className='flex flex-row mb-1 mt-2 items-center'>
+                                    {!isEditPrompt ? <div onClick={() => {
+                                        refAiPromptCurrent.current = assetBlockSelected.aiPrompt
+                                        setIsEditPrompt(true)
+                                    }} className='p-1'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 30 30" fill="none">
+                                            <path d="M21.459 2.79243C22.2215 2.02993 23.2557 1.60156 24.334 1.60156C25.4123 1.60156 26.4465 2.02993 27.209 2.79243C27.9715 3.55492 28.3998 4.58909 28.3998 5.66743C28.3998 6.74576 27.9715 7.77993 27.209 8.54243L9.00065 26.7508L1.33398 28.6674L3.25065 21.0008L21.459 2.79243Z" stroke="#00A881" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </div> : null}
+                                    <div className='text-[14px] font-bold'>AI Prompt:</div>
                                 </div>
                                 <TextareaAutosize
                                     disabled={!isEditPrompt}
@@ -238,7 +228,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                     onChange={handleInputAIPrompt}
                                     minRows={1}
                                     maxRows={3}
-                                    className="w-full p-3 border rounded-[10px] resize-none"
+                                    className="w-full p-3 border rounded-[10px] resize-none hover:border-[#01A982] focus:border-[#01A982] outline-none"
                                 />
                                 <div className='flex justify-end mt-3'>
                                     {!isEditPrompt ? <Button
@@ -281,23 +271,17 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                             <JsonForms
                                 schema={JSON.parse(assetBlock.schema as string)}
                                 data={blockData}
-                                renderers={materialRenderers}
+                                renderers={[
+                                    ...materialRenderers,
+                                    { tester: CustomTextTester, renderer: CustomTextArea }
+                                ]}
                                 cells={materialCells}
-                                // uischema={uiSChema}
                                 onChange={onHandleEditData}
                             />
                         </div>
                     </div>
                     <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-end'>
                         <div className='flex'>
-                            {/* <Button
-                                handleClick={() => { setIsShowModelEdit(false) }}
-                                buttonText='Close'
-                                showIcon={false}
-                                textStyle='text-[1rem] font-base'
-                                textColor="text-[#00A881]"
-                                backgroundColor="bg-[#fff]"
-                                customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' /> */}
                             <Button
                                 handleClick={onSaveAllAndClose}
                                 disabled={isLoading}
@@ -307,6 +291,14 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                 textColor="text-[#fff]"
                                 backgroundColor={isLoading ? "bg-[#00A881]" : "bg-custom-gradient-green"}
                                 customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+                        </div>
+                    </div>
+                    <div className='absolute top-1 right-1'>
+                        <div
+                            onClick={() => setIsShowModelEdit(false)}
+                            className="p-1 cursor-pointer hover:bg-gray-200 rounded-full transition ease-in-out duration-200"
+                        >
+                            <CloseIcon className="text-gray-600" fontSize="medium" />
                         </div>
                     </div>
                 </div>
