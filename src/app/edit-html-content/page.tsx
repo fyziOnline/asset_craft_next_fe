@@ -11,6 +11,8 @@ import { useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
+import { UserIcon } from "@/assets/icons/AppIcons"
+import Link from 'next/link'
 
 interface HeaderProps {
     versionNameChoose: string
@@ -176,6 +178,8 @@ const Page = () => {
                             textColor="text-[#fff]"
                             iconColor="#fff"
                             customClass='static mr-[80px] ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+
+                        <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
                     </div>
                 </div>
                 <div className='pl-28'>
@@ -189,8 +193,8 @@ const Page = () => {
                             </button>)
                     })}
                 </div>
-                <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9] bg-[#e4e4e4]">
-                    <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide relative">
+                <div className="min-h-[82vh] border-t border-solid border-[#D9D9D9] bg-[#e4e4e4]">
+                    <div className="flex flex-col h-[82vh] pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
                         <div>
                             <div id="container">
                                 {renderHTMLSelect}
