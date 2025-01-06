@@ -46,14 +46,14 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div className="h-full pt-7">
-        <div className="flex relative justify-evenly items-center gap-[2rem] ">
+      <div className="h-full pt-7 md:pt-[1rem]">
+        <div className="flex relative items-center gap-[17rem]">
           <section className="text-white w-[25rem]">
-            <h1 className="text-[3.45rem] leading-[6rem]">BrandCentral<sup className="text-5xl">ai</sup></h1>
-            <p className="text-wrap text-base">Simplifying Marketing Content with AI-Driven Precision</p>
+            <h1 className="text-[3.45rem] leading-[6rem] font-bold font-metric text-green-100">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
+            <p className="text-wrap text-base font-metricLight">Simplifying Marketing Content with AI-Driven</p>
           </section>
 
-          <div className="relative text-white border-4 bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-10 flex flex-col items-center">
+          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-10 padbot10 flex flex-col items-center md:pb-[0.75rem]">
             <div className="absolute top-[35%] left-[25%]">
               <div className="color-wheel ">
                 <div className="eclipse-1"></div>
@@ -61,22 +61,29 @@ const Home: FC = () => {
                 <div className="eclipse-3"></div>
               </div>
             </div>
-            <UserIcon className="mb-[1.5rem]" />
-            <input defaultValue={emailLoginDefault} onChange={onChangeEmail} className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[35ch] outline-none" placeholder="Email ID" type="text" />
-            <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
-            <p className="text-[0.7rem] mb-[0.7rem] ">Not a member? <span className="text-green-100">Sign up now</span></p>
+            <UserIcon className="mb-[1.5rem] " color="white" />
+            <input 
+              defaultValue={emailLoginDefault} 
+              onChange={onChangeEmail} 
+              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[35ch] outline-none font-metricLight bg-transparent border border-white text-white rounded-full" 
+              placeholder="Enter Your email id" 
+              type="text" 
+/>
+            <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[35ch] font-metricLight rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
+            <p className="text-[0.7rem] mb-[0.7rem] font-metricLight">Not a member? <span className="text-green-100">Sign up now</span></p>
           </div>
         </div>
-
-        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] my-8">
+        
+        
+        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] my-5">   
         </div>
 
         <div className="grid grid-cols-4 gap-7">
           {TaglineContents.map(tagline => {
             return (
               <section key={tagline.title} className="text-white">
-                <h2 className="mb-5 font-semibold tracking-wide">{tagline.title}</h2>
-                <p className="text-grey-200 text-sm tracking-wide">{tagline.content}</p>
+                <h2 className="mb-2 font-semibold tracking-wide font-metricSemibold">{tagline.title}</h2>
+                <p className="text-grey-200 text-sm tracking-wide font-metricLight">{tagline.content}</p>
               </section>
             )
           })}
