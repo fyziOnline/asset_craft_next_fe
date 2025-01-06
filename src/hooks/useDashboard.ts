@@ -79,6 +79,14 @@ interface AssetVersion {
     status: string;
 }
 
+interface UserDetailsProps {
+    userID: string;
+    name: string;
+    email: string;
+    userRole: string;
+    isActive: number;
+}
+
 
 type AssetDetails = {
     project_name: string;
@@ -110,10 +118,12 @@ export const useDashboard = () => {
     })
 
     const [dashboardAssets, setDashboardAssets] = useState<AllAssetsTypeProps[]>([])
+    const [userDetails, setUserDetails] = useState<UserDetailsProps | null>(null);
 
     useEffect(() => {
         getListProjects()
         getAssetTypes()
+        getUserDetails()
         getAssetAllAtDashboard()
     }, [])
 
@@ -168,9 +178,7 @@ export const useDashboard = () => {
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
             alert(ApiService.handleError(error));
-        } finally {
-            setShowLoading(false)
-        }
+        } 
     }
 
     const handleShowPopup = (item: ClientAssetTypeProps) => {
@@ -307,6 +315,18 @@ export const useDashboard = () => {
         }
     }
 
+    const getUserDetails = async () => {
+        try {
+            const userID = Cookies.get(nkey.userID)
+            const response = await ApiService.get<any>(`${urls.getuserDetails}?userProfileId=${userID}`)
+            if (response.isSuccess) {
+                setUserDetails(response.userProfile)
+            }
+        } catch (error) {
+            alert(ApiService.handleError(error))
+            return false
+        } 
+    }
 
     const getAssetAllAtDashboard = async () => {
         try {
@@ -324,6 +344,8 @@ export const useDashboard = () => {
             setShowLoading(false)
         }
     }
+
+
 
     return {
         isProductNameValid,
@@ -344,5 +366,6 @@ export const useDashboard = () => {
         dashboardAssets,
         projectName: assetDetails.project_name,
         handleChangeAssetDetails,
+        userDetails
     };
 };

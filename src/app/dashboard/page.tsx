@@ -16,6 +16,14 @@ import DropDown from "@/components/global/DropDown";
 import processDashboardAssets from "@/app/dashboard/utils/dashboardFilters"
 
 
+interface UserDetailsProps {
+  userID: string;
+  name: string;
+  email: string;
+  userRole: string;
+  isActive: number;
+}
+
 
 const pendingApprovals = [
   {
@@ -67,7 +75,8 @@ const Dashboard: FC = () => {
     handleShowPopup,
     onSelect,
     handleChangeAssetDetails,
-    dashboardAssets
+    dashboardAssets,
+    userDetails
   } = useDashboard()
 
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
@@ -120,7 +129,7 @@ const Dashboard: FC = () => {
       <div className="px-8 p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl tracking-wide text-green-100 font-bold leading-normal">
-            Welcome, Stan Lee.
+          Welcome, {userDetails?.name}
           </h1>
           <SearchBox />
         </div>

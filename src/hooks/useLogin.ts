@@ -66,8 +66,13 @@ export const useLogin = () => {
             });
 
             if (resToken.isSuccess) {
-                const decodedToken = jwtDecode(resToken.loginToken);
+                const decodedToken:any = jwtDecode(resToken.loginToken);
                 console.log("Decoded Token:", decodedToken);
+                const { UserID , UserRole } = decodedToken;
+
+                Cookies.set(nkey.userID, UserID, { expires: 180 });
+                Cookies.set(nkey.userRole, UserRole, { expires: 180 });
+
                 Cookies.set(nkey.auth_token, resToken.loginToken, { expires: 180 });
                 const resClientID = await ApiService.get<any>(urls.client_select_all, {});
 
