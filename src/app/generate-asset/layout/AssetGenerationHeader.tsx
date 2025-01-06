@@ -4,7 +4,7 @@ import { FC } from "react"
 import { useSearchParams } from "next/navigation"
 import { useAppData } from "@/context/AppContext"
 import { useRouter } from "next/navigation"
-import Breadcrumb from "@/components/global/Breadcrumb"
+// import Breadcrumb from "@/components/global/Breadcrumb"
 import Button from "@/components/global/Button"
 
 interface ProjectAssetProp {
@@ -21,7 +21,7 @@ const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
   const queryParams = useSearchParams()
   const asset_name = queryParams.get('asset_name') ?? 'default'
 
-  const assetTypeID = queryParams.get('assetTypeID')
+  // const assetTypeID = queryParams.get('assetTypeID')
   
   const handleEdit = () => {
     router.replace(`/edit-html-content?project_name=${project_name}&campaign_name=${campaign_name}&asset_name=${asset_name}`)
@@ -32,20 +32,20 @@ const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
     }, 5000);
   }
 
-  const handleBack = () => {
-    if (contextData.stepGenerate === 1) {
-      if (contextData.isRegenerateHTML) { return }
-      setContextData({ stepGenerate: 0 })
-    } else {
-      router.back()
-    }
-  }
+  // const handleBack = () => {
+  //   if (contextData.stepGenerate === 1) {
+  //     if (contextData.isRegenerateHTML) { return }
+  //     setContextData({ stepGenerate: 0 })
+  //   } else {
+  //     router.back()
+  //   }
+  // }
   
   return (
     <div className="flex items-center justify-between border-grey-200 border-b-[1px] border-solid pt-[2rem] pb-5 px-[1.5rem]">
-      <div>
+      {/* <div>
         <Breadcrumb onClickBack={handleBack} ProjectNameUrl={`/my-projects/${project_name}`} TaskNameUrl={`/my-projects/${project_name}/${assetTypeID}`} projectName={project_name.split('%20').join(' ')} TaskName={campaign_name.split('%20').join(' ')} TaskType={asset_name.split('%20').join(' ')} />
-      </div>
+      </div> */}
       {contextData.assetGenerateStatus === 3 && contextData.isShowEdit_Save_Button &&
         <div className="flex">
           <Button

@@ -12,6 +12,7 @@ import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/ass
 import { useDashboard } from "@/hooks/useDashboard";
 import InputAreaSearch from "@/components/global/InputAreaSearch";
 import DropDown from "@/components/global/DropDown";
+import SectionAssetDetails from "@/components/assetGeneration/SectionAssetDetails";
 
 const dashboardData = [
   { projectName: "All Projects", allProjectDate: "as of 04.10.2024", totalAssets: 15, underReview: 4, inProgress: 11 },
@@ -84,23 +85,25 @@ const tableHeading = ["Project Name", "Campaign Name", "Asset Details", "Created
 
 const Dashboard: FC = () => {
   const {
-    isProductNameValid,
-    isAssetNameExists,
-    listProjects,
-    listCampaigns,
+    // isProductNameValid,
+    // isAssetNameExists,
+    // listProjects,
+    // listCampaigns,
     clientAssetTypes,
     isModalOpen,
     chooseAssetModal,
     selectedIndexes,
     selectedButton,
     handleNext,
-    projectName,
+    // projectName,
     closeModal,
     closeAssetModal,
-    onChangeAssetDetails,
+    // onChangeAssetDetails,
     handleShowPopup,
     onSelect,
-    handleChangeAssetDetails } = useDashboard()
+    // handleChangeAssetDetails ,
+    selectAssetType
+  } = useDashboard()
 
   const options = [
     { id: 1, label: "Email", icon: <EmailIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(1) ? "white" : "black"} /> },
@@ -111,14 +114,13 @@ const Dashboard: FC = () => {
 
   return (
     <>
-      <ProjectSetUpModal title="Project Details" selectedValue={selectedButton?.assetTypeName} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} >
-        <div className='w-full flex flex-col gap-3 px-12 pb-7'>
+      {/* <ProjectSetUpModal title="Project Details" selectedValue={selectedButton?.assetTypeName} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} > */}
+        {/* <div className='w-full flex flex-col gap-3 px-12 pb-7'>
           <div className='pt-[15px] flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
             <DropDown
               onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value,optionSelected.label || '') }}
               selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name"  otherFieldErrorText={!isProductNameValid ? `Product/Solution name cannot be ${projectName}` : '' }></DropDown>
-            {/* <InputAreaSearch name="project_name" placeholder="Type the name of your Project/Solution here." listData={listProjects} onChange={(value) => { handleChangeAssetDetails("project_name", value) }} /> */}
           </div>
           <div className='flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
@@ -131,10 +133,11 @@ const Dashboard: FC = () => {
               {isAssetNameExists ? <p className='text-red-500 text-[12px] mt-[-10px]'>Asset name already exists, please enter another asset name.</p> : null}
             </div>
           }
-        </div>
-      </ProjectSetUpModal>
+        </div> */}
+        {/* <SectionAssetDetails /> */}
+      {/* </ProjectSetUpModal> */}
 
-      <ProjectSetUpModal title="Choose your Assets" onClose={closeAssetModal} selectedValue="All in One" isOpen={chooseAssetModal} onNext={handleNext}>
+      {/* <ProjectSetUpModal title="Choose your Assets" onClose={closeAssetModal} selectedValue="All in One" isOpen={chooseAssetModal} onNext={handleNext}>
         <div className="flex items-center justify-between px-11 py-8 ">
           {options.map((data, index) => (
             <div key={index} className="cursor-pointer" onClick={() => onSelect(data.id)}>
@@ -145,7 +148,7 @@ const Dashboard: FC = () => {
             </div>
           ))}
         </div>
-      </ProjectSetUpModal>
+      </ProjectSetUpModal> */}
 
       <div className="px-8 pt-8 pb-4">
         <div className="flex items-center justify-between">
@@ -186,7 +189,7 @@ const Dashboard: FC = () => {
                   backgroundColor={item.assetTypeName === "All in One" ? "bg-green-300" : "bg-white"}
                   customClass={item.assetTypeName === "All in One" ? "px-[50px] py-1" : "border-2 border-green-300 min-w-min px-[50px]"}
                   textColor={item.assetTypeName === "All in One" ? undefined : "text-foreground"}
-                  handleClick={() => handleShowPopup(item)}
+                  handleClick={() => selectAssetType(item)}
                   textStyle={`font-normal text-sm text-center whitespace-nowrap`}
                 />
               ))}

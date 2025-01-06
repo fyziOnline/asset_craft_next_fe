@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
@@ -8,20 +8,20 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
-import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { AssetHtmlProps, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
-import { emailType, keyPoints, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
+import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
+import { listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 
-interface EmailPageProps {
+interface LandingPageProps {
     params: {
         template: Template
         project_name?: string
     }
 }
 
-const EmailPage = ({ params }: EmailPageProps) => {
+const LandingPage = ({ params }: LandingPageProps) => {
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
@@ -92,7 +92,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
                 setShowLoading(true)
-                const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.isRegenerateHTML)
+                const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[],contextData.ProjectDetails, contextData.isRegenerateHTML)
                 setShowLoading(false)
                 setGenerateStep(3);
                 setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
@@ -115,8 +115,9 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     handleShowContent={() => { setIsShowList([1]) }}
                     isShowContent={isShowList.includes(1)}>
                     <div>
-                        <ChildrenTitle title='Solution & Product' ></ChildrenTitle>
-                        <TextField handleChange={(e) => { handleInputText(e, "product") }}
+                        <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
+                        <TextField
+                            handleChange={(e) => { handleInputText(e, "product") }}
                             placeholder="Enter the name of the product or solution."
                             value={params.project_name}
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
@@ -174,37 +175,23 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 {/* step 2 */}
                 <Accordion
                     isRequire={true}
-                    HeaderTitle="Email - Key Messages & Content"
+                    HeaderTitle="Key Message & Content"
                     checked={checkedList.includes(2)}
                     disableShowContent={disableList.includes(2)}
                     handleShowContent={() => { setIsShowList([2]) }}
                     isShowContent={isShowList.includes(2)}>
-                    <div className='max-w-[90%]'>
-                        <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
-                        <TextField handleChange={(e) => { handleInputText(e, "topic") }}
-                            placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                    <div>
+                        <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
+                        <TextField
+                            handleChange={(e) => { handleInputText(e, "topic") }}
+                            placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <div className='flex items-start gap-[16%]'>
-                            <div className='w-[260px]'>
-                                <ChildrenTitle title='Email Type' customClass='mt-5' />
-                                <DropDown onSelected={(optionSelected) => {
-                                    refFormData.current = {
-                                        ...refFormData.current,
-                                        type: optionSelected.value
-                                    }
-                                }} selectPlaceHolder="Select Post Type" optionLists={emailType} />
-                            </div>
-
-                            <div className='w-[260px]'>
-                                <ChildrenTitle title='Key Points' customClass='mt-5' />
-                                <DropDown onSelected={(optionSelected) => {
-                                    refFormData.current = {
-                                        ...refFormData.current,
-                                        keyPoints: optionSelected.value
-                                    }
-                                }} selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
-                            </div>
-                        </div>
+                        <ChildrenTitle customClass='mt-5' title='Provide additional information that supports the main message.'></ChildrenTitle>
+                        <TextField
+                            handleChange={(e) => { handleInputText(e, "keyPoints") }}
+                            rows={4}
+                            placeholder={`HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility.\nFeature 1\nFeature 2\nFeature 3`}
+                            customAreaClass='whitespace-pre-line overflow-x-hidden overflow-y-auto scrollbar-hide'></TextField>
 
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
@@ -247,7 +234,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         }} />
 
                         <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
-                        <TextField handleChange={(e) => { handleInputText(e, "webUrl") }}
+                        <TextField
+                            handleChange={(e) => { handleInputText(e, "webUrl") }}
                             placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                     </div>
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
@@ -300,6 +288,25 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             )
                         })}
                     </div>
+                    {/* <div>
+                        <ChildrenTitle title='Section 1: Hero Section' customClass="text-[18px]" />
+                        <ChildrenTitle title='Headline:' />
+                        <TextField customClass='h-16' placeholder={`"Generate a compelling headline that captures attention and introduces the product. The product is [Product Name], and it is designed to help [Target Audience] with [Main Benefit]."`} />
+
+                        <ChildrenTitle title='Subheading:' customClass="text-[18px] mt-[20px]" />
+                        <TextField placeholder={`"Generate a brief subheading or tagline that supports the headline and highlights the product’s core value. Focus on [Key Feature] for [Target Audience]."`} rows={2} />
+
+                        <ChildrenTitle title='Call-to-Action (CTA):' customClass="text-[18px] mt-[20px]" />
+                        <TextField placeholder={`"Generate a clear call-to-action (CTA) encouraging users to engage. Focus on [Desired User Action]."`} rows={1} />
+
+                        <ChildrenTitle title='Section 2: Feature Highlights' customClass="text-[18px] mt-[20px]" />
+                        <ChildrenTitle title='Main Features:' />
+                        <TextField placeholder={`“List 3-5 main features or benefits of the product. Focus on [Key Features] and how they help [Target Audience]."`} rows={1} />
+
+                        <ChildrenTitle title='Section 3: Closing CTA' customClass="text-[18px] mt-[20px]" />
+                        <ChildrenTitle title='Final Call-to-Action:' />
+                        <TextField placeholder={`"Sign up for a free demo and experience cloud efficiency today!"`} rows={1} />
+                    </div> */}
                     <div className='max-w-full flex justify-end pt-5 pb-3'>
                         <Button
                             buttonText='Back'
@@ -336,4 +343,4 @@ const EmailPage = ({ params }: EmailPageProps) => {
     );
 };
 
-export default EmailPage;
+export default LandingPage;
