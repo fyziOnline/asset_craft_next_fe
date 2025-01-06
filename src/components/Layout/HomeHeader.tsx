@@ -3,7 +3,7 @@ import { FC } from 'react'
 
 const HomeHeader:FC = () => {
   return (
-    <header className='bg-black py-3 px-16 relative z-10'>
+    <header className='bg-black py-3 px-32 relative z-10'>
         <HPE_BRAND_Logo className='flex justify-start'/>
     </header>
   )
