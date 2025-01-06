@@ -249,12 +249,27 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         }
       );
 
+      console.log("--------------------------------------");
+      console.log("resAddWithTemplate", resAddWithTemplate);
+      console.log("--------------------------------------");
+      
+
       if (resAddWithTemplate.isSuccess) {
         assetIDTemplateRef.current = resAddWithTemplate.assetID;
         const resAssetSelect = await getAssetHTML();
+
+        console.log("--------------------------------------");
+        console.log("resAssetSelect", resAssetSelect);
+        console.log("--------------------------------------");
+
         if (resAssetSelect.isSuccess) {
           assetSelect.current = resAssetSelect as AssetHtmlProps;
           const allSuccess = await updateSections(Sections);
+
+          console.log("--------------------------------------");
+          console.log("allSuccess", allSuccess);
+          console.log("--------------------------------------");
+
           if (allSuccess) {
             const resAssetInsert = await ApiService.post<any>(
               urls.aiPrompt_Asset_insert,
@@ -265,6 +280,11 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                 keyPoints: FormData?.keyPoints || "",
               }
             );
+
+            console.log("--------------------------------------");
+            console.log("resAssetInsert", resAssetInsert);
+            console.log("--------------------------------------");
+
             if (resAssetInsert.isSuccess) {
               assetPromptIDRef.current = resAssetInsert?.promptID || "";
               let fileID = await uploadImage(FormData);
@@ -272,10 +292,25 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                 FormData,
                 fileID
               );
+
+              console.log("--------------------------------------");
+              console.log("resCampaignInsert", resCampaignInsert);
+              console.log("--------------------------------------");
+
+              
               if (resCampaignInsert.isSuccess) {
                 let resGenerate = await aiPromptGenerateForAsset();
+                console.log("--------------------------------------");
+                console.log("resGenerate", resGenerate);
+                console.log("--------------------------------------");
+  
                 if (resGenerate.isSuccess) {
-                  return await generateAssetHTML();
+                  const res = await generateAssetHTML();
+                  console.log("--------------------------------------");
+                  console.log("res", res);
+                  console.log("--------------------------------------");
+    
+                  return res;
                 }
               }
             }

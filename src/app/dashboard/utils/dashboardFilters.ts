@@ -60,7 +60,7 @@ const getCurrentDateFormatted = (): string => {
 };
 
 // The main function that processes the dashboard assets
-const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDashboardData: DashboardData[], assetsDisplayTable: any[] } => {
+const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDashboardData: DashboardData[], assetsDisplayTable: any[], pendingApproval: any[] } => {
     const dashboardData: DashboardData[] = [
         { projectName: "All Projects", allProjectDate: `as of ${getCurrentDateFormatted()}`, totalAssets: 0, underReview: 0, inProgress: 0 },
         { projectName: "Email", totalAssets: 0, underReview: 0, inProgress: 0 },
@@ -76,6 +76,10 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDas
     const inProgressCount = dashboardAssets.filter(asset => asset.status === "In Progress").length;
     const onReviewCount = dashboardAssets.filter(asset => asset.status === "On review").length;
 
+    const pendingApproval = dashboardAssets.filter(asset => asset.status === "On review")
+
+    console.log("pendingApproval", pendingApproval);
+    
     // Calculate for each project type
     const projectTypes = ["Email", "LinkedIn", "Landing Page", "Call Script"];
     const updatedDashboardData = dashboardData.map((data) => {
@@ -111,7 +115,7 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDas
         currentStatus: data.status,
     }));
 
-    return { updatedDashboardData, assetsDisplayTable };
+    return { updatedDashboardData, assetsDisplayTable, pendingApproval };
 };
 
 export default processDashboardAssets;

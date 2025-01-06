@@ -10,48 +10,40 @@ import TextField from "@/components/global/TextField";
 import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 import { ExpressIcon } from "@/assets/icons/AppIcons";
 import { useDashboard } from "@/hooks/useDashboard";
-import { formatDate } from "@/utils/formatDate"
 import InputAreaSearch from "@/components/global/InputAreaSearch";
 import DropDown from "@/components/global/DropDown";
 import processDashboardAssets from "@/app/dashboard/utils/dashboardFilters"
+import { formatDate } from "@/utils/formatDate";
 
 
-interface UserDetailsProps {
-  userID: string;
-  name: string;
-  email: string;
-  userRole: string;
-  isActive: number;
-}
 
-
-const pendingApprovals = [
-  {
-    id: 1,
-    name: "Email_1",
-    lastUpdated: "2nd Oct 2024",
-  },
-  {
-    id: 2,
-    name: "LinkedIn_1",
-    lastUpdated: "3rd Oct 2024",
-  },
-  {
-    id: 3,
-    name: "SalesCall_1",
-    lastUpdated: "4th Oct 2024",
-  },
-  {
-    id: 4,
-    name: "Lorem",
-    lastUpdated: "4th Oct 2024",
-  },
-  {
-    id: 5,
-    name: "Lorem",
-    lastUpdated: "4th Oct 2024",
-  },
-];
+// const pendingApprovals = [
+//   {
+//     id: 1,
+//     name: "Email_1",
+//     lastUpdated: "2nd Oct 2024",
+//   },
+//   {
+//     id: 2,
+//     name: "LinkedIn_1",
+//     lastUpdated: "3rd Oct 2024",
+//   },
+//   {
+//     id: 3,
+//     name: "SalesCall_1",
+//     lastUpdated: "4th Oct 2024",
+//   },
+//   {
+//     id: 4,
+//     name: "Lorem",
+//     lastUpdated: "4th Oct 2024",
+//   },
+//   {
+//     id: 5,
+//     name: "Lorem",
+//     lastUpdated: "4th Oct 2024",
+//   },
+// ];
 
 
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
@@ -79,7 +71,7 @@ const Dashboard: FC = () => {
     userDetails
   } = useDashboard()
 
-  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
+  const { updatedDashboardData, assetsDisplayTable, pendingApproval } = processDashboardAssets(dashboardAssets);
 
   const options = [
     { id: 1, label: "Email", icon: <EmailIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(1) ? "white" : "black"} /> },
@@ -191,12 +183,12 @@ const Dashboard: FC = () => {
               <p className="text-lg font-bold">Pending Approval:</p>
               <p className="text-base font-normal underline">View all</p>
             </div>
-            {pendingApprovals.map((data, index) => (
+            {pendingApproval.map((data, index) => (
               <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-3 mt-2">
-                <p className="text-[##2F363F] font-inter text-base font-normal mb-1">{data.name}</p>
+                <p className="text-[##2F363F] font-inter text-base font-normal mb-1">{data.assetName}</p>
                 <div className="flex items-center justify-between">
                   <p className="text-[#636363] font-semibold text-sm">Last Updated:</p>
-                  <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
+                  <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
                 </div>
               </div>
             ))}
