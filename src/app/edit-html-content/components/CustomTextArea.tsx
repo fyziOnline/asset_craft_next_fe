@@ -7,7 +7,7 @@ const CustomTextRenderer = (props: ControlProps) => {
     const { data, handleChange, path, label, required } = props;
 
     return (
-        <div className="relative w-full">
+        <div className="relative w-full mt-3">
             <div className="absolute top-[-10px] left-[10px] bg-white px-[6px] font-semibold flex transition-all" >
                 <div className="peer-hover:text-[#01A982] peer-focus:text-[#01A982] text-[12px]">{label ?? ""}</div>
                 {required ? <div className="ml-[2px] text-[red] text-[12px]">{"*"}</div> : null}
