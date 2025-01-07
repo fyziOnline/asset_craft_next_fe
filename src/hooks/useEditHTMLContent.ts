@@ -11,6 +11,7 @@ import { nkey } from "@/data/keyStore";
 import { AssetBlockProps, AssetVersionProps } from "@/types/templates";
 import { ApproverProps } from "@/types/approval";
 import { Option } from "@/components/global/Search";
+import { useLoading } from "@/components/global/Loading/LoadingContext";
 
 export const useEditHTMLContent = () => {
     const router = useRouter();
@@ -24,6 +25,7 @@ export const useEditHTMLContent = () => {
     const [sectionEdit, setSectionEdit] = useState<AssetBlockProps>()
     const [listApprovers, setListApprovers] = useState<ApproverProps[]>([])
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
+    const { setShowLoading } = useLoading()
     const refVersion = useRef('')
 
     useEffect(() => {
@@ -136,10 +138,29 @@ export const useEditHTMLContent = () => {
         }
     }
 
-    const onSubmit = (itemSelected: Option) => {
-        console.log('itemSelected: ', itemSelected);
+    const onSubmit = async (itemSelected: Option) => {
+        try {
+            setShowLoading(true)
+            const resSubmit = await ApiService.post<any>(urls.approval_assetApproval_SubmitForApproval, {
+                "assetID": versionSelected.assetID,
+                "assetVersionID": versionSelected.assetVersionID,
+                "approverID": itemSelected.value
+            })
 
-        setIsShowSubmitVer(false)
+            if (resSubmit.isSuccess) {
+                setIsShowSubmitVer(false)
+                router.replace("/dashboard")
+            } else {
+                alert("Submit failed, please try again later.");
+            }
+
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        } finally {
+            setShowLoading(false)
+        }
+
         // try {
         //     let project_name = ""
         //     let campaign_name = ""

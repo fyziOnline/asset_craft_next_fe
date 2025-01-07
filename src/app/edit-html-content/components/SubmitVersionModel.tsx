@@ -57,7 +57,7 @@ const SubmitVersionModel = ({ isShowSubmitVer, setIsShowSubmitVer, handleSubmitV
             <div ref={modalRef} className="w-[900px] relative bg-white rounded-3xl">
                 <div className="flex items-center px-[50px] pt-[25px]">
                     <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold font-['Inter'] leading-[17.11px]">
-                        Submit the version:
+                        {/* Submit the version: */}
                     </div>
                     <Button
                         buttonText="Next"
