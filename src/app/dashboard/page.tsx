@@ -16,36 +16,6 @@ import { useAppData } from "@/context/AppContext";
 import { AssetHtmlProps } from "@/types/templates";
 
 
-
-// const pendingApprovals = [
-//   {
-//     id: 1,
-//     name: "Email_1",
-//     lastUpdated: "2nd Oct 2024",
-//   },
-//   {
-//     id: 2,
-//     name: "LinkedIn_1",
-//     lastUpdated: "3rd Oct 2024",
-//   },
-//   {
-//     id: 3,
-//     name: "SalesCall_1",
-//     lastUpdated: "4th Oct 2024",
-//   },
-//   {
-//     id: 4,
-//     name: "Lorem",
-//     lastUpdated: "4th Oct 2024",
-//   },
-//   {
-//     id: 5,
-//     name: "Lorem",
-//     lastUpdated: "4th Oct 2024",
-//   },
-// ];
-
-
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
 const Dashboard: FC = () => {

@@ -13,9 +13,9 @@ interface IconProps {
 type IconComponent = ComponentType<IconProps>
 
 const ASSET_ICONS: Record<string, IconComponent> = {
-  'Email_1': MailIcon,
-  'LinkedIn_1': LinkedinIcon,
-  'SalesCall_1': SalesCallIcon
+  'Email': MailIcon,
+  'LinkedIn': LinkedinIcon,
+  'Call Script': SalesCallIcon
 }
 
 
@@ -26,7 +26,7 @@ interface AssetIndicatorProp {
 
 const AssetIndicator:FC<AssetIndicatorProp> = ({hoverStatus,asset_type='Email_1'}) => {
 
-  const AssetIcon = ASSET_ICONS[asset_type]
+  const AssetIcon = ASSET_ICONS[asset_type] || MailIcon
    
   return (
     <div className="w-fit text-center text-green-100 group-hover:text-white">
