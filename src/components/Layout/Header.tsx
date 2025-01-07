@@ -19,7 +19,7 @@ const Header: React.FC = () => {
               <SearchBox customClass="bg-[#F6F6F6]"/>
             </div>
 
-              <h3 className="font-bold text-[#00A881] pr-5">Welcome, <span>{userDetails?.name}</span></h3>
+              <h3 className="text-xl font-bold text-[#00A881] pr-3">Welcome, <span>{userDetails?.name}</span></h3>
           </div>
           <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
         </div>

@@ -125,7 +125,7 @@ const Dashboard: FC = () => {
         </div>
         <p className="text-base font-bold tracking-wide">Overview:</p>
       </div> */}
-      <div className="w-full px-8 flex items-center justify-between mt-4 gap-10">
+      <div className="w-full px-8 flex items-center justify-between mt-5 gap-10">
         {updatedDashboardData.map((data, index) => (
           <DashboardCard
             key={index}
@@ -153,7 +153,7 @@ const Dashboard: FC = () => {
                   showIcon={false}
                   IconComponent={item.assetTypeName === "All in One" && <ExpressIcon strokeColor="white" width="40" height="38" />}
                   backgroundColor="bg-white"
-                  customClass="group px-12 py-2 border border-[#07363480] w-[25%] px-[50px] transition-all duration-300 hover:bg-[#073634]"
+                  customClass="group px-12 py-2 border border-[#07363480] w-[25%] px-[50px] transition-all duration-300 hover:bg-[#00A881]"
                   textColor="text-foreground group-hover:text-white"
                   handleClick={() => selectAssetType(item)}
                   textStyle="font-normal text-sm text-center whitespace-nowrap"
