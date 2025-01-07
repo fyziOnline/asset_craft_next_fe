@@ -10,48 +10,40 @@ import TextField from "@/components/global/TextField";
 import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 import { ExpressIcon } from "@/assets/icons/AppIcons";
 import { useDashboard } from "@/hooks/useDashboard";
-import { formatDate } from "@/utils/formatDate"
 import InputAreaSearch from "@/components/global/InputAreaSearch";
 import DropDown from "@/components/global/DropDown";
 import processDashboardAssets from "@/app/dashboard/utils/dashboardFilters"
+import { formatDate } from "@/utils/formatDate";
 
 
-interface UserDetailsProps {
-  userID: string;
-  name: string;
-  email: string;
-  userRole: string;
-  isActive: number;
-}
 
-
-const pendingApprovals = [
-  {
-    id: 1,
-    name: "Email_1",
-    lastUpdated: "2nd Oct 2024",
-  },
-  {
-    id: 2,
-    name: "LinkedIn_1",
-    lastUpdated: "3rd Oct 2024",
-  },
-  {
-    id: 3,
-    name: "SalesCall_1",
-    lastUpdated: "4th Oct 2024",
-  },
-  {
-    id: 4,
-    name: "Lorem",
-    lastUpdated: "4th Oct 2024",
-  },
-  {
-    id: 5,
-    name: "Lorem",
-    lastUpdated: "4th Oct 2024",
-  },
-];
+// const pendingApprovals = [
+//   {
+//     id: 1,
+//     name: "Email_1",
+//     lastUpdated: "2nd Oct 2024",
+//   },
+//   {
+//     id: 2,
+//     name: "LinkedIn_1",
+//     lastUpdated: "3rd Oct 2024",
+//   },
+//   {
+//     id: 3,
+//     name: "SalesCall_1",
+//     lastUpdated: "4th Oct 2024",
+//   },
+//   {
+//     id: 4,
+//     name: "Lorem",
+//     lastUpdated: "4th Oct 2024",
+//   },
+//   {
+//     id: 5,
+//     name: "Lorem",
+//     lastUpdated: "4th Oct 2024",
+//   },
+// ];
 
 
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
@@ -79,7 +71,7 @@ const Dashboard: FC = () => {
     userDetails
   } = useDashboard()
 
-  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
+  const { updatedDashboardData, assetsDisplayTable, pendingApproval } = processDashboardAssets(dashboardAssets);
 
   const options = [
     { id: 1, label: "Email", icon: <EmailIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(1) ? "white" : "black"} /> },
@@ -129,7 +121,7 @@ const Dashboard: FC = () => {
       {/* <div className="px-8 p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl tracking-wide text-green-100 font-bold leading-normal">
-          Welcome, {userDetails?.name}
+            Welcome, {userDetails?.name}
           </h1>
           <SearchBox />
         </div>
@@ -177,7 +169,7 @@ const Dashboard: FC = () => {
             </div>
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} tablePlaceitems="center" />
+                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
@@ -190,19 +182,21 @@ const Dashboard: FC = () => {
           <p className="text-lg font-bold pl-10 pb-2">Pending Approval</p>
           <div className="w-full bg-[#F9F9F9] rounded-[14px] ml-4">
             <div className="p-5 max-h-[580px] overflow-y-auto">
-              {/* <div className="flex items-baseline justify-between">
-              <p className="text-lg font-bold">Pending Approval</p>
-              <p className="text-base font-normal underline">View all</p>
-            </div> */}
-              {pendingApprovals.map((data, index) => (
-                <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
-                  <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.name}</p>
-                  <div className="flex items-center justify-between mt-2">
-                    <p className="text-[#636363] font-thin text-sm">Last Updated :</p>
-                    <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
+
+              {pendingApproval && pendingApproval.length > 0 ? (
+                pendingApproval.map((data, index) => (
+                  <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
+                    <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.name}</p>
+                    <div className="flex items-center justify-between mt-2">
+                      <p className="text-[#636363] font-thin text-sm">Last Updated :</p>
+                      <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
+                    </div>
                   </div>
+                ))) : (
+                <div className="text-center text-[#636363] font-inter text-sm ">
+                  No data available
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
