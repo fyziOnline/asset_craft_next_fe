@@ -29,7 +29,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
   const { contextData, setContextData } = useAppData();
-  
+
   const handleNext = async (selectedTemplate: Template) => {
     if (contextData.stepGenerate < total_steps) {
       try {
