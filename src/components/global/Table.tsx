@@ -49,11 +49,11 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   const getStatusClass = (status: string) => {
     switch (status) {
       case 'In Progress':
-        return 'text-[#5DB9FF] font-semibold';  // Blue background for In Progress
+        return 'text-[#B0890E] font-thin';  // Blue background for In Progress
       case 'On Review':
-        return 'text-[#1CD3A8] font-semibold';  // Green background for Pending Approval
+        return 'text-[#1CD3A8] font-thin';  // Green background for Pending Approval
       case 'Completed':
-        return 'text-[#00A881] font-semibold';  // Green background for Complete
+        return 'text-[#09CC20] font-thin';  // Green background for Complete
       default:
         return 'text-black';  // Default gray background for unknown status
     }
@@ -107,7 +107,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
       <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}>
         {tableHeadings.map((heading, index) => (
           <div key={index} className='flex items-center gap-2 justify-center'>
-            <p className='text-base font-semibold text-grey-800'>{heading}</p>
+            <p className='text-sm font-thin text-[#969696]'>{heading}</p>
             {arrowInHeadings.includes(heading) && (
               <span className={`cursor-pointer transition-transform ${sortArrows[heading] ? "rotate-180" : ""}`} onClick={() => handleSort(index)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="7" viewBox="0 0 13 7" fill="none">
@@ -123,13 +123,21 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         {sortListData.map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
           return (
-            <div onClick={() => {
-              if (fieldClick !== undefined) {
-                handleClick(data[fieldClick])
-              }
-            }} key={index} className={`grid p-6 border border-[#00A881] rounded-xl cursor-pointer`} style={{ gridTemplateColumns: gridColumnStyle, placeItems : tablePlaceitems }}>
+            <div
+              onClick={() => {
+                if (fieldClick !== undefined) {
+                  handleClick(data[fieldClick])
+                }
+              }}
+              key={index}
+              className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F6F6F6]'}`}
+              style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}
+            >
               {getListItemsHeadings.map((heading, idx) => (
-                <div key={idx} className={`flex items-center gap-2 text-sm font-normal justify-center ${getStatusClass(data[heading] || '')}`}>
+                <div
+                  key={idx}
+                  className={`flex items-center gap-2 text-sm font-normal justify-center ${getStatusClass(data[heading] || '')}`}
+                >
                   {heading === IconAssetName && IconComponent}
                   {getIcon(data[heading])}
                   {data[heading]}

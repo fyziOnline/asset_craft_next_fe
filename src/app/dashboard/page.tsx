@@ -126,7 +126,7 @@ const Dashboard: FC = () => {
         </div>
       </ProjectSetUpModal>
 
-      <div className="px-8 p-4">
+      {/* <div className="px-8 p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl tracking-wide text-green-100 font-bold leading-normal">
           Welcome, {userDetails?.name}
@@ -134,8 +134,8 @@ const Dashboard: FC = () => {
           <SearchBox />
         </div>
         <p className="text-base font-bold tracking-wide">Overview:</p>
-      </div>
-      <div className="px-8 flex items-center gap-9">
+      </div> */}
+      <div className="w-full px-8 flex items-center justify-between mt-4 gap-10">
         {updatedDashboardData.map((data, index) => (
           <DashboardCard
             key={index}
@@ -149,8 +149,8 @@ const Dashboard: FC = () => {
       </div>
 
       <div className="pl-8 pt-5 flex w-full mb-32">
-        <div className="w-[70%] border-t border-[#D9D9D9]">
-          <div className="mt-5">
+        <div className="w-[70%] border-[#D9D9D9]">
+          <div>
             <p className="text-lg font-bold tracking-wide">
               What would you like to create today?
             </p>
@@ -162,11 +162,11 @@ const Dashboard: FC = () => {
                   buttonText={item.assetTypeName}
                   showIcon={false}
                   IconComponent={item.assetTypeName === "All in One" && <ExpressIcon strokeColor="white" width="40" height="38" />}
-                  backgroundColor={"bg-white"}
-                  customClass={"px-12 py-1 border-2 border-green-300 min-w-min px-[50px]"}
-                  textColor={"text-foreground"}
+                  backgroundColor="bg-white"
+                  customClass="group px-12 py-2 border border-[#07363480] w-[25%] px-[50px] transition-all duration-300 hover:bg-[#073634]"
+                  textColor="text-foreground group-hover:text-white"
                   handleClick={() => handleShowPopup(item)}
-                  textStyle={`font-normal text-sm text-center whitespace-nowrap`}
+                  textStyle="font-normal text-sm text-center whitespace-nowrap"
                 />
               ))}
             </div>
@@ -185,21 +185,25 @@ const Dashboard: FC = () => {
 
           </div>
         </div>
-        <div className="w-[30%] bg-[#F9F9F9] rounded-[14px] ml-4">
-          <div className="p-6">
-            <div className="flex items-baseline justify-between">
-              <p className="text-lg font-bold">Pending Approval:</p>
+
+        <div className="w-[27%]">
+          <p className="text-lg font-bold pl-10 pb-2">Pending Approval</p>
+          <div className="w-full bg-[#F9F9F9] rounded-[14px] ml-4">
+            <div className="p-5 max-h-[580px] overflow-y-auto">
+              {/* <div className="flex items-baseline justify-between">
+              <p className="text-lg font-bold">Pending Approval</p>
               <p className="text-base font-normal underline">View all</p>
-            </div>
-            {pendingApprovals.map((data, index) => (
-              <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-3 mt-2">
-                <p className="text-[##2F363F] font-inter text-base font-normal mb-1">{data.name}</p>
-                <div className="flex items-center justify-between">
-                  <p className="text-[#636363] font-semibold text-sm">Last Updated:</p>
-                  <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
+            </div> */}
+              {pendingApprovals.map((data, index) => (
+                <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
+                  <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.name}</p>
+                  <div className="flex items-center justify-between mt-2">
+                    <p className="text-[#636363] font-thin text-sm">Last Updated :</p>
+                    <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
