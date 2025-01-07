@@ -169,7 +169,7 @@ const Dashboard: FC = () => {
             </div>
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} tablePlaceitems="center" />
+                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
@@ -193,7 +193,7 @@ const Dashboard: FC = () => {
                     </div>
                   </div>
                 ))) : (
-                <div className="text-center text-[#636363] font-inter text-sm mt-8">
+                <div className="text-center text-[#636363] font-inter text-sm ">
                   No data available
                 </div>
               )}

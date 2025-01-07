@@ -6,7 +6,7 @@ import Button from '@/components/global/Button'
 import Cookies from 'js-cookie';
 import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
-import { useDashboard } from '@/hooks/useDashboard';
+import { useProfile } from '@/hooks/useProfile';
 
 interface FormValues {
     fullName: string;
@@ -38,11 +38,13 @@ const page: React.FC = () => {
         Cookies.remove(nkey.auth_token)
         Cookies.remove(nkey.email_login)
         Cookies.remove(nkey.client_ID)
+        Cookies.remove(nkey.userID)
+        Cookies.remove(nkey.userRole)
 
         router.push('/')
     }
 
-    const { userDetails } = useDashboard()
+    const { userDetails } = useProfile()
 
   return (
     <LayoutWrapper layout='main'>

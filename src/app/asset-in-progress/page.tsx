@@ -20,6 +20,9 @@ const AssetInProgress: FC = () => {
   useEffect(() => {
     try {
       const assetInProgressTemporary = JSON.parse(localStorage.getItem(nkey.assetInProgressTemporary) || "[]") as AssetInProgressProps[]
+
+      console.log("assetInProgressTemporary: ", assetInProgressTemporary);
+      
       const newassetInProgress = assetInProgressTemporary.map((item) => {
         return {
           projectName: item.projectName,
