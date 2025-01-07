@@ -107,7 +107,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
       <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}>
         {tableHeadings.map((heading, index) => (
           <div key={index} className='flex items-center gap-2 justify-center'>
-            <p className='text-sm font-thin text-[#969696]'>{heading}</p>
+            <p className='text-base font-thin text-[#969696]'>{heading}</p>
             {arrowInHeadings.includes(heading) && (
               <span className={`cursor-pointer transition-transform ${sortArrows[heading] ? "rotate-180" : ""}`} onClick={() => handleSort(index)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="7" viewBox="0 0 13 7" fill="none">
@@ -119,7 +119,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         ))}
       </div>
 
-      <div className='grid gap-[10px]'>
+      <div className='grid gap-[10px] mb-[4rem]'>
         {sortListData.map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
           return (
