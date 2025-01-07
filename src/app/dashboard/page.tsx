@@ -175,12 +175,13 @@ const Dashboard: FC = () => {
             <div className="mt-5">
               <p className="text-lg font-bold tracking-wide">Recent Assets:</p>
             </div>
-            <div>
+            <div className="overflow-y-scroll h-[50vh] scrollbar-hide">
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
                 <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} tablePlaceitems="center" />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
+              <div className="h-[15vh]" />
             </div>
 
           </div>

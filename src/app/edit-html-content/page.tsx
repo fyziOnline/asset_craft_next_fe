@@ -198,10 +198,11 @@ const Page = () => {
                     })}
                 </div>
                 <div className="min-h-[82vh] border-t border-solid border-[#D9D9D9] bg-[#e4e4e4]">
-                    <div className="flex flex-col h-[82vh] pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
+                    <div className="flex flex-col h-[92vh] pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
                         <div>
                             <div id="container">
                                 {renderHTMLSelect}
+                                <div className='h-[10vh]' />
                             </div>
                         </div>
 
