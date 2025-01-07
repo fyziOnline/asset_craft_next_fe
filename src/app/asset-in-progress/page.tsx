@@ -2,6 +2,7 @@
 
 import { useAppData } from "@/context/AppContext"
 import { nkey } from "@/data/keyStore"
+import { useDashboard } from "@/hooks/useDashboard"
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 import { AssetInProgressProps } from "@/types/asset"
 import { AssetHtmlProps, AssetVersionProps } from "@/types/templates"
@@ -13,10 +14,15 @@ interface Asset {
 }
 
 const AssetInProgress: FC = () => {
+  const { dashboardAssets } = useDashboard()
   const router = useRouter();
   const { setContextData } = useAppData();
   const [tableData, setTableData] = useState<Asset[]>([])
 
+  const assetInProgress = dashboardAssets.filter(asset => asset.status === "In Progress" || asset.status === "On review")
+
+  console.log("assetInProgress: ", assetInProgress);
+  
   useEffect(() => {
     try {
       const assetInProgressTemporary = JSON.parse(localStorage.getItem(nkey.assetInProgressTemporary) || "[]") as AssetInProgressProps[]

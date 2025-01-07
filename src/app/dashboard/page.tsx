@@ -67,8 +67,7 @@ const Dashboard: FC = () => {
     handleShowPopup,
     onSelect,
     handleChangeAssetDetails,
-    dashboardAssets,
-    userDetails
+    dashboardAssets
   } = useDashboard()
 
   const { updatedDashboardData, assetsDisplayTable, pendingApproval } = processDashboardAssets(dashboardAssets);
