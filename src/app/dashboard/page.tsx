@@ -121,7 +121,7 @@ const Dashboard: FC = () => {
       <div className="px-8 p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl tracking-wide text-green-100 font-bold leading-normal">
-          Welcome, {userDetails?.name}
+            Welcome, {userDetails?.name}
           </h1>
           <SearchBox />
         </div>
@@ -169,7 +169,7 @@ const Dashboard: FC = () => {
             </div>
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} tablePlaceitems="center" />
+                <Table  listItems={assetsDisplayTable} tableHeadings={tableHeading} tablePlaceitems="center" />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
@@ -183,15 +183,22 @@ const Dashboard: FC = () => {
               <p className="text-lg font-bold">Pending Approval:</p>
               <p className="text-base font-normal underline">View all</p>
             </div>
-            {pendingApproval.map((data, index) => (
-              <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-3 mt-2">
-                <p className="text-[##2F363F] font-inter text-base font-normal mb-1">{data.assetName}</p>
-                <div className="flex items-center justify-between">
-                  <p className="text-[#636363] font-semibold text-sm">Last Updated:</p>
-                  <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
+            {pendingApproval && pendingApproval.length > 0 ? (
+              pendingApproval.map((data, index) => (
+                <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-3 mt-2">
+                  <p className="text-[#2F363F] font-inter text-base font-normal mb-1">{data.assetName}</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[#636363] font-semibold text-sm">Last Updated:</p>
+                    <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
+                  </div>
                 </div>
+              ))
+            ) : (
+              <div className="text-center text-[#636363] font-inter text-sm mt-8">
+                No data available
               </div>
-            ))}
+            )}
+
           </div>
         </div>
       </div>

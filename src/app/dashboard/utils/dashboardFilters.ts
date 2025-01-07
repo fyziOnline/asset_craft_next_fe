@@ -108,6 +108,7 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDas
 
     // Format the dashboard asset data for the display table
     const assetsDisplayTable = dashboardAssets.slice(0, 5).map((data) => ({
+        assetTypeIcon: data.assetTypeName,
         assetName: data.assetName,
         campaignName: data.campaignName,
         projectName: data.project,
