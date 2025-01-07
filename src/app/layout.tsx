@@ -4,6 +4,8 @@ import "./globals.css";
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import { LoadingProvider } from "@/components/global/Loading/LoadingContext";
 import { YesNoPopupProvider } from "@/components/global/Popup/YesNoPopupContext";
+import './globals.css';
+
 
 export const metadata: Metadata = {
   title: "HPE Brand Central AI",

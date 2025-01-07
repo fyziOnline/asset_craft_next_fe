@@ -2,41 +2,111 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+/* fonts */
+/* Metric-Light Font */
+@font-face {
+  font-family: "Metric";
+  src: url("/fonts/Metric-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
 
-@layer components { 
+/* MetricHPEXSSemibold-Regular Font */
+@font-face {
+  font-family: "MetricHPEXS-Semibold";
+  src: url("/fonts/MetricHPEXSSemibold-Regular.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* MetricHPEXS-Regular Font */
+@font-face {
+  font-family: "MetricHPEXS";
+  src: url("/fonts/MetricHPEXS-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* MetricHPEXSMedium-Regular Font */
+@font-face {
+  font-family: "MetricHPEXS-Medium";
+  src: url("/fonts/MetricHPEXSMedium-Regular.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* HPE-Glyphicons Font */
+@font-face {
+  font-family: "HPE-Glyphicons";
+  src: url("/fonts/hpe-glyphicons.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Metric-Semibold Font */
+@font-face {
+  font-family: "Metric";
+  src: url("/fonts/Metric-Semibold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Metric-Regular Font */
+@font-face {
+  font-family: "Metric";
+  src: url("/fonts/Metric-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Metric-Medium Font */
+@font-face {
+  font-family: "Metric";
+  src: url("/fonts/Metric-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@layer components {
   .flex_item-start {
-    @apply flex flex-col items-start justify-center
+    @apply flex flex-col items-start justify-center;
   }
-  .nav-transition{
-    @apply transition-all duration-200 ease-in
+  .nav-transition {
+    @apply transition-all duration-200 ease-in;
   }
-  .nav-option{
-    @apply text-steel-gray
+  .nav-option {
+    @apply text-steel-gray;
   }
-  input[type='range'] {
+  input[type="range"] {
     @apply w-full h-4 rounded-lg appearance-none cursor-pointer;
   }
   .home-box-element {
-    @apply block text-sm bg-[rgba(255,251.79,251.79,0.46)] rounded-xl
+    @apply block text-sm bg-[rgba(255,251.79,251.79,0.46)] rounded-xl;
   }
   .asset-grid-layout {
-    @apply 
-      grid 
+    @apply grid 
       grid-cols-[minmax(300px,360px)] md:grid-cols-[repeat(2,minmax(310px,380px))] xl:grid-cols-[repeat(3,minmax(auto,380px))]
       gap-x-4 lg:gap-x-6
       gap-y-4 lg:gap-y-6;
   }
-  .asset-grid-padding { 
-    @apply px-4 lg:px-16 xl:px-20
+  .asset-grid-padding {
+    @apply px-4 lg:px-16 xl:px-20;
   }
   /* .color-wheel-circle {
     @apply w-8 aspect-square
   } */
-
 }
-.bg-custom-gradient-green{
-  background: linear-gradient(65deg, #01A982 29.4%, #01A982 36.24%, #1CD3A8 44.6%, #01A982 54.09%, #01A982 105.37%);
+.bg-custom-gradient-green {
+  background: linear-gradient(
+    65deg,
+    #01a982 29.4%,
+    #01a982 36.24%,
+    #1cd3a8 44.6%,
+    #01a982 54.09%,
+    #01a982 105.37%
+  );
   background-position: 99% 50%;
   background-size: 220% 200%;
   transition: background-size 0.5s;
@@ -50,8 +120,8 @@
 }
 
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* For Internet Explorer 10+ */
-  scrollbar-width: none;      /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer 10+ */
+  scrollbar-width: none; /* For Firefox */
 }
 
 .login-divider-or {
@@ -59,59 +129,58 @@
 }
 .login-divider-or::before {
   position: absolute;
-  content: '';
+  content: "";
   left: 0;
   right: calc(50% + 0.75rem);
-  top:50%;
+  top: 50%;
   height: 0.5px;
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.2);
 }
 .login-divider-or::after {
   position: absolute;
-  content: '';
+  content: "";
   left: calc(50% + 0.75rem);
   right: 0;
-  top:50%;
+  top: 50%;
   height: 0.5px;
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.2);
 }
-
 
 .color-wheel {
   position: relative;
   /* right: 10%;
   height: 100%; */
   /* animation: rotate-wheel 2s ease; */
-}  
-.eclipse-1{
+}
+.eclipse-1 {
   position: absolute;
   width: 13rem;
   aspect-ratio: 1;
   background: rgba(151, 71, 255, 0.5);
   border-radius: 100%;
-  top:12rem ;
-  left:5.5rem;
+  top: 12rem;
+  left: 5.5rem;
   animation: eclipse-purple-translation 2s ease;
   /* top: -10%; */
   filter: blur(150px);
-} 
+}
 
 .eclipse-3 {
   position: absolute;
-    width: 13rem;
-    border-radius: 100%;
-    aspect-ratio: 1;
-    background: rgba(28, 211, 168, 0.5);
-    left: -8rem;
-    top: 9.4rem;
-    animation: eclipse-green-translation 2s ease;
-    filter: blur(150px);
-    /* bottom: 0; */
-    /* right: -52%;
+  width: 13rem;
+  border-radius: 100%;
+  aspect-ratio: 1;
+  background: rgba(28, 211, 168, 0.5);
+  left: -8rem;
+  top: 9.4rem;
+  animation: eclipse-green-translation 2s ease;
+  filter: blur(150px);
+  /* bottom: 0; */
+  /* right: -52%;
     bottom: 10%; */
-} 
+}
 
-.eclipse-2{
+.eclipse-2 {
   position: absolute;
   width: 13rem;
   aspect-ratio: 1;
@@ -121,7 +190,7 @@
   background: rgba(255, 255, 71, 0.5);
   animation: eclipse-yellow-translation 2s ease;
   filter: blur(150px);
-} 
+}
 
 @keyframes eclipse-purple-translation {
   0% {
@@ -131,9 +200,9 @@
     top: 16rem;
     left: -8rem;
   }
-  100%{
-    top:12rem ;
-    left:5.5rem;
+  100% {
+    top: 12rem;
+    left: 5.5rem;
   }
 }
 @keyframes eclipse-green-translation {
@@ -145,7 +214,7 @@
     left: -8rem;
     top: -6.5rem;
   }
-  100%{
+  100% {
     left: -8rem;
     top: 9.4rem;
   }
@@ -159,21 +228,20 @@
     left: 13.5rem;
     top: 2rem;
   }
-  100%{
+  100% {
     top: 0rem;
     left: 13.5rem;
   }
 }
 
-
 .custom-range::-moz-range-thumb {
   width: 1.7rem;
   height: 1.7rem;
-  background: #00A881;
+  background: #00a881;
   border: 3px solid white;
   border-radius: 50%;
   cursor: pointer;
   z-index: 99;
   position: relative;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
-} 
+}

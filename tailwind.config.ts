@@ -1,6 +1,8 @@
 import type { Config } from "tailwindcss";
 import { PluginAPI } from "tailwindcss/types/config";
 
+
+
 const config: Config = {
     darkMode: ["class"],
     content: [
@@ -11,6 +13,8 @@ const config: Config = {
   ],
   theme: {
     extend: {
+            
+      
       aspectRatio:{
         half : "1 / 2",
         card : "434 / 330",
@@ -22,6 +26,13 @@ const config: Config = {
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
+        geist: ['GeistMonoVF', 'monospace'], // Add fallback
+        metric: ['MetricHPE-Web', 'sans-serif'], // Add fallback
+        metricLight: ['Metric', 'sans-serif'],
+        metricSemibold: ['MetricHPEXS-Semibold', 'sans-serif'],
+        metricRegular: ['MetricHPEXS', 'sans-serif'],
+        metricMedium: ['MetricHPEXS-Medium', 'sans-serif'],
+        glyphicons: ['HPE-Glyphicons', 'sans-serif'],
       },
       colors: {
         background: "#ffff",
