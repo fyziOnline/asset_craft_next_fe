@@ -58,7 +58,10 @@ const LandingPage = ({ params }: LandingPageProps) => {
                 return
             }
         }
-        setCheckedList([...checkedList, step])
+        setCheckedList((prev) => {
+            const updatedList = [...prev, step];
+            return updatedList;
+        });
     };
 
     const onBack = (step: number): void => {
@@ -82,7 +85,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
     };
 
     const handleGenerate = async () => {
-        if (generateStep === 2 || checkedList.length !== 4) {
+        if (generateStep === 2 || checkedList.length !== 5) {
             return;
         }
 

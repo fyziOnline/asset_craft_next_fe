@@ -1,19 +1,16 @@
 'use client';
 
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
-import ProjectSetUpModal from "@/components/wrapper/ProjectSetUpModal";
-import TextField from "@/components/global/TextField";
 import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 import { ExpressIcon } from "@/assets/icons/AppIcons";
 import { useDashboard } from "@/hooks/useDashboard";
-import { formatDate } from "@/utils/formatDate"
-import InputAreaSearch from "@/components/global/InputAreaSearch";
-import DropDown from "@/components/global/DropDown";
 import processDashboardAssets from "@/app/dashboard/utils/dashboardFilters"
+import { useAppData } from "@/context/AppContext";
+import { AssetHtmlProps } from "@/types/templates";
 
 
 interface UserDetailsProps {
@@ -58,37 +55,34 @@ const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On
 
 const Dashboard: FC = () => {
   const {
-    // isProductNameValid,
-    // isAssetNameExists,
-    // listProjects,
-    // listCampaigns,
     clientAssetTypes,
-    isModalOpen,
-    chooseAssetModal,
     selectedIndexes,
     selectedButton,
     handleNext,
-    // projectName,
     closeModal,
     closeAssetModal,
-    // onChangeAssetDetails,
     handleShowPopup,
     onSelect,
     selectAssetType,
-    handleChangeAssetDetails,
     dashboardAssets,
     userDetails
   } = useDashboard()
 
+  const {setContextData} = useAppData()
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
 
-  const options = [
-    { id: 1, label: "Email", icon: <EmailIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(1) ? "white" : "black"} /> },
-    { id: 2, label: "LinkedIn", icon: <LinkedinIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(2) ? "white" : "black"} /> },
-    { id: 3, label: "Call Script", icon: <SalesCallIcon width="100" height="95" strokeWidth="0.5" strokeColor={selectedIndexes.includes(3) ? "white" : "black"} /> },
-    { id: 4, label: "Landing Page", icon: <LandingAssetIcon2 strokeColor={selectedIndexes.includes(4) ? "white" : "black"} /> },
-  ];
 
+  useEffect(() => {
+    setContextData({ 
+      isShowEdit_Save_Button: false, 
+      isRegenerateHTML: false, 
+      stepGenerate: 0,
+      AssetHtml : {} as AssetHtmlProps,
+      assetGenerateStatus : 1,
+      assetTemplateShow : false
+    })
+  }, [])
+  
   return (
     <>
       {/* <ProjectSetUpModal title="Project Details" selectedValue={selectedButton?.assetTypeName} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} > */}

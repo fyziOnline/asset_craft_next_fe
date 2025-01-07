@@ -2,9 +2,7 @@
 
 import React, { 
     FC, 
-    use, 
     useEffect, 
-    // useMemo,
      useState 
     } from 'react';
 import ProgressSection from "./components/progressSection"
@@ -14,7 +12,6 @@ import { PageType } from '@/componentsMap/pageMap';
 
 
 const GenerateAssetPage: FC = () => {
-//   const resolvedParams = React.use(params) // unwrap the Promise
   const params = useSearchParams() 
   const [projectName,setProjectName]= useState<string>('')
   const [CampaignName,setCampaignName]= useState<string>('')

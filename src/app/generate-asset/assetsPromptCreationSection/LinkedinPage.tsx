@@ -58,7 +58,10 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                 return
             }
         }
-        setCheckedList([...checkedList, step])
+        setCheckedList((prev) => {
+            const updatedList = [...prev, step];
+            return updatedList;
+        });
     };
 
     const onBack = (step: number): void => {
@@ -82,7 +85,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
     };
 
     const handleGenerate = async () => {
-        if (generateStep === 2 || checkedList.length !== 4) {
+        if (generateStep === 2 || checkedList.length !== 5) {
             return;
         }
 
