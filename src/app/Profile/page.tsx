@@ -48,14 +48,14 @@ const page: React.FC = () => {
 
   return (
     <LayoutWrapper layout='main'>
-        <div className='w-[80%] h-full mt-8  mx-auto'>
+        <div className='w-[80%] h-full mx-auto'>
             <div className='flex items-baseline justify-between mb-5'>
                 <h1 className="text-[30px] text-green-100 font-bold leading-normal">
                     Welcome, {userDetails?.name}
                 </h1>
                 <Button
                   buttonText='Request Access' 
-                  customClass='border-2 border-green-300 px-4'
+                  customClass='border-2 border-green-300 px-4 py-1'
                   textColor='text-green-300'
                   backgroundColor='bg-white'
                   iconColor='#01A982'
