@@ -10,7 +10,7 @@ const HomeLayout: FC<LayoutProps> = ({ children }) => {
   return (
     <div className='h-screen w-screen bg-black overflow-hidden'>
       <HomeHeader />
-      <main className="px-32 relative overflow-hidden h-full">
+      <main className="px-32 relative overflow-auto h-full">
         {children}
       </main>
       <Footer />

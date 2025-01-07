@@ -46,14 +46,14 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div className="h-full pt-7 md:pt-[1rem]">
-        <div className="flex relative items-center gap-[17rem]">
+      <div className="h-full flex flex-col justify-evenly min—h-[75vh]">
+        <div className="flex relative items-center justify-between mr-[15vw]">
           <section className="text-white w-[25rem]">
             <h1 className="text-[3.45rem] leading-[6rem] font-bold font-metric text-green-100">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
             <p className="text-wrap text-base font-metricLight">Simplifying Marketing Content with AI-Driven</p>
           </section>
 
-          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-10 padbot10 flex flex-col items-center md:pb-[0.75rem]">
+          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-10 padbot10 flex flex-col items-center ">
             <div className="absolute top-[35%] left-[25%]">
               <div className="color-wheel ">
                 <div className="eclipse-1"></div>
@@ -65,20 +65,20 @@ const Home: FC = () => {
             <input 
               defaultValue={emailLoginDefault} 
               onChange={onChangeEmail} 
-              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[35ch] outline-none font-metricLight bg-transparent border border-white text-white rounded-full" 
+              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none font-metricLight bg-transparent border border-white text-white rounded-full" 
               placeholder="Enter Your email id" 
               type="text" 
 />
-            <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[35ch] font-metricLight rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
+            <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[32ch] font-metricLight rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
             <p className="text-[0.7rem] mb-[0.7rem] font-metricLight">Not a member? <span className="text-green-100">Sign up now</span></p>
           </div>
         </div>
         
         
-        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] my-5">   
+        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mt-[2%] mb-[3%]">   
         </div>
 
-        <div className="grid grid-cols-4 gap-7">
+        <div className="grid grid-cols-4 gap-7 mb-[2%] relative">
           {TaglineContents.map(tagline => {
             return (
               <section key={tagline.title} className="text-white">
