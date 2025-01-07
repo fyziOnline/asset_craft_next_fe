@@ -6,7 +6,7 @@ import { useLoading } from '@/components/global/Loading/LoadingContext'
 import { useGetTemplates } from '@/hooks/useGetTemplates'
 import { ApiService } from '@/lib/axios_generic'
 import { FC, ReactNode, useRef } from 'react'
-import { Template } from '@/types/templates'
+import { AssetHtmlProps, Template } from '@/types/templates'
 import { useAppData } from '@/context/AppContext'
 import TemplateSelectionContainer from '../layout/TemplateSelectionContainer'
 import TemplateGenerationSection from '../layout/TemplateGenerationSection'
@@ -29,8 +29,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
   const { contextData, setContextData } = useAppData();
-
-
+  
   const handleNext = async (selectedTemplate: Template) => {
     if (contextData.stepGenerate < total_steps) {
       try {
@@ -63,7 +62,6 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
       <TemplateGenerationSection
         params={{
           type_page: params.type_page,
-          // project_name : params.project_name,
           template: selectedTemplateRef.current as Template
         }}
       />

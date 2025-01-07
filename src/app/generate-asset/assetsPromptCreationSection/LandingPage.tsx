@@ -13,6 +13,7 @@ import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { listofcampains, ListTargetAudience } from '@/data/dataGlobal';
+import SectionAssetDetails from '@/components/assetGeneration/SectionAssetDetails';
 
 interface LandingPageProps {
     params: {
@@ -24,7 +25,7 @@ interface LandingPageProps {
 const LandingPage = ({ params }: LandingPageProps) => {
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
-    const [disableList, setDisableList] = useState<number[]>([2, 3, 4]);
+    const [disableList, setDisableList] = useState<number[]>([1,2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
@@ -39,17 +40,23 @@ const LandingPage = ({ params }: LandingPageProps) => {
     }, [])
 
     const onNext = (step: number): void => {
-        if (step === 1) {
-            setDisableList([1, 3])
-            setIsShowList([2])
+        if (step === 0) {
+            setDisableList([0, 2, 3,4]);
+            setIsShowList([1]);
+        } else if (step === 1) {
+            setDisableList([0, 1, 3,4]);
+            setIsShowList([2]);
         } else if (step === 2) {
-            setDisableList([1, 2])
-            setIsShowList([3])
+            setDisableList([0, 1, 2,4]);
+            setIsShowList([3]);
         } else if (step === 3) {
-            setIsShowList([4])
+            setDisableList([0, 1, 2,3]);
+            setIsShowList([4]);
         } else if (step === 4) {
-            setIsShowList([])
-            if (checkedList.length === 4) { return }
+            setIsShowList([]);
+            if (checkedList.length === 5) {
+                return
+            }
         }
         setCheckedList([...checkedList, step])
     };
@@ -66,7 +73,11 @@ const LandingPage = ({ params }: LandingPageProps) => {
         } else if (step === 2) {
             setDisableList([2, 3, 4]);
             setIsShowList([1]);
-            setCheckedList([]);
+            setCheckedList([0]);
+        } else if (step === 1) {
+            setDisableList([1,2,3,4])
+            setIsShowList([0])
+            setCheckedList([])
         }
     };
 
@@ -81,14 +92,14 @@ const LandingPage = ({ params }: LandingPageProps) => {
             newStep = 1;
             setIsShowList([]);
             setCheckedList([]);
-            setDisableList([2, 3, 4]);
+            setDisableList([1,2, 3, 4]);
             setContextData({ assetTemplateShow: false });
         } else {
             setContextData({ assetTemplateShow: true });
 
             if (newStep === 2) {
-                setCheckedList([1, 2, 3, 4]);
-                setDisableList([1, 2, 3, 4]);
+                setCheckedList([0,1, 2, 3, 4]);
+                setDisableList([0,1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
                 setShowLoading(true)
@@ -105,6 +116,29 @@ const LandingPage = ({ params }: LandingPageProps) => {
 
     return (
         <div>
+             <div>
+                <Accordion
+                    isRequire={true}
+                    HeaderTitle='Project Details'
+                    checked={checkedList.includes(0)}
+                    handleShowContent={() => { setIsShowList([0]) }}
+                    disableShowContent={disableList.includes(0)}
+                    isShowContent={isShowList.includes(0)}
+                >
+                    <SectionAssetDetails />
+                    <div className='max-w-full flex justify-end pt-5 pb-3'>
+                        <Button
+                            buttonText='Next'
+                            showIcon
+                            textStyle='text-[1rem] font-base text-[#00A881]'
+                            textColor="text-[#00A881]"
+                            iconColor="#00A881"
+                            backgroundColor='bg-[#fff]'
+                            handleClick={() => { onNext(0) }}
+                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
+                    </div>
+                </Accordion>
+            </div>
             <div className='mt-[40px]'>
                 {/* step 1 */}
                 <Accordion
@@ -335,7 +369,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                     showIcon
                     textStyle='text-[1rem] font-base text-[#00A881]'
-                    backgroundColor={((checkedList.length === 4 && generateStep != 2) || generateStep === 4) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
+                    backgroundColor={((checkedList.length === 5 && generateStep != 2) || generateStep === 5) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
                     handleClick={handleGenerate}
                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
             </div>
