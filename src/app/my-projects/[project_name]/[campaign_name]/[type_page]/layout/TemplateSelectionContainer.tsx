@@ -30,7 +30,7 @@ const TemplateSelectionContainer: FC<TemplateViewerProps> = ({ templateData = []
             {templateData.map((template) => (
               <div key={template.templateID} className="flex flex-col items-center flex-shrink-0 cursor-pointer">
                 <div
-                  className="h-[55vh] aspect-half relative bg-gray-200 mb-4"
+                  className="h-[60vh] aspect-half relative bg-gray-200 mb-4"
                   style={{ aspectRatio: aspect_ratio }}
                   onClick={() => onTemplateSelection(template)}
                 >
