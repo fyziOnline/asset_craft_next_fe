@@ -1,14 +1,15 @@
 "use client"
 
 import { createContext, useState, useContext, ReactNode, FC } from "react";
-import { AssetHtmlProps } from "@/types/templates";
+import { AssetHtmlProps, ProjectDetails } from "@/types/templates";
 
-interface AppData {
+export interface AppData {
     assetTemplateShow: boolean;
     assetGenerateTemplate: string;
     assetGenerateStatus: number;
     layoutType: 'main' | 'home';
     isShowEdit_Save_Button: boolean;
+    ProjectDetails : ProjectDetails
     AssetHtml: AssetHtmlProps;
     stepGenerate: number; //step 0 or 1
     isRegenerateHTML: boolean
@@ -31,6 +32,12 @@ const APP_DATA: AppData = {
     assetGenerateStatus: 1,
     stepGenerate: 0,
     layoutType: 'main',
+    ProjectDetails : {
+        project_name: "", 
+        campaign_name: "", 
+        asset_name: "", 
+        campaignID : ""
+    },
     AssetHtml: {} as AssetHtmlProps,
     isShowEdit_Save_Button: false,
     isRegenerateHTML: false
