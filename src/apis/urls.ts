@@ -27,7 +27,8 @@ export const urls = {
   asset_version_generate: "/asset/version/generate",
   asset_version_select: "/asset/version/select",
   asset_version_copy: "/asset/version/copy",
-  getCampaigns : "/campaign/select/all",
-  getAssetsAllDashboard : "/asset/select/all/Dashboard",
-  getuserDetails: "/userProfile/select"
+  getCampaigns: "/campaign/select/all",
+  getAssetsAllDashboard: "/asset/select/all/Dashboard",
+  getuserDetails: "/userProfile/select",
+  approval_approver_select_all: "/approval/approver/select/all"
 };

@@ -16,28 +16,28 @@ import { SearchDownArrow } from '@/assets/icons/DownArrow'
  * @returns {React.FC} The Search component.
  */
 
-interface Option {
+export interface Option {
     label: string
     value: string
     firstLetter: string
-    IconColor: string
+    IconColor?: string
 }
 
 interface SearchProps {
     optionsList?: Option[];
     placeHolder?: string;
     customOuterClass?: string;
-    onSelect?: (selectedOption: Option) => void; 
+    onSelect?: (selectedOption: Option) => void;
 }
 
 
-const Search: React.FC<SearchProps> = ({ 
+const Search: React.FC<SearchProps> = ({
     optionsList = [],
     onSelect,
     placeHolder = "Search for a person...",
     customOuterClass = ""
- }) => {
-    const [isOpen , setIsOpen] = useState(false);
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
     const [selectValue, setSelectValue] = useState<Option | null>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -50,9 +50,9 @@ const Search: React.FC<SearchProps> = ({
      */
     const getFilteredOptions = useCallback(() => {
         const query = searchQuery.toLowerCase()
-        return optionsList.filter(option => 
-          option.label.toLowerCase().includes(query) ||
-          option.value.toLowerCase().includes(query)
+        return optionsList.filter(option =>
+            option.label.toLowerCase().includes(query) ||
+            option.value.toLowerCase().includes(query)
         )
     }, [optionsList, searchQuery])
 
@@ -71,7 +71,7 @@ const Search: React.FC<SearchProps> = ({
         setIsOpen(false)
         setSearchQuery("")
         onSelect?.(option)
-      }, [onSelect])
+    }, [onSelect])
 
     /**
      * Handles changes to the search input value
@@ -99,41 +99,41 @@ const Search: React.FC<SearchProps> = ({
         <div ref={searchRef} className={`relative flex flex-col w-[300px] ${customOuterClass} `}>
             <div onClick={handleToggle} className={`flex items-center gap-1 bg-gray-100 px-[14px] cursor-pointer h-[45px] ${isOpen ? "rounded-t-[16px] " : "rounded-full shadow-search-box-shadow"}`}>
                 <SearchIcon />
-                {selectValue?.value ? 
+                {selectValue?.label ?
                     <div className='flex items-start px-1 w-full h-8'>
                         <div className='flex items-center gap-[10px] ring-2 ring-emerald-500 ring-offset-0 rounded-full p-[5px]' >
-                            <div className={`flex items-center justify-center w-5 h-5 rounded-full ${selectValue.IconColor}`}>
+                            <div className={`flex items-center justify-center w-5 h-5 rounded-full`} style={selectValue.IconColor ? { backgroundColor: selectValue.IconColor } : {}}>
                                 <span className='text-sm'>{selectValue.firstLetter}</span>
                             </div>
-                            <p className='text-sm'>{selectValue.value}</p>
+                            <p className='text-sm'>{selectValue.label}</p>
                         </div>
-                    </div> 
-                    : 
-                    <input 
-                        type="text" 
+                    </div>
+                    :
+                    <input
+                        type="text"
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        placeholder={placeHolder} 
-                        className='bg-transparent border-none outline-none w-full h-full px-1 placeholder-black' 
+                        placeholder={placeHolder}
+                        className='bg-transparent border-none outline-none w-full h-full px-1 placeholder-black'
                     />
                 }
-                <span className={`transition-transform duration-300 ${isOpen ? "rotate-180" : "" }`}><SearchDownArrow /></span>
+                <span className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}><SearchDownArrow /></span>
             </div>
-            {isOpen && 
-            <div className='absolute top-full left-0 right-0 flex flex-col bg-white rounded-b-2xl max-h-60 overflow-y-auto shadow-search-box-shadow'>
-                {getFilteredOptions().map((data , index) => (
-                    <div 
-                        key={index} 
-                        onClick={() => handleOptionSelect(data)} 
-                        className='flex items-center gap-[10px] w-full h-10 border-t-[1px] border-black px-[14px] cursor-pointer'
-                    >
-                        <div className={`flex items-center justify-center w-6 h-6 rounded-full ${data.IconColor}`}>
-                            <span>{data.firstLetter}</span>
+            {isOpen &&
+                <div className='absolute top-full left-0 right-0 flex flex-col bg-white rounded-b-2xl max-h-60 overflow-y-auto shadow-search-box-shadow'>
+                    {getFilteredOptions().map((data, index) => (
+                        <div
+                            key={index}
+                            onClick={() => handleOptionSelect(data)}
+                            className='flex items-center gap-[10px] w-full h-10 border-t-[1px] border-black px-[14px] cursor-pointer'
+                        >
+                            <div className={`flex items-center justify-center w-6 h-6 my-1 rounded-full`} style={data.IconColor ? { backgroundColor: data.IconColor } : {}}>
+                                {data.firstLetter}
+                            </div>
+                            <p className='text-base'>{data.label}</p>
                         </div>
-                        <p className='text-base'>{data.label}</p>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
             }
         </div>
     )
