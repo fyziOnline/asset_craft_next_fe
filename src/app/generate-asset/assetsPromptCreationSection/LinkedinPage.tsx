@@ -159,7 +159,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             value={params.project_name}
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <div className='flex items-center gap-[16%]'>
+                        <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
                                 <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown

@@ -49,6 +49,8 @@ interface AllAssetsTypeProps {
     project: string;
     campaignName: string;
     status: string;
+    approvedBy: string;
+    approvedOn: string;
     assetID: string;
     assetTypeName: string;
     clientID: string;

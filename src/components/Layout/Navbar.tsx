@@ -30,12 +30,6 @@ const navOption: NavOptions[] = [
       component:<CompetedIcon />,
       id:'asset-comp'
     },
-    {
-      label: 'My Projects',
-      href: '/my-projects',
-      component:<FolderIcon />,
-      id:'projects'
-    }
 ]
 
 const bottomOptions: NavOptions[] = [

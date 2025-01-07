@@ -16,36 +16,6 @@ import { useAppData } from "@/context/AppContext";
 import { AssetHtmlProps } from "@/types/templates";
 
 
-
-// const pendingApprovals = [
-//   {
-//     id: 1,
-//     name: "Email_1",
-//     lastUpdated: "2nd Oct 2024",
-//   },
-//   {
-//     id: 2,
-//     name: "LinkedIn_1",
-//     lastUpdated: "3rd Oct 2024",
-//   },
-//   {
-//     id: 3,
-//     name: "SalesCall_1",
-//     lastUpdated: "4th Oct 2024",
-//   },
-//   {
-//     id: 4,
-//     name: "Lorem",
-//     lastUpdated: "4th Oct 2024",
-//   },
-//   {
-//     id: 5,
-//     name: "Lorem",
-//     lastUpdated: "4th Oct 2024",
-//   },
-// ];
-
-
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
 const Dashboard: FC = () => {
@@ -58,30 +28,31 @@ const Dashboard: FC = () => {
     closeAssetModal,
     handleShowPopup,
     onSelect,
+    handleChangeAssetDetails,
     selectAssetType,
     dashboardAssets,
     userDetails
   } = useDashboard()
 
   const { updatedDashboardData, assetsDisplayTable, pendingApproval } = processDashboardAssets(dashboardAssets);
-  
-  const {setContextData} = useAppData()
+
+  const { setContextData } = useAppData()
 
   useEffect(() => {
-    setContextData({ 
-      isShowEdit_Save_Button: false, 
-      isRegenerateHTML: false, 
+    setContextData({
+      isShowEdit_Save_Button: false,
+      isRegenerateHTML: false,
       stepGenerate: 0,
-      AssetHtml : {} as AssetHtmlProps,
-      assetGenerateStatus : 1,
-      assetTemplateShow : false
+      AssetHtml: {} as AssetHtmlProps,
+      assetGenerateStatus: 1,
+      assetTemplateShow: false
     })
   }, [])
-  
+
   return (
     <>
       {/* <ProjectSetUpModal title="Project Details" selectedValue={selectedButton?.assetTypeName} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} > */}
-        {/* <div className='w-full flex flex-col gap-3 px-12 pb-7'>
+      {/* <div className='w-full flex flex-col gap-3 px-12 pb-7'>
           <div className='pt-[15px] flex flex-col gap-3'>
             <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
             <DropDown
@@ -100,7 +71,7 @@ const Dashboard: FC = () => {
             </div>
           }
         </div> */}
-        {/* <SectionAssetDetails /> */}
+      {/* <SectionAssetDetails /> */}
       {/* </ProjectSetUpModal> */}
 
       {/* <ProjectSetUpModal title="Choose your Assets" onClose={closeAssetModal} selectedValue="All in One" isOpen={chooseAssetModal} onNext={handleNext}>

@@ -152,7 +152,7 @@ const Page = () => {
                             <Button
                                 buttonText='Save As'
                                 showIcon
-                                textStyle='text-[1rem] font-base text-[#00A881]'
+                                textStyle='text-lg text-[#00A881]'
                                 textColor="text-[#00A881]"
                                 iconColor="#00A881"
                                 backgroundColor='bg-[#fff]'
@@ -161,16 +161,16 @@ const Page = () => {
                             {isShowSave ?
                                 <div className="w-[170px] h-[130px] ml-[40px] absolute z-[1000] rounded-[14px] bg-[#fdfdfd] flex flex-col">
                                     <button onClick={() => handleSave(1)} className="h-[43px] flex items-center justify-start px-4 rounded-t-[14px]">
-                                        <span className="text-black text-lg font-normal font-['Inter']">New Version</span>
+                                        <span className="text-black text-lg font-normal">New Version</span>
                                     </button>
                                     <button onClick={() => handleSave(2)} className="h-[43px] flex items-center justify-start px-4 border-t-[0.5px] border-[#7F7F7F] border-solid">
-                                        <span className="text-black text-lg font-normal font-['Inter']">HTML File</span>
+                                        <span className="text-black text-lg font-normal">HTML File</span>
                                     </button>
                                     <button onClick={() => handleSave(3)} className="h-[43px] flex items-center justify-start px-4 rounded-b-[14px] border-t-[0.5px] border-[#7F7F7F] border-solid">
-                                        <span className="text-black text-lg font-normal font-['Inter']">Zip File</span>
+                                        <span className="text-black text-lg font-normal">Zip File</span>
                                     </button>
                                     <button onClick={() => handleSave(4)} className="h-[43px] flex items-center justify-start px-4 rounded-b-[14px] border-t-[0.5px] border-[#7F7F7F] border-solid">
-                                        <span className="text-black text-lg font-normal font-['Inter']">PDF File</span>
+                                        <span className="text-black text-lg font-normal">PDF File</span>
                                     </button>
                                 </div> : null}
                         </div>

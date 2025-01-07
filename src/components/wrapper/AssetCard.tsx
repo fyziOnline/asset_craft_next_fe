@@ -1,9 +1,9 @@
 'use client'
 import { FC, useState } from 'react'
-import AssetIndicator from '../global/AssetIndicator'
-import UpdateIndicator from '../global/UpdateIndicator'
-import CardContent from '../global/CardContent'
-import StatusLabel from '../global/StatusLabel'
+import AssetIndicator from '@/components/global/AssetIndicator'
+import UpdateIndicator from '@/components/global/UpdateIndicator'
+import CardContent from '@/components/global/CardContent'
+import StatusLabel from '@/components/global/StatusLabel'
 import Button from '../global/Button'
 
 interface AssetCardProp {
@@ -49,12 +49,12 @@ const AssetCard:FC<AssetCardProp> = ({data}) => {
       onMouseLeave={onLeave}
     >
       <div className='flex items-start justify-between mb-[2%]'>
-        <AssetIndicator hoverStatus={isHovered} asset_type={data.assetName}/>
+        <AssetIndicator hoverStatus={isHovered} asset_type={data.assetTypeIcon}/>
         <StatusLabel status_value={status}/>
       </div>
         <CardContent header={data.projectName} cardClass=' mb-[4%]' content='Ipsum dolor sit amet consectetur adipisicing elit. Ipsum deleniti ab perspiciatis obcaecati inventore quae officiis debitis ullam dolorem illo? dsjfkwhai udjsfhuwieuh fuehu Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, fugiat!' /> 
         <div className='flex justify-between items-center'>
-          <UpdateIndicator date={data.creadedOn}/>
+          <UpdateIndicator date={data.createdOn}/>
           <Button 
             buttonText='Clone It' 
             showIcon textStyle='text-xs  xl:text-sm font-base text-[#00A881]' 

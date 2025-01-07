@@ -72,9 +72,9 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDas
     // Calculate the totals for all projects
     const totalAssets = dashboardAssets.length;
     const inProgressCount = dashboardAssets.filter(asset => asset.status === "In Progress").length;
-    const onReviewCount = dashboardAssets.filter(asset => asset.status === "On review").length;
+    const onReviewCount = dashboardAssets.filter(asset => asset.status === "On Review").length;
 
-    const pendingApproval = dashboardAssets.filter(asset => asset.status === "On review")
+    const pendingApproval = dashboardAssets.filter(asset => asset.status === "On Review")
 
     // Calculate for each project type
     const projectTypes = ["Email", "LinkedIn", "Landing Page", "Call Script"];
@@ -90,7 +90,7 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDas
 
         if (projectTypes.includes(data.projectName)) {
             const { total, statusCount } = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, "In Progress");
-            const onReviewStatusCount = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, "On review").statusCount;
+            const onReviewStatusCount = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, "On Review").statusCount;
             return {
                 ...data,
                 underReview: onReviewStatusCount,
