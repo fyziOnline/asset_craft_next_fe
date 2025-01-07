@@ -9,7 +9,7 @@ import { ListTypePage } from '@/data/dataGlobal';
 import { debounce } from 'lodash';
 import { DropDownOptions } from '@/components/global/DropDown';
 import moment from 'moment';
-import { useAppData } from '@/context/AppContext';
+import { AppData, useAppData } from '@/context/AppContext';
 
 interface ClientAssetTypeProps {
     clientAssetTypeID?: string,
@@ -229,6 +229,7 @@ export const useDashboard = () => {
                 setIsAssetNameExists(false)
             }
         }
+        
     }, 500)
 
     const handleCheckCampNameExists = (listCampaigns: CampaignsProps[], value: string) => {
@@ -254,6 +255,11 @@ export const useDashboard = () => {
         } catch (error) {
             console.log('getAssetAll: ', ApiService.handleError(error));
         }
+    }
+
+    const selectAssetType = async (item:ClientAssetTypeProps) => {
+        setSelectedButton(item)
+        router.push(`generate-asset?asset-type=${item?.assetTypeName}&assetTypeID=${item.assetTypeID}`)
     }
 
     const handleNext = async () => {
@@ -368,11 +374,13 @@ export const useDashboard = () => {
         selectedIndexes,
         selectedButton,
         handleNext,
+        selectAssetType,
         closeModal,
         closeAssetModal,
         onChangeAssetDetails,
         handleShowPopup,
         onSelect,
+        assetDetails,
         dashboardAssets,
         projectName: assetDetails.project_name,
         handleChangeAssetDetails,

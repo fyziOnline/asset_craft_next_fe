@@ -111,3 +111,10 @@ export interface AssetBlockProps {
     html: string,
     isStatic: boolean
 }
+
+export interface ProjectDetails {
+        project_name: string
+        campaign_name: string 
+        asset_name: string
+        campaignID : string
+}

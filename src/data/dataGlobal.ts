@@ -1,8 +1,12 @@
 export const ListTypePage = {
-    Email: "email",
+    Email: "email" ,
     LinkedIn: "linkedin",
     CallScript: "call-script",
     LandingPage: "landing-page",
+}
+
+export const TypeToAssetPageMap = {
+    
 }
 
 export const ListTargetAudience = [
