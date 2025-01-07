@@ -9,9 +9,11 @@ const AddVersionModel = ({ isShowAddVer, setIsShowAddVer, handleAddVersion, hand
         const handleClickOutside = (event: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 setIsShowAddVer(false);
+                document.body.style.overflow = '';
             }
         };
 
+        document.body.style.overflow = 'hidden';
         document.addEventListener('mousedown', handleClickOutside);
 
         return () => {
@@ -22,7 +24,7 @@ const AddVersionModel = ({ isShowAddVer, setIsShowAddVer, handleAddVersion, hand
     if (!isShowAddVer) return null;
 
     return (
-        <div className="z-20 fixed left-0 right-0 h-[70vh] bg-black bg-opacity-55 flex items-center justify-center">
+        <div className="z-20 fixed left-0 right-0 h-[82vh] bg-black bg-opacity-55 flex items-center justify-center">
             <div ref={modalRef} className="w-[900px] relative bg-white rounded-3xl">
                 <div className="flex items-center px-[50px] pt-[25px]">
                     <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold font-['Inter'] leading-[17.11px]">
