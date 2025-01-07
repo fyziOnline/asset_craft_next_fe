@@ -27,7 +27,7 @@ const config: Config = {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
         geist: ['GeistMonoVF', 'monospace'], // Add fallback
-        metric: ['MetricHPE-Web', 'sans-serif'], // Add fallback
+        metric: ['Metric', 'sans-serif'], // Add fallback
         metricLight: ['Metric', 'sans-serif'],
         metricSemibold: ['MetricHPEXS-Semibold', 'sans-serif'],
         metricRegular: ['MetricHPEXS', 'sans-serif'],

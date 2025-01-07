@@ -8,47 +8,42 @@ import Table from "@/components/global/Table";
 import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 import { ExpressIcon } from "@/assets/icons/AppIcons";
 import { useDashboard } from "@/hooks/useDashboard";
+import InputAreaSearch from "@/components/global/InputAreaSearch";
+import DropDown from "@/components/global/DropDown";
 import processDashboardAssets from "@/app/dashboard/utils/dashboardFilters"
+import { formatDate } from "@/utils/formatDate";
 import { useAppData } from "@/context/AppContext";
 import { AssetHtmlProps } from "@/types/templates";
 
 
-interface UserDetailsProps {
-  userID: string;
-  name: string;
-  email: string;
-  userRole: string;
-  isActive: number;
-}
 
-
-const pendingApprovals = [
-  {
-    id: 1,
-    name: "Email_1",
-    lastUpdated: "2nd Oct 2024",
-  },
-  {
-    id: 2,
-    name: "LinkedIn_1",
-    lastUpdated: "3rd Oct 2024",
-  },
-  {
-    id: 3,
-    name: "SalesCall_1",
-    lastUpdated: "4th Oct 2024",
-  },
-  {
-    id: 4,
-    name: "Lorem",
-    lastUpdated: "4th Oct 2024",
-  },
-  {
-    id: 5,
-    name: "Lorem",
-    lastUpdated: "4th Oct 2024",
-  },
-];
+// const pendingApprovals = [
+//   {
+//     id: 1,
+//     name: "Email_1",
+//     lastUpdated: "2nd Oct 2024",
+//   },
+//   {
+//     id: 2,
+//     name: "LinkedIn_1",
+//     lastUpdated: "3rd Oct 2024",
+//   },
+//   {
+//     id: 3,
+//     name: "SalesCall_1",
+//     lastUpdated: "4th Oct 2024",
+//   },
+//   {
+//     id: 4,
+//     name: "Lorem",
+//     lastUpdated: "4th Oct 2024",
+//   },
+//   {
+//     id: 5,
+//     name: "Lorem",
+//     lastUpdated: "4th Oct 2024",
+//   },
+// ];
 
 
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
@@ -68,9 +63,9 @@ const Dashboard: FC = () => {
     userDetails
   } = useDashboard()
 
+  const { updatedDashboardData, assetsDisplayTable, pendingApproval } = processDashboardAssets(dashboardAssets);
+  
   const {setContextData} = useAppData()
-  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
-
 
   useEffect(() => {
     setContextData({ 
@@ -121,16 +116,16 @@ const Dashboard: FC = () => {
         </div>
       </ProjectSetUpModal> */}
 
-      <div className="px-8 p-4">
+      {/* <div className="px-8 p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl tracking-wide text-green-100 font-bold leading-normal">
-          Welcome, {userDetails?.name}
+            Welcome, {userDetails?.name}
           </h1>
           <SearchBox />
         </div>
         <p className="text-base font-bold tracking-wide">Overview:</p>
-      </div>
-      <div className="px-8 flex items-center gap-9">
+      </div> */}
+      <div className="w-full px-8 flex items-center justify-between mt-4 gap-10">
         {updatedDashboardData.map((data, index) => (
           <DashboardCard
             key={index}
@@ -144,8 +139,8 @@ const Dashboard: FC = () => {
       </div>
 
       <div className="pl-8 pt-5 flex w-full mb-32">
-        <div className="w-[70%] border-t border-[#D9D9D9]">
-          <div className="mt-5">
+        <div className="w-[70%] border-[#D9D9D9]">
+          <div>
             <p className="text-lg font-bold tracking-wide">
               What would you like to create today?
             </p>
@@ -157,11 +152,11 @@ const Dashboard: FC = () => {
                   buttonText={item.assetTypeName}
                   showIcon={false}
                   IconComponent={item.assetTypeName === "All in One" && <ExpressIcon strokeColor="white" width="40" height="38" />}
-                  backgroundColor={"bg-white"}
-                  customClass={"px-12 py-1 border-2 border-green-300 min-w-min px-[50px]"}
-                  textColor={"text-foreground"}
+                  backgroundColor="bg-white"
+                  customClass="group px-12 py-2 border border-[#07363480] w-[25%] px-[50px] transition-all duration-300 hover:bg-[#073634]"
+                  textColor="text-foreground group-hover:text-white"
                   handleClick={() => selectAssetType(item)}
-                  textStyle={`font-normal text-sm text-center whitespace-nowrap`}
+                  textStyle="font-normal text-sm text-center whitespace-nowrap"
                 />
               ))}
             </div>
@@ -170,31 +165,38 @@ const Dashboard: FC = () => {
             <div className="mt-5">
               <p className="text-lg font-bold tracking-wide">Recent Assets:</p>
             </div>
-            <div>
+            <div className="overflow-y-scroll h-[50vh] scrollbar-hide">
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} tablePlaceitems="center" />
+                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
+              <div className="h-[15vh]" />
             </div>
 
           </div>
         </div>
-        <div className="w-[30%] bg-[#F9F9F9] rounded-[14px] ml-4">
-          <div className="p-6">
-            <div className="flex items-baseline justify-between">
-              <p className="text-lg font-bold">Pending Approval:</p>
-              <p className="text-base font-normal underline">View all</p>
-            </div>
-            {pendingApprovals.map((data, index) => (
-              <div key={index} className="rounded-[15px] border-2 border-[#00A881] bg-white p-3 mt-2">
-                <p className="text-[##2F363F] font-inter text-base font-normal mb-1">{data.name}</p>
-                <div className="flex items-center justify-between">
-                  <p className="text-[#636363] font-semibold text-sm">Last Updated:</p>
-                  <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
+
+        <div className="w-[27%]">
+          <p className="text-lg font-bold pl-10 pb-2">Pending Approval</p>
+          <div className="w-full bg-[#F9F9F9] rounded-[14px] ml-4">
+            <div className="p-5 max-h-[580px] overflow-y-auto">
+
+              {pendingApproval && pendingApproval.length > 0 ? (
+                pendingApproval.map((data, index) => (
+                  <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
+                    <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.name}</p>
+                    <div className="flex items-center justify-between mt-2">
+                      <p className="text-[#636363] font-thin text-sm">Last Updated :</p>
+                      <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
+                    </div>
+                  </div>
+                ))) : (
+                <div className="text-center text-[#636363] font-inter text-sm ">
+                  No data available
                 </div>
-              </div>
-            ))}
+              )}
+            </div>
           </div>
         </div>
       </div>

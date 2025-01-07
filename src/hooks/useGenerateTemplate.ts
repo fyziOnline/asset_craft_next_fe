@@ -301,10 +301,12 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       if (resAddWithTemplate.isSuccess) {
         assetIDTemplateRef.current = resAddWithTemplate.assetID;
         const resAssetSelect = await getAssetHTML();
+
         if (resAssetSelect.isSuccess) {
           assetSelect.current = resAssetSelect as AssetHtmlProps;
           // return
           const allSuccess = await updateSections(Sections);
+
           if (allSuccess) {
             const resAssetInsert = await ApiService.post<any>(
               urls.aiPrompt_Asset_insert,
@@ -315,6 +317,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                 keyPoints: FormData?.keyPoints || "",
               }
             );
+
             if (resAssetInsert.isSuccess) {
               assetPromptIDRef.current = resAssetInsert?.promptID || "";
               let fileID = await uploadImage(FormData);
@@ -323,6 +326,8 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                 fileID,
                 campaign_id
               );
+
+              
               if (resCampaignInsert.isSuccess) {
                 let resGenerate = await aiPromptGenerateForAsset();
                 if (resGenerate.isSuccess) {

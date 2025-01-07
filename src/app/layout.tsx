@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-inter bg-background">
+      <body className="font-metricRegular bg-background overflow-hidden">
         <AppDataProvider>
           <LoadingProvider>
             <YesNoPopupProvider>

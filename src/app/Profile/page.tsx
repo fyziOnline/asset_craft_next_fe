@@ -6,6 +6,7 @@ import Button from '@/components/global/Button'
 import Cookies from 'js-cookie';
 import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
+import { useProfile } from '@/hooks/useProfile';
 
 interface FormValues {
     fullName: string;
@@ -37,16 +38,20 @@ const page: React.FC = () => {
         Cookies.remove(nkey.auth_token)
         Cookies.remove(nkey.email_login)
         Cookies.remove(nkey.client_ID)
+        Cookies.remove(nkey.userID)
+        Cookies.remove(nkey.userRole)
 
         router.push('/')
     }
+
+    const { userDetails } = useProfile()
 
   return (
     <LayoutWrapper layout='main'>
         <div className='w-[80%] h-full mt-8  mx-auto'>
             <div className='flex items-baseline justify-between mb-5'>
                 <h1 className="text-[30px] text-green-100 font-bold leading-normal">
-                    Welcome, Stan Lee.
+                    Welcome, {userDetails?.name}
                 </h1>
                 <Button
                   buttonText='Request Access' 
@@ -63,8 +68,8 @@ const page: React.FC = () => {
                     <div className="flex relative items-center gap-4">
                         <div className="w-[100px] h-[100px] bg-[#C4C4C4] rounded-full" />
                         <div className='absolute bottom-0 left-[120px]'>
-                            <h3 className="font-medium">Stan Lee</h3>
-                            <p className="text-gray-500 text-sm">stanlee@gmail.com</p>
+                            <h3 className="font-medium">{userDetails?.name}</h3>
+                            <p className="text-gray-500 text-sm">{userDetails?.email}</p>
                         </div>
                     </div>
                 </div>
