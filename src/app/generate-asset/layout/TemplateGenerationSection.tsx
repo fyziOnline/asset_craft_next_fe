@@ -111,7 +111,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     return (
         <div className='min-h-[70vh]'>
             <div className="flex">
-                <div className="flex-1 py-8">
+                <div className="flex-1 py-4">
                     <div className="flex items-center justify-center">
                         <p className="font-inter font-bold text-black text-lg tracking-[0] leading-[normal] whitespace-nowrap pb-[10px]">
                             Please provide the necessary information to generate AI content

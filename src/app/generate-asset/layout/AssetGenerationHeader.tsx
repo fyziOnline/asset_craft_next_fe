@@ -43,9 +43,9 @@ const AssetGenerationHeader: FC<ProjectAssetProp> = ({ params }) => {
   
   return (
     <div className="flex items-center justify-between border-grey-200 border-b-[1px] border-solid pt-[2rem] pb-5 px-[1.5rem]">
-      {/* <div>
-        <Breadcrumb onClickBack={handleBack} ProjectNameUrl={`/my-projects/${project_name}`} TaskNameUrl={`/my-projects/${project_name}/${assetTypeID}`} projectName={project_name.split('%20').join(' ')} TaskName={campaign_name.split('%20').join(' ')} TaskType={asset_name.split('%20').join(' ')} />
-      </div> */}
+      <div>
+        {/* <Breadcrumb onClickBack={handleBack} ProjectNameUrl={`/my-projects/${project_name}`} TaskNameUrl={`/my-projects/${project_name}/${assetTypeID}`} projectName={project_name.split('%20').join(' ')} TaskName={campaign_name.split('%20').join(' ')} TaskType={asset_name.split('%20').join(' ')} /> */}
+      </div>
       {contextData.assetGenerateStatus === 3 && contextData.isShowEdit_Save_Button &&
         <div className="flex">
           <Button

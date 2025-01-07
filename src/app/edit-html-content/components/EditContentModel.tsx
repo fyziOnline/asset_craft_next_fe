@@ -6,11 +6,13 @@ import { AssetBlockProps, AssetHtmlProps, AssetVersionProps } from '@/types/temp
 import Button from '@/components/global/Button';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, TextareaAutosize, ThemeProvider } from '@mui/material';
 import { useAppData } from '@/context/AppContext';
 import ShadowDomContainer from './ShadowDomContainer';
-import TextField from '@/components/global/TextField';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
+import CloseIcon from '@mui/icons-material/Close';
+import { CustomTextArea, CustomTextTester } from './CustomTextArea';
+import { linkedIn_Uischema } from './schema';
 
 const customTheme = createTheme({
     palette: {
@@ -40,23 +42,23 @@ const customTheme = createTheme({
                 },
             },
         },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    textTransform: 'none',
-                    fontSize: '1rem',
-                    fontWeight: '500',
-                },
-            },
-        },
-        MuiGrid: {
-            styleOverrides: {
-                root: {
-                    gap: '14px',
-                    marginTop: "6px"
-                },
-            },
-        },
+        // MuiButton: {
+        //     styleOverrides: {
+        //         root: {
+        //             textTransform: 'none',
+        //             fontSize: '1rem',
+        //             fontWeight: '500',
+        //         },
+        //     },
+        // },
+        // MuiGrid: {
+        //     styleOverrides: {
+        //         root: {
+        //             gap: '14px',
+        //             marginTop: "6px"
+        //         },
+        //     },
+        // },
     },
 });
 
@@ -210,7 +212,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                         </div>
                         <div className='flex-1 h-[86vh] overflow-y-scroll scrollbar-hide px-5 py-2'>
                             <div className='border-b border-solid border-[#D9D9D9] pb-3 mt-2'>
-                                <div className='flex flex-row mb-1 items-center'>
+                                <div className='flex flex-row mb-1 mt-2 items-center'>
                                     {!isEditPrompt ? <div onClick={() => {
                                         refAiPromptCurrent.current = assetBlockSelected.aiPrompt
                                         setIsEditPrompt(true)
@@ -221,13 +223,14 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                     </div> : null}
                                     <div className='text-[14px] font-bold'>AI Prompt:</div>
                                 </div>
-                                <div className="border border-[#DCD8E8] w-full rounded-[10px]">
-                                    <TextField
-                                        disabled={!isEditPrompt}
-                                        customClass="h-12 border-none"
-                                        handleChange={handleInputAIPrompt}
-                                        value={assetBlockSelected.aiPrompt} />
-                                </div>
+                                <TextareaAutosize
+                                    disabled={!isEditPrompt}
+                                    value={assetBlockSelected.aiPrompt}
+                                    onChange={handleInputAIPrompt}
+                                    minRows={1}
+                                    maxRows={3}
+                                    className="w-full p-3 border rounded-[10px] resize-none hover:border-[#01A982] focus:border-[#01A982] outline-none"
+                                />
                                 <div className='flex justify-end mt-3'>
                                     {!isEditPrompt ? <Button
                                         handleClick={onGenerateWithAI}
@@ -269,23 +272,18 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                             <JsonForms
                                 schema={JSON.parse(assetBlock.schema as string)}
                                 data={blockData}
-                                renderers={materialRenderers}
+                                renderers={[
+                                    ...materialRenderers,
+                                    { tester: CustomTextTester, renderer: CustomTextArea }
+                                ]}
+                                uischema={contextData.AssetHtml.layoutName.toLowerCase().includes("linkedin") ? linkedIn_Uischema : undefined}
                                 cells={materialCells}
-                                // uischema={uiSChema}
                                 onChange={onHandleEditData}
                             />
                         </div>
                     </div>
                     <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-end'>
                         <div className='flex'>
-                            <Button
-                                handleClick={() => { setIsShowModelEdit(false) }}
-                                buttonText='Close'
-                                showIcon={false}
-                                textStyle='text-[1rem] font-base'
-                                textColor="text-[#00A881]"
-                                backgroundColor="bg-[#fff]"
-                                customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
                             <Button
                                 handleClick={onSaveAllAndClose}
                                 disabled={isLoading}
@@ -295,6 +293,14 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                 textColor="text-[#fff]"
                                 backgroundColor={isLoading ? "bg-[#00A881]" : "bg-custom-gradient-green"}
                                 customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+                        </div>
+                    </div>
+                    <div className='absolute top-1 right-1'>
+                        <div
+                            onClick={() => setIsShowModelEdit(false)}
+                            className="p-1 cursor-pointer hover:bg-gray-200 rounded-full transition ease-in-out duration-200"
+                        >
+                            <CloseIcon className="text-gray-600" fontSize="medium" />
                         </div>
                     </div>
                 </div>

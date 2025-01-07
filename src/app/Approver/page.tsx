@@ -1,4 +1,4 @@
-import Breadcrumb from '@/components/global/Breadcrumb'
+// import Breadcrumb from '@/components/global/Breadcrumb'
 import Table from '@/components/global/Table'
 import LayoutWrapper from '@/layout/LayoutWrapper'
 import React from 'react'
@@ -60,7 +60,7 @@ const page = () => {
   return (
     <LayoutWrapper layout='main'>
         <div className="pt-[2rem] px-[1.5rem]">
-            <Breadcrumb TaskType='Approval Assets:' />
+            {/* <Breadcrumb TaskType='Approval Assets:' /> */}
         </div>
 
         <div className='px-16'>

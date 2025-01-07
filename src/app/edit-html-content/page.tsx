@@ -1,6 +1,6 @@
 'use client';
 import React, { Suspense, useMemo } from 'react';
-import Breadcrumb from "@/components/global/Breadcrumb";
+// import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import Search from '@/components/global/Search';
 import TextField from '@/components/global/TextField';
@@ -11,18 +11,20 @@ import { useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
+import { UserIcon } from "@/assets/icons/AppIcons"
+import Link from 'next/link'
 
 interface HeaderProps {
     versionNameChoose: string
 }
 
-const Header = ({ versionNameChoose }: HeaderProps) => {
-    const queryParams = useSearchParams()
-    const project_name = queryParams.get('project_name') ?? 'default'
-    const campaign_name = queryParams.get('campaign_name') ?? 'default'
-    const asset_name = queryParams.get('asset_name') ?? 'default'
-    return (<Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={`${asset_name}_${versionNameChoose}`.replace(" ", "")} />)
-}
+// const Header = ({ versionNameChoose }: HeaderProps) => {
+//     const queryParams = useSearchParams()
+//     const project_name = queryParams.get('project_name') ?? 'default'
+//     const campaign_name = queryParams.get('campaign_name') ?? 'default'
+//     const asset_name = queryParams.get('asset_name') ?? 'default'
+//     return (<Breadcrumb projectName={project_name} TaskName={campaign_name} TaskType={`${asset_name}_${versionNameChoose}`.replace(" ", "")} />)
+// }
 
 const Page = () => {
     const { contextData } = useAppData();
@@ -127,9 +129,9 @@ const Page = () => {
     return (
         <Suspense>
             <div className='overflow-hidden'>
-                <div className="flex pt-[2rem] pb-2 px-[1.5rem]">
+                <div className="flex p-1 px-2">
                     <div className='flex-1'>
-                        <Header versionNameChoose={versionSelected?.versionName || ""} />
+                        {/* <Header versionNameChoose={versionSelected?.versionName || ""} /> */}
                     </div>
                     <div className='flex items-center'>
                         <div className='flex items-center'>
@@ -139,7 +141,7 @@ const Page = () => {
                                 <path d="M19.8429 16.0714V14.4047C19.8423 13.6661 19.5897 12.9487 19.1246 12.3649C18.6595 11.7812 18.0084 11.3643 17.2734 11.1797" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 <path d="M13.8477 1.28906C14.5846 1.47265 15.2378 1.88965 15.7042 2.47432C16.1706 3.059 16.4238 3.77809 16.4238 4.51823C16.4238 5.25837 16.1706 5.97746 15.7042 6.56214C15.2378 7.14681 14.5846 7.56381 13.8477 7.7474" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                            <div className="mx-2 text-black text-lg font-normal font-['Inter']">Assign Approver</div>
+                            <div className="mx-2 text-black text-base tracking-wide font-normal">Assign Approver</div>
                         </div>
                         <Search placeHolder=''></Search>
                         <div className='relative'>
@@ -176,9 +178,11 @@ const Page = () => {
                             textColor="text-[#fff]"
                             iconColor="#fff"
                             customClass='static mr-[80px] ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+
+                        <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
                     </div>
                 </div>
-                <div className='pl-[64px]'>
+                <div className='pl-28'>
                     {versionList.map((item, index) => {
                         return (
                             <button
@@ -189,8 +193,8 @@ const Page = () => {
                             </button>)
                     })}
                 </div>
-                <div className="min-h-[70vh] border-t border-solid border-[#D9D9D9] bg-[#e4e4e4]">
-                    <div className="flex flex-col h-[70vh] overflow-y-scroll scrollbar-hide relative">
+                <div className="min-h-[82vh] border-t border-solid border-[#D9D9D9] bg-[#e4e4e4]">
+                    <div className="flex flex-col h-[82vh] pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
                         <div>
                             <div id="container">
                                 {renderHTMLSelect}
