@@ -1,13 +1,16 @@
 'use client'
 import { urls } from '@/apis/urls'
 import { useLoading } from '@/components/global/Loading/LoadingContext'
-import TemplateGenerationSection from '@/app/my-projects/[project_name]/[campaign_name]/[type_page]/layout/TemplateGenerationSection'
-import TemplateSelectionContainer from '@/app/my-projects/[project_name]/[campaign_name]/[type_page]/layout/TemplateSelectionContainer'
+// import TemplateGenerationSection from '@/app/my-projects/[project_name]/[campaign_name]/[type_page]/layout/TemplateGenerationSection'
+// import TemplateSelectionContainer from '@/app/my-projects/[project_name]/[campaign_name]/[type_page]/layout/TemplateSelectionContainer'
 import { useGetTemplates } from '@/hooks/useGetTemplates'
 import { ApiService } from '@/lib/axios_generic'
 import { FC, ReactNode, useRef } from 'react'
-import { Template } from '@/types/templates'
+import { AssetHtmlProps, Template } from '@/types/templates'
 import { useAppData } from '@/context/AppContext'
+import TemplateSelectionContainer from '../layout/TemplateSelectionContainer'
+import TemplateGenerationSection from '../layout/TemplateGenerationSection'
+import { PageType } from '@/componentsMap/pageMap'
 
 type ProgressComponent = ReactNode;
 interface ProjectAssetProp {
@@ -15,7 +18,7 @@ interface ProjectAssetProp {
     project_name?: string
     campaign_name?: string
     asset_name?: string
-    type_page: string
+    type_page: PageType
   }
   handleEdit?: () => void
 }
@@ -26,8 +29,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
   const { contextData, setContextData } = useAppData();
-
-
+  
   const handleNext = async (selectedTemplate: Template) => {
     if (contextData.stepGenerate < total_steps) {
       try {
@@ -60,7 +62,6 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
       <TemplateGenerationSection
         params={{
           type_page: params.type_page,
-          project_name : params.project_name,
           template: selectedTemplateRef.current as Template
         }}
       />

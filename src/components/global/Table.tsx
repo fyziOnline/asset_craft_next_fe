@@ -1,6 +1,6 @@
 'use client';
 
-import { EmailIcon, LinkedinIcon, SalesCallIcon } from '@/assets/icons/TableIcon';
+import { EmailIcon, LandingAssetIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from '@/assets/icons/TableIcon';
 import React, { useEffect, useState } from 'react'
 
 /**
@@ -40,7 +40,8 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
 
   // Extract column names from the first item in the list
   const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]).filter((item) => item != fieldClick) : []
-
+  const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
+  
   useEffect(() => {
     setSortListData(listItems)
   }, [listItems])
@@ -68,9 +69,10 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
    */
   const getIcon = (value: string | undefined) => {
     const icons: { [key: string]: JSX.Element } = {
-      Email_1: <EmailIcon />,
-      LinkedIn_1: <LinkedinIcon />,
-      SalesCall_1: <SalesCallIcon />,
+      "Email": <EmailIcon />,
+      "Landing Page": <LandingAssetIcon2 height='27' width='27' strokeWidth='6' />,
+      "LinkedIn": <LinkedinIcon />,
+      "Call Script": <SalesCallIcon />,
     };
     return value ? icons[value] || null : null;
   };
@@ -100,7 +102,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   };
 
   // Set dynamic widths for columns or fallback to equal width if not provided
-  const gridColumnStyle = columnWidths.length === getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${getListItemsHeadings.length}, 1fr)`;
+  const gridColumnStyle = columnWidths.length === getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${visibleHeadings.length}, 1fr)`;
 
   return (
     <div className='w-full'>
@@ -122,6 +124,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
       <div className='grid gap-[10px] mb-[4rem]'>
         {sortListData.map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
+          const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
           return (
             <div
               onClick={() => {
@@ -133,14 +136,19 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
               className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F6F6F6]'}`}
               style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}
             >
-              {getListItemsHeadings.map((heading, idx) => (
+              {visibleHeadings.map((heading, idx) => (
                 <div
                   key={idx}
                   className={`flex items-center gap-2 text-sm font-normal justify-center ${getStatusClass(data[heading] || '')}`}
                 >
-                  {heading === IconAssetName && IconComponent}
-                  {getIcon(data[heading])}
-                  {data[heading]}
+                  {heading === 'assetName' ? (
+                    <div className="flex items-center gap-2">
+                      {getIcon(data['assetTypeIcon'])}
+                      <span>{data[heading]}</span>
+                    </div>
+                  ) : (
+                    heading !== 'assetTypeIcon' && data[heading]
+                  )}
                 </div>
               ))}
             </div>
