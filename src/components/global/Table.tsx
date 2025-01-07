@@ -121,7 +121,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
         ))}
       </div>
 
-      <div className='grid gap-[10px] mb-[4rem]'>
+      <div className='grid gap-[10px]'>
         {sortListData.map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
           const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');

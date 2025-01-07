@@ -125,7 +125,7 @@ const Dashboard: FC = () => {
         </div>
         <p className="text-base font-bold tracking-wide">Overview:</p>
       </div> */}
-      <div className="w-full px-8 flex items-center justify-between mt-4 gap-10">
+      <div className="w-full px-8 flex items-center justify-between mt-5 gap-10">
         {updatedDashboardData.map((data, index) => (
           <DashboardCard
             key={index}
