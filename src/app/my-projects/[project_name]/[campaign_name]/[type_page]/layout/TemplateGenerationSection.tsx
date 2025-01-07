@@ -82,6 +82,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             </p> :
                             null
                 }
+                <div className='h-7' />
             </div>
         )
     }
@@ -124,15 +125,15 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     }
 
     return (
-        <div className='min-h-[70vh]'>
+        <div className='min-h-[80vh]'>
             <div className="flex">
                 <div className="flex-1 py-4">
                     <div className="flex items-center justify-center">
-                        <p className="font-inter font-bold text-black text-lg tracking-[0] leading-[normal] whitespace-nowrap pb-[10px]">
+                        <p className="font-inter font-bold text-black text-lg tracking-[0] leading-[normal] whitespace-nowrap pb-[20px]">
                             Please provide the necessary information to generate AI content
                         </p>
                     </div>
-                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[66vh]'>
+                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[80vh]'>
                         {renderAssetGenerateContent()}
                     </div>
                 </div>
@@ -144,7 +145,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             </div>
                         </div>
                     }
-                    <div className={`bg-[#F5F5F7] h-[72vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
+                    <div className={`bg-[#F5F5F7] h-[87vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
                         {contextData.assetGenerateStatus === 1 && sidebarStep1()}
                         {contextData.assetGenerateStatus === 2 && sidebarStep2()}
                         {contextData.assetGenerateStatus === 3 && sidebarStep3()}
