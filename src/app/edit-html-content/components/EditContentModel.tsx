@@ -12,6 +12,7 @@ import ShadowDomContainer from './ShadowDomContainer';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import CloseIcon from '@mui/icons-material/Close';
 import { CustomTextArea, CustomTextTester } from './CustomTextArea';
+import { linkedIn_Uischema } from './schema';
 
 const customTheme = createTheme({
     palette: {
@@ -41,23 +42,23 @@ const customTheme = createTheme({
                 },
             },
         },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    textTransform: 'none',
-                    fontSize: '1rem',
-                    fontWeight: '500',
-                },
-            },
-        },
-        MuiGrid: {
-            styleOverrides: {
-                root: {
-                    gap: '14px',
-                    marginTop: "6px"
-                },
-            },
-        },
+        // MuiButton: {
+        //     styleOverrides: {
+        //         root: {
+        //             textTransform: 'none',
+        //             fontSize: '1rem',
+        //             fontWeight: '500',
+        //         },
+        //     },
+        // },
+        // MuiGrid: {
+        //     styleOverrides: {
+        //         root: {
+        //             gap: '14px',
+        //             marginTop: "6px"
+        //         },
+        //     },
+        // },
     },
 });
 
@@ -275,6 +276,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                     ...materialRenderers,
                                     { tester: CustomTextTester, renderer: CustomTextArea }
                                 ]}
+                                uischema={contextData.AssetHtml.layoutName.toLowerCase().includes("linkedin") ? linkedIn_Uischema : undefined}
                                 cells={materialCells}
                                 onChange={onHandleEditData}
                             />
