@@ -2,7 +2,9 @@
 
 import React, { 
     FC, 
+    Suspense, 
     useEffect, 
+     useMemo, 
      useState 
     } from 'react';
 import ProgressSection from "./components/progressSection"
@@ -11,17 +13,14 @@ import { useSearchParams } from 'next/navigation';
 import { PageType } from '@/componentsMap/pageMap';
 
 
-const GenerateAssetPage: FC = () => {
+const GenerateAssetContent: FC = () => {
   const params = useSearchParams() 
   const [projectName,setProjectName]= useState<string>('')
   const [CampaignName,setCampaignName]= useState<string>('')
-  const [assetType,setAssetType]= useState<string>('')
+  // const [assetType,setAssetType]= useState<string>('')
 
-  useEffect(() => {
-    const assetTypeFromUrl = params.get('asset-type')
-    if (assetTypeFromUrl) {
-      setAssetType(assetTypeFromUrl);
-    }
+  const assetType = useMemo(() => {
+    return params.get('asset-type') || '';
   }, [params]);
 
   return (
@@ -33,5 +32,13 @@ const GenerateAssetPage: FC = () => {
     </>
   )
 }
+
+const GenerateAssetPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <GenerateAssetContent />
+    </Suspense>
+  );
+};
 
 export default GenerateAssetPage
