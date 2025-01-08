@@ -5,6 +5,7 @@ import { UserIcon } from "@/assets/icons/AppIcons";
 import { useLogin } from "@/hooks/useLogin";
 import Button from "@/components/global/Button";
 import { useRouter } from "next/navigation";
+import { IoMdClose } from "react-icons/io";
 
 type TaglineObj = {
   title: string
