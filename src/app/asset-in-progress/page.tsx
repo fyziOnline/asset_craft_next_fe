@@ -18,7 +18,7 @@ const AssetInProgress: FC = () => {
   const { dashboardAssets } = useDashboard()
   const router = useRouter();
   const { setContextData } = useAppData();
- 
+
   const assetInProgress = dashboardAssets.filter(asset => asset.status === "In Progress" || asset.status === "On Review")
 
   const assetsDisplayTable = assetInProgress.map((data) => ({
@@ -35,16 +35,8 @@ const AssetInProgress: FC = () => {
   const fieldClick = "dataItem"
 
   const handleClick = (item: any) => {
-    try {
-      const dataItem = JSON.parse(item)
-      const assetHtml = {} as AssetHtmlProps
-      assetHtml.assetVersions = [dataItem.assetVersion]
-      setContextData({ AssetHtml: assetHtml })
-      router.push(`/edit-html-content?project_name=${dataItem.projectName}&campaign_name=${dataItem.campaignName}&asset_name=${dataItem.assetName}`)
-
-    } catch (error) {
-
-    }
+    console.log("item", item);
+    router.push(`/edit-html-content?project_name=${item.projectName}&campaign_name=${item.campaignName}&asset_name=${item.assetName}`)
   }
 
   return (
