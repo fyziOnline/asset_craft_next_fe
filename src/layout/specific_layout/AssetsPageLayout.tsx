@@ -26,7 +26,6 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const toggleListType = () => {
     setIsList(pre => !pre)
   }
-  console.log('campaign_data', campaign_data);
 
   return (
     <>

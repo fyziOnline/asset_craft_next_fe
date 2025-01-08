@@ -4,7 +4,6 @@ import AssetIndicator from '@/components/global/AssetIndicator'
 import UpdateIndicator from '@/components/global/UpdateIndicator'
 import CardContent from '@/components/global/CardContent'
 import StatusLabel from '@/components/global/StatusLabel'
-import Button from '../global/Button'
 
 interface AssetCardProp {
   data : {
@@ -52,16 +51,9 @@ const AssetCard:FC<AssetCardProp> = ({data}) => {
         <AssetIndicator hoverStatus={isHovered} asset_type={data.assetTypeIcon}/>
         <StatusLabel status_value={status}/>
       </div>
-        <CardContent header={data.projectName} cardClass=' mb-[4%]' content='Ipsum dolor sit amet consectetur adipisicing elit. Ipsum deleniti ab perspiciatis obcaecati inventore quae officiis debitis ullam dolorem illo? dsjfkwhai udjsfhuwieuh fuehu Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, fugiat!' /> 
+        <CardContent header={data.projectName} cardClass=' mb-[4%]' content={data.campaignName} /> 
         <div className='flex justify-between items-center'>
           <UpdateIndicator date={data.createdOn}/>
-          <Button 
-            buttonText='Clone It' 
-            showIcon textStyle='text-xs  xl:text-sm font-base text-[#00A881]' 
-            customClass='static border-[1.5px] border-[#00A881]  px-[1rem] xl:px-[1.2rem] py-[0.3rem] xl:py-[0.5rem] group-hover:border-white' 
-            textColor={!isHovered ? 'text-[#00A881]' : 'text-[#fff]'}  
-            backgroundColor='white' 
-            iconColor={!isHovered ? '#00A881' : '#fff'}/>
         </div>
     </div>
   )
