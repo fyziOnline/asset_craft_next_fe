@@ -231,7 +231,7 @@ export const useDashboard = () => {
                 setIsAssetNameExists(false)
             }
         }
-        
+
     }, 500)
 
     const handleCheckCampNameExists = (listCampaigns: CampaignsProps[], value: string) => {
@@ -259,7 +259,7 @@ export const useDashboard = () => {
         }
     }
 
-    const selectAssetType = async (item:ClientAssetTypeProps) => {
+    const selectAssetType = async (item: ClientAssetTypeProps) => {
         setSelectedButton(item)
         router.push(`generate-asset?asset-type=${item?.assetTypeName}&assetTypeID=${item.assetTypeID}`)
     }
@@ -282,7 +282,7 @@ export const useDashboard = () => {
                 const resAddCampaign = await addCampaign()
                 if (!resAddCampaign) { return }
             }
-            setContextData({ isShowEdit_Save_Button: false, isRegenerateHTML: false, stepGenerate: 0 })
+            setContextData({ isRegenerateHTML: false, stepGenerate: 0 })
 
             if (selectedButton?.assetTypeName.includes("Email")) {
                 router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.Email}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)

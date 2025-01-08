@@ -40,7 +40,6 @@ const Dashboard: FC = () => {
 
   useEffect(() => {
     setContextData({
-      isShowEdit_Save_Button: false,
       isRegenerateHTML: false,
       stepGenerate: 0,
       AssetHtml: {} as AssetHtmlProps,
