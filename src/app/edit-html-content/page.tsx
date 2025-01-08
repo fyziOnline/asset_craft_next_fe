@@ -14,6 +14,7 @@ import { useAppData } from '@/context/AppContext';
 import { UserIcon } from "@/assets/icons/AppIcons"
 import Link from 'next/link'
 import SubmitVersionModel from './components/SubmitVersionModel';
+import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 
 interface HeaderProps {
     versionNameChoose: string
@@ -29,6 +30,7 @@ interface HeaderProps {
 
 const Page = () => {
     const { contextData } = useAppData();
+    useOverflowHidden()
     const {
         sectionEdit,
         isLoadingGenerate,
@@ -201,6 +203,7 @@ const Page = () => {
                     <div className="flex flex-col h-[92vh] pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
                         <div>
                             <div id="container">
+                                <div className='h-[10px]' />
                                 {renderHTMLSelect}
                                 <div className='h-[10vh]' />
                             </div>
