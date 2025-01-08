@@ -2,8 +2,7 @@ import { urls } from "@/apis/urls";
 import { ApiService } from "@/lib/axios_generic";
 import { convertFileToBase64 } from "@/lib/utils";
 import { AssetHtmlProps, ProjectDetails } from "@/types/templates";
-import { useSearchParams } from "next/navigation";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import Cookies from "js-cookie";
 import { FormDataProps, SectionProps } from "./useInputFormDataGenerate";
 import { nkey } from "@/data/keyStore";
@@ -16,8 +15,12 @@ interface GenerateTemplateProp {
 }
 
 export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
-  const queryParams = useSearchParams();
-  const campaignID = queryParams.get("campaignID") as string;
+  const campaignID = useMemo(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("campaignID") as string
+    }
+  }, [])
   const assetPromptIDRef = useRef("");
   const assetIDTemplateRef = useRef("");
   const assetSelect = useRef<AssetHtmlProps>({} as AssetHtmlProps);
