@@ -10,15 +10,14 @@ import { nkey } from "@/data/keyStore";
 import moment from "moment";
 
 interface GenerateTemplateProp {
-  params: {
-    templateID: string;
+  params?: {
+    templateID?: string;
   };
 }
 
 export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const queryParams = useSearchParams();
   const campaignID = queryParams.get("campaignID") as string;
-  const asset_name = queryParams.get("asset_name") as string;
   const assetPromptIDRef = useRef("");
   const assetIDTemplateRef = useRef("");
   const assetSelect = useRef<AssetHtmlProps>({} as AssetHtmlProps);
@@ -125,7 +124,10 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     try {
       const resGenerateUsingAI = await generateHTMLWithAI();
       if (resGenerateUsingAI) {
-        return await getAssetHTML();
+        // return await getAssetHTML();
+        return { isSuccess: true };
+      } else {
+        return returnError("An error occurred please try again later.");
       }
     } catch (error) {
       return returnError("An error occurred please try again later.");
@@ -292,7 +294,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         {
           campaignID: campaign_id,
           assetName: ProjectDetails.asset_name,
-          templateID: params.templateID,
+          templateID: params?.templateID,
           language: "",
           assetAIPrompt: "",
         }
@@ -390,5 +392,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
   return {
     generateHTML,
+    assetIDTemplateRef,
+    getAssetHTML
   };
 };
