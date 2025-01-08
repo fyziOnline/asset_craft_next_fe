@@ -1,6 +1,6 @@
 'use client';
 
-import { EmailIcon, LinkedinIcon, SalesCallIcon } from '@/assets/icons/TableIcon';
+import { EmailIcon, LandingAssetIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from '@/assets/icons/TableIcon';
 import React, { useEffect, useState } from 'react'
 
 /**
@@ -40,7 +40,8 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
 
   // Extract column names from the first item in the list
   const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]).filter((item) => item != fieldClick) : []
-
+  const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
+  
   useEffect(() => {
     setSortListData(listItems)
   }, [listItems])
@@ -49,11 +50,11 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   const getStatusClass = (status: string) => {
     switch (status) {
       case 'In Progress':
-        return 'text-[#5DB9FF] font-semibold';  // Blue background for In Progress
+        return 'text-[#B0890E] font-thin';  // Blue background for In Progress
       case 'On Review':
-        return 'text-[#1CD3A8] font-semibold';  // Green background for Pending Approval
+        return 'text-[#1CD3A8] font-thin';  // Green background for Pending Approval
       case 'Completed':
-        return 'text-[#00A881] font-semibold';  // Green background for Complete
+        return 'text-[#09CC20] font-thin';  // Green background for Complete
       default:
         return 'text-black';  // Default gray background for unknown status
     }
@@ -68,9 +69,10 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
    */
   const getIcon = (value: string | undefined) => {
     const icons: { [key: string]: JSX.Element } = {
-      Email_1: <EmailIcon />,
-      LinkedIn_1: <LinkedinIcon />,
-      SalesCall_1: <SalesCallIcon />,
+      "Email": <EmailIcon />,
+      "Landing Page": <LandingAssetIcon2 height='27' width='27' strokeWidth='6' />,
+      "LinkedIn": <LinkedinIcon />,
+      "Call Script": <SalesCallIcon />,
     };
     return value ? icons[value] || null : null;
   };
@@ -100,14 +102,14 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   };
 
   // Set dynamic widths for columns or fallback to equal width if not provided
-  const gridColumnStyle = columnWidths.length === getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${getListItemsHeadings.length}, 1fr)`;
+  const gridColumnStyle = columnWidths.length === getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${visibleHeadings.length}, 1fr)`;
 
   return (
     <div className='w-full'>
       <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}>
         {tableHeadings.map((heading, index) => (
           <div key={index} className='flex items-center gap-2 justify-center'>
-            <p className='text-base font-semibold text-grey-800'>{heading}</p>
+            <p className='text-base font-thin text-[#969696]'>{heading}</p>
             {arrowInHeadings.includes(heading) && (
               <span className={`cursor-pointer transition-transform ${sortArrows[heading] ? "rotate-180" : ""}`} onClick={() => handleSort(index)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="7" viewBox="0 0 13 7" fill="none">
@@ -122,17 +124,31 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
       <div className='grid gap-[10px]'>
         {sortListData.map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
+          const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
           return (
-            <div onClick={() => {
-              if (fieldClick !== undefined) {
-                handleClick(data[fieldClick])
-              }
-            }} key={index} className={`grid p-6 border border-[#00A881] rounded-xl cursor-pointer`} style={{ gridTemplateColumns: gridColumnStyle, placeItems : tablePlaceitems }}>
-              {getListItemsHeadings.map((heading, idx) => (
-                <div key={idx} className={`flex items-center gap-2 text-sm font-normal justify-center ${getStatusClass(data[heading] || '')}`}>
-                  {heading === IconAssetName && IconComponent}
-                  {getIcon(data[heading])}
-                  {data[heading]}
+            <div
+              onClick={() => {
+                if (fieldClick !== undefined) {
+                  handleClick(data[fieldClick])
+                }
+              }}
+              key={index}
+              className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F6F6F6]'}`}
+              style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}
+            >
+              {visibleHeadings.map((heading, idx) => (
+                <div
+                  key={idx}
+                  className={`flex items-center gap-2 text-sm font-normal justify-center ${getStatusClass(data[heading] || '')}`}
+                >
+                  {heading === 'assetName' ? (
+                    <div className="flex items-center gap-2">
+                      {getIcon(data['assetTypeIcon'])}
+                      <span>{data[heading]}</span>
+                    </div>
+                  ) : (
+                    heading !== 'assetTypeIcon' && data[heading]
+                  )}
                 </div>
               ))}
             </div>

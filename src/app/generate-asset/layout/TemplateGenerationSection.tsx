@@ -1,20 +1,15 @@
 'use client';
 import React, { FC, useState } from 'react';
 import Image from 'next/image';
-import { ListTypePage } from '@/data/dataGlobal';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useAppData } from '@/context/AppContext';
-import LandingPage from '../asset-generate/LandingPage';
-import LinkedInPage from '../asset-generate/LinkedinPage';
-import CallScriptPage from '../asset-generate/CallScriptPage';
-import EmailPage from '../asset-generate/EmailPage';
-import { AssetHtmlProps, Template } from '@/types/templates';
+import { Template } from '@/types/templates';
+import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 
 interface TemplateViewerProps {
     params: {
         template: Template
-        type_page: string
-        project_name: string | undefined
+        type_page: PageType
     }
 }
 
@@ -27,18 +22,8 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     };
 
     const renderAssetGenerateContent = () => {
-        switch (params.type_page) {
-            case ListTypePage.Email:
-                return <EmailPage params={params} />;
-            case ListTypePage.LandingPage:
-                return <LandingPage params={params} />;
-            case ListTypePage.LinkedIn:
-                return <LinkedInPage params={params} />;
-            case ListTypePage.CallScript:
-                return <CallScriptPage />;
-            default:
-                return null;
-        }
+        const Component = PAGE_COMPONENT[params.type_page]
+        return Component ? <Component params={params} /> : null
     };
 
     const sidebarStep1 = () => {
@@ -61,20 +46,20 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                     width="267"
                     height="360"
                 />
-                {params.type_page === ListTypePage.Email ?
+                {params.type_page === 'Email' ?
                     <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
                         {content("Section 1: Event Overview", "Overview of essential details: title, date, location, purpose, and a CTA to attract attendees.")}
                         {content("Section 2: Event Agenda", "Detailed event schedule: session timings, key activities, speakers, and closing plans.")}
                         {content("Section 3: Key Benefits and Highlights", "Event value summary: main benefits, featured technologies, and the target audience.")}
                         {content("Section 4: Partnership and Sponsorship", "Sponsor recognition: list of sponsors by level with logos and optional sponsor descriptions.")}
                     </p> :
-                    params.type_page === ListTypePage.LandingPage ?
+                    params.type_page === 'Landing Page' ?
                         <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
                             {content("Section 1: Hero Section", "Headline: Generate a powerful headline that captures attention and highlights the core message. Subheading: Briefly elaborate on the core offering with a supporting statement. Call-to-Action (CTA): Clearly instruct users on what action to take.")}
                             {content("Section 2: Feature Highlights", "Key features or benefits of the product/service.")}
                             {content("Section 3: Closing CTA", "Closing CTA Encourage users to take the final action.")}
                         </p> :
-                        params.type_page === ListTypePage.LinkedIn ?
+                        params.type_page === 'LinkedIn' ?
                             <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
                                 {content("Hook/Headline & Introduction", "Create a compelling headline and brief introduction that captures attention and interest.")}
                                 {content("Main Message & Call-to-Action (CTA)", "Value Proposition and provide a clear call-to-action with event details.")}
@@ -82,6 +67,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             </p> :
                             null
                 }
+                <div className='h-7' />
             </div>
         )
     }
@@ -102,7 +88,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const sidebarStep3 = () => {
         return (
             <>
-                {
+                {/* {
                     <TransformWrapper
                         initialScale={0.4}
                         minScale={0.4}
@@ -118,21 +104,22 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
                         </TransformComponent>
                     </TransformWrapper>
-                }
+                } */}
+                <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
             </>
         );
     }
 
     return (
-        <div className='min-h-[70vh]'>
+        <div className='min-h-[82vh]'>
             <div className="flex">
                 <div className="flex-1 py-4">
                     <div className="flex items-center justify-center">
-                        <p className="font-inter font-bold text-black text-lg tracking-[0] leading-[normal] whitespace-nowrap pb-[10px]">
+                        <p className="font-inter font-bold text-black text-lg tracking-[0] leading-[normal] whitespace-nowrap pb-[20px]">
                             Please provide the necessary information to generate AI content
                         </p>
                     </div>
-                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[66vh]'>
+                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[82vh]'>
                         {renderAssetGenerateContent()}
                     </div>
                 </div>
@@ -144,7 +131,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             </div>
                         </div>
                     }
-                    <div className={`bg-[#F5F5F7] h-[72vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
+                    <div className={`bg-[#F5F5F7] h-[90vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
                         {contextData.assetGenerateStatus === 1 && sidebarStep1()}
                         {contextData.assetGenerateStatus === 2 && sidebarStep2()}
                         {contextData.assetGenerateStatus === 3 && sidebarStep3()}

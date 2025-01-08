@@ -36,10 +36,10 @@ const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingP
 
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
       </div>
-      <div className="asset-grid-padding">
+      <div className="asset-grid-padding overflow-y-scroll h-[85vh] scrollbar-hide">
         {
           !isList ?
-            <div className="asset-grid-layout mt-4  justify-center overflow-auto">
+            <div className="asset-grid-layout mt-4  justify-center">
               {project_data.map((data, index) => (
                 <div key={index}>
                   <MyProjectCard viewType={viewType} data={data} handleSelectProject={onSelectingProjects} />
@@ -52,6 +52,7 @@ const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingP
                 : <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
             )
         }
+        <div className='h-[10vh]' />
       </div>
 
     </>

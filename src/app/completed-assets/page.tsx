@@ -4,59 +4,29 @@ import { GridIcon, ListIcon } from "@/assets/icons/AppIcons"
 import Table from "@/components/global/Table"
 import Title from "@/components/global/Title"
 import AssetCard from "@/components/wrapper/AssetCard"
+import { useDashboard } from "@/hooks/useDashboard"
+import { formatDate } from "@/utils/formatDate"
+import App from "next/app"
 import { FC, useState } from "react"
 
 
 const CompletedAssets: FC = () => {
+  const { dashboardAssets } = useDashboard()
   const [isList, setIsList] = useState<Boolean>(true)
 
-  const tableData = [
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Lorem Ipsum',
-      assetName: 'Email_1',
-      creadedOn: '18.01.2024',
-      approvedBy: 'Prakash C.',
-      approvedOn: '20.01.2024',
-      currentStatus: 'Completed',
-    },
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Lorem Ipsum',
-      assetName: 'LinkedIn_1',
-      creadedOn: '18.01.2024',
-      approvedBy: 'Avish J.',
-      approvedOn: '20.01.2024',
-      currentStatus: 'Completed',
-    },
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Campaign X',
-      assetName: 'SalesCall_1',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Prakash C.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'Completed',
-    },
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Campaign X',
-      assetName: 'LinkedIn_1',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Avish J.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'Completed',
-    },
-    {
-      projectName: 'Lorem Ipsum',
-      campaignName: 'Campaign X',
-      assetName: 'LinkedIn_1',
-      creadedOn: '21.01.2024',
-      approvedBy: 'Avish J.',
-      approvedOn: '22.01.2024',
-      currentStatus: 'Completed',
-    }
-  ];
+  const completedAssets = dashboardAssets.filter(asset => asset.status === "Completed")
+
+  const assetsDisplayTable = completedAssets.map((data) => ({
+    projectName: data.project,
+    campaignName: data.campaignName,
+    assetTypeIcon: data.assetTypeName,
+    assetName: data.assetName,
+    createdOn: formatDate(data.createdOn),
+    approvedBy: data.approvedBy || "N/A",
+    approvedOn: formatDate(data.approvedOn),
+    currentStatus: data.status,
+  }));
+
 
   const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Approved By", "Approved On", "Current Status"]
 
@@ -77,14 +47,14 @@ const CompletedAssets: FC = () => {
       <div className="px-4 lg:px-16 xl:px-20">
         {!isList ?
           <div className="asset-grid-layout mt-4  justify-center overflow-auto">
-            {tableData.map((data, index) => (
+            {assetsDisplayTable.map((data, index) => (
               <div key={index}>
                 <AssetCard data={data} />
               </div>
             ))}
           </div>
           :
-          <Table listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems}
+          <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems}
           />}
       </div>
     </>

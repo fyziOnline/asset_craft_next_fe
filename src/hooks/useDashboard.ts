@@ -9,7 +9,7 @@ import { ListTypePage } from '@/data/dataGlobal';
 import { debounce } from 'lodash';
 import { DropDownOptions } from '@/components/global/DropDown';
 import moment from 'moment';
-import { useAppData } from '@/context/AppContext';
+import { AppData, useAppData } from '@/context/AppContext';
 
 interface ClientAssetTypeProps {
     clientAssetTypeID?: string,
@@ -49,6 +49,8 @@ interface AllAssetsTypeProps {
     project: string;
     campaignName: string;
     status: string;
+    approvedBy: string;
+    approvedOn: string;
     assetID: string;
     assetTypeName: string;
     clientID: string;
@@ -178,7 +180,7 @@ export const useDashboard = () => {
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
             alert(ApiService.handleError(error));
-        } 
+        }
     }
 
     const handleShowPopup = (item: ClientAssetTypeProps) => {
@@ -229,6 +231,7 @@ export const useDashboard = () => {
                 setIsAssetNameExists(false)
             }
         }
+
     }, 500)
 
     const handleCheckCampNameExists = (listCampaigns: CampaignsProps[], value: string) => {
@@ -256,6 +259,11 @@ export const useDashboard = () => {
         }
     }
 
+    const selectAssetType = async (item: ClientAssetTypeProps) => {
+        setSelectedButton(item)
+        router.push(`generate-asset?asset-type=${item?.assetTypeName}&assetTypeID=${item.assetTypeID}`)
+    }
+
     const handleNext = async () => {
         if (isAssetNameExists ||
             !isProductNameValid ||
@@ -274,7 +282,7 @@ export const useDashboard = () => {
                 const resAddCampaign = await addCampaign()
                 if (!resAddCampaign) { return }
             }
-            setContextData({ isShowEdit_Save_Button: false, isRegenerateHTML: false, stepGenerate: 0 })
+            setContextData({ isRegenerateHTML: false, stepGenerate: 0 })
 
             if (selectedButton?.assetTypeName.includes("Email")) {
                 router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.Email}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
@@ -318,6 +326,16 @@ export const useDashboard = () => {
     const getUserDetails = async () => {
         try {
             const userID = Cookies.get(nkey.userID)
+
+            if (!userID) {
+                Cookies.remove(nkey.auth_token);
+                Cookies.remove(nkey.email_login);
+                Cookies.remove(nkey.client_ID);
+                Cookies.remove(nkey.userID);
+                Cookies.remove(nkey.userRole);
+                return false;
+            }
+
             const response = await ApiService.get<any>(`${urls.getuserDetails}?userProfileId=${userID}`)
             if (response.isSuccess) {
                 setUserDetails(response.userProfile)
@@ -325,12 +343,12 @@ export const useDashboard = () => {
         } catch (error) {
             alert(ApiService.handleError(error))
             return false
-        } 
+        }
     }
 
     const getAssetAllAtDashboard = async () => {
+        setShowLoading(true)
         try {
-            setShowLoading(true)
             const respone = await ApiService.get<any>(`${urls.getAssetsAllDashboard}?timePeriod=${90}`)
 
             if (respone.isSuccess) {
@@ -358,11 +376,13 @@ export const useDashboard = () => {
         selectedIndexes,
         selectedButton,
         handleNext,
+        selectAssetType,
         closeModal,
         closeAssetModal,
         onChangeAssetDetails,
         handleShowPopup,
         onSelect,
+        assetDetails,
         dashboardAssets,
         projectName: assetDetails.project_name,
         handleChangeAssetDetails,
