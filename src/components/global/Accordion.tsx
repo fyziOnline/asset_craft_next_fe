@@ -55,8 +55,8 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
   }
 
   return (
-    <div className='flex flex-col border border-[#9A9A9A] bg-white rounded-[20px] w-full'>
-      <div onClick={toggleContent} className={`flex items-center justify-between px-[8%] w-full h-[100px] cursor-pointer `}>
+    <div className='flex flex-col border border-sectionGrey-darker bg-sectionGrey rounded-[20px] w-full'>
+      <div onClick={toggleContent} className={`flex items-center justify-between px-[8%] w-full h-[80px] cursor-pointer `}>
         <div className="flex items-center gap-9">
           <div>
             <label className="flex flex-row items-center gap-2.5 dark:text-white light:text-black">
@@ -78,7 +78,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
             </label>
           </div>
           <div className="flex">
-            <p className="font-semibold text-lg text-wrap tracking-normal">{HeaderTitle}</p>
+            <p className="font-medium text-lg text-wrap tracking-normal text-[#000000]">{HeaderTitle}</p>
             {isRequire ? <p className="text-red-500">*</p> : null}
           </div>
         </div>

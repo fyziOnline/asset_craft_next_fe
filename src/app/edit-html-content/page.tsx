@@ -7,7 +7,7 @@ import TextField from '@/components/global/TextField';
 import AddVersionModel from './components/AddVersionModel';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import EditContentModel from './components/EditContentModel';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
@@ -34,6 +34,8 @@ interface HeaderProps {
 const Page = () => {
     const { contextData } = useAppData();
     const [showOptionList, setShowOptionList] = useState(false)
+    const router = useRouter();
+
     useOverflowHidden()
     const {
         sectionEdit,
@@ -147,7 +149,7 @@ const Page = () => {
                     <div className='flex-1'>
                         {/* <Header versionNameChoose={versionSelected?.versionName || ""} /> */}
                     </div>
-                    <div className='flex items-center'>
+                    <div className='w-full flex items-center justify-between p-[0.6rem]'>
                         {/* <div className='flex items-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="17" viewBox="0 0 21 17" fill="none">
                                 <path d="M14.7037 16.1797V14.513C14.7037 13.629 14.3428 12.7811 13.7003 12.156C13.0578 11.5309 12.1864 11.1797 11.2778 11.1797H4.42593C3.51731 11.1797 2.64592 11.5309 2.00343 12.156C1.36094 12.7811 1 13.629 1 14.513V16.1797" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -156,9 +158,15 @@ const Page = () => {
                                 <path d="M13.8477 1.28906C14.5846 1.47265 15.2378 1.88965 15.7042 2.47432C16.1706 3.059 16.4238 3.77809 16.4238 4.51823C16.4238 5.25837 16.1706 5.97746 15.7042 6.56214C15.2378 7.14681 14.5846 7.56381 13.8477 7.7474" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             <div className="mx-2 text-black text-base tracking-wide font-normal">Assign Approver</div>
-                        </div> */}
-                        {/* <Search placeHolder=''></Search> */}
-                        <div className='relative'>
+                        </div>
+                        <Search placeHolder=''></Search> */}
+
+                        <div onClick={() => router.back()} className="relative w-7 h-7 rounded-full bg-[#00A881] cursor-pointer">
+                            <svg className="absolute top-1 left-[0.40rem]" width="17" height="18" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M21 17.918C18.5533 14.9313 16.3807 13.2367 14.482 12.834C12.5833 12.4313 10.7757 12.3705 9.059 12.6515V18L1 9.2725L9.059 1V6.0835C12.2333 6.1085 14.932 7.24733 17.155 9.5C19.3777 11.7527 20.6593 14.5587 21 17.918Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        {/* <div className='relative'>
                             <Button
                                 buttonText='Save As'
                                 showIcon
@@ -191,7 +199,7 @@ const Page = () => {
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#fff]"
                             iconColor="#fff"
-                            customClass='static mr-[80px] ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+                            customClass='static mr-[80px] ml-[0px] px-[35px] py-[10px] group-hover:border-white' /> */}
 
                         <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
                     </div>

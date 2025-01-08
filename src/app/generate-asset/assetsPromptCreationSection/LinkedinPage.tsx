@@ -145,13 +145,13 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#00A881]"
                             iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
+                            backgroundColor=''
                             handleClick={() => { onNext(0) }}
                             customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                     </div>
                 </Accordion>
             </div>
-            <div className='mt-[40px]'>
+            <div className='mt-[25px]'>
                 {/* step 1 */}
                 <Accordion
                     isRequire={true}
@@ -211,7 +211,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#00A881]"
                             iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
+                            backgroundColor=''
                             handleClick={() => { onNext(1) }}
                             customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                     </div>
@@ -262,7 +262,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             textStyle='text-[1rem] font-base text-[#000000]'
                             textColor="text-[#000000]"
                             iconColor="#000000"
-                            backgroundColor='bg-[#fff]'
+                            backgroundColor=''
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(2) }}
                             customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
@@ -272,7 +272,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#00A881]"
                             iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
+                            backgroundColor=''
                             handleClick={() => { onNext(2) }}
                             customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                     </div>
@@ -305,7 +305,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             textStyle='text-[1rem] font-base text-[#000000]'
                             textColor="text-[#000000]"
                             iconColor="#000000"
-                            backgroundColor='bg-[#fff]'
+                            backgroundColor=''
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(3) }}
                             customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
@@ -315,7 +315,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#00A881]"
                             iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
+                            backgroundColor=''
                             handleClick={() => { onNext(3) }}
                             customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                     </div>
@@ -369,7 +369,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             textStyle='text-[1rem] font-base text-[#000000]'
                             textColor="text-[#000000]"
                             iconColor="#000000"
-                            backgroundColor='bg-[#fff]'
+                            backgroundColor=''
                             customClassIcon="rotate-180"
                             handleClick={() => { onBack(4) }}
                             customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
@@ -379,13 +379,13 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             textStyle='text-[1rem] font-base text-[#00A881]'
                             textColor="text-[#00A881]"
                             iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
+                            backgroundColor=''
                             handleClick={() => { onNext(4) }}
                             customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                     </div>
                 </Accordion>
             </div>
-            <div className='flex justify-end my-[50px]'>
+            <div className='flex justify-end my-[20px]'>
                 <Button
                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                     showIcon

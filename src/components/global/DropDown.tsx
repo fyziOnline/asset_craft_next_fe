@@ -95,11 +95,11 @@ const DropDown: React.FC<DropDownProps> = ({
 
     return (
         <div ref={dropdownRef} className={`relative flex flex-col gap-[7px] ${dropdownWidthClass}`}>
-            <div onClick={handleDropDownList} className={`shadow-dropdown-shadow rounded-lg flex items-center justify-between px-4 py-5 cursor-pointer ${customClass}`}>
+            <div onClick={handleDropDownList} className={`h-[60px] bg-white shadow-dropdown-shadow rounded-lg flex items-center justify-between px-4 py-5 cursor-pointer ${customClass}`}>
                 <p className={`text-base ${!selectedOption ? "text-[#666666]" : ""}`}>{selectedOption || selectPlaceHolder}</p>
                 <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
             </div>
-            <div className={`absolute top-[110%] w-[100%] z-[100] h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all  duration-300 ease-in-out ${showOptionList ? 'max-h-[140px] overflow-y-scroll opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
+            <div className={`z-[40] h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all relative duration-300 ease-in-out ${showOptionList ? 'max-h-[140px] overflow-y-scroll opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
                 {showOptionList &&
                     <>
                         {optionLists.map((options, index) => (
