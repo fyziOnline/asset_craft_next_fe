@@ -29,7 +29,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [disableList, setDisableList] = useState<number[]>([1, 2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
+    const { assetIDTemplateRef, generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
@@ -111,12 +111,13 @@ const LandingPage = ({ params }: LandingPageProps) => {
                 const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.ProjectDetails, contextData.isRegenerateHTML)
                 setShowLoading(false)
                 // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isRegenerateHTML: true });
-                setContextData({ AssetHtml: res as AssetHtmlProps });
+                // setContextData({ AssetHtml: res as AssetHtmlProps });
                 if (res?.isSuccess) {
-                    router.replace(`/edit-html-content`)
+                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}`)
                 } else {
                     setGenerateStep(3);
                     setContextData({ assetGenerateStatus: 3 })
+                    setContextData({ AssetHtml: res as AssetHtmlProps });
                 }
                 return
             }
