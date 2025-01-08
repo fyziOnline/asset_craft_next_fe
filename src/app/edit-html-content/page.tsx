@@ -190,43 +190,45 @@ const Page = () => {
                         <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
                     </div>
                 </div>
-                <div className='pl-28'>
-                    {versionList.map((item, index) => {
-                        return (
-                            <button
-                                key={item.assetID + index}
-                                onClick={() => { setVersionSelected(item) }}
-                                className={`${versionSelected.assetVersionID === item.assetVersionID ? "text-white bg-[#01A982]" : "text-black bg-[#e4e4e4]"} inline-block h-[42px] mx-1 text-center text-lg font-normal  rounded-tl-[20px] rounded-tr-[20px] px-[30px] py-2`}>
-                                {item.versionName}
-                            </button>)
-                    })}
-                </div>
+
 
                 {/* Edit section  */}
-                
+
                 <div className="min-h-[82vh] border-t border-solid">
                     {/* Edit section header  */}
                     <div className='flex mt-section justify-around'>
                         {/* left portion  */}
                         <div className='flex items-center'>
                             <div className='mr-4 flex items-center gap-2'>
-                                <Individuals strokeColor='#00A881'/>
+                                <Individuals strokeColor='#00A881' />
                                 <p className='font-bold text-lg text-gray-700'>Assign Approver</p>
                             </div>
                             <Search customOuterClass={"bg-sectionGrey"} placeHolder='Search' />
                         </div>
                         {/* right portion  */}
                         <div className='flex gap-4'>
-                            <DropDown 
-                                selectPlaceHolder='Save' 
-                                optionLists={saveOptions} 
-                                isShowOther={false} 
+                            <DropDown
+                                selectPlaceHolder='Save'
+                                optionLists={saveOptions}
+                                isShowOther={false}
                                 dropdownWidthClass='bg-white'
                                 customClass={"h-[1ch] w-[15ch]"}
                             />
                             <div className='h-full w-[1.5px] bg-sectionGrey'></div>
-                            <Button buttonText='Submit' showIcon={false} customClass='px-10 py-1'/>
+                            <Button buttonText='Submit' showIcon={false} customClass='px-10 py-1' />
                         </div>
+                    </div>
+
+                    <div className='pt-6'>
+                        {versionList.map((item, index) => {
+                            return (
+                                <button
+                                    key={item.assetID + index}
+                                    onClick={() => { setVersionSelected(item) }}
+                                    className={`${versionSelected.assetVersionID === item.assetVersionID ? "text-white bg-[#01A982]" : "text-black bg-[#e4e4e4]"} inline-block h-[42px] mx-1 text-center text-lg font-normal  rounded-tl-[20px] rounded-tr-[20px] px-[30px] py-2`}>
+                                    {item.versionName}
+                                </button>)
+                        })}
                     </div>
 
                     {/* Edit section main  */}
