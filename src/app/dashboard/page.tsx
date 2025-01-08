@@ -51,7 +51,7 @@ const Dashboard: FC = () => {
   }, [])
 
   return (
-    <>
+    <div className="mt-10">
       {/* <ProjectSetUpModal title="Project Details" selectedValue={selectedButton?.assetTypeName} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} > */}
       {/* <div className='w-full flex flex-col gap-3 px-12 pb-7'>
           <div className='pt-[15px] flex flex-col gap-3'>
@@ -125,7 +125,7 @@ const Dashboard: FC = () => {
                   showIcon={false}
                   IconComponent={item.assetTypeName === "All in One" && <ExpressIcon strokeColor="white" width="40" height="38" />}
                   backgroundColor="bg-white"
-                  customClass="group px-12 py-2 border border-[#07363480] w-[25%] px-[50px] transition-all duration-300 hover:bg-[#00A881]"
+                  customClass="group px-12 py-2 border border-[#07363480] w-[25%] px-[50px] transition-all duration-300 hover:bg-[#00A881] tracking-wide hover:border-none"
                   textColor="text-foreground group-hover:text-white"
                   handleClick={() => selectAssetType(item)}
                   textStyle="font-normal text-sm text-center whitespace-nowrap"
@@ -174,7 +174,7 @@ const Dashboard: FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
