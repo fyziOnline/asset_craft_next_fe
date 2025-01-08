@@ -139,7 +139,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
               {visibleHeadings.map((heading, idx) => (
                 <div
                   key={idx}
-                  className={`flex items-center gap-2 text-sm font-normal justify-center ${getStatusClass(data[heading] || '')}`}
+                  className={`flex items-center gap-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
                 >
                   {heading === 'assetName' ? (
                     <div className="flex items-center gap-2">

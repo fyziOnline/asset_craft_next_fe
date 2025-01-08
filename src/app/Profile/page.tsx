@@ -55,7 +55,7 @@ const page: React.FC = () => {
                 </h1>
                 <Button
                   buttonText='Request Access' 
-                  customClass='border-2 border-green-300 px-4 py-1'
+                  customClass='border-2 border-green-300 px-4 py-1 tracking-wide'
                   textColor='text-green-300'
                   backgroundColor='bg-white'
                   iconColor='#01A982'
@@ -67,7 +67,7 @@ const page: React.FC = () => {
                 <div className="absolute bottom-[-50px] flex items-center justify-between">
                     <div className="flex relative items-center gap-4">
                         <div className="w-[100px] h-[100px] bg-[#C4C4C4] rounded-full" />
-                        <div className='absolute bottom-0 left-[120px]'>
+                        <div className='absolute bottom-0 top-14 left-[120px]'>
                             <h3 className="font-medium">{userDetails?.name}</h3>
                             <p className="text-gray-500 text-sm">{userDetails?.email}</p>
                         </div>
