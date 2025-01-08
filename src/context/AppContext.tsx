@@ -8,8 +8,7 @@ export interface AppData {
     assetGenerateTemplate: string;
     assetGenerateStatus: number;
     layoutType: 'main' | 'home';
-    isShowEdit_Save_Button: boolean;
-    ProjectDetails : ProjectDetails
+    ProjectDetails: ProjectDetails
     AssetHtml: AssetHtmlProps;
     stepGenerate: number; //step 0 or 1
     isRegenerateHTML: boolean
@@ -32,14 +31,13 @@ const APP_DATA: AppData = {
     assetGenerateStatus: 1,
     stepGenerate: 0,
     layoutType: 'main',
-    ProjectDetails : {
-        project_name: "", 
-        campaign_name: "", 
-        asset_name: "", 
-        campaignID : ""
+    ProjectDetails: {
+        project_name: "",
+        campaign_name: "",
+        asset_name: "",
+        campaignID: ""
     },
     AssetHtml: {} as AssetHtmlProps,
-    isShowEdit_Save_Button: false,
     isRegenerateHTML: false
 };
 

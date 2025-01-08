@@ -14,6 +14,7 @@ import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/u
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { emailType, keyPoints, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 import SectionAssetDetails from '@/components/assetGeneration/SectionAssetDetails';
+import { useRouter } from 'next/navigation';
 
 interface LinkedInPageProps {
     params: {
@@ -23,9 +24,10 @@ interface LinkedInPageProps {
 }
 
 const LinkedInPage = ({ params }: LinkedInPageProps) => {
+    const router = useRouter();
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
-    const [disableList, setDisableList] = useState<number[]>([1,2, 3, 4]);
+    const [disableList, setDisableList] = useState<number[]>([1, 2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
@@ -41,16 +43,16 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
 
     const onNext = (step: number): void => {
         if (step === 0) {
-            setDisableList([0, 2, 3,4]);
+            setDisableList([0, 2, 3, 4]);
             setIsShowList([1]);
         } else if (step === 1) {
-            setDisableList([0, 1, 3,4]);
+            setDisableList([0, 1, 3, 4]);
             setIsShowList([2]);
         } else if (step === 2) {
-            setDisableList([0, 1, 2,4]);
+            setDisableList([0, 1, 2, 4]);
             setIsShowList([3]);
         } else if (step === 3) {
-            setDisableList([0, 1, 2,3]);
+            setDisableList([0, 1, 2, 3]);
             setIsShowList([4]);
         } else if (step === 4) {
             setIsShowList([]);
@@ -78,7 +80,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
             setIsShowList([1]);
             setCheckedList([0]);
         } else if (step === 1) {
-            setDisableList([1,2,3,4])
+            setDisableList([1, 2, 3, 4])
             setIsShowList([0])
             setCheckedList([])
         }
@@ -95,21 +97,27 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
             newStep = 1;
             setIsShowList([]);
             setCheckedList([]);
-            setDisableList([1,2, 3, 4]);
+            setDisableList([1, 2, 3, 4]);
             setContextData({ assetTemplateShow: false });
         } else {
             setContextData({ assetTemplateShow: true });
 
             if (newStep === 2) {
-                setCheckedList([0,1, 2, 3, 4]);
-                setDisableList([0,1, 2, 3, 4]);
+                setCheckedList([0, 1, 2, 3, 4]);
+                setDisableList([0, 1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
                 setShowLoading(true)
-                const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[],contextData.ProjectDetails, contextData.isRegenerateHTML)
+                const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.ProjectDetails, contextData.isRegenerateHTML)
                 setShowLoading(false)
-                setGenerateStep(3);
-                setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isShowEdit_Save_Button: res?.isSuccess, isRegenerateHTML: true });
+                // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isRegenerateHTML: true });
+                setContextData({ AssetHtml: res as AssetHtmlProps });
+                if (res?.isSuccess) {
+                    router.replace(`/edit-html-content`)
+                } else {
+                    setGenerateStep(3);
+                    setContextData({ assetGenerateStatus: 3 })
+                }
                 return
             }
         }

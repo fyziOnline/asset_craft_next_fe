@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react';
 import Image from 'next/image';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useAppData } from '@/context/AppContext';
-import {  Template } from '@/types/templates';
+import { Template } from '@/types/templates';
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 
 interface TemplateViewerProps {
@@ -22,8 +22,8 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     };
 
     const renderAssetGenerateContent = () => {
-        const Component  = PAGE_COMPONENT[params.type_page]
-        return Component  ? <Component params={params}/> : null
+        const Component = PAGE_COMPONENT[params.type_page]
+        return Component ? <Component params={params} /> : null
     };
 
     const sidebarStep1 = () => {
@@ -88,7 +88,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const sidebarStep3 = () => {
         return (
             <>
-                {
+                {/* {
                     <TransformWrapper
                         initialScale={0.4}
                         minScale={0.4}
@@ -104,13 +104,14 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
                         </TransformComponent>
                     </TransformWrapper>
-                }
+                } */}
+                <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
             </>
         );
     }
 
     return (
-        <div className='min-h-[80vh]'>
+        <div className='min-h-[82vh]'>
             <div className="flex">
                 <div className="flex-1 py-4">
                     <div className="flex items-center justify-center">
@@ -118,7 +119,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             Please provide the necessary information to generate AI content
                         </p>
                     </div>
-                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[80vh]'>
+                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[82vh]'>
                         {renderAssetGenerateContent()}
                     </div>
                 </div>
@@ -130,7 +131,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             </div>
                         </div>
                     }
-                    <div className={`bg-[#F5F5F7] h-[87vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
+                    <div className={`bg-[#F5F5F7] h-[90vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
                         {contextData.assetGenerateStatus === 1 && sidebarStep1()}
                         {contextData.assetGenerateStatus === 2 && sidebarStep2()}
                         {contextData.assetGenerateStatus === 3 && sidebarStep3()}
