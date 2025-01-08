@@ -229,8 +229,8 @@ const Page = () => {
                                 dropdownWidthClass='bg-white'
                                 customClass={"h-[1ch] w-[15ch]"}
                             /> */}
-                            <div className='relative w-[170px] bg-white'>
-                                <div onClick={handleDropDownList} className='shadow-sm flex items-center justify-between px-4 py-2 cursor-pointer'>
+                            <div className='relative w-[170px] bg-white shadow-sm rounded'>
+                                <div onClick={handleDropDownList} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
                                     <p className='text-base px-2'>Download</p>
                                     <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
                                 </div>
@@ -254,11 +254,11 @@ const Page = () => {
 
 
                             <div className='h-full w-[1.5px] bg-sectionGrey'></div>
-                            <Button buttonText='Submit' showIcon={false} customClass='px-10 py-1' />
+                            <Button buttonText='Submit' handleClick={() => setIsShowSubmitVer(true)} showIcon={false} customClass='px-10 py-1' />
                         </div>
                     </div>
 
-                    <div className='pt-6 pl-14'>
+                    <div className='pt-2 pl-14'>
                         {versionList.map((item, index) => {
                             return (
                                 <button
