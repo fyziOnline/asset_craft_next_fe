@@ -129,7 +129,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
             <div
               onClick={() => {
                 if (fieldClick !== undefined) {
-                  handleClick(data[fieldClick])
+                  handleClick(data)
                 }
               }}
               key={index}
