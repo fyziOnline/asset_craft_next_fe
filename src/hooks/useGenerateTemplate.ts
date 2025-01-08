@@ -29,7 +29,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       isSuccess: false,
       assetVersions: [
         {
-          htmlGenerated: `<div style="font-size:30px;">${message}</div>`,
+          htmlGenerated: `<div style="font-size:24px;">${message}</div>`,
         },
       ],
     };
@@ -147,11 +147,11 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const aiPromptCampaignInsert = async (
     FormData: FormDataProps,
     fileID: number,
-    campaign_id : string
+    campaign_id: string
   ) => {
     try {
       if (isCampaignSelect.current) {
-        return await aiPromptCampaignUpdate(FormData, fileID,campaign_id);
+        return await aiPromptCampaignUpdate(FormData, fileID, campaign_id);
       } else {
         const resCampaignInsert = await ApiService.post<any>(
           urls.aiPrompt_Campaign_insert,
@@ -172,7 +172,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       }
       return { isSuccess: false };
     } catch (error) {
-      console.log(' campaign error :',error);
+      console.log(' campaign error :', error);
       return { isSuccess: false };
     }
   };
@@ -180,7 +180,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const aiPromptCampaignUpdate = async (
     FormData: FormDataProps,
     fileID: number,
-    campaign_id : string
+    campaign_id: string
   ) => {
     try {
       const resCampaignInsert = await ApiService.put<any>(
@@ -195,11 +195,11 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
           webUrl: FormData?.webUrl || "",
         }
       );
-      console.log('update campaign :',resCampaignInsert);
-      
+      console.log('update campaign :', resCampaignInsert);
+
       return resCampaignInsert;
     } catch (error) {
-      console.log('update campaign error :',error);
+      console.log('update campaign error :', error);
 
       return { isSuccess: false };
     }
@@ -240,32 +240,32 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
 
-  const addCampaign = async (details:ProjectDetails) => {
+  const addCampaign = async (details: ProjectDetails) => {
     try {
-        const client_ID = Cookies.get(nkey.client_ID);
-        const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-        const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
-            "clientID": client_ID,
-            "project": details.project_name,
-            "campaignName": details.campaign_name,
-            "country": "",
-            "squad": "",
-            "startDate": currentDate,
-            "endDate": "",
-            "status": ""
-        });
-        return {
-          campaignID : res_campaign_add.campaignID,
-          status : true
-        }
+      const client_ID = Cookies.get(nkey.client_ID);
+      const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
+      const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
+        "clientID": client_ID,
+        "project": details.project_name,
+        "campaignName": details.campaign_name,
+        "country": "",
+        "squad": "",
+        "startDate": currentDate,
+        "endDate": "",
+        "status": ""
+      });
+      return {
+        campaignID: res_campaign_add.campaignID,
+        status: true
+      }
     } catch (error) {
-        alert(ApiService.handleError(error));
-        return {
-          campaignID : "",
-          status : false
-        }
+      alert(ApiService.handleError(error));
+      return {
+        campaignID: "",
+        status: false
+      }
     }
-}
+  }
 
   const generateHTML = async (
     FormData: FormDataProps,
@@ -274,14 +274,14 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     isRegenerateHTML: boolean
   ) => {
     let campaign_id = ProjectDetails.campaignID
-    campaign_id.length === 0 ? 
-      isCampaignSelect.current = false :  isCampaignSelect.current = true 
+    campaign_id.length === 0 ?
+      isCampaignSelect.current = false : isCampaignSelect.current = true
     try {
       if (isRegenerateHTML) {
-        return await reGenerateHTML(FormData, Sections,campaign_id);
+        return await reGenerateHTML(FormData, Sections, campaign_id);
       }
       if (campaign_id.length === 0) {
-        const resAddCampaign =  await addCampaign(ProjectDetails)
+        const resAddCampaign = await addCampaign(ProjectDetails)
         campaign_id = resAddCampaign.campaignID
         if (!resAddCampaign.status) {
           return returnError("Add Campaign failed, please try again later.")
@@ -327,7 +327,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                 campaign_id
               );
 
-              
+
               if (resCampaignInsert.isSuccess) {
                 let resGenerate = await aiPromptGenerateForAsset();
                 if (resGenerate.isSuccess) {
@@ -350,7 +350,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const reGenerateHTML = async (
     FormData: FormDataProps,
     Sections: SectionProps[],
-    campaign_id : string
+    campaign_id: string
   ) => {
     try {
       const allSuccess = await updateSections(Sections);
