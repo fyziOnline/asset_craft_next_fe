@@ -11,10 +11,12 @@ import { useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
-import { UserIcon } from "@/assets/icons/AppIcons"
+import { Individuals, UserIcon } from "@/assets/icons/AppIcons"
 import Link from 'next/link'
 import SubmitVersionModel from './components/SubmitVersionModel';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
+import DropDown from '@/components/global/DropDown';
+import { saveOptions } from '@/data/dataGlobal';
 
 interface HeaderProps {
     versionNameChoose: string
@@ -148,8 +150,8 @@ const Page = () => {
                                 <path d="M13.8477 1.28906C14.5846 1.47265 15.2378 1.88965 15.7042 2.47432C16.1706 3.059 16.4238 3.77809 16.4238 4.51823C16.4238 5.25837 16.1706 5.97746 15.7042 6.56214C15.2378 7.14681 14.5846 7.56381 13.8477 7.7474" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             <div className="mx-2 text-black text-base tracking-wide font-normal">Assign Approver</div>
-                        </div>
-                        <Search placeHolder=''></Search> */}
+                        </div> */}
+                        {/* <Search placeHolder=''></Search> */}
                         <div className='relative'>
                             <Button
                                 buttonText='Save As'
@@ -199,8 +201,36 @@ const Page = () => {
                             </button>)
                     })}
                 </div>
-                <div className="min-h-[82vh] border-t border-solid border-[#D9D9D9] bg-[#e4e4e4]">
-                    <div className="flex flex-col h-[92vh] pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
+
+                {/* Edit section  */}
+                
+                <div className="min-h-[82vh] border-t border-solid">
+                    {/* Edit section header  */}
+                    <div className='flex mt-section justify-around'>
+                        {/* left portion  */}
+                        <div className='flex items-center'>
+                            <div className='mr-4 flex items-center gap-2'>
+                                <Individuals strokeColor='#00A881'/>
+                                <p className='font-bold text-lg text-gray-700'>Assign Approver</p>
+                            </div>
+                            <Search customOuterClass={"bg-sectionGrey"} placeHolder='Search' />
+                        </div>
+                        {/* right portion  */}
+                        <div className='flex gap-4'>
+                            <DropDown 
+                                selectPlaceHolder='Save' 
+                                optionLists={saveOptions} 
+                                isShowOther={false} 
+                                dropdownWidthClass='bg-white'
+                                customClass={"h-[1ch] w-[15ch]"}
+                            />
+                            <div className='h-full w-[1.5px] bg-sectionGrey'></div>
+                            <Button buttonText='Submit' showIcon={false} customClass='px-10 py-1'/>
+                        </div>
+                    </div>
+
+                    {/* Edit section main  */}
+                    <div className="flex flex-col h-[92vh] pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative ">
                         <div>
                             <div id="container">
                                 <div className='h-[10px]' />
@@ -208,13 +238,11 @@ const Page = () => {
                                 <div className='h-[10vh]' />
                             </div>
                         </div>
-
                         {isShowAddVer ? <AddVersionModel
                             isShowAddVer={isShowAddVer}
                             setIsShowAddVer={setIsShowAddVer}
                             handleAddVersion={handleAddVersion}
                             handleChangeTextVersion={handleChangeTextVersion} /> : null}
-
                         {isShowSubmitVer ? <SubmitVersionModel
                             isShowSubmitVer={isShowSubmitVer}
                             setIsShowSubmitVer={setIsShowSubmitVer}

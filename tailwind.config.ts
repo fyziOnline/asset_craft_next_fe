@@ -24,6 +24,9 @@ const config: Config = {
         mlg : '840px',
         // md : '780px'
       },
+      margin:{
+        'section' : "1.25rem"
+      },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
         geist: ['GeistMonoVF', 'monospace'], // Add fallback
@@ -49,7 +52,7 @@ const config: Config = {
         'green-500': '#1CD3A8', // Another green color for contrast if needed
         'primary-black':'#020103', // black color, ref: navbar background
         'steel-gray': '#ADB3CC', // blue tint with gray, ref: navigation option color
-        'steel-gray-shade': '#55597D', // blue tint with gray, ref: navigation option color
+        // 'steel-gray-shade': '#55597D', // blue tint with gray, ref: navigation option color
         'faded-grey':'#475467',
         'grey-100': '#F9F9F9',
         'grey-800':'#444444',
@@ -59,6 +62,12 @@ const config: Config = {
         'grey-700' : '#62697626', // ref : non selected portion of range slider
         'crystal-blue-500':'#5DB9FF',
         'crystal-blue-200':'#EBF6FF',
+        // 'lighter-grey-200' : '#F6F6F6',
+        // // 'lighter-grey-500' : '#383838', 
+        sectionGrey:{
+          DEFAULT : '#F6F6F6',
+          darker : '#dedede'
+        },
         card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
