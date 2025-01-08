@@ -48,7 +48,7 @@ const DropDown: React.FC<DropDownProps> = ({
     otherFieldText = 'Specify other target audiences',
     otherFieldErrorText = '',
     onSelected = () => { },
-    isShowOther = true }) => {
+    isShowOther = true  }) => {
     const [selectedOption, setSelectedOption] = useState('')
     const [showOptionList, setShowOptionList] = useState(false)
     const [isOtherSelected, setIsOtherSelected] = useState(false)

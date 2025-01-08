@@ -1,5 +1,5 @@
 'use client';
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useMemo, useState } from 'react';
 // import Breadcrumb from "@/components/global/Breadcrumb";
 import Button from '@/components/global/Button';
 import Search from '@/components/global/Search';
@@ -11,10 +11,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
-import { UserIcon } from "@/assets/icons/AppIcons"
+import { Individuals, UserIcon } from "@/assets/icons/AppIcons"
 import Link from 'next/link'
 import SubmitVersionModel from './components/SubmitVersionModel';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
+import DropDown from '@/components/global/DropDown';
+import { saveOptions } from '@/data/dataGlobal';
+import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 
 interface HeaderProps {
     versionNameChoose: string
@@ -30,6 +33,7 @@ interface HeaderProps {
 
 const Page = () => {
     const { contextData } = useAppData();
+    const [showOptionList, setShowOptionList] = useState(false)
     const router = useRouter();
 
     useOverflowHidden()
@@ -78,6 +82,10 @@ const Page = () => {
         })
 
         return versionSelected.layoutHTMLGenerated.replace("[(blocks)]", htmlContent)
+    }
+
+    const handleDropDownList = () => {
+        setShowOptionList((prev) => !prev)
     }
 
     const handleClickEdit = (event: Event) => {
@@ -196,33 +204,86 @@ const Page = () => {
                         <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
                     </div>
                 </div>
-                <div className='pl-28'>
-                    {versionList.map((item, index) => {
-                        return (
-                            <button
-                                key={item.assetID + index}
-                                onClick={() => { setVersionSelected(item) }}
-                                className={`${versionSelected.assetVersionID === item.assetVersionID ? "text-white bg-[#01A982]" : "text-black bg-[#e4e4e4]"} inline-block h-[42px] mx-1 text-center text-lg font-normal  rounded-tl-[20px] rounded-tr-[20px] px-[30px] py-2`}>
-                                {item.versionName}
-                            </button>)
-                    })}
-                </div>
-                <div className="min-h-[82vh] border-t border-solid border-[#D9D9D9] bg-[#e4e4e4]">
-                    <div className="flex flex-col h-[92vh] pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
+
+
+                {/* Edit section  */}
+
+                <div className="min-h-[82vh] border-t border-solid">
+                    {/* Edit section header  */}
+                    <div className='flex justify-between px-14 py-4'>
+                        {/* left portion  */}
+                        <div className='flex items-center'>
+                            <div className='mr-4 flex items-center gap-2'>
+                                <Individuals strokeColor='#00A881' />
+                                <p className='font-bold text-lg text-gray-700'>Assign Approver</p>
+                            </div>
+
+                            <Search customOuterClass={"bg-sectionGrey"} placeHolder='Search' />
+                        </div>
+                        {/* right portion  */}
+                        <div className='flex gap-4'>
+                            {/* <DropDown
+                                selectPlaceHolder='Save'
+                                optionLists={saveOptions}
+                                isShowOther={false}
+                                dropdownWidthClass='bg-white'
+                                customClass={"h-[1ch] w-[15ch]"}
+                            /> */}
+                            <div className='relative w-[170px] bg-white shadow-sm rounded'>
+                                <div onClick={handleDropDownList} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
+                                    <p className='text-base px-2'>Download</p>
+                                    <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
+                                </div>
+                                {showOptionList &&
+                                    <div className="absolute z-[1000] w-full bg-white shadow-sm flex flex-col rounded-b-md px-2 py-1">
+                                        <button onClick={() => handleSave(1)} className="h-[43px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
+                                            <span className="text-black text-base font-normal">New Version</span>
+                                        </button>
+                                        <button onClick={() => handleSave(2)} className="h-[43px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
+                                            <span className="text-black text-base font-normal">HTML File</span>
+                                        </button>
+                                        <button onClick={() => handleSave(3)} className="h-[43px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
+                                            <span className="text-black text-base font-normal">Zip File</span>
+                                        </button>
+                                        <button onClick={() => handleSave(4)} className="h-[43px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
+                                            <span className="text-black text-base font-normal">PDF File</span>
+                                        </button>
+                                    </div>}
+                            </div>
+
+
+
+                            <div className='h-full w-[1.5px] bg-sectionGrey'></div>
+                            <Button buttonText='Submit' handleClick={() => setIsShowSubmitVer(true)} showIcon={false} customClass='px-10 py-1' />
+                        </div>
+                    </div>
+
+                    <div className='pt-2 pl-14'>
+                        {versionList.map((item, index) => {
+                            return (
+                                <button
+                                    key={item.assetID + index}
+                                    onClick={() => { setVersionSelected(item) }}
+                                    className={`${versionSelected.assetVersionID === item.assetVersionID ? "text-[#333333] bg-[#e4e4e4]" : "text-black bg-[#fff]"} inline-block h-[42px] text-center text-lg font-normal  rounded-tl-[5px] rounded-tr-[5px] px-[30px] py-2`}>
+                                    {item.versionName}
+                                </button>)
+                        })}
+                    </div>
+
+                    {/* Edit section main  */}
+                    <div className="flex flex-col bg-[#e4e4e4] h-[92vh] pb-10 mx-14 px-20 overflow-x-hidden overflow-y-scroll scrollbar-hide relative ">
                         <div>
                             <div id="container">
-                                <div className='h-[10px]' />
+                                <div className='h-[20px]' />
                                 {renderHTMLSelect}
                                 <div className='h-[10vh]' />
                             </div>
                         </div>
-
                         {isShowAddVer ? <AddVersionModel
                             isShowAddVer={isShowAddVer}
                             setIsShowAddVer={setIsShowAddVer}
                             handleAddVersion={handleAddVersion}
                             handleChangeTextVersion={handleChangeTextVersion} /> : null}
-
                         {isShowSubmitVer ? <SubmitVersionModel
                             isShowSubmitVer={isShowSubmitVer}
                             setIsShowSubmitVer={setIsShowSubmitVer}

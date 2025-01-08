@@ -32,3 +32,10 @@ export const keyPoints = [
     { label: 'Performance', value: 'Performance' },
     { label: 'Increased Security', value: 'Increased Security' },
 ]
+
+export const saveOptions = [
+    {label : 'New Version',value : 'New Version'},
+    {label : 'HTML File',value:'HTML File'},
+    {label : 'Zip File',value:'Zip File'},
+    {label : 'PDF File',value:'PDF File'}
+]
