@@ -10,6 +10,9 @@ interface UserDetailsProps {
     userID: string;
     name: string;
     email: string;
+    company: string;
+    country: string;
+    timeZone: string;
     userRole: string;
     isActive: number;
 }
@@ -38,8 +41,26 @@ export const useProfile = () => {
         }
     }
 
+
+    const updateUserDetails = async (data: any) => {
+        setShowLoading(true)
+        try {
+            const response = await ApiService.put<any>(urls.updateuserDetails , data)
+
+            if (response.isSuccess) {
+                await getUserDetails()
+            }
+        } catch (error) {
+            alert(ApiService.handleError(error))
+            return false
+        } finally {
+            setShowLoading(false)
+        }
+    }
+
     return {
-        userDetails
+        userDetails,
+        updateUserDetails
     }
 }
 

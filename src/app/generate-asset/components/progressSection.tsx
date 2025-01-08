@@ -1,12 +1,10 @@
 'use client'
 import { urls } from '@/apis/urls'
 import { useLoading } from '@/components/global/Loading/LoadingContext'
-// import TemplateGenerationSection from '@/app/my-projects/[project_name]/[campaign_name]/[type_page]/layout/TemplateGenerationSection'
-// import TemplateSelectionContainer from '@/app/my-projects/[project_name]/[campaign_name]/[type_page]/layout/TemplateSelectionContainer'
 import { useGetTemplates } from '@/hooks/useGetTemplates'
 import { ApiService } from '@/lib/axios_generic'
 import { FC, ReactNode, useRef } from 'react'
-import { AssetHtmlProps, Template } from '@/types/templates'
+import { Template } from '@/types/templates'
 import { useAppData } from '@/context/AppContext'
 import TemplateSelectionContainer from '../layout/TemplateSelectionContainer'
 import TemplateGenerationSection from '../layout/TemplateGenerationSection'
@@ -15,9 +13,6 @@ import { PageType } from '@/componentsMap/pageMap'
 type ProgressComponent = ReactNode;
 interface ProjectAssetProp {
   params: {
-    project_name?: string
-    campaign_name?: string
-    asset_name?: string
     type_page: PageType
   }
   handleEdit?: () => void

@@ -14,11 +14,13 @@ import processDashboardAssets from "@/app/dashboard/utils/dashboardFilters"
 import { formatDate } from "@/utils/formatDate";
 import { useAppData } from "@/context/AppContext";
 import { AssetHtmlProps } from "@/types/templates";
+import { useRouter } from "next/navigation";
 
 
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
 const Dashboard: FC = () => {
+  const router = useRouter();
   const {
     clientAssetTypes,
     selectedIndexes,
@@ -40,7 +42,6 @@ const Dashboard: FC = () => {
 
   useEffect(() => {
     setContextData({
-      isShowEdit_Save_Button: false,
       isRegenerateHTML: false,
       stepGenerate: 0,
       AssetHtml: {} as AssetHtmlProps,
@@ -50,7 +51,7 @@ const Dashboard: FC = () => {
   }, [])
 
   return (
-    <>
+    <div className="mt-10">
       {/* <ProjectSetUpModal title="Project Details" selectedValue={selectedButton?.assetTypeName} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} > */}
       {/* <div className='w-full flex flex-col gap-3 px-12 pb-7'>
           <div className='pt-[15px] flex flex-col gap-3'>
@@ -124,7 +125,7 @@ const Dashboard: FC = () => {
                   showIcon={false}
                   IconComponent={item.assetTypeName === "All in One" && <ExpressIcon strokeColor="white" width="40" height="38" />}
                   backgroundColor="bg-white"
-                  customClass="group px-12 py-2 border border-[#07363480] w-[25%] px-[50px] transition-all duration-300 hover:bg-[#00A881]"
+                  customClass="group px-12 py-2 border border-[#07363480] w-[25%] px-[50px] transition-all duration-300 hover:bg-[#00A881] tracking-wide hover:border-none"
                   textColor="text-foreground group-hover:text-white"
                   handleClick={() => selectAssetType(item)}
                   textStyle="font-normal text-sm text-center whitespace-nowrap"
@@ -138,7 +139,9 @@ const Dashboard: FC = () => {
             </div>
             <div className="overflow-y-scroll h-[50vh] scrollbar-hide">
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} />
+                <Table fieldClick="assetID" handleClick={(assetID) => {
+                  router.push(`/edit-html-content?assetID=${assetID}`)
+                }} listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
@@ -171,7 +174,7 @@ const Dashboard: FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

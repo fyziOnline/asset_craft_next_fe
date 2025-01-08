@@ -1,3 +1,5 @@
+import { update } from "lodash";
+
 export const urls = {
   login: "/user/login",
   finalise: "/user/login/finalise",
@@ -30,6 +32,7 @@ export const urls = {
   getCampaigns: "/campaign/select/all",
   getAssetsAllDashboard: "/asset/select/all/Dashboard",
   getuserDetails: "/userProfile/select",
+  updateuserDetails: "/userProfile/update",
   approval_approver_select_all: "/approval/approver/select/all",
   approval_assetApproval_SubmitForApproval: "/approval/assetApproval/SubmitForApproval"
 };

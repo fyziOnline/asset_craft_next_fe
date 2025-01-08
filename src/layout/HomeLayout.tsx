@@ -8,9 +8,9 @@ interface LayoutProps {
 
 const HomeLayout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div className='h-screen w-screen bg-black overflow-hidden'>
+    <div className='h-screen w-screen bg-black '>
       <HomeHeader />
-      <main className="px-32 relative overflow-hidden h-full">
+      <main className="px-32 relative">
         {children}
       </main>
       <Footer />

@@ -5,6 +5,7 @@ import { UserIcon } from "@/assets/icons/AppIcons";
 import { useLogin } from "@/hooks/useLogin";
 import Button from "@/components/global/Button";
 import { useRouter } from "next/navigation";
+import { IoMdClose } from "react-icons/io";
 
 type TaglineObj = {
   title: string
@@ -46,14 +47,14 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div className="h-full pt-7 md:pt-[1rem]">
-        <div className="flex relative items-center gap-[17rem]">
+      <div className="h-full flex flex-col justify-between min-h-[75vh]">
+        <div className="flex relative items-center justify-between mr-[15vw]">
           <section className="text-white w-[25rem]">
-            <h1 className="text-[3.45rem] leading-[6rem] font-bold font-metric text-green-100">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
-            <p className="text-wrap text-base font-metricLight">Simplifying Marketing Content with AI-Driven</p>
+            <h1 className="text-[3.45rem] leading-[6rem] font-bold text-green-100">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
+            <p className="text-wrap text-base">Simplifying Marketing Content with AI-Driven</p>
           </section>
 
-          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-10 padbot10 flex flex-col items-center md:pb-[0.75rem]">
+          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-10 padbot10 flex flex-col items-center ">
             <div className="absolute top-[35%] left-[25%]">
               <div className="color-wheel ">
                 <div className="eclipse-1"></div>
@@ -65,25 +66,25 @@ const Home: FC = () => {
             <input 
               defaultValue={emailLoginDefault} 
               onChange={onChangeEmail} 
-              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[35ch] outline-none font-metricLight bg-transparent border border-white text-white rounded-full" 
+              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full" 
               placeholder="Enter Your email id" 
               type="text" 
 />
-            <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[35ch] font-metricLight rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
-            <p className="text-[0.7rem] mb-[0.7rem] font-metricLight">Not a member? <span className="text-green-100">Sign up now</span></p>
+            <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[32ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
+            <p className="text-[0.7rem] mb-[0.7rem] ">Not a member? <span className="text-green-100">Sign up now</span></p>
           </div>
         </div>
         
         
-        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] my-5">   
+        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mt-[2%] mb-[2%]">   
         </div>
 
-        <div className="grid grid-cols-4 gap-7">
+        <div className="grid grid-cols-4 gap-7 mb-[2%]">
           {TaglineContents.map(tagline => {
             return (
               <section key={tagline.title} className="text-white">
-                <h2 className="mb-2 font-semibold tracking-wide font-metricSemibold">{tagline.title}</h2>
-                <p className="text-grey-200 text-sm tracking-wide font-metricLight">{tagline.content}</p>
+                <h2 className="mb-2 font-semibold tracking-wide ">{tagline.title}</h2>
+                <p className="text-grey-200 text-sm tracking-wide">{tagline.content}</p>
               </section>
             )
           })}
@@ -93,30 +94,38 @@ const Home: FC = () => {
 
 
       {isOtpVisible && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h3 className="text-xl mb-4">Enter OTP Code</h3>
+        <div className="fixed inset-0 bg-gray-900  bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gradient-to-br from-[#00A881]  to-[#073634] w-fit px-6 pt-[1rem] pb-10 padbot10 flex flex-col items-center rounded-[6%] border-white border-[1px]">
+
+           <div className="w-full flex justify-end">
+              <button className="text-white text-3xl mb-1">
+              <IoMdClose />
+              </button>
+           </div>
+
+
+            <h3 className="text-xl mb-4 text-white font-bold">Enter OTP Code</h3>
             <input
               type="text"
-              placeholder="Enter OTP"
+              placeholder="Enter Your OTP ..."
               onChange={onChangeOtp}
-              className="w-full p-3 mb-4 border border-gray-300 rounded"
+              className="w-[32ch] p-3  mb-3 bg-transparent  text-white border border-white placeholder:text-white rounded-full "
             />
-            <div className="flex justify-between">
-              <Button
-                buttonText={"Cancel"}
-                showIcon={false}
-                textStyle='text-[1rem] font-base text-[#00A881]'
-                backgroundColor={"bg-[#B1B1B1]"}
-                handleClick={handleCancelOtp}
-                customClass='static  px-[1.4rem] py-2 group-hover:border-white gap-0' />
-              <Button
+
+             <p className="text-[0.7rem] text-white">Don't receive OTP? </p>
+
+             <p className=" text-white pt-[1px] mb-[4%] border-b border-white inline-block leading-none">Resend OTP </p>
+
+
+            <div className="flex justify-between px-[1rem] py-[.75rem]">
+              
+              <Button 
                 buttonText={isLoading ? "Verifying OTP..." : "Submit OTP"}
                 showIcon={false}
                 textStyle='text-[1rem] font-base text-[#00A881]'
                 backgroundColor={"bg-custom-gradient-green"}
                 handleClick={handleOtpSubmit}
-                customClass='static px-[1.4rem] py-2 group-hover:border-white gap-0' />
+                customClass='static px-[1.4rem] py-2 group-hover:border-white gap-0 w-[32ch] px-[1rem] py-[0.7rem]' />
 
             </div>
           </div>
