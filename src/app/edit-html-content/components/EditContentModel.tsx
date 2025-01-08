@@ -12,7 +12,7 @@ import ShadowDomContainer from './ShadowDomContainer';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import CloseIcon from '@mui/icons-material/Close';
 import { CustomTextArea, CustomTextTester } from './CustomTextArea';
-import { linkedIn_Uischema } from './schema';
+import { linkedIn_noImage_Uischema, linkedIn_Uischema } from './schema';
 
 const customTheme = createTheme({
     palette: {
@@ -276,7 +276,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                     ...materialRenderers,
                                     { tester: CustomTextTester, renderer: CustomTextArea }
                                 ]}
-                                uischema={contextData.AssetHtml.layoutName.toLowerCase().includes("linkedin") ? linkedIn_Uischema : undefined}
+                                uischema={contextData.AssetHtml.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined}
                                 cells={materialCells}
                                 onChange={onHandleEditData}
                             />

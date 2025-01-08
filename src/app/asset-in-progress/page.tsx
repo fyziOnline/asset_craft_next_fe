@@ -1,42 +1,41 @@
 'use client'
 
 import { useAppData } from "@/context/AppContext"
-import { nkey } from "@/data/keyStore"
 import { useDashboard } from "@/hooks/useDashboard"
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
-import { AssetInProgressProps } from "@/types/asset"
-import { AssetHtmlProps, AssetVersionProps } from "@/types/templates"
 import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation"
 import React, { FC, useEffect, useState } from "react"
 
-interface Asset {
-  [key: string]: string
-}
-
 const AssetInProgress: FC = () => {
-  const { dashboardAssets } = useDashboard()
   const router = useRouter();
   const { setContextData } = useAppData();
+  const { dashboardAssets } = useDashboard()
+  const [assetsDisplayTable, setAssetsDisplayTable] = useState<any[]>([])
 
-  const assetInProgress = dashboardAssets.filter(asset => asset.status === "In Progress" || asset.status === "On Review")
+  useEffect(() => {
+    const assetInProgress = dashboardAssets.filter(asset => asset.status === "In Progress" || asset.status === "On Review")
+    console.log('assetInProgress: ', assetInProgress);
 
-  const assetsDisplayTable = assetInProgress.map((data) => ({
-    projectName: data.project,
-    campaignName: data.campaignName,
-    assetTypeIcon: data.assetTypeName,
-    assetName: data.assetName,
-    createdOn: formatDate(data.createdOn),
-    currentStatus: data.status,
-  }));
+    const newAssetsDisplayTable = assetInProgress.map((data) => ({
+      projectName: data.project,
+      campaignName: data.campaignName,
+      assetTypeIcon: data.assetTypeName,
+      assetName: data.assetName,
+      createdOn: formatDate(data.createdOn),
+      currentStatus: data.status,
+      assetID: data.assetID
+    }));
+    setAssetsDisplayTable(newAssetsDisplayTable)
+  }, [dashboardAssets])
 
   const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Current Status"]
   const headerHavingSortingToggle = ["Project Name", "Created On"]
-  const fieldClick = "dataItem"
+  const fieldClick = "assetID"
 
-  const handleClick = (item: any) => {
-    console.log("item", item);
-    router.push(`/edit-html-content?project_name=${item.projectName}&campaign_name=${item.campaignName}&asset_name=${item.assetName}`)
+  const handleClick = (assetID: any) => {
+    console.log("item", assetID);
+    router.push(`/edit-html-content?assetID=${assetID}`)
   }
 
   return (

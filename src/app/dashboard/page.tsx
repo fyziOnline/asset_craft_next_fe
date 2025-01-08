@@ -14,11 +14,13 @@ import processDashboardAssets from "@/app/dashboard/utils/dashboardFilters"
 import { formatDate } from "@/utils/formatDate";
 import { useAppData } from "@/context/AppContext";
 import { AssetHtmlProps } from "@/types/templates";
+import { useRouter } from "next/navigation";
 
 
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
 const Dashboard: FC = () => {
+  const router = useRouter();
   const {
     clientAssetTypes,
     selectedIndexes,
@@ -137,7 +139,9 @@ const Dashboard: FC = () => {
             </div>
             <div className="overflow-y-scroll h-[50vh] scrollbar-hide">
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table listItems={assetsDisplayTable} tableHeadings={tableHeading} />
+                <Table fieldClick="assetID" handleClick={(assetID) => {
+                  router.push(`/edit-html-content?assetID=${assetID}`)
+                }} listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
