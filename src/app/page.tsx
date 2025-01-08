@@ -95,7 +95,15 @@ const Home: FC = () => {
 
       {isOtpVisible && (
         <div className="fixed inset-0 bg-gray-900  bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gradient-to-br from-[#00A881]  to-[#073634] w-fit px-6 pt-[3rem] pb-10 padbot10 flex flex-col items-center rounded-[6%] border-white border-[1px]">
+          <div className="bg-gradient-to-br from-[#00A881]  to-[#073634] w-fit px-6 pt-[1rem] pb-10 padbot10 flex flex-col items-center rounded-[6%] border-white border-[1px]">
+
+           <div className="w-full flex justify-end">
+              <button className="text-white text-3xl mb-1">
+              <IoMdClose />
+              </button>
+           </div>
+
+
             <h3 className="text-xl mb-4 text-white font-bold">Enter OTP Code</h3>
             <input
               type="text"

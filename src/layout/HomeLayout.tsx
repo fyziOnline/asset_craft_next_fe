@@ -10,7 +10,7 @@ const HomeLayout: FC<LayoutProps> = ({ children }) => {
   return (
     <div className='h-screen w-screen bg-black '>
       <HomeHeader />
-      <main className="px-32 relative h-[84%]">
+      <main className="px-32 relative">
         {children}
       </main>
       <Footer />
