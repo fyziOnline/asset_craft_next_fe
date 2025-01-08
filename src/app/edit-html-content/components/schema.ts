@@ -45,5 +45,11 @@ export const linkedIn_Uischema: VerticalLayout = {
         sectionsControl,
         image_urlControl
     ]
+}
 
+export const linkedIn_noImage_Uischema: VerticalLayout = {
+    type: "VerticalLayout",
+    elements: [
+        sectionsControl
+    ]
 }
