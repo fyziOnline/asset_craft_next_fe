@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { FormDataProps, SectionProps } from "./useInputFormDataGenerate";
 import { nkey } from "@/data/keyStore";
 import moment from "moment";
+import { useAppData } from "@/context/AppContext";
 
 interface GenerateTemplateProp {
   params?: {
@@ -25,6 +26,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const assetIDTemplateRef = useRef("");
   const assetSelect = useRef<AssetHtmlProps>({} as AssetHtmlProps);
   const isCampaignSelect = useRef(false)
+  const { setError } = useAppData()
 
   const returnError = (message: string) => {
     return {
@@ -52,11 +54,13 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
               );
               return resSectionInsert;
             } catch (innerError) {
-              console.error(
-                "API Error for item:",
-                item,
-                ApiService.handleError(innerError)
-              );
+              const apiError = ApiService.handleError(innerError)
+              console.error("API Error for item:", item, apiError);
+              setError({
+                  status: apiError.statusCode,
+                  message: apiError.message,
+                  showError: true
+              })
               return { isSuccess: false };
             }
           });
@@ -90,10 +94,13 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
             }
             return { isSuccess: false };
           } catch (innerError) {
-            console.error(
-              "API Error for item:",
-              ApiService.handleError(innerError)
-            );
+            const apiError = ApiService.handleError(innerError)
+            console.error( "API Error for item:", apiError);
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
             return { isSuccess: false };
           }
         }
@@ -264,7 +271,12 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         status: true
       }
     } catch (error) {
-      alert(ApiService.handleError(error));
+      const apiError = ApiService.handleError(error)
+      setError({
+          status: apiError.statusCode,
+          message: apiError.message,
+          showError: true
+      })
       return {
         campaignID: "",
         status: false
@@ -348,7 +360,13 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         }
       }
     } catch (error) {
-      return returnError(ApiService.handleError(error));
+      const apiError = ApiService.handleError(error)
+      setError({
+          status: apiError.statusCode,
+          message: apiError.message,
+          showError: true
+      })
+      return returnError(apiError.message);
     }
   };
 
@@ -388,8 +406,12 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         return returnError("Add Section failed, please try again later.");
       }
     } catch (error) {
-      console.error("API Error:", ApiService.handleError(error));
-      return returnError(ApiService.handleError(error));
+      const apiError = ApiService.handleError(error)
+      setError({
+          status: apiError.statusCode,
+          message: apiError.message,
+          showError: true
+      })
     }
   };
 

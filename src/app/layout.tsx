@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { AppDataProvider } from "@/context/AppContext";
-import "./globals.css";
 import LayoutWrapper from "@/layout/LayoutWrapper";
 import { LoadingProvider } from "@/components/global/Loading/LoadingContext";
 import { YesNoPopupProvider } from "@/components/global/Popup/YesNoPopupContext";
-import './globals.css';
+import ErrorPopup from "@/components/global/Error/ErrorPopup";
+import "./globals.css";
 
 
 export const metadata: Metadata = {
@@ -23,6 +23,7 @@ export default function RootLayout({
         <AppDataProvider>
           <LoadingProvider>
             <YesNoPopupProvider>
+              <ErrorPopup />
               <LayoutWrapper>
                 {children}
               </LayoutWrapper>

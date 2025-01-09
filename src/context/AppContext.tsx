@@ -14,9 +14,17 @@ export interface AppData {
     isRegenerateHTML: boolean
 }
 
+export interface ErrorData {
+    status: number;
+    message: string;
+    showError: boolean;
+}
+
 interface AppDataContextType {
     contextData: AppData;
     setContextData: (data: Partial<AppData>) => void;
+    error: ErrorData;
+    setError: (data: ErrorData) => void;
 }
 
 export const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
@@ -35,15 +43,22 @@ const APP_DATA: AppData = {
         project_name: "",
         campaign_name: "",
         asset_name: "",
-        campaignID: ""
+        campaignID: "" 
     },
     AssetHtml: {} as AssetHtmlProps,
     isRegenerateHTML: false
 };
 
+const ERROR_APP: ErrorData = {
+    status: 0,
+    message: "",
+    showError: false
+}
+
 // Create a provider component
 export const AppDataProvider: FC<AppDataProviderProps> = ({ children }) => {
     const [contextData, setContextData] = useState<AppData>(APP_DATA);
+    const [error, setError] = useState<ErrorData>(ERROR_APP)
 
     // Update context data, ensuring all fields are available
     const updateContextData = (update: Partial<AppData>) => {
@@ -53,8 +68,12 @@ export const AppDataProvider: FC<AppDataProviderProps> = ({ children }) => {
         }));
     };
 
+    const updateErrorData = (update: ErrorData) => {
+        setError(update);
+    };
+
     return (
-        <AppDataContext.Provider value={{ contextData, setContextData: updateContextData }}>
+        <AppDataContext.Provider value={{ contextData, setContextData: updateContextData, error, setError: updateErrorData }}>
             {children}
         </AppDataContext.Provider>
     );

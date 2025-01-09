@@ -41,64 +41,34 @@ const LandingPage = ({ params }: LandingPageProps) => {
     }, [])
 
     const doesFormCompleted = (step:number,status?:boolean) => {
-            if (step===1) {
-                setCheckedList((prev) =>
-                    status
-                      ? prev.includes(0) ? prev : [...prev, 0] 
-                      : prev.filter((item) => item !== 0)
-                  ) 
-            }
-            if(step===2) {
-                if (
-                    refFormData.current?.campaignGoal?.length &&
-                    refFormData.current?.targetAudience?.length 
-                 )  {
-                    setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
-                 } else {
-                    setCheckedList((prev) => prev.filter((item) => item !== 1))
-                }
-            }
-            if (step===3) {
-                if (
-                    refFormData.current?.topic?.length && 
-                    // refFormData.current.type?.length && 
-                    refFormData.current.keyPoints?.length
-                ) {
-                    setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
-                 } else {
-                    setCheckedList((prev) => prev.filter((item) => item !== 2))
-                }
-            }
-            if (step===4) {
-                if (
-                    refFormData.current?.webUrl?.length || 
-                    refFormData.current?.fileSelected
-                ) {
-                    setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
-                 } else {
-                    setCheckedList((prev) => prev.filter((item) => item !== 3))
-                }
-            } if (step===5) {
-                let flag = false
-                for (const obj of refSection.current) {
-                    if (obj.aiPrompt.length > 0) {
-                      flag = true
-                    } else {
-                      flag = false
-                      break
-                    }
-                }
-                if (flag) {
-                    setCheckedList((prev) => (prev.includes(4) ? prev : [...prev, 4]))
-                 } else {
-                    setCheckedList((prev) => prev.filter((item) => item !== 4))
-                }
+        if (step===1) {
+            setCheckedList((prev) =>
+                status
+                  ? prev.includes(0) ? prev : [...prev, 0] 
+                  : prev.filter((item) => item !== 0)
+              ) 
+        }
+        if(step===2) {
+            if (
+                refFormData.current?.campaignGoal?.length &&
+                refFormData.current?.targetAudience?.length 
+             )  {
+                setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
+             } else {
+                setCheckedList((prev) => prev.filter((item) => item !== 1))
             }
         }
+        if (step===3) {
+            setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
+        }
+        if (step===4) {
+            setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
+        }
+    }
 
 
     const handleGenerate = async () => {
-        if (generateStep === 2 || checkedList.length !== 5) {
+        if (generateStep === 2 || checkedList.length !== 4) {
             return;
         }
 
@@ -172,6 +142,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                         }
                                         doesFormCompleted(2)
                                     }}
+                                    isShowOther={false}
                                     selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
@@ -185,20 +156,27 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                         }
                                         doesFormCompleted(2)
                                     }}
+                                    isShowOther={false}
                                     selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
                         </div>
 
-                        <div className='w-[300px]'>
-                            <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
-                            <RangeSlider onSelectValue={(value) => {
-                                refFormData.current = {
-                                    ...refFormData.current,
-                                    outputScale: value
-                                }
-                                doesFormCompleted(2)
-                            }}></RangeSlider>
-                        </div>
+                        <div >
+                                <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
+                                <TextField handleChange={(e) => { 
+                                    handleInputText(e, "webUrl") 
+                                    // doesFormCompleted(4)
+                                }}
+                                    placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                <DragAndDrop onFileSelect={(file) => {
+                                    refFormData.current = {
+                                        ...refFormData.current,
+                                        fileSelected: file
+                                    }
+                                    // doesFormCompleted(4)
+                                }} />
+
+                            </div> 
                     </div>
                 </Accordion>
             </div>
@@ -208,13 +186,14 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     isRequire={true}
                     HeaderTitle="Key Message & Content"
                     checked={checkedList.includes(2)}
+                    handleShowContent={()=>{doesFormCompleted(3,true)}}
                     >
                     <div>
                         <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
                         <TextField
                             handleChange={(e) => { 
                                 handleInputText(e, "topic") 
-                                doesFormCompleted(3)
+                                // doesFormCompleted(3)
                             }}
                             placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
@@ -222,7 +201,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                         <TextField
                             handleChange={(e) => { 
                                 handleInputText(e, "keyPoints") 
-                                doesFormCompleted(3)
+                                // doesFormCompleted(3)
                             }}
                             rows={4}
                             placeholder={`HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility.\nFeature 1\nFeature 2\nFeature 3`}
@@ -231,38 +210,13 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     </div>
                 </Accordion>
             </div>
-            <div className='mt-[25px]'>
-                {/* step 3 */}
-                <Accordion
-                    HeaderTitle="Additional Campaign Assets"
-                    checked={checkedList.includes(3)}
-                    >
-                    <div>
-                        <DragAndDrop onFileSelect={(file) => {
-                            refFormData.current = {
-                                ...refFormData.current,
-                                fileSelected: file
-                            }
-                            doesFormCompleted(4)
-                        }} />
-
-                        <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
-                        <TextField
-                            handleChange={(e) => { 
-                                handleInputText(e, "webUrl") 
-                                doesFormCompleted(4)
-                            }}
-                            placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
-                    </div>
-                </Accordion>
-            </div>
 
             <div className='mt-[25px]'>
                 {/* step 4 */}
                 <Accordion
-                    HeaderTitle="Content Structuring for Communication"
-                    checked={checkedList.includes(4)}
-                    handleShowContent={()=>{doesFormCompleted(5)}}
+                    HeaderTitle="Content Brief"
+                    checked={checkedList.includes(3)}
+                    handleShowContent={()=>{doesFormCompleted(4)}}
                     >
                     <div>
                         {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
@@ -279,7 +233,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                     <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
                                     <TextField handleChange={(e) => { 
                                         handleInputSection(e, index) 
-                                        doesFormCompleted(5)    
+                                        // doesFormCompleted(5)    
                                     }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
                                 </div>
                             )
@@ -304,14 +258,23 @@ const LandingPage = ({ params }: LandingPageProps) => {
                         <ChildrenTitle title='Final Call-to-Action:' />
                         <TextField placeholder={`"Sign up for a free demo and experience cloud efficiency today!"`} rows={1} />
                     </div> */}
+                    <div className='w-[300px]'>
+                            <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
+                            <RangeSlider onSelectValue={(value) => {
+                                refFormData.current = {
+                                    ...refFormData.current,
+                                    outputScale: value
+                                }
+                            }}></RangeSlider>
+                        </div>
                 </Accordion>
             </div>
-            <div className='flex justify-end my-[20px]'>
+            <div className='flex justify-end my-[30px]'>
                 <Button
                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                     showIcon
                     textStyle='text-[1rem] font-base text-[#00A881]'
-                    backgroundColor={((checkedList.length === 5 && generateStep != 2) || generateStep === 5) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
+                    backgroundColor={((checkedList.length === 4 && generateStep != 2) || generateStep === 4) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
                     handleClick={handleGenerate}
                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
             </div>

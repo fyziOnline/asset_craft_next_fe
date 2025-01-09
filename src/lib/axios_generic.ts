@@ -140,20 +140,27 @@ export const ApiService = {
   /**
    * Convenient method to handle errors
    */
-  handleError(error: unknown): string {
+  handleError(error: unknown): { statusCode: number; message: string } {
     if (error instanceof ApiError) {
       // Handle specific API errors
       switch (error.status) {
-        case 400: return 'Bad Request: Invalid data provided';
+        case 400:
+          return { statusCode: 400, message: 'Bad Request: Invalid data provided' };
         case 401:
-          window.location.href = '/'
-          return 'Unauthorized: Please log in again';
-        case 403: return 'Forbidden: You do not have permission';
-        case 404: return 'Not Found: Resource does not exist';
-        case 500: return 'Server Error: Something went wrong';
-        default: return error.message || 'An unexpected error occurred';
+          return { statusCode: 401, message: 'Unauthorized: Please log in again' };
+        case 403:
+          return { statusCode: 403, message: 'Forbidden: You do not have permission' };
+        case 404:
+          return { statusCode: 404, message: 'Not Found: Resource does not exist' };
+        case 500:
+          return { statusCode: 500, message: 'Server Error: Something went wrong' };
+        default:
+          return {
+            statusCode: error.status ?? 500,
+            message: error.message || 'An unexpected error occurred',
+          };
       }
     }
-    return 'An unknown error occurred';
+    return { statusCode: 0, message: 'An unknown error occurred' };
   }
 };
