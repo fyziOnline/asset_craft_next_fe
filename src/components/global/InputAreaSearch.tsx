@@ -24,7 +24,7 @@ const InputAreaSearch: React.FC<Props> = ({ placeholder, name, listData = [], on
   };
 
   return (
-    <div className="border border-[#DCD8E8] w-full rounded-[10px]">
+    <div className=" w-full rounded-[5px]">
       <TextField
         customClass="h-12 border-none"
         placeholder={placeholder}
@@ -34,7 +34,7 @@ const InputAreaSearch: React.FC<Props> = ({ placeholder, name, listData = [], on
       />
 
       {searchValue && matchedItems.length > 0 && (
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap bg-white mt-[-12px] rounded-[10px]">
           {matchedItems.map((matchedItem, index) => (
             <div
               key={matchedItem + index}
@@ -43,7 +43,7 @@ const InputAreaSearch: React.FC<Props> = ({ placeholder, name, listData = [], on
                 onChange(matchedItem)
                 setSearchValue(matchedItem)
               }}
-              className="bg-off-white-primary px-5 py-1 rounded-full ml-3 mb-2 mt-[-5px] text-sm cursor-pointer"
+              className="bg-off-white-primary px-5 py-1 rounded-full ml-3 mb-2 mt-[2px] text-sm cursor-pointer"
             >
               <h3>{matchedItem}</h3>
             </div>
