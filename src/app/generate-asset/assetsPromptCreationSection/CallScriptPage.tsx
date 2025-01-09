@@ -44,52 +44,17 @@ const CallScriptPage = () => {
                       : prev.filter((item) => item !== 0)
                   ) 
             }
-            // if(step===2) {
-            //     if (
-            //         refFormData.current?.campaignGoal?.length &&
-            //         refFormData.current?.targetAudience?.length 
-            //      )  {
-            //         setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
-            //      } else {
-            //         setCheckedList((prev) => prev.filter((item) => item !== 1))
-            //     }
-            // }
-            // if (step===3) {
-            //     if (
-            //         refFormData.current?.topic?.length && 
-            //         refFormData.current.type?.length && 
-            //         refFormData.current.keyPoints?.length
-            //     ) {
-            //         setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
-            //      } else {
-            //         setCheckedList((prev) => prev.filter((item) => item !== 2))
-            //     }
-            // }
-            // if (step===4) {
-            //     if (
-            //         refFormData.current?.webUrl?.length || 
-            //         refFormData.current?.fileSelected
-            //     ) {
-            //         setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
-            //      } else {
-            //         setCheckedList((prev) => prev.filter((item) => item !== 3))
-            //     }
-            // } if (step===5) {
-            //     let flag = false
-            //     for (const obj of refSection.current) {
-            //         if (obj.aiPrompt.length > 0) {
-            //           flag = true
-            //         } else {
-            //           flag = false
-            //           break
-            //         }
-            //     }
-            //     if (flag) {
-            //         setCheckedList((prev) => (prev.includes(4) ? prev : [...prev, 4]))
-            //      } else {
-            //         setCheckedList((prev) => prev.filter((item) => item !== 4))
-            //     }
-            // }
+            if(step===2) {
+                setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
+            }
+            if (step===3) {
+                setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
+            }
+            if (step===4) {
+                setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
+            } if (step===5) {
+                setCheckedList((prev) => (prev.includes(4) ? prev : [...prev, 4]))
+            }
         }
 
 
@@ -144,6 +109,7 @@ const CallScriptPage = () => {
                 <Accordion
                     HeaderTitle="Call Objective and Target Audience"
                     checked={checkedList.includes(1)}
+                    handleShowContent={()=>{doesFormCompleted(2)}}
                     >
                     <div className='max-w-[90%]'>
                         <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
@@ -162,6 +128,7 @@ const CallScriptPage = () => {
                 <Accordion
                     HeaderTitle="Tone, Style, and Objections"
                     checked={checkedList.includes(2)}
+                    handleShowContent={()=>{doesFormCompleted(3)}}
                     >
                     <div className='max-w-[90%] flex'>
                         <div className='flex-1'>
@@ -180,6 +147,7 @@ const CallScriptPage = () => {
                 <Accordion
                     HeaderTitle="Content Structuring for Communication"
                     checked={checkedList.includes(3)}
+                    handleShowContent={()=>{doesFormCompleted(4)}}
                     >
                     <div>
                         <ChildrenTitle title='Prospect Details' customClass="text-[18px]" ></ChildrenTitle>
