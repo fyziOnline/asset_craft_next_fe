@@ -125,7 +125,7 @@ const Page = () => {
         return (versionSelected.assetVersionBlocks.map((item, idx) => {
             return (
                 <div key={idx} >
-                    {!item.isStatic ? <div className='flex w-[100%] items-center justify-center absolute ml-[350px] mt-9 z-20' >
+                    {(item.blockData !== "{}" && item.blockData !== "") ? <div className='flex w-[100%] items-center justify-center absolute ml-[280px] mt-9 z-20' >
                         <div className='mt-1' onClick={() => {
                             setSectionEdit(item)
                             setIsShowModelEdit(true)
@@ -210,16 +210,16 @@ const Page = () => {
 
                 <div className="min-h-[82vh] border-t border-solid">
                     {/* Edit section header  */}
-                    <div className='flex justify-between px-14 py-4'>
+                    <div className='flex justify-end px-14 py-4'>
                         {/* left portion  */}
-                        <div className='flex items-center'>
+                        {/* <div className='flex items-center'>
                             <div className='mr-4 flex items-center gap-2'>
                                 <Individuals strokeColor='#00A881' />
                                 <p className='font-bold text-lg text-gray-700'>Assign Approver</p>
                             </div>
 
                             <Search customOuterClass={"bg-sectionGrey"} placeHolder='Search' />
-                        </div>
+                        </div> */}
                         {/* right portion  */}
                         <div className='flex gap-4'>
                             {/* <DropDown
@@ -276,7 +276,7 @@ const Page = () => {
                             <div id="container">
                                 <div className='h-[20px]' />
                                 {renderHTMLSelect}
-                                <div className='h-[10vh]' />
+                                <div className='h-[20vh]' />
                             </div>
                         </div>
                         {isShowAddVer ? <AddVersionModel
@@ -284,14 +284,14 @@ const Page = () => {
                             setIsShowAddVer={setIsShowAddVer}
                             handleAddVersion={handleAddVersion}
                             handleChangeTextVersion={handleChangeTextVersion} /> : null}
-                        {isShowSubmitVer ? <SubmitVersionModel
-                            isShowSubmitVer={isShowSubmitVer}
-                            setIsShowSubmitVer={setIsShowSubmitVer}
-                            listApprovers={listApprovers}
-                            handleSubmitVersion={onSubmit}
-                        /> : null}
                     </div>
                 </div>
+                {isShowSubmitVer ? <SubmitVersionModel
+                    isShowSubmitVer={isShowSubmitVer}
+                    setIsShowSubmitVer={setIsShowSubmitVer}
+                    listApprovers={listApprovers}
+                    handleSubmitVersion={onSubmit}
+                /> : null}
                 {isShowModelEdit ? <EditContentModel
                     setVersionList={setVersionList}
                     setVersionSelected={setVersionSelected}
