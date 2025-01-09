@@ -6,7 +6,11 @@ import { useAppData } from "@/context/AppContext"
 import { useProjectFormData } from "@/hooks/useProjectFormData"
 import { ProjectDetails } from "@/types/templates"
 
-const SectionAssetDetails:FC = () => {
+type SectionAssetDetailsProps = {
+  validatingTheData: (step: number,status : boolean) => void; // Define the callback type
+};
+
+const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData }) => {
   const {
     isProductNameValid,
     handleChangeAssetDetails,
@@ -25,6 +29,11 @@ const SectionAssetDetails:FC = () => {
 
   const updateContextProjectDetails = (data:ProjectDetails) => {
     setContextData({ProjectDetails :{...data}})
+    if (data.asset_name.length>0 && data.campaign_name.length && data.project_name.length >0) {
+      validatingTheData(1,true)
+    } else {
+      validatingTheData(1,false)
+    }
   }
   
 
