@@ -10,7 +10,7 @@ interface DashboardCardProps {
 
 const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDate, totalAssets, underReview, inProgress }) => {
   return (
-    <div className="group bg-[#F6F6F6] hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] w-[20%] p-4 cursor-pointer hover:border-none">
+    <div className="group bg-[#F6F6F6] hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] w-[20%] p-4 hover:border-none">
       <h2 className="text-lg text-[#073634] leading-none font-bold mb-2 group-hover:text-white">{projectName}</h2>
       {/* <p className='text-base text-[#7B7B7B] group-hover:text-white'>{allProjectDate}</p> */}
 

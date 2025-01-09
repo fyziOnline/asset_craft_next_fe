@@ -96,7 +96,7 @@ const page: React.FC = () => {
                             <div className="w-[100px] h-[100px] aspect-square bg-[url('/images/userProfile.jpeg')] bg-cover bg-center rounded-full" />
                             <div className='absolute bottom-0 top-16 left-[112px]'>
                                 {/* <h3 className="font-medium">{userDetails?.name}</h3> */}
-                                <p className="text-gray-500 text-sm w-[400px]">{userDetails?.email}</p>
+                                <p className="text-gray-500 text-base w-[400px]">{userDetails?.email}</p>
                             </div>
                         </div>
                     </div>
@@ -108,11 +108,11 @@ const page: React.FC = () => {
 
                 <div className='flex flex-wrap gap-x-6 gap-y-4 mt-4'>
                     <div className='flex flex-col flex-1'>
-                        <label className='text-sm font-light text-black' htmlFor="">Full Name</label>
+                        <label className='text-base font-light text-black' htmlFor="">Full Name</label>
                         <div className='bg-grey-100 p-1 rounded-md px-4 py-2 mt-3'>
                             <input
                                 name='name'
-                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-sm '
+                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-base '
                                 type="text"
                                 placeholder='Your Full Name'
                                 value={formValues.name}
@@ -121,11 +121,11 @@ const page: React.FC = () => {
                         </div>
                     </div>
                     <div className='flex flex-col flex-1'>
-                        <label className='text-sm font-light text-black' htmlFor="">Company</label>
+                        <label className='text-base font-light text-black' htmlFor="">Company</label>
                         <div className='bg-grey-100 rounded-md px-4 py-2 mt-3'>
                             <input
                                 name='company'
-                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-sm '
+                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-base '
                                 type="text"
                                 placeholder='Your Company'
                                 value={formValues.company}
@@ -138,11 +138,11 @@ const page: React.FC = () => {
 
                 <div className='flex flex-wrap gap-x-6 gap-y-4 mt-4'>
                     <div className='flex flex-col flex-1'>
-                        <label className='text-sm font-light text-black' htmlFor="">Country</label>
+                        <label className='text-base font-light text-black' htmlFor="">Country</label>
                         <div className='bg-grey-100  rounded-md px-4 py-2 mt-3'>
                             <input
                                 name='country'
-                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-sm '
+                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-base '
                                 type="text"
                                 placeholder='Your Country'
                                 value={formValues.country}
@@ -151,11 +151,11 @@ const page: React.FC = () => {
                         </div>
                     </div>
                     <div className='flex flex-col flex-1'>
-                        <label className='text-sm font-light text-black' htmlFor="">Time Zone</label>
+                        <label className='text-base font-light text-black' htmlFor="">Time Zone</label>
                         <div className='bg-grey-100  rounded-md px-4 py-2 mt-3'>
                             <input
                                 name='timeZone' 
-                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-sm '
+                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-base '
                                 type="text"
                                 placeholder='Your Time Zone'
                                 value={formValues.timeZone}

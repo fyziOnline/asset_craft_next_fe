@@ -40,6 +40,9 @@ const Dashboard: FC = () => {
 
   const { setContextData } = useAppData()
 
+  console.log("pendingApproval" , pendingApproval);
+  
+
   useEffect(() => {
     setContextData({
       isRegenerateHTML: false,
@@ -159,10 +162,10 @@ const Dashboard: FC = () => {
               {pendingApproval && pendingApproval.length > 0 ? (
                 pendingApproval.map((data, index) => (
                   <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
-                    <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.name}</p>
+                    <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
                     <div className="flex items-center justify-between mt-2">
                       <p className="text-[#636363] font-thin text-sm">Last Updated :</p>
-                      <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
+                      <p className="text-[#636363] text-sm font-normal">{formatDate(data.modifiedOn)}</p>
                     </div>
                   </div>
                 ))) : (
