@@ -4,14 +4,13 @@ import { useAppData } from '@/context/AppContext';
 import { ApiService } from "@/lib/axios_generic";
 import { urls } from "@/apis/urls";
 import { useRouter } from "next/navigation";
-import { AssetInProgressProps } from "@/types/asset";
-import moment from "moment";
 import Cookies from 'js-cookie';
 import { nkey } from "@/data/keyStore";
-import { AssetBlockProps, AssetVersionProps } from "@/types/templates";
+import { AssetBlockProps, AssetHtmlProps, AssetVersionProps } from "@/types/templates";
 import { ApproverProps } from "@/types/approval";
 import { Option } from "@/components/global/Search";
 import { useLoading } from "@/components/global/Loading/LoadingContext";
+import { useGenerateTemplate } from "./useGenerateTemplate";
 
 export const useEditHTMLContent = () => {
     const router = useRouter();
@@ -26,6 +25,7 @@ export const useEditHTMLContent = () => {
     const [listApprovers, setListApprovers] = useState<ApproverProps[]>([])
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
     const { setShowLoading } = useLoading()
+    const { assetIDTemplateRef, getAssetHTML } = useGenerateTemplate({})
     const refVersion = useRef('')
 
     useEffect(() => {
@@ -43,8 +43,35 @@ export const useEditHTMLContent = () => {
     }, [contextData.AssetHtml])
 
     useEffect(() => {
+        resAssetHtml()
         getListApprovers()
     }, [])
+
+    const resAssetHtml = async () => {
+        try {
+            setShowLoading(true)
+            let assetID = ""
+            if (typeof window !== "undefined") {
+                const params = new URLSearchParams(window.location.search);
+                assetID = params.get("assetID") as string
+            }
+
+            assetIDTemplateRef.current = assetID
+            const res = await getAssetHTML()
+            if (res.isSuccess) {
+                const AssetHtml = res as AssetHtmlProps
+                setContextData({ AssetHtml: AssetHtml });
+                setVersionList(AssetHtml.assetVersions || [])
+                setVersionSelected(AssetHtml.assetVersions?.[0])
+            } else {
+                alert("An error occurred, please try again later.")
+            }
+        } catch (error) {
+            alert(ApiService.handleError(error))
+        } finally {
+            setShowLoading(false)
+        }
+    }
 
     const getListApprovers = async () => {
         try {

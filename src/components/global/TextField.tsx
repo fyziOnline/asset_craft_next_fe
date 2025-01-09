@@ -46,7 +46,7 @@ const TextField: React.FC<TextFieldProps> = ({
   handleChange
 }) => {
   return (
-    <div className={`border border-[#DCD8E8] w-full rounded-[10px] ${customClass}`}>
+    <div className={` w-full rounded-[10px] ${customClass}`}>
       <textarea
         name={name}
         id={id}

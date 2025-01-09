@@ -41,7 +41,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   // Extract column names from the first item in the list
   const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]).filter((item) => item != fieldClick) : []
   const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
-  
+
   useEffect(() => {
     setSortListData(listItems)
   }, [listItems])
@@ -129,7 +129,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
             <div
               onClick={() => {
                 if (fieldClick !== undefined) {
-                  handleClick(data)
+                  handleClick(data[fieldClick])
                 }
               }}
               key={index}
@@ -139,7 +139,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
               {visibleHeadings.map((heading, idx) => (
                 <div
                   key={idx}
-                  className={`flex items-center gap-2 text-sm font-normal justify-center ${getStatusClass(data[heading] || '')}`}
+                  className={`flex items-center gap-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
                 >
                   {heading === 'assetName' ? (
                     <div className="flex items-center gap-2">

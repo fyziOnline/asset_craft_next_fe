@@ -14,7 +14,7 @@ const CustomTextRenderer = (props: ControlProps) => {
             </div>
 
             <TextareaAutosize
-                defaultValue={data}
+                value={data}
                 onChange={(event) => handleChange(path, event.target.value)}
                 minRows={1}
                 maxRows={3}

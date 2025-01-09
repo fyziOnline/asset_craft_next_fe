@@ -28,7 +28,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
-    const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
+    const { assetIDTemplateRef, generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
@@ -120,12 +120,13 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.ProjectDetails, contextData.isRegenerateHTML)
                 setShowLoading(false)
                 // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isRegenerateHTML: true });
-                setContextData({ AssetHtml: res as AssetHtmlProps });
+                // setContextData({ AssetHtml: res as AssetHtmlProps });
                 if (res?.isSuccess) {
-                    router.replace(`/edit-html-content`)
+                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}`)
                 } else {
                     setGenerateStep(3);
                     setContextData({ assetGenerateStatus: 3 })
+                    setContextData({ AssetHtml: res as AssetHtmlProps });
                 }
                 return
             }
@@ -146,7 +147,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     <SectionAssetDetails validatingTheData={doesFormCompleted} />
                 </Accordion>
             </div>
-            <div className='mt-[40px]'>
+            <div className='mt-[25px]'>
                 {/* step 1 */}
 
                 <Accordion
@@ -299,7 +300,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     </div>
                 </Accordion>
             </div>
-            <div className='flex justify-end my-[50px]'>
+            <div className='flex justify-end my-[20px]'>
                 <Button
                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                     showIcon

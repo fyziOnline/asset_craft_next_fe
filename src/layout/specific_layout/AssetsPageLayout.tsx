@@ -29,7 +29,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
 
   return (
     <>
-      <div className="flex items-center justify-between pt-[1rem] px-[1.5rem]">
+      <div className="flex items-center justify-between pt-[1rem] px-[1.5rem] mt-5">
         {/* <Breadcrumb TaskType={page} /> */}
         <Title titleName={page} />
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>

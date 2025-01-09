@@ -201,7 +201,7 @@ const CallScriptPage = () => {
                     </div>
                 </Accordion>
             </div>
-            <div className='flex justify-end my-[50px]'>
+            <div className='flex justify-end my-[20px]'>
                 <Button
                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                     showIcon
