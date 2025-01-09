@@ -11,10 +11,10 @@ interface RangeProp {
     defaultValue?: number
 }
 
-const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '100', steps = 5, label = 'range', onSelectValue = () => { }, defaultValue = 0 }) => {
+const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '100', steps = 10, label = 'range', onSelectValue = () => { }, defaultValue = 7 }) => {
     const singleStepRange = parseInt(maxValue) / steps
 
-    const [value, setValue] = useState<number>(0)
+    const [value, setValue] = useState<number>(defaultValue * singleStepRange)
     const [valueToDisplay, setValueToDisplay] = useState<number>(defaultValue)
     const selectRangeRef = useRef<HTMLParagraphElement>(null)
 
@@ -33,10 +33,9 @@ const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '100', steps = 
     const onHandleRelease = () => {
         setValue(valueToDisplay * singleStepRange)
         if (selectRangeRef.current) {
-            selectRangeRef.current.innerText = (valueToDisplay).toString();
+            selectRangeRef.current.innerText = valueToDisplay.toString()
         }
     }
-
 
     return (
         <div className='relative'>
@@ -54,10 +53,10 @@ const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '100', steps = 
                     onTouchEnd={onHandleRelease}
                     className='custom-range bg-grey-700 '
                 />
-                <div className="absolute z-0 top-[5%] h-4 rounded-lg bg-green-100 pointer-events-none" style={{ width: `${value}%` }} ></div>
+                <div className="absolute z-0 top-[5%] h-4 rounded-lg bg-green-100 pointer-events-none" style={{ width: `${(value / parseInt(maxValue)) * 100}%` }} ></div>
             </div>
-            <p ref={selectRangeRef} className='absolute left-0 top-[75%] text-grey-300'>0</p>
-            <p className={`absolute right-0 top-[75%] ${value !== parseInt(maxValue) ? 'text-grey-300' : 'text-green-100'}`}>5</p>
+            <p ref={selectRangeRef} className='absolute left-0 top-[75%] text-grey-300'>{defaultValue}</p>
+            <p className={`absolute right-0 top-[75%] ${value !== parseInt(maxValue) ? 'text-grey-300' : 'text-green-100'}`}>{steps}</p>
         </div>
     )
 }
