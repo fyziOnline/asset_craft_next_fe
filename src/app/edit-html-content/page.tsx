@@ -235,7 +235,7 @@ const Page = () => {
                                     <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
                                 </div>
                                 {showOptionList &&
-                                    <div className="absolute z-[1000] w-full bg-white shadow-sm flex flex-col rounded-b-md px-2 py-1">
+                                    <div className="absolute z-[100] w-full bg-white shadow-sm flex flex-col rounded-b-md px-2 py-1">
                                         <button onClick={() => handleSave(1)} className="h-[43px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
                                             <span className="text-black text-base font-normal">New Version</span>
                                         </button>
