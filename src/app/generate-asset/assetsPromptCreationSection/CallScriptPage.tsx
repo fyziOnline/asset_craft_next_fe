@@ -135,17 +135,13 @@ const CallScriptPage = () => {
                             <ChildrenTitle title='What tone should the call have?'></ChildrenTitle>
                             <ChooseLabel optionLists={ListTone}></ChooseLabel>
                         </div>
-                        <div className='flex-1'>
-                            <ChildrenTitle title='How creative you want the output?'></ChildrenTitle>
-                            <RangeSlider></RangeSlider>
-                        </div>
                     </div>
                 </Accordion>
             </div>
             <div className='mt-[25px]'>
                 {/* step 3 */}
                 <Accordion
-                    HeaderTitle="Content Structuring for Communication"
+                    HeaderTitle="Content Brief"
                     checked={checkedList.includes(3)}
                     handleShowContent={()=>{doesFormCompleted(4)}}
                     >
@@ -167,9 +163,13 @@ const CallScriptPage = () => {
                         <ChildrenTitle title='What is the next step that you’d like the prospect to take?' ></ChildrenTitle>
                         <TextField placeholder={`"Generate a call-to-action to schedule a demo. Highlight the value of the demo in showcasing how HPE GreenLake can optimize cloud operations. Mention a 30-minute session to walk through real-world applications for their team."`} rows={2}></TextField>
                     </div>
+                    <div className='flex-1'>
+                            <ChildrenTitle title='How creative you want the output?'></ChildrenTitle>
+                            <RangeSlider></RangeSlider>
+                        </div>
                 </Accordion>
             </div>
-            <div className='flex justify-end my-[20px]'>
+            <div className='flex justify-end my-[30px]'>
                 <Button
                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                     showIcon

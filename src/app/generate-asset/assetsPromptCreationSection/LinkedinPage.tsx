@@ -40,6 +40,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
         }
     }, [])
 
+    
     const doesFormCompleted = (step:number,status?:boolean) => {
         if (step===1) {
             setCheckedList((prev) =>
@@ -59,45 +60,15 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
             }
         }
         if (step===3) {
-            if (
-                refFormData.current?.topic?.length && 
-                refFormData.current.type?.length && 
-                refFormData.current.keyPoints?.length
-            ) {
-                setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
-             } else {
-                setCheckedList((prev) => prev.filter((item) => item !== 2))
-            }
+            setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
         }
         if (step===4) {
-            if (
-                refFormData.current?.webUrl?.length || 
-                refFormData.current?.fileSelected
-            ) {
-                setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
-             } else {
-                setCheckedList((prev) => prev.filter((item) => item !== 3))
-            }
-        } if (step===5) {
-            let flag = false
-            for (const obj of refSection.current) {
-                if (obj.aiPrompt.length > 0) {
-                  flag = true
-                } else {
-                  flag = false
-                  break
-                }
-            }
-            if (flag) {
-                setCheckedList((prev) => (prev.includes(4) ? prev : [...prev, 4]))
-             } else {
-                setCheckedList((prev) => prev.filter((item) => item !== 4))
-            }
+            setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
         }
     }
 
     const handleGenerate = async () => {
-        if (generateStep === 2 || checkedList.length !== 5) {
+        if (generateStep === 2 || checkedList.length !== 4) {
             return;
         }
 
@@ -180,17 +151,23 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                     selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
                         </div>
+                        <div >
+                                <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
+                                <TextField handleChange={(e) => { 
+                                    handleInputText(e, "webUrl") 
+                                    // doesFormCompleted(4)
+                                }}
+                                    placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                <DragAndDrop onFileSelect={(file) => {
+                                    refFormData.current = {
+                                        ...refFormData.current,
+                                        fileSelected: file
+                                    }
+                                    // doesFormCompleted(4)
+                                }} />
 
-                        <div className='w-[300px]'>
-                            <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
-                            <RangeSlider onSelectValue={(value) => {
-                                refFormData.current = {
-                                    ...refFormData.current,
-                                    outputScale: value
-                                }
-                                doesFormCompleted(2)
-                            }}></RangeSlider>
-                        </div>
+                            </div> 
+
                     </div>
                 </Accordion>
             </div>
@@ -200,6 +177,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     isRequire={true}
                     HeaderTitle="Post Context"
                     checked={checkedList.includes(2)}
+                    handleShowContent={()=>{doesFormCompleted(3,true)}}
                     >
                     <div className='max-w-[90%]'>
                         <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
@@ -218,7 +196,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         ...refFormData.current,
                                         type: optionSelected.value
                                     }
-                                doesFormCompleted(3)
+                                // doesFormCompleted(3)
                                 }} selectPlaceHolder="Select Post Type" optionLists={emailType} />
                             </div>
 
@@ -229,7 +207,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         ...refFormData.current,
                                         keyPoints: optionSelected.value
                                     }
-                                    doesFormCompleted(3)
+                                    // doesFormCompleted(3)
                                 }} selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
                             </div>
                         </div>
@@ -237,37 +215,13 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     </div>
                 </Accordion>
             </div>
-            <div className='mt-[25px]'>
-                {/* step 3 */}
-                <Accordion
-                    HeaderTitle="Additional Campaign Assets"
-                    checked={checkedList.includes(3)}
-                    >
-                    <div>
-                        <DragAndDrop onFileSelect={(file) => {
-                            refFormData.current = {
-                                ...refFormData.current,
-                                fileSelected: file
-                            }
-                            doesFormCompleted(4)
-                        }} />
-
-                        <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
-                        <TextField handleChange={(e) => { 
-                            handleInputText(e, "webUrl") 
-                            doesFormCompleted(4)
-                        }}
-                            placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
-                    </div>
-                </Accordion>
-            </div>
 
             <div className='mt-[25px]'>
                 {/* step 4 */}
                 <Accordion
-                    HeaderTitle="Content Structuring for Communication"
-                    checked={checkedList.includes(4)}
-                    handleShowContent={()=>{doesFormCompleted(5)}}
+                    HeaderTitle="Content Brief"
+                    checked={checkedList.includes(3)}
+                    handleShowContent={()=>{doesFormCompleted(4)}}
                     >
                     <div>
                         {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
@@ -284,7 +238,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                     <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
                                     <TextField handleChange={(e) => { 
                                         handleInputSection(e, index) 
-                                        doesFormCompleted(5)    
+                                        // doesFormCompleted(5)    
                                     }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
                                 </div>
                             )
@@ -304,14 +258,23 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                         <TextField placeholder={`"Generate 4-5 relevant hashtags for an HPE GreenLake LinkedIn post on hybrid cloud solutions."`} rows={1} />
 
                     </div> */}
+                    <div className='w-[300px]'>
+                            <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
+                            <RangeSlider onSelectValue={(value) => {
+                                refFormData.current = {
+                                    ...refFormData.current,
+                                    outputScale: value
+                                }
+                            }}></RangeSlider>
+                        </div>
                 </Accordion>
             </div>
-            <div className='flex justify-end my-[20px]'>
+            <div className='flex justify-end my-[30px]'>
                 <Button
                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                     showIcon
                     textStyle='text-[1rem] font-base text-[#00A881]'
-                    backgroundColor={((checkedList.length === 5 && generateStep != 2) || generateStep === 5) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
+                    backgroundColor={((checkedList.length === 4 && generateStep != 2) || generateStep === 4) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
                     handleClick={handleGenerate}
                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
             </div>
