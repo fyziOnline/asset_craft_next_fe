@@ -27,7 +27,6 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
     const router = useRouter();
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
-    const [disableList, setDisableList] = useState<number[]>([1, 2, 3, 4]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const { generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
@@ -41,50 +40,61 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
         }
     }, [])
 
-    const onNext = (step: number): void => {
-        if (step === 0) {
-            setDisableList([0, 2, 3, 4]);
-            setIsShowList([1]);
-        } else if (step === 1) {
-            setDisableList([0, 1, 3, 4]);
-            setIsShowList([2]);
-        } else if (step === 2) {
-            setDisableList([0, 1, 2, 4]);
-            setIsShowList([3]);
-        } else if (step === 3) {
-            setDisableList([0, 1, 2, 3]);
-            setIsShowList([4]);
-        } else if (step === 4) {
-            setIsShowList([]);
-            if (checkedList.length === 5) {
-                return
+    const doesFormCompleted = (step:number,status?:boolean) => {
+        if (step===1) {
+            setCheckedList((prev) =>
+                status
+                  ? prev.includes(0) ? prev : [...prev, 0] 
+                  : prev.filter((item) => item !== 0)
+              ) 
+        }
+        if(step===2) {
+            if (
+                refFormData.current?.campaignGoal?.length &&
+                refFormData.current?.targetAudience?.length 
+             )  {
+                setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
+             } else {
+                setCheckedList((prev) => prev.filter((item) => item !== 1))
             }
         }
-        setCheckedList((prev) => {
-            const updatedList = [...prev, step];
-            return updatedList;
-        });
-    };
-
-    const onBack = (step: number): void => {
-        if (step === 4) {
-            setDisableList([1, 2, 4]);
-            setIsShowList([3]);
-            setCheckedList([1, 2, 3]);
-        } else if (step === 3) {
-            setDisableList([1, 3]);
-            setIsShowList([2]);
-            setCheckedList([1]);
-        } else if (step === 2) {
-            setDisableList([2, 3, 4]);
-            setIsShowList([1]);
-            setCheckedList([0]);
-        } else if (step === 1) {
-            setDisableList([1, 2, 3, 4])
-            setIsShowList([0])
-            setCheckedList([])
+        if (step===3) {
+            if (
+                refFormData.current?.topic?.length && 
+                refFormData.current.type?.length && 
+                refFormData.current.keyPoints?.length
+            ) {
+                setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
+             } else {
+                setCheckedList((prev) => prev.filter((item) => item !== 2))
+            }
         }
-    };
+        if (step===4) {
+            if (
+                refFormData.current?.webUrl?.length || 
+                refFormData.current?.fileSelected
+            ) {
+                setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
+             } else {
+                setCheckedList((prev) => prev.filter((item) => item !== 3))
+            }
+        } if (step===5) {
+            let flag = false
+            for (const obj of refSection.current) {
+                if (obj.aiPrompt.length > 0) {
+                  flag = true
+                } else {
+                  flag = false
+                  break
+                }
+            }
+            if (flag) {
+                setCheckedList((prev) => (prev.includes(4) ? prev : [...prev, 4]))
+             } else {
+                setCheckedList((prev) => prev.filter((item) => item !== 4))
+            }
+        }
+    }
 
     const handleGenerate = async () => {
         if (generateStep === 2 || checkedList.length !== 5) {
@@ -97,14 +107,12 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
             newStep = 1;
             setIsShowList([]);
             setCheckedList([]);
-            setDisableList([1, 2, 3, 4]);
             setContextData({ assetTemplateShow: false });
         } else {
             setContextData({ assetTemplateShow: true });
 
             if (newStep === 2) {
                 setCheckedList([0, 1, 2, 3, 4]);
-                setDisableList([0, 1, 2, 3, 4]);
                 setContextData({ assetGenerateStatus: newStep });
                 setGenerateStep(newStep);
                 setShowLoading(true)
@@ -132,22 +140,8 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     isRequire={true}
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
-                    handleShowContent={() => { setIsShowList([0]) }}
-                    disableShowContent={disableList.includes(0)}
-                    isShowContent={isShowList.includes(0)}
                 >
-                    <SectionAssetDetails />
-                    <div className='max-w-full flex justify-end pt-5 pb-3'>
-                        <Button
-                            buttonText='Next'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
-                            handleClick={() => { onNext(0) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
-                    </div>
+                    <SectionAssetDetails validatingTheData={doesFormCompleted}/>
                 </Accordion>
             </div>
             <div className='mt-[40px]'>
@@ -156,17 +150,8 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     isRequire={true}
                     HeaderTitle="Campaign Overview"
                     checked={checkedList.includes(1)}
-                    disableShowContent={disableList.includes(1)}
-                    handleShowContent={() => { setIsShowList([1]) }}
-                    isShowContent={isShowList.includes(1)}>
+                    >
                     <div>
-                        <ChildrenTitle title='Product/Solution'></ChildrenTitle>
-                        <TextField
-                            handleChange={(e) => { handleInputText(e, "product") }}
-                            placeholder="Enter the name of the product or solution."
-                            value={params.project_name}
-                            customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
-
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
                                 <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
@@ -176,6 +161,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                             ...refFormData.current,
                                             campaignGoal: optionSelected.value
                                         }
+                                        doesFormCompleted(2)
                                     }}
                                     selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
@@ -188,6 +174,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                             ...refFormData.current,
                                             targetAudience: optionSelected.value
                                         }
+                                        doesFormCompleted(2)
                                     }}
                                     selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
@@ -200,19 +187,9 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                     ...refFormData.current,
                                     outputScale: value
                                 }
+                                doesFormCompleted(2)
                             }}></RangeSlider>
                         </div>
-                    </div>
-                    <div className='max-w-full flex justify-end pt-5 pb-3'>
-                        <Button
-                            buttonText='Next'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
-                            handleClick={() => { onNext(1) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                     </div>
                 </Accordion>
             </div>
@@ -222,13 +199,14 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     isRequire={true}
                     HeaderTitle="Post Context"
                     checked={checkedList.includes(2)}
-                    disableShowContent={disableList.includes(2)}
-                    handleShowContent={() => { setIsShowList([2]) }}
-                    isShowContent={isShowList.includes(2)}>
+                    >
                     <div className='max-w-[90%]'>
                         <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
                         <TextField
-                            handleChange={(e) => { handleInputText(e, "topic") }}
+                            handleChange={(e) => { 
+                                handleInputText(e, "topic") 
+                                doesFormCompleted(3)
+                            }}
                             placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-center gap-[16%]'>
@@ -239,6 +217,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         ...refFormData.current,
                                         type: optionSelected.value
                                     }
+                                doesFormCompleted(3)
                                 }} selectPlaceHolder="Select Post Type" optionLists={emailType} />
                             </div>
 
@@ -249,31 +228,11 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         ...refFormData.current,
                                         keyPoints: optionSelected.value
                                     }
+                                    doesFormCompleted(3)
                                 }} selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
                             </div>
                         </div>
 
-                    </div>
-                    <div className='max-w-full flex justify-end pt-5 pb-3'>
-                        <Button
-                            buttonText='Back'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#000000]'
-                            textColor="text-[#000000]"
-                            iconColor="#000000"
-                            backgroundColor='bg-[#fff]'
-                            customClassIcon="rotate-180"
-                            handleClick={() => { onBack(2) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
-                        <Button
-                            buttonText='Next'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
-                            handleClick={() => { onNext(2) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                     </div>
                 </Accordion>
             </div>
@@ -282,41 +241,22 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                 <Accordion
                     HeaderTitle="Additional Campaign Assets"
                     checked={checkedList.includes(3)}
-                    disableShowContent={disableList.includes(3)}
-                    handleShowContent={() => { setIsShowList([3]) }}
-                    isShowContent={isShowList.includes(3)}>
+                    >
                     <div>
                         <DragAndDrop onFileSelect={(file) => {
                             refFormData.current = {
                                 ...refFormData.current,
                                 fileSelected: file
                             }
+                            doesFormCompleted(4)
                         }} />
 
                         <ChildrenTitle customClass='mt-5' title='Website Link'></ChildrenTitle>
-                        <TextField handleChange={(e) => { handleInputText(e, "webUrl") }}
+                        <TextField handleChange={(e) => { 
+                            handleInputText(e, "webUrl") 
+                            doesFormCompleted(4)
+                        }}
                             placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
-                    </div>
-                    <div className='max-w-full flex justify-end pt-5 pb-3'>
-                        <Button
-                            buttonText='Back'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#000000]'
-                            textColor="text-[#000000]"
-                            iconColor="#000000"
-                            backgroundColor='bg-[#fff]'
-                            customClassIcon="rotate-180"
-                            handleClick={() => { onBack(3) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
-                        <Button
-                            buttonText='Next'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
-                            handleClick={() => { onNext(3) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                     </div>
                 </Accordion>
             </div>
@@ -326,9 +266,8 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                 <Accordion
                     HeaderTitle="Content Structuring for Communication"
                     checked={checkedList.includes(4)}
-                    disableShowContent={disableList.includes(4)}
-                    handleShowContent={() => { setIsShowList([4]) }}
-                    isShowContent={isShowList.includes(4)}>
+                    handleShowContent={()=>{doesFormCompleted(5)}}
+                    >
                     <div>
                         {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
                             if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
@@ -342,7 +281,10 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                 <div key={index}>
                                     <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
                                     <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
-                                    <TextField handleChange={(e) => { handleInputSection(e, index) }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
+                                    <TextField handleChange={(e) => { 
+                                        handleInputSection(e, index) 
+                                        doesFormCompleted(5)    
+                                    }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
                                 </div>
                             )
                         })}
@@ -361,27 +303,6 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                         <TextField placeholder={`"Generate 4-5 relevant hashtags for an HPE GreenLake LinkedIn post on hybrid cloud solutions."`} rows={1} />
 
                     </div> */}
-                    <div className='max-w-full flex justify-end pt-5 pb-3'>
-                        <Button
-                            buttonText='Back'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#000000]'
-                            textColor="text-[#000000]"
-                            iconColor="#000000"
-                            backgroundColor='bg-[#fff]'
-                            customClassIcon="rotate-180"
-                            handleClick={() => { onBack(4) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
-                        <Button
-                            buttonText='Next'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor='bg-[#fff]'
-                            handleClick={() => { onNext(4) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
-                    </div>
                 </Accordion>
             </div>
             <div className='flex justify-end my-[50px]'>
