@@ -23,7 +23,7 @@ const TemplateSelectionContainer: FC<TemplateViewerProps> = ({ templateData = []
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-center">
             <p className="font-bold text-black text-2xl tracking-wide whitespace-nowrap">
-              {title}
+              {/* {title} */}
             </p>
           </div>
           <div className="flex justify-evenly gap-5 w-full mt-4 flex-wrap">
