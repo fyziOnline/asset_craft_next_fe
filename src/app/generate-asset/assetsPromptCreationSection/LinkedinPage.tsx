@@ -219,7 +219,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
             <div className='mt-[25px]'>
                 {/* step 4 */}
                 <Accordion
-                    HeaderTitle="Content Structuring for Communication"
+                    HeaderTitle="Content Brief"
                     checked={checkedList.includes(3)}
                     handleShowContent={()=>{doesFormCompleted(4)}}
                     >
