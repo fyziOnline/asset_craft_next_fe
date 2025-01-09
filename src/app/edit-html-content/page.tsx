@@ -64,7 +64,7 @@ const Page = () => {
     const htmlOtherAsset = () => {
         let htmlContent = ''
         versionSelected.assetVersionBlocks.forEach((item) => {
-            if (!item.isStatic) {
+            if ((item.blockData !== "{}" && item.blockData !== "" && item.blockHTMLGenerated)) {
                 htmlContent += `
                 <div style="position:relative;">
                 <div style="right:-60px; z-index:100; position:absolute;">
