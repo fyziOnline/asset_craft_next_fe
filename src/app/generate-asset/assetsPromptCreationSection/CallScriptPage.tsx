@@ -10,13 +10,13 @@ import { urls } from '@/apis/urls';
 import ChooseLabel from '@/components/global/ChooseLabel';
 import { useAppData } from '@/context/AppContext';
 import ChildrenTitle from '@/components/global/ChildrenTitle';
+import SectionAssetDetails from '@/components/assetGeneration/SectionAssetDetails';
 
 
 const CallScriptPage = () => {
     // const [isOpen, setIsOpen] = useState(false);
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
-    const [disableList, setDisableList] = useState<number[]>([2, 3]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const [html_content, setHtml_content] = useState("");
 
@@ -35,31 +35,28 @@ const CallScriptPage = () => {
         { label: 'Persuasive and Sales-Oriented', value: 'Persuasive and Sales-Oriented' }
     ]
 
-    const onNext = (step: number): void => {
-        if (step === 1) {
-            setDisableList([1, 3])
-            setIsShowList([2])
-        } else if (step === 2) {
-            setDisableList([1, 2])
-            setIsShowList([3])
-        } else if (step === 3) {
-            setIsShowList([])
-            if (checkedList.length === 3) { return }
-        }
-        setCheckedList([...checkedList, step])
-    };
 
-    const onBack = (step: number): void => {
-        if (step === 3) {
-            setDisableList([1, 3])
-            setIsShowList([2])
-            setCheckedList([1])
-        } else if (step === 2) {
-            setDisableList([2, 3])
-            setIsShowList([1])
-            setCheckedList([])
+     const doesFormCompleted = (step:number,status?:boolean) => {
+            if (step===1) {
+                setCheckedList((prev) =>
+                    status
+                      ? prev.includes(0) ? prev : [...prev, 0] 
+                      : prev.filter((item) => item !== 0)
+                  ) 
+            }
+            if(step===2) {
+                setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
+            }
+            if (step===3) {
+                setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
+            }
+            if (step===4) {
+                setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
+            } if (step===5) {
+                setCheckedList((prev) => (prev.includes(4) ? prev : [...prev, 4]))
+            }
         }
-    }
+
 
     const handleGenerate = async () => {
         if (generateStep === 2 || checkedList.length !== 3) { return }
@@ -70,7 +67,6 @@ const CallScriptPage = () => {
             // setIsOpen(false)
             setIsShowList([])
             setCheckedList([])
-            setDisableList([2, 3])
         } else {
             if (newStep === 2) {
                 const resHTML = await ApiService.get<any>(`${urls.asset_select}?assetId=a844c23c-a4ac-ef11-ac7b-0a9328dfcacd`)
@@ -80,8 +76,6 @@ const CallScriptPage = () => {
                 }
 
                 setCheckedList([1, 2, 3])
-                setDisableList([1, 2, 3])
-
                 setTimeout(() => {
                     setGenerateStep(3)
                     setContextData({ assetGenerateStatus: 3 });
@@ -101,14 +95,22 @@ const CallScriptPage = () => {
 
     return (
         <div>
-            <div className='mt-[25px]'>
+            <div>
+                <Accordion
+                    isRequire={true}
+                    HeaderTitle='Project Details'
+                    checked={checkedList.includes(0)}
+                >
+                    <SectionAssetDetails validatingTheData={doesFormCompleted} />
+                </Accordion>
+            </div>
+            <div className='mt-[40px]'>
                 {/* step 1 */}
                 <Accordion
                     HeaderTitle="Call Objective and Target Audience"
                     checked={checkedList.includes(1)}
-                    disableShowContent={disableList.includes(1)}
-                    handleShowContent={() => { setIsShowList([1]) }}
-                    isShowContent={isShowList.includes(1)}>
+                    handleShowContent={()=>{doesFormCompleted(2)}}
+                    >
                     <div className='max-w-[90%]'>
                         <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
                         <TextField placeholder="What is the purpose of the call? What would you like to communicate?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
@@ -119,17 +121,6 @@ const CallScriptPage = () => {
                         <ChildrenTitle title='Describe the key messages you want to highlight' customClass='mt-5' ></ChildrenTitle>
                         <TextField placeholder="What are the 2-3 key points you want to highlight in this post?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                     </div>
-                    <div className='max-w-full flex justify-end pt-5 pb-3'>
-                        <Button
-                            buttonText='Next'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor=''
-                            handleClick={() => { onNext(1) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
-                    </div>
                 </Accordion>
             </div>
             <div className='mt-[25px]'>
@@ -137,9 +128,8 @@ const CallScriptPage = () => {
                 <Accordion
                     HeaderTitle="Tone, Style, and Objections"
                     checked={checkedList.includes(2)}
-                    disableShowContent={disableList.includes(2)}
-                    handleShowContent={() => { setIsShowList([2]) }}
-                    isShowContent={isShowList.includes(2)}>
+                    handleShowContent={()=>{doesFormCompleted(3)}}
+                    >
                     <div className='max-w-[90%] flex'>
                         <div className='flex-1'>
                             <ChildrenTitle title='What tone should the call have?'></ChildrenTitle>
@@ -150,27 +140,6 @@ const CallScriptPage = () => {
                             <RangeSlider></RangeSlider>
                         </div>
                     </div>
-                    <div className='max-w-full flex justify-end pt-5 pb-3'>
-                        <Button
-                            buttonText='Back'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
-                            backgroundColor=''
-                            customClassIcon="rotate-180"
-                            handleClick={() => { onBack(2) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
-                        <Button
-                            buttonText='Next'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor=''
-                            handleClick={() => { onNext(2) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
-                    </div>
                 </Accordion>
             </div>
             <div className='mt-[25px]'>
@@ -178,9 +147,8 @@ const CallScriptPage = () => {
                 <Accordion
                     HeaderTitle="Content Structuring for Communication"
                     checked={checkedList.includes(3)}
-                    disableShowContent={disableList.includes(3)}
-                    handleShowContent={() => { setIsShowList([3]) }}
-                    isShowContent={isShowList.includes(3)}>
+                    handleShowContent={()=>{doesFormCompleted(4)}}
+                    >
                     <div>
                         <ChildrenTitle title='Prospect Details' customClass="text-[18px]" ></ChildrenTitle>
                         <ChildrenTitle title='What is the prospect’s company and role?' ></ChildrenTitle>
@@ -198,27 +166,6 @@ const CallScriptPage = () => {
                         <ChildrenTitle title='The Next Steps' customClass="text-[18px] mt-[20px]" ></ChildrenTitle>
                         <ChildrenTitle title='What is the next step that you’d like the prospect to take?' ></ChildrenTitle>
                         <TextField placeholder={`"Generate a call-to-action to schedule a demo. Highlight the value of the demo in showcasing how HPE GreenLake can optimize cloud operations. Mention a 30-minute session to walk through real-world applications for their team."`} rows={2}></TextField>
-                    </div>
-                    <div className='max-w-full flex justify-end pt-5 pb-3'>
-                        <Button
-                            buttonText='Back'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#B1B1B1]"
-                            iconColor="#B1B1B1"
-                            backgroundColor=''
-                            customClassIcon="rotate-180"
-                            handleClick={() => { onBack(3) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white flex-row-reverse' />
-                        <Button
-                            buttonText='Next'
-                            showIcon
-                            textStyle='text-[1rem] font-base text-[#00A881]'
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor=''
-                            handleClick={() => { onNext(3) }}
-                            customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
                     </div>
                 </Accordion>
             </div>

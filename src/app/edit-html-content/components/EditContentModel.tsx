@@ -126,7 +126,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
             if (resUpdate.isSuccess) {
                 const dataJson = JSON.parse(resUpdate.jsonData as string)
                 if (dataJson.blocks && dataJson.blocks.length > 0) {
-                    setBlockData(JSON.parse(dataJson.blocks[0].data as string))
+                    setBlockData(JSON.parse(dataJson.blocks[0].Data as string))
                 }
             }
         } catch (error) {

@@ -64,10 +64,10 @@ const Page = () => {
     const htmlOtherAsset = () => {
         let htmlContent = ''
         versionSelected.assetVersionBlocks.forEach((item) => {
-            if (!item.isStatic) {
+            if ((item.blockData !== "{}" && item.blockData !== "" && item.blockHTMLGenerated)) {
                 htmlContent += `
                 <div style="position:relative;">
-                <div style="right:-60px; z-index:100; position:absolute;">
+                <div style="right:-60px; z-index:20; position:absolute;">
                     <div id="edit-button" data-block-id="${item.assetVersionBlockID}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none">
                         <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -235,7 +235,7 @@ const Page = () => {
                                     <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
                                 </div>
                                 {showOptionList &&
-                                    <div className="absolute z-[1000] w-full bg-white shadow-sm flex flex-col rounded-b-md px-2 py-1">
+                                    <div className="absolute z-[100] w-full bg-white shadow-sm flex flex-col rounded-b-md px-2 py-1">
                                         <button onClick={() => handleSave(1)} className="h-[43px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
                                             <span className="text-black text-base font-normal">New Version</span>
                                         </button>
