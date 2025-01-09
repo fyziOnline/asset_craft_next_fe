@@ -125,7 +125,7 @@ const Page = () => {
         return (versionSelected.assetVersionBlocks.map((item, idx) => {
             return (
                 <div key={idx} >
-                    {(item.blockData !== "{}" && item.blockData !== "") ? <div className='flex w-[100%] items-center justify-center absolute ml-[280px] mt-9 z-20' >
+                    {(item.blockData !== "{}" && item.blockData !== "") ? <div className='flex w-[100%] items-center justify-center absolute ml-[280px] mt-9' >
                         <div className='mt-1' onClick={() => {
                             setSectionEdit(item)
                             setIsShowModelEdit(true)

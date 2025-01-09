@@ -102,7 +102,7 @@ const Dashboard: FC = () => {
       </div> */}
 
       {/* <div className="w-full px-8 flex items-center justify-between mt-5 gap-10"> */}
-      <div className="w-full grid grid-cols-3 lg:grid-cols-5 gap-10 px-8">
+      <div className="w-[100%] grid grid-cols-3 lg:grid-cols-5 gap-10 px-8">
         {updatedDashboardData.map((data, index) => (
           <DashboardCard
             key={index}

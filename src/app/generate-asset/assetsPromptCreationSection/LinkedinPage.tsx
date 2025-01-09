@@ -190,7 +190,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
 
                         <div className='flex items-center gap-[16%]'>
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Email Type' customClass='mt-5' />
+                                <ChildrenTitle title='Linkedin Type' customClass='mt-5' />
                                 <DropDown onSelected={(optionSelected) => {
                                     refFormData.current = {
                                         ...refFormData.current,
