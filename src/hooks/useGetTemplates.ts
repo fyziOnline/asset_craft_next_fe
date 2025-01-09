@@ -6,6 +6,7 @@ import { urls } from '@/apis/urls';
 import { Template } from '../types/templates';
 import { ListTypePage } from '@/data/dataGlobal';
 import { useSearchParams } from 'next/navigation';
+import { useAppData } from '@/context/AppContext';
 
 interface GetTemplatesProps {
     type_page?: string
@@ -15,6 +16,7 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
     const [isLoading, setIsLoading] = useState(false)
     const [listTemplates, setListTemplates] = useState<Template[]>([])
     const queryParams = useSearchParams()
+    const  { setError } = useAppData()
 
     useEffect(() => {
         getTemplates()
@@ -31,8 +33,12 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
                 setListTemplates(resGetTemplates.templates)
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         } finally {
             setIsLoading(false);
         }
