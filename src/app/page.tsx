@@ -98,7 +98,9 @@ const Home: FC = () => {
           <div className="bg-gradient-to-br from-[#00A881]  to-[#073634] w-fit px-6 pt-[1rem] pb-10 padbot10 flex flex-col items-center rounded-[6%] border-white border-[1px]">
 
            <div className="w-full flex justify-end">
-              <button className="text-white text-3xl mb-1">
+              <button
+              onClick={handleCancelOtp}
+               className="text-white text-3xl mb-1">
               <IoMdClose />
               </button>
            </div>
@@ -109,7 +111,7 @@ const Home: FC = () => {
               type="text"
               placeholder="Enter Your OTP ..."
               onChange={onChangeOtp}
-              className="w-[32ch] p-3  mb-3 bg-transparent  text-white border border-white placeholder:text-white rounded-full "
+              className="w-[32ch] p-3  mb-3 bg-transparent  text-white border border-white placeholder:text-white rounded-full outline-none"
             />
 
              <p className="text-[0.7rem] text-white">Don't receive OTP? </p>

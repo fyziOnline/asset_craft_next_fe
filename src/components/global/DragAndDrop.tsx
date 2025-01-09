@@ -58,6 +58,13 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect , dragAndDropOut
     }
   };
 
+    // Handles file removal when the close icon is clicked.
+    const handleFileRemove = () => {
+      setFiles(null);
+      setSelectedFile("");
+    };
+     
+     
   return (
     <div className={`h-[230px] rounded-3xl shadow overflow-hidden flex flex-col ${dragAndDropOuterClass}`}>
       <div className="w-full h-[68px] flex items-center justify-center bg-white border-b border-[#EBEFF2]">
@@ -117,7 +124,10 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect , dragAndDropOut
                   <p>{formatFileSize(files.size)}</p>
                 </div>
               </div>
-              <CloseIcon className="absolute top-0 right-1 w-4" color="#BCB8B8" />
+              <div onClick={handleFileRemove}>
+                <CloseIcon
+                className="absolute top-0 right-1 w-4" color="#BCB8B8" />
+              </div>
             </div>}
           </div>
         )}
