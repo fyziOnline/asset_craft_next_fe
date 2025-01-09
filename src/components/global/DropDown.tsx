@@ -37,6 +37,7 @@ interface DropDownProps {
     isShowOther?: boolean;
     otherFieldText ?: string 
     otherFieldErrorText ?: string
+    preSelectValue ?: string
     onSelected?: (valueSelected: DropDownOptions) => void;
 }
 

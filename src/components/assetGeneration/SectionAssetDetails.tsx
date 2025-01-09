@@ -4,13 +4,14 @@ import InputAreaSearch from "../global/InputAreaSearch"
 import TextField from "../global/TextField"
 import { useAppData } from "@/context/AppContext"
 import { useProjectFormData } from "@/hooks/useProjectFormData"
-import { ProjectDetails } from "@/types/templates"
+import { CampaignSelectResponse, ProjectDetails } from "@/types/templates"
 
 type SectionAssetDetailsProps = {
-  validatingTheData: (step: number,status : boolean) => void; // Define the callback type
+  validatingTheData: (step: number,status : boolean) => void
+  returnCampaignDetails : (data:CampaignSelectResponse|null) => void
 };
 
-const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData }) => {
+const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,returnCampaignDetails }) => {
   const {
     isProductNameValid,
     handleChangeAssetDetails,
@@ -18,6 +19,7 @@ const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData }) 
     listCampaigns,
     isAssetNameExists,
     assetDetails, 
+    existingCampaignDetails,
     onChangeAssetDetails
     } = useProjectFormData()
 
@@ -26,6 +28,10 @@ const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData }) 
   useEffect(() => {
     updateContextProjectDetails(assetDetails)
   }, [assetDetails])
+
+  useEffect(()=>{
+    returnCampaignDetails(existingCampaignDetails)
+  },[existingCampaignDetails])
 
   const updateContextProjectDetails = (data:ProjectDetails) => {
     setContextData({ProjectDetails :{...data}})

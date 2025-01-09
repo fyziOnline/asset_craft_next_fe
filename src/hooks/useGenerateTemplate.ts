@@ -138,16 +138,16 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   //   Check if the campaign exist and return true or false
-  const aiPromptCampaignExist = async (id: string = "") => {
-    try {
-      const resAIPromptCampaign = await ApiService.get<any>(
-        `${urls.aiPrompt_Campaign_select}?CampaignID=${id ?? campaignID}`
-      );
-      return resAIPromptCampaign.isSuccess;
-    } catch (error) {
-      return false;
-    }
-  };
+  // const aiPromptCampaignExist = async (id: string = "") => {
+  //   try {
+  //     const resAIPromptCampaign = await ApiService.get<any>(
+  //       `${urls.aiPrompt_Campaign_select}?CampaignID=${id ?? campaignID}`
+  //     );
+  //     return resAIPromptCampaign.isSuccess;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
 
   const aiPromptCampaignInsert = async (
     FormData: FormDataProps,

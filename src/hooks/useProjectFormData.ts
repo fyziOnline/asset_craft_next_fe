@@ -6,6 +6,7 @@ import { urls } from "@/apis/urls";
 import { nkey } from "@/data/keyStore";
 import { DropDownOptions } from "@/components/global/DropDown";
 import { useAppData } from "@/context/AppContext";
+import { CampaignSelectResponse } from "@/types/templates";
 
 interface CampaignsProps {
     campaignID: string,
@@ -43,6 +44,8 @@ export const useProjectFormData = () => {
     const [listProjects, setListProjects] = useState<DropDownOptions[]>([]);
     const [listCampaigns, setListCampaigns] = useState<CampaignsProps[]>([]);
     const [listAssets, setListAssets] = useState<AssetsProps[]>([]);
+      const [existingCampaignDetails,setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
+
     // const campaignIDRef = useRef("")
     const isCampaignSelect = useRef(false)
     // const {contextData,setContextData} = useAppData()
@@ -89,7 +92,7 @@ export const useProjectFormData = () => {
             const res = await ApiService.get<any>(`${urls.campaign_select_all}?clientId=${client_ID}&project=${projectName}`);
             if (res.isSuccess) {
                 setListCampaigns(res.campaigns as CampaignsProps[])
-                handleCheckCampNameExists(res.campaigns as CampaignsProps[], assetDetails.campaign_name)
+                // handleCheckCampNameExists(res.campaigns as CampaignsProps[], assetDetails.campaign_name)
             }
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
@@ -144,11 +147,24 @@ export const useProjectFormData = () => {
             setAssetDetails(pre=>({...pre,campaignID:checkCampNameExists[0].campaignID}))
             isCampaignSelect.current = true
             getAssetAll(checkCampNameExists[0].campaignID)
+            collectCampaignData(checkCampNameExists[0].campaignID)
         } else {
             setAssetDetails(pre=>({...pre,campaignID:""}))
             isCampaignSelect.current = false
             setListAssets([])
             setIsAssetNameExists(false)
+        }
+    }
+
+    const collectCampaignData = async (campaign_id:string) => {
+        try {
+            const res = await ApiService.get<any>(`${urls.aiPrompt_Campaign_select}?CampaignID=${campaign_id}`)
+            if (res.isSuccess) {
+                setExistingCampaignDetails(res)
+            }
+        } catch (error) {
+            console.error('API Error: ',error)
+            alert(ApiService.handleError(error))
         }
     }
 
@@ -168,6 +184,7 @@ export const useProjectFormData = () => {
         isAssetNameExists,
         listProjects,
         listCampaigns,
+        existingCampaignDetails,
         onChangeAssetDetails,
         assetDetails,
         handleChangeAssetDetails

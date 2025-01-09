@@ -9,7 +9,7 @@ import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
-import { AssetHtmlProps, Template } from '@/types/templates';
+import { AssetHtmlProps, CampaignSelectResponse, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { emailType, keyPoints, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
@@ -32,6 +32,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
+    const [existingCampaignDetails,setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
+    
 
     useEffect(() => {
         refFormData.current = {
@@ -39,6 +41,11 @@ const EmailPage = ({ params }: EmailPageProps) => {
             product: params.project_name
         }
     }, [])
+
+    const fetchExistingCampaignData = (data:CampaignSelectResponse | null) => {
+        console.log("fetchExistingCampaignData :",data);
+        setExistingCampaignDetails(data)
+    }
 
     const doesFormCompleted = (step:number,status?:boolean) => {
         if (step===1) {
@@ -114,7 +121,10 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
                 >
-                    <SectionAssetDetails validatingTheData={doesFormCompleted} />
+                    <SectionAssetDetails 
+                        validatingTheData={doesFormCompleted} 
+                        returnCampaignDetails={fetchExistingCampaignData}    
+                    />
                 </Accordion>
             </div>
             <div className='mt-[25px]'>

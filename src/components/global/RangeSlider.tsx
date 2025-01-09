@@ -11,7 +11,7 @@ interface RangeProp {
     defaultValue?: number
 }
 
-const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '100', steps = 5, label = 'range', onSelectValue = () => { }, defaultValue = 0 }) => {
+const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '100', steps = 10, label = 'range', onSelectValue = () => { }, defaultValue = 0 }) => {
     const singleStepRange = parseInt(maxValue) / steps
 
     const [value, setValue] = useState<number>(0)
