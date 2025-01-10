@@ -208,7 +208,8 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                 <div className='w-[90vw] bg-white rounded-md relative flex flex-col'>
                     <div className='flex flex-row flex-1'>
                         {assetBlock.blockHTMLGenerated ? <div className='p-1 max-w-[50vw] h-[86vh] overflow-y-scroll scrollbar-hide relative border-r border-solid border-[#D9D9D9]'>
-                            <ShadowDomContainer htmlContent={assetVersion.layoutHTMLGenerated.replace("[(blocks)]", assetBlock.blockHTMLGenerated || "")}></ShadowDomContainer>
+                            {/* <ShadowDomContainer htmlContent={assetVersion.layoutHTMLGenerated.replace("[(blocks)]", assetBlock.blockHTMLGenerated || "")}></ShadowDomContainer> */}
+                            <iframe className='w-[40vw] h-[100%]' srcDoc={assetVersion.layoutHTMLGenerated.replace("[(blocks)]", assetBlock.blockHTMLGenerated || "")} />
                         </div> : null}
                         <div className='flex-1 h-[86vh] overflow-y-scroll scrollbar-hide px-5 py-2'>
                             <div className='mt-7' />
