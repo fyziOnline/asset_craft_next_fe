@@ -9,12 +9,12 @@ const AssetsToApprove: React.FC = () => {
     console.log('assetToApprove: ', assetToApprove);
 
     const assetsToApprove = assetToApprove.map((data) => ({
-        ProjectName: data.projectName,
-        CampaignName: data.campaignName,
-        AssetName: data.assetName,
-        AssetType: data.assetTypeName,
-        ModifiedOn: data.modifiedOn,
-        CreatedOn: data.createdOn
+        projectName: data.projectName,
+        campaignName: data.campaignName,
+        assetTypeIcon: data.assetTypeName,
+        assetName: data.assetName,
+        modifiedOn: data.modifiedOn,
+        createdOn: data.createdOn
     }))
 
     const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Current Status"]
