@@ -53,7 +53,7 @@ const SubmitVersionModel = ({ isShowSubmitVer, setIsShowSubmitVer, handleSubmitV
     if (!isShowSubmitVer) return null;
 
     return (
-        <div className="z-100 absolute left-0 right-0 bottom-0 top-0 bg-black bg-opacity-55 flex items-center justify-center">
+        <div className="z-[300] absolute left-0 right-0 bottom-0 top-0 bg-black bg-opacity-55 flex items-center justify-center">
             <div ref={modalRef} className="w-[900px] relative bg-white rounded-3xl">
                 <div className="flex items-center px-[50px] pt-[25px]">
                     <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold font-['Inter'] leading-[17.11px]">

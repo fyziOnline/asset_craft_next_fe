@@ -119,7 +119,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             {/* Please provide the necessary information to generate AI content */}
                         </p>
                     </div>
-                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[79vh]'>
+                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[82vh]'>
                         {renderAssetGenerateContent()}
                     </div>
                 </div>
