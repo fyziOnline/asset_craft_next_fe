@@ -14,7 +14,7 @@ import { useGenerateTemplate } from "./useGenerateTemplate";
 
 export const useEditHTMLContent = () => {
     const router = useRouter();
-    const { contextData, setContextData , setError} = useAppData();
+    const { contextData, setContextData, setError } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
     const [isShowSubmitVer, setIsShowSubmitVer] = useState(false)
@@ -117,7 +117,7 @@ export const useEditHTMLContent = () => {
                 }
             }
         }
-        setShowSave(!isShowSave)
+        setShowSave(false)
     }
 
     const handleChangeTextVersion = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
