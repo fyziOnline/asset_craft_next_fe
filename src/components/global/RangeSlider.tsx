@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, FC, useRef, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 
 interface RangeProp {
     minValue?: string
@@ -14,8 +14,10 @@ interface RangeProp {
 const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '100', steps = 10, label = 'range', onSelectValue = () => { }, defaultValue = 7 }) => {
     const singleStepRange = parseInt(maxValue) / steps
 
-    const [value, setValue] = useState<number>(defaultValue * singleStepRange)
-    const [valueToDisplay, setValueToDisplay] = useState<number>(defaultValue)
+    const clampedDefaultValue = defaultValue * singleStepRange 
+    
+    const [value, setValue] = useState<number>(clampedDefaultValue)
+    const [valueToDisplay, setValueToDisplay] = useState<number>(clampedDefaultValue)
     const selectRangeRef = useRef<HTMLParagraphElement>(null)
 
     const setSnapToValue = (value: number) => {
@@ -36,6 +38,15 @@ const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '100', steps = 
             selectRangeRef.current.innerText = valueToDisplay.toString()
         }
     }
+
+    useEffect(() => {
+        if (selectRangeRef.current) {
+            selectRangeRef.current.innerText = defaultValue.toString();
+        }
+        setValue(clampedDefaultValue)
+        setValueToDisplay(clampedDefaultValue)
+    }, [defaultValue]);
+
 
     return (
         <div className='relative'>

@@ -8,7 +8,7 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
-import { AssetHtmlProps, Template } from '@/types/templates';
+import { AssetHtmlProps, CampaignSelectResponse, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
@@ -32,6 +32,8 @@ const LandingPage = ({ params }: LandingPageProps) => {
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
+    const [existingCampaignDetails,setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
+    
 
     useEffect(() => {
         refFormData.current = {
@@ -39,6 +41,31 @@ const LandingPage = ({ params }: LandingPageProps) => {
             product: params.project_name
         }
     }, [])
+
+    const updateShowList = (value: number) => {
+        setIsShowList((prev) => {
+            if (prev.includes(value)) {
+                return prev.filter((item) => item !== value);
+            } else {
+                return [...prev, value];
+            }
+        })
+    }
+
+    const fetchExistingCampaignData = (data:CampaignSelectResponse | null) => {
+            setExistingCampaignDetails(data)
+            refFormData.current = {
+                ...refFormData.current,
+                campaignGoal : data?.aIPromptCampaign.campaignGoal,
+                targetAudience : data?.aIPromptCampaign.targetAudience,
+                webUrl : data?.aIPromptCampaign.webUrl,
+                outputScale:data?.aIPromptCampaign.outputScale
+                // fileSelected:data?.aIPromptCampaign.fileName,
+            }
+            if (isShowList.includes(1) || checkedList.includes(1)) {
+                doesFormCompleted(2)
+            }
+    }
 
     const doesFormCompleted = (step:number,status?:boolean) => {
         if (step===1) {
@@ -113,7 +140,10 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
                 >
-                    <SectionAssetDetails validatingTheData={doesFormCompleted} />
+                    <SectionAssetDetails 
+                        validatingTheData={doesFormCompleted}
+                        returnCampaignDetails={fetchExistingCampaignData}    
+                    />
                 </Accordion>
             </div>
             <div className='mt-[25px]'>
@@ -122,6 +152,10 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     isRequire={true}
                     HeaderTitle="Campaign Overview"
                     checked={checkedList.includes(1)}
+                    handleShowContent={()=>{
+                        updateShowList(1)
+                        doesFormCompleted(2)
+                    }}
                     >
                     <div>
                         {/* <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
@@ -143,6 +177,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                         doesFormCompleted(2)
                                     }}
                                     isShowOther={false}
+                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.campaignGoal : "" }
                                     selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
@@ -157,6 +192,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                         doesFormCompleted(2)
                                     }}
                                     isShowOther={false}
+                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.targetAudience : "" }
                                     selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
                         </div>
@@ -166,7 +202,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                 <TextField handleChange={(e) => { 
                                     handleInputText(e, "webUrl") 
                                     // doesFormCompleted(4)
-                                }}
+                                }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
                                     placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                                 <DragAndDrop onFileSelect={(file) => {
                                     refFormData.current = {
@@ -186,7 +222,10 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     isRequire={true}
                     HeaderTitle="Key Message & Content"
                     checked={checkedList.includes(2)}
-                    handleShowContent={()=>{doesFormCompleted(3,true)}}
+                    handleShowContent={()=>{
+                        doesFormCompleted(3,true)
+                        updateShowList(2)
+                    }}
                     >
                     <div>
                         <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
@@ -216,7 +255,10 @@ const LandingPage = ({ params }: LandingPageProps) => {
                 <Accordion
                     HeaderTitle="Content Brief"
                     checked={checkedList.includes(3)}
-                    handleShowContent={()=>{doesFormCompleted(4)}}
+                    handleShowContent={()=>{
+                        doesFormCompleted(4)
+                        updateShowList(3)
+                    }}
                     >
                     <div>
                         {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
@@ -265,7 +307,8 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                     ...refFormData.current,
                                     outputScale: value
                                 }
-                            }}></RangeSlider>
+                            }} defaultValue = {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.outputScale : 7 }
+                            ></RangeSlider>
                         </div>
                 </Accordion>
             </div>

@@ -8,7 +8,7 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
-import { AssetHtmlProps, Template } from '@/types/templates';
+import { AssetHtmlProps, CampaignSelectResponse, Template } from '@/types/templates';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
@@ -32,6 +32,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
+    const [existingCampaignDetails,setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
 
     useEffect(() => {
         refFormData.current = {
@@ -39,6 +40,31 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
             product: params.project_name
         }
     }, [])
+
+    const updateShowList = (value: number) => {
+        setIsShowList((prev) => {
+            if (prev.includes(value)) {
+                return prev.filter((item) => item !== value);
+            } else {
+                return [...prev, value];
+            }
+        })
+    }
+
+    const fetchExistingCampaignData = (data:CampaignSelectResponse | null) => {
+            setExistingCampaignDetails(data)
+            refFormData.current = {
+                ...refFormData.current,
+                campaignGoal : data?.aIPromptCampaign.campaignGoal,
+                targetAudience : data?.aIPromptCampaign.targetAudience,
+                webUrl : data?.aIPromptCampaign.webUrl,
+                outputScale:data?.aIPromptCampaign.outputScale
+                // fileSelected:data?.aIPromptCampaign.fileName,
+            }
+            if (isShowList.includes(1) || checkedList.includes(1)) {
+                doesFormCompleted(2)
+            }
+    }
 
     
     const doesFormCompleted = (step:number,status?:boolean) => {
@@ -113,7 +139,10 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
                 >
-                    <SectionAssetDetails validatingTheData={doesFormCompleted}/>
+                    <SectionAssetDetails 
+                        validatingTheData={doesFormCompleted}
+                        returnCampaignDetails={fetchExistingCampaignData}
+                    />
                 </Accordion>
             </div>
             <div className='mt-[25px]'>
@@ -122,6 +151,10 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     isRequire={true}
                     HeaderTitle="Campaign Overview"
                     checked={checkedList.includes(1)}
+                    handleShowContent={()=>{
+                        updateShowList(1)
+                        doesFormCompleted(2)
+                    }}
                     >
                     <div>
                         <div className='flex items-start gap-[16%]'>
@@ -135,6 +168,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         }
                                         doesFormCompleted(2)
                                     }}
+                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.campaignGoal : "" }
                                     selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
@@ -148,6 +182,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         }
                                         doesFormCompleted(2)
                                     }}
+                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.targetAudience : "" }
                                     selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
                         </div>
@@ -156,7 +191,8 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                 <TextField handleChange={(e) => { 
                                     handleInputText(e, "webUrl") 
                                     // doesFormCompleted(4)
-                                }}
+                                }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
+
                                     placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                                 <DragAndDrop onFileSelect={(file) => {
                                     refFormData.current = {
@@ -177,7 +213,10 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     isRequire={true}
                     HeaderTitle="Post Context"
                     checked={checkedList.includes(2)}
-                    handleShowContent={()=>{doesFormCompleted(3,true)}}
+                    handleShowContent={()=>{
+                        doesFormCompleted(3,true)
+                        updateShowList(2)
+                    }}
                     >
                     <div className='max-w-[90%]'>
                         <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
@@ -221,7 +260,10 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                 <Accordion
                     HeaderTitle="Content Brief"
                     checked={checkedList.includes(3)}
-                    handleShowContent={()=>{doesFormCompleted(4)}}
+                    handleShowContent={()=>{
+                        doesFormCompleted(4)
+                        updateShowList(3)
+                    }}
                     >
                     <div>
                         {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
@@ -265,7 +307,8 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                     ...refFormData.current,
                                     outputScale: value
                                 }
-                            }}></RangeSlider>
+                            }} defaultValue = {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.outputScale : 7 }
+                            ></RangeSlider>
                         </div>
                 </Accordion>
             </div>
