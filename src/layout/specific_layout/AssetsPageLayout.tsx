@@ -47,7 +47,14 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
               ))}
             </div>
             :
-            <Table columnWidths={columnWidthsTable} handleClick={handleClick} fieldClick={fieldClick} listItems={campaign_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />}
+            <Table
+              isPagination={true}
+              columnWidths={columnWidthsTable}
+              handleClick={handleClick}
+              fieldClick={fieldClick}
+              listItems={campaign_data}
+              tableHeadings={tableHeadings}
+              arrowInHeadings={headersHavingToggle} />}
         <div className='h-[10vh]' />
       </div>
     </>

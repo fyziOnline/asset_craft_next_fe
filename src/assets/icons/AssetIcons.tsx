@@ -164,16 +164,16 @@ export const MailIcon:FC<IconProps> = ({
             id="Vector" 
             d="M18.8428 6.97705L6.84277 18.9771" 
             stroke={color}
-            stroke-width="2" 
+            strokeWidth="2" 
             stroke-linecap="round" 
-            stroke-linejoin="round"/>
+            strokeLinejoin="round"/>
           <path 
             id="Vector_2" 
             d="M6.84277 6.97705L18.8428 18.9771" 
             stroke={color}
-            stroke-width="2" 
+            strokeWidth="2" 
             stroke-linecap="round" 
-            stroke-linejoin="round"/>
+            strokeLinejoin="round"/>
         </g>
       </svg>
     );

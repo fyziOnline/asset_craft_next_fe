@@ -97,12 +97,12 @@ const Search: React.FC<SearchProps> = ({
 
     return (
         <div ref={searchRef} className={`relative flex flex-col w-[300px] ${customOuterClass} border-sectionGrey-darker border-solid border-[1px] rounded-full p-2`}>
-            <div onClick={handleToggle} className={`flex items-center gap-1 bg-sectionGrey px-2 cursor-pointer ${isOpen ? "rounded-t-[16px] " : "rounded-full"}`}>
+            <div onClick={handleToggle} className={`flex items-center gap-1 bg-white px-2 cursor-pointer ${isOpen ? "rounded-t-[16px] " : "rounded-full"}`}>
                 <SearchIcon customColor='#00A881' />
                 {selectValue?.label ?
                     <div className='flex items-start px-1 w-full '>
-                        <div className='flex items-center gap-[10px] ring-2 ring-emerald-500 ring-offset-0 rounded-full p-[5px]' >
-                            <div className={`flex items-center justify-center w-5 h-5 rounded-full`} style={selectValue.IconColor ? { backgroundColor: selectValue.IconColor } : {}}>
+                        <div className='flex items-center gap-[10px] ring-1 ring-emerald-500 ring-offset-0 rounded-full p-[5px]' >
+                            <div className='flex items-center justify-center w-5 h-5 rounded-full bg-[#D2D2D2] text-white'>
                                 <span className='text-sm'>{selectValue.firstLetter}</span>
                             </div>
                             <p className='text-sm'>{selectValue.label}</p>
@@ -114,7 +114,7 @@ const Search: React.FC<SearchProps> = ({
                         value={searchQuery}
                         onChange={handleSearchChange}
                         placeholder={placeHolder}
-                        className='bg-transparent border-none outline-none w-full h-full px-1 placeholder-[#6F6F6F]'
+                        className='bg-white border-none outline-none w-full h-full px-1 placeholder-[#6F6F6F]'
                     />
                 }
                 <span className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}><SearchDownArrow /></span>
@@ -125,9 +125,8 @@ const Search: React.FC<SearchProps> = ({
                         <div
                             key={index}
                             onClick={() => handleOptionSelect(data)}
-                            className='flex items-center gap-[10px] w-full h-10 border-t-[1px] border-black px-[14px] cursor-pointer'
-                        >
-                            <div className={`flex items-center justify-center w-6 h-6 my-1 rounded-full`} style={data.IconColor ? { backgroundColor: data.IconColor } : {}}>
+                            className='flex items-center gap-[10px] w-full h-10 border-b-[1px] border-[#D2D2D2] px-[14px] py-2 cursor-pointer'>
+                            <div className='flex text-white items-center justify-center w-6 h-6 my-1 rounded-full bg-[#D2D2D2]'>
                                 {data.firstLetter}
                             </div>
                             <p className='text-base'>{data.label}</p>

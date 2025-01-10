@@ -1,21 +1,24 @@
 'use client'
 
-import { useAppData } from "@/context/AppContext"
 import { useDashboard } from "@/hooks/useDashboard"
+import { useOverflowHidden } from "@/hooks/useOverflowHidden"
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation"
 import React, { FC, useEffect, useState } from "react"
 
+const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Current Status"]
+const headerHavingSortingToggle = ["Project Name", "Created On"]
+const fieldClick = "assetID"
+
 const AssetInProgress: FC = () => {
+  useOverflowHidden()
   const router = useRouter();
-  const { setContextData } = useAppData();
   const { dashboardAssets } = useDashboard()
   const [assetsDisplayTable, setAssetsDisplayTable] = useState<any[]>([])
 
   useEffect(() => {
     const assetInProgress = dashboardAssets.filter(asset => asset.status === "In Progress" || asset.status === "On Review")
-    console.log('assetInProgress: ', assetInProgress);
 
     const newAssetsDisplayTable = assetInProgress.map((data) => ({
       projectName: data.project,
@@ -28,10 +31,6 @@ const AssetInProgress: FC = () => {
     }));
     setAssetsDisplayTable(newAssetsDisplayTable)
   }, [dashboardAssets])
-
-  const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Current Status"]
-  const headerHavingSortingToggle = ["Project Name", "Created On"]
-  const fieldClick = "assetID"
 
   const handleClick = (assetID: any) => {
     console.log("item", assetID);
