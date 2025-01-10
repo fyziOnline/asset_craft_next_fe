@@ -36,26 +36,28 @@ const CallScriptPage = () => {
     ]
 
 
-     const doesFormCompleted = (step:number,status?:boolean) => {
-            if (step===1) {
-                setCheckedList((prev) =>
-                    status
-                      ? prev.includes(0) ? prev : [...prev, 0] 
-                      : prev.filter((item) => item !== 0)
-                  ) 
-            }
-            if(step===2) {
-                setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
-            }
-            if (step===3) {
-                setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
-            }
-            if (step===4) {
-                setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
-            } if (step===5) {
-                setCheckedList((prev) => (prev.includes(4) ? prev : [...prev, 4]))
-            }
+    const doesFormCompleted = (step: number, status?: boolean) => {
+        if (step === 1) {
+            setCheckedList((prev) =>
+                status
+                    ? prev.includes(0) ? prev : [...prev, 0]
+                    : prev.filter((item) => item !== 0)
+            )
         }
+        if (step === 2) {
+            setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
+        }
+        if (step === 3) {
+            setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
+        }
+        if (step === 4) {
+            setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
+        } if (step === 5) {
+            setCheckedList((prev) => (prev.includes(4) ? prev : [...prev, 4]))
+        }
+    }
+
+    const fetchExistingCampaignData = () => {}
 
 
     const handleGenerate = async () => {
@@ -101,7 +103,10 @@ const CallScriptPage = () => {
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
                 >
-                    <SectionAssetDetails validatingTheData={doesFormCompleted} />
+                    <SectionAssetDetails
+                        validatingTheData={doesFormCompleted}
+                        returnCampaignDetails={fetchExistingCampaignData}
+                    />
                 </Accordion>
             </div>
             <div className='mt-[40px]'>
@@ -109,8 +114,8 @@ const CallScriptPage = () => {
                 <Accordion
                     HeaderTitle="Call Objective and Target Audience"
                     checked={checkedList.includes(1)}
-                    handleShowContent={()=>{doesFormCompleted(2)}}
-                    >
+                    handleShowContent={() => { doesFormCompleted(2) }}
+                >
                     <div className='max-w-[90%]'>
                         <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
                         <TextField placeholder="What is the purpose of the call? What would you like to communicate?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
@@ -128,8 +133,8 @@ const CallScriptPage = () => {
                 <Accordion
                     HeaderTitle="Tone, Style, and Objections"
                     checked={checkedList.includes(2)}
-                    handleShowContent={()=>{doesFormCompleted(3)}}
-                    >
+                    handleShowContent={() => { doesFormCompleted(3) }}
+                >
                     <div className='max-w-[90%] flex'>
                         <div className='flex-1'>
                             <ChildrenTitle title='What tone should the call have?'></ChildrenTitle>
@@ -143,8 +148,8 @@ const CallScriptPage = () => {
                 <Accordion
                     HeaderTitle="Content Brief"
                     checked={checkedList.includes(3)}
-                    handleShowContent={()=>{doesFormCompleted(4)}}
-                    >
+                    handleShowContent={() => { doesFormCompleted(4) }}
+                >
                     <div>
                         <ChildrenTitle title='Prospect Details' customClass="text-[18px]" ></ChildrenTitle>
                         <ChildrenTitle title='What is the prospect’s company and role?' ></ChildrenTitle>
@@ -164,9 +169,9 @@ const CallScriptPage = () => {
                         <TextField placeholder={`"Generate a call-to-action to schedule a demo. Highlight the value of the demo in showcasing how HPE GreenLake can optimize cloud operations. Mention a 30-minute session to walk through real-world applications for their team."`} rows={2}></TextField>
                     </div>
                     <div className='flex-1'>
-                            <ChildrenTitle title='How creative you want the output?'></ChildrenTitle>
-                            <RangeSlider></RangeSlider>
-                        </div>
+                        <ChildrenTitle title='How creative you want the output?'></ChildrenTitle>
+                        <RangeSlider></RangeSlider>
+                    </div>
                 </Accordion>
             </div>
             <div className='flex justify-end my-[30px]'>

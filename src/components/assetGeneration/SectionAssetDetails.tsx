@@ -8,7 +8,7 @@ import { CampaignSelectResponse, ProjectDetails } from "@/types/templates"
 
 type SectionAssetDetailsProps = {
   validatingTheData: (step: number,status : boolean) => void
-  returnCampaignDetails : (data:CampaignSelectResponse|null) => void
+  returnCampaignDetails: (data:CampaignSelectResponse|null) => void
 };
 
 const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,returnCampaignDetails }) => {
