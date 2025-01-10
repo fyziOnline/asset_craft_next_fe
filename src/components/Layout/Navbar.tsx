@@ -30,6 +30,12 @@ const navOption: NavOptions[] = [
       component:<CompetedIcon />,
       id:'asset-comp'
     },
+    {
+        label : "Assets to Approve",
+        href : "/assets-to-approve",
+        component : <AssetIcon />,
+        id : "asset-approve"
+    }
 ]
 
 const bottomOptions: NavOptions[] = [
