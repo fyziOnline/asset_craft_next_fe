@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/hooks/useProfile';
+import { SignOutIcon, UserDetailsIcon } from '@/assets/icons/AppIcons';
 
 interface FormValues {
     name: string;
@@ -22,7 +23,7 @@ interface FormValues {
 
 const page: React.FC = () => {
     const router = useRouter()
-    const { userDetails , updateUserDetails } = useProfile()
+    const { userDetails, updateUserDetails } = useProfile()
     const [formValues, setFormValues] = useState<FormValues>({
         name: '',
         email: '',
@@ -39,12 +40,12 @@ const page: React.FC = () => {
             setFormValues({
                 name: userDetails.name || '',
                 email: userDetails.email,
-                userId: userDetails.userID ,
+                userId: userDetails.userID,
                 userRole: userDetails.userRole,
                 country: userDetails.country || '',
                 company: userDetails.company || '',
                 timeZone: userDetails.timeZone || '',
-                isActive: userDetails.isActive, 
+                isActive: userDetails.isActive,
             });
         }
     }, [userDetails]);
@@ -57,7 +58,7 @@ const page: React.FC = () => {
         }));
 
         console.log("formValues", formValues);
-        
+
     };
 
     const handleLogout = () => {
@@ -102,11 +103,11 @@ const page: React.FC = () => {
                     </div>
                 </div>
 
-                <div className='w-full flex items-end justify-end mt-[-15px]'>
-                    <button onClick={ () => updateUserDetails(formValues)} className='bg-green-100 text-white font-light text-base px-6 py-2 rounded-md'>Update</button>
-                </div>
+                {/* <div className='w-full flex items-end justify-end mt-[-15px]'>
+                    <button onClick={() => updateUserDetails(formValues)} className='bg-green-100 text-white font-light text-base px-6 py-2 rounded-md'>Update</button>
+                </div> */}
 
-                <div className='flex flex-wrap gap-x-6 gap-y-4 mt-4'>
+                <div className='flex flex-wrap gap-x-6 gap-y-4 mt-20'>
                     <div className='flex flex-col flex-1'>
                         <label className='text-base font-light text-black' htmlFor="">Full Name</label>
                         <div className='bg-grey-100 p-1 rounded-md px-4 py-2 mt-3'>
@@ -151,7 +152,7 @@ const page: React.FC = () => {
                         </div>
                     </div>
                     <div className='flex flex-col flex-1'>
-                        <label className='text-base font-light text-black' htmlFor="">Time Zone</label>
+                        {/* <label className='text-base font-light text-black' htmlFor="">Time Zone</label>
                         <div className='bg-grey-100  rounded-md px-4 py-2 mt-3'>
                             <input
                                 name='timeZone' 
@@ -161,19 +162,30 @@ const page: React.FC = () => {
                                 value={formValues.timeZone}
                                 onChange={handleInputChange}
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
-                <div onClick={handleLogout} className='flex gap-2 float-end w-fit mt-6 cursor-pointer text-green-100'>
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="#00a881" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M16 17L21 12L16 7" stroke="#00a881" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M21 12H9" stroke="#00a881" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </span>
-                    <p className='text-base font-medium'>Sign Out</p>
+                <div className='flex items-center justify-end gap-2 mt-2'>
+                    <Button
+                        buttonText='Update'
+                        customClass='border-2 border-green-300 px-6 py-1'
+                        textColor='text-green-300'
+                        backgroundColor='bg-white'
+                        iconColor='#01A982'
+                        IconComponent={<UserDetailsIcon />}
+                        showIcon={false}
+                        handleClick={() => updateUserDetails(formValues)}
+                    />
+
+                    <Button
+                        IconComponent={<SignOutIcon />}
+                        buttonText='Sign Out'
+                        customClass='px-6 py-[5px]'
+                        iconColor='#fff'
+                        handleClick={handleLogout}
+                        showIcon={false}
+                    />
                 </div>
 
             </div>

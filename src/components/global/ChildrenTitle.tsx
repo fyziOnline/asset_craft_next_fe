@@ -7,7 +7,7 @@ interface ChildrenTitleProps {
 }
 
 const ChildrenTitle: React.FC<ChildrenTitleProps> = ({ title = "", customClass = "" }) => {
-    return (<p className={`font-semibold text-[#160647] text-base tracking-[0] leading-5 whitespace-nowrap mb-[12px] ${customClass}`}>{title}</p>)
+    return (<p className={`font-semibold text-[#160647] text-base tracking-[0] leading-5 text-wrap whitespace-nowrap mb-[12px] ${customClass}`}>{title}</p>)
 }
 
 export default ChildrenTitle;
