@@ -1,6 +1,7 @@
 'use client';
 
 import { EmailIcon, LandingAssetIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from '@/assets/icons/TableIcon';
+import { Pagination, Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 
 /**
@@ -12,9 +13,7 @@ import React, { useEffect, useState } from 'react'
  * @param {Array<string>} [props.arrowInHeadings=[]] - An optional array of column headings that will display sortable arrows, allowing the user to sort the data by those columns.
  * @param {Array<string>} [props.columnWidths=[]] - An optional array of column widths, where each width corresponds to a column. If specified, it controls the width of each column using CSS units (e.g., '1fr', '200px'). Defaults to equal width for each column if not provided.
  * eg:- columnWidths={['4fr', '1fr', '1fr']}
- * @param {string} [props.IconAssetName] - An optional prop to specify a column name to display an icon (e.g., "Email_1", "LinkedIn_1").
- * @param {React.ReactNode} [props.IconComponent] - An optional React component to render as an icon next to the data for the specified column.
- * 
+ * @param {boolean} [props.isPagination] - Pagination (default is false) 
  * @returns {JSX.Element} A JSX element representing the table, with sortable columns and optional icon rendering.
  */
 
@@ -27,14 +26,22 @@ interface TableProps {
   tableHeadings: string[];
   arrowInHeadings?: string[];
   columnWidths?: string[];
-  IconAssetName?: string;
   fieldClick?: string;
   tablePlaceitems?: string;
   handleClick?: (value: any) => void;
-  IconComponent?: React.ReactNode;
+  isPagination?: boolean;
 }
 
-const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings = [], columnWidths = [], IconAssetName, IconComponent, fieldClick, tablePlaceitems = "flex-start", handleClick = () => { } }) => {
+const Table: React.FC<TableProps> = ({ listItems,
+  tableHeadings,
+  arrowInHeadings = [],
+  columnWidths = [],
+  fieldClick,
+  tablePlaceitems = "flex-start",
+  handleClick = () => { },
+  isPagination = false
+}) => {
+  const [page, setPage] = React.useState(1);
   const [sortListData, setSortListData] = useState<Options[]>(listItems);
   const [sortArrows, setSortArrows] = useState<{ [key: string]: boolean }>({ ...tableHeadings.reduce((acc, heading) => ({ ...acc, [heading]: true }), {}) });
 
@@ -104,6 +111,10 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
   // Set dynamic widths for columns or fallback to equal width if not provided
   const gridColumnStyle = columnWidths.length === getListItemsHeadings.length ? columnWidths.join(' ') : `repeat(${visibleHeadings.length}, 1fr)`;
 
+  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+  };
+
   return (
     <div className='w-full'>
       <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}>
@@ -122,7 +133,7 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
       </div>
 
       <div className='grid gap-[10px]'>
-        {sortListData.map((data, index) => {
+        {(isPagination ? sortListData.slice((page - 1) * 10, ((page - 1) * 10) + 10) : sortListData).map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
           const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
           return (
@@ -155,6 +166,11 @@ const Table: React.FC<TableProps> = ({ listItems, tableHeadings, arrowInHeadings
           )
         })}
       </div>
+      {isPagination ? <div className='flex justify-center mt-2'>
+        <Stack spacing={2}>
+          <Pagination count={Math.floor(listItems.length / 10) + (listItems.length % 10 === 0 ? 0 : 1)} showFirstButton showLastButton onChange={handleChangePage} />
+        </Stack>
+      </div> : null}
     </div>
   )
 }
