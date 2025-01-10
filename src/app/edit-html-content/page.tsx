@@ -81,7 +81,7 @@ const Page = () => {
             }
         })
 
-        return versionSelected.layoutHTMLGenerated.replace("[(blocks)]", htmlContent)
+        return versionSelected.layoutHTMLGenerated?.replace("[(blocks)]", htmlContent) || '<div>An error occurred, please try again later.</div>'
     }
 
     const handleDropDownList = () => {
