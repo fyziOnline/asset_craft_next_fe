@@ -24,8 +24,8 @@ const AddVersionModel = ({ isShowAddVer, setIsShowAddVer, handleAddVersion, hand
     if (!isShowAddVer) return null;
 
     return (
-        <div className="z-20 fixed left-0 right-0 h-[82vh] bg-black bg-opacity-55 flex items-center justify-center">
-            <div ref={modalRef} className="w-[900px] relative bg-white rounded-3xl">
+        <div className=" fixed left-0 right-0 h-[82vh] bg-black bg-opacity-55 flex items-center justify-center">
+            <div ref={modalRef} className="z-[99] w-[900px] relative bg-white rounded-3xl">
                 <div className="flex items-center px-[50px] pt-[25px]">
                     <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold font-['Inter'] leading-[17.11px]">
                         Save new version as:

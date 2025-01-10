@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { ApiService } from '@/lib/axios_generic';
 import { nkey } from '@/data/keyStore';
 import { urls } from '@/apis/urls';
+import { useAppData } from '@/context/AppContext';
 
 interface ResLoginProps {
     isSuccess: boolean,
@@ -19,6 +20,7 @@ export const useLogin = () => {
     const emailRef = useRef("");
     const loginRef = useRef<ResLoginProps>();
     const otpRef = useRef("");
+    const { setError } = useAppData()
 
     useEffect(() => {
         const email_login = Cookies.get(nkey.email_login);
@@ -44,8 +46,12 @@ export const useLogin = () => {
                 setIsOtpVisible(true);
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         } finally {
             setIsLoading(false);
         }
@@ -87,8 +93,12 @@ export const useLogin = () => {
                 alert("OTP code is incorrect!");
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         } finally {
             setIsLoading(false);
         }

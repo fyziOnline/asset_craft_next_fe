@@ -4,6 +4,7 @@ import { nkey } from "@/data/keyStore"
 import { ApiService } from "@/lib/axios_generic"
 import Cookies from 'js-cookie';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
+import { useAppData } from '@/context/AppContext';
 
 
 interface UserDetailsProps {
@@ -19,6 +20,7 @@ interface UserDetailsProps {
 
 export const useProfile = () => {
     const { setShowLoading } = useLoading()
+    const { setError } = useAppData()
     const [userDetails, setUserDetails] = useState<UserDetailsProps | null>(null);
 
     useEffect(() => {
@@ -34,7 +36,12 @@ export const useProfile = () => {
                 setUserDetails(response.userProfile)
             }
         } catch (error) {
-            alert(ApiService.handleError(error))
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
             return false
         } finally {
             setShowLoading(false)
@@ -51,7 +58,12 @@ export const useProfile = () => {
                 await getUserDetails()
             }
         } catch (error) {
-            alert(ApiService.handleError(error))
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
             return false
         } finally {
             setShowLoading(false)

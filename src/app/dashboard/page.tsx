@@ -40,6 +40,9 @@ const Dashboard: FC = () => {
 
   const { setContextData } = useAppData()
 
+  console.log("pendingApproval" , pendingApproval);
+  
+
   useEffect(() => {
     setContextData({
       isRegenerateHTML: false,
@@ -97,7 +100,9 @@ const Dashboard: FC = () => {
         </div>
         <p className="text-base font-bold tracking-wide">Overview:</p>
       </div> */}
-      <div className="w-full px-8 flex items-center justify-between mt-5 gap-10">
+
+      {/* <div className="w-full px-8 flex items-center justify-between mt-5 gap-10"> */}
+      <div className="w-[100%] grid grid-cols-3 lg:grid-cols-5 gap-10 px-8">
         {updatedDashboardData.map((data, index) => (
           <DashboardCard
             key={index}
@@ -112,7 +117,7 @@ const Dashboard: FC = () => {
 
       <div className="pl-8 pt-5 flex w-full mb-32">
         <div className="w-[70%] border-[#D9D9D9]">
-          <div>
+          <div className="w-[140%] lg:w-full border-b border-[#D9D9D9]">
             <p className="text-lg font-bold tracking-wide">
               What would you like to create today?
             </p>
@@ -137,7 +142,7 @@ const Dashboard: FC = () => {
             <div className="mt-5">
               <p className="text-lg font-bold tracking-wide">Recent Assets:</p>
             </div>
-            <div className="overflow-y-scroll h-[50vh] scrollbar-hide">
+            <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
                 <Table fieldClick="assetID" handleClick={(assetID) => {
                   router.push(`/edit-html-content?assetID=${assetID}`)
@@ -145,13 +150,11 @@ const Dashboard: FC = () => {
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
-              <div className="h-[15vh]" />
             </div>
-
           </div>
         </div>
 
-        <div className="w-[27%]">
+        <div className="w-[27%] mt-[7.7rem] lg:mt-0">
           <p className="text-lg font-bold pl-10 pb-2">Pending Approval</p>
           <div className="w-full bg-[#F9F9F9] rounded-[14px] ml-4">
             <div className="p-5 max-h-[580px] overflow-y-auto">
@@ -159,10 +162,10 @@ const Dashboard: FC = () => {
               {pendingApproval && pendingApproval.length > 0 ? (
                 pendingApproval.map((data, index) => (
                   <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
-                    <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.name}</p>
+                    <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
                     <div className="flex items-center justify-between mt-2">
                       <p className="text-[#636363] font-thin text-sm">Last Updated :</p>
-                      <p className="text-[#636363] text-sm font-normal">{data.lastUpdated}</p>
+                      <p className="text-[#636363] text-sm font-normal">{formatDate(data.modifiedOn)}</p>
                     </div>
                   </div>
                 ))) : (

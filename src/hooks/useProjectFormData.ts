@@ -48,6 +48,7 @@ export const useProjectFormData = () => {
 
     // const campaignIDRef = useRef("")
     const isCampaignSelect = useRef(false)
+    const { setError } = useAppData()
     // const {contextData,setContextData} = useAppData()
 
     const [assetDetails, setAssetDetails] = useState<AssetDetails>({
@@ -77,8 +78,12 @@ export const useProjectFormData = () => {
                 setListProjects(newListProjects)
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     }
 
@@ -95,8 +100,12 @@ export const useProjectFormData = () => {
                 // handleCheckCampNameExists(res.campaigns as CampaignsProps[], assetDetails.campaign_name)
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     }
 
@@ -175,7 +184,12 @@ export const useProjectFormData = () => {
                 setListAssets(res_assets.assets as AssetsProps[])
             }
         } catch (error) {
-            console.log('getAssetAll: ', ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     }
 

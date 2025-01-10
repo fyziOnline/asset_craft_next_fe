@@ -208,7 +208,8 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                 <div className='w-[90vw] bg-white rounded-md relative flex flex-col'>
                     <div className='flex flex-row flex-1'>
                         {assetBlock.blockHTMLGenerated ? <div className='p-1 max-w-[50vw] h-[86vh] overflow-y-scroll scrollbar-hide relative border-r border-solid border-[#D9D9D9]'>
-                            <ShadowDomContainer htmlContent={assetVersion.layoutHTMLGenerated.replace("[(blocks)]", assetBlock.blockHTMLGenerated || "")}></ShadowDomContainer>
+                            {/* <ShadowDomContainer htmlContent={assetVersion.layoutHTMLGenerated.replace("[(blocks)]", assetBlock.blockHTMLGenerated || "")}></ShadowDomContainer> */}
+                            <iframe className='w-[40vw] h-[100%]' srcDoc={assetVersion.layoutHTMLGenerated.replace("[(blocks)]", assetBlock.blockHTMLGenerated || "")} />
                         </div> : null}
                         <div className='flex-1 h-[86vh] overflow-y-scroll scrollbar-hide px-5 py-2'>
                             <div className='mt-7' />
@@ -218,7 +219,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                     {!isEditPrompt ? <div onClick={() => {
                                         refAiPromptCurrent.current = assetBlockSelected.aiPrompt
                                         setIsEditPrompt(true)
-                                    }} className='p-1 cursor-pointer flex flex-row text-[14px] font-bold bg-[#01A982] rounded-[30px] px-3 py-1'>
+                                    }} className='p-1 cursor-pointer flex flex-row text-[14px] font-bold bg-custom-gradient-green rounded-[30px] px-3 py-1'>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 30 30" fill="none">
                                             <path d="M21.459 2.79243C22.2215 2.02993 23.2557 1.60156 24.334 1.60156C25.4123 1.60156 26.4465 2.02993 27.209 2.79243C27.9715 3.55492 28.3998 4.58909 28.3998 5.66743C28.3998 6.74576 27.9715 7.77993 27.209 8.54243L9.00065 26.7508L1.33398 28.6674L3.25065 21.0008L21.459 2.79243Z" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
@@ -231,7 +232,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                     onChange={handleInputAIPrompt}
                                     minRows={1}
                                     maxRows={3}
-                                    className="w-full p-3 border rounded-[10px] resize-none hover:border-[#01A982] focus:border-[#01A982] outline-none"
+                                    className={`w-full p-3 border rounded-[10px] resize-none focus:border-[#01A982] outline-none ${isEditPrompt ? `hover:border-[#01A982]` : ``}`}
                                 />
                                 <div className='flex justify-end mt-3'>
                                     {!isEditPrompt ? <Button

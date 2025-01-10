@@ -14,7 +14,7 @@ import { useGenerateTemplate } from "./useGenerateTemplate";
 
 export const useEditHTMLContent = () => {
     const router = useRouter();
-    const { contextData, setContextData } = useAppData();
+    const { contextData, setContextData, setError } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
     const [isShowSubmitVer, setIsShowSubmitVer] = useState(false)
@@ -67,7 +67,12 @@ export const useEditHTMLContent = () => {
                 alert("An error occurred, please try again later.")
             }
         } catch (error) {
-            alert(ApiService.handleError(error))
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         } finally {
             setShowLoading(false)
         }
@@ -81,8 +86,12 @@ export const useEditHTMLContent = () => {
                 setListApprovers(resListApprovers.approvers as ApproverProps[])
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     }
 
@@ -108,7 +117,7 @@ export const useEditHTMLContent = () => {
                 }
             }
         }
-        setShowSave(!isShowSave)
+        setShowSave(false)
     }
 
     const handleChangeTextVersion = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -134,8 +143,12 @@ export const useEditHTMLContent = () => {
                 }
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     };
 
@@ -158,8 +171,12 @@ export const useEditHTMLContent = () => {
                 }
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         } finally {
             setIsLoadingGenerate(false);
         }
@@ -182,8 +199,12 @@ export const useEditHTMLContent = () => {
             }
 
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         } finally {
             setShowLoading(false)
         }

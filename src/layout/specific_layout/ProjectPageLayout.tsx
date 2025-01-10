@@ -48,7 +48,14 @@ const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingP
             </div>
             : (
               project_data.length > 0 ?
-                <Table columnWidths={['8fr', '2fr', '1fr']} handleClick={onSelectingProjects} fieldClick={fieldClick} listItems={project_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />
+                <Table
+                  isPagination={true}
+                  columnWidths={['8fr', '2fr', '1fr']}
+                  handleClick={onSelectingProjects}
+                  fieldClick={fieldClick}
+                  listItems={project_data}
+                  tableHeadings={tableHeadings}
+                  arrowInHeadings={headersHavingToggle} />
                 : <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
             )
         }

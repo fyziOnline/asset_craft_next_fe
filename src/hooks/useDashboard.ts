@@ -99,7 +99,7 @@ type AssetDetails = {
 export const useDashboard = () => {
     const [clientAssetTypes, setClientAssetTypes] = useState<ClientAssetTypeProps[]>([])
     const { setShowLoading } = useLoading()
-    const { setContextData } = useAppData();
+    const { setContextData , setError } = useAppData();
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
@@ -145,8 +145,12 @@ export const useDashboard = () => {
                 setListProjects(newListProjects)
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     }
 
@@ -163,8 +167,12 @@ export const useDashboard = () => {
                 handleCheckCampNameExists(res.campaigns as CampaignsProps[], assetDetails.campaign_name)
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     }
 
@@ -178,8 +186,12 @@ export const useDashboard = () => {
                 setClientAssetTypes([{ assetTypeName: "All in One" }, ...res.clientAssetTypes])
             }
         } catch (error) {
-            console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     }
 
@@ -255,7 +267,12 @@ export const useDashboard = () => {
                 setListAssets(res_assets.assets as AssetsProps[])
             }
         } catch (error) {
-            console.log('getAssetAll: ', ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     }
 
@@ -315,7 +332,12 @@ export const useDashboard = () => {
             }
             return res_campaign_add.isSuccess
         } catch (error) {
-            alert(ApiService.handleError(error));
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
             return false
         }
         finally {
@@ -341,7 +363,12 @@ export const useDashboard = () => {
                 setUserDetails(response.userProfile)
             }
         } catch (error) {
-            alert(ApiService.handleError(error))
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
             return false
         }
     }
@@ -356,7 +383,12 @@ export const useDashboard = () => {
             }
 
         } catch (error) {
-            alert(ApiService.handleError(error))
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
             return false
         } finally {
             setShowLoading(false)
