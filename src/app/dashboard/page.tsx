@@ -142,7 +142,7 @@ const Dashboard: FC = () => {
             <div className="mt-5">
               <p className="text-lg font-bold tracking-wide">Recent Assets:</p>
             </div>
-            <div className="overflow-y-scroll h-[45vh] lg:h-[50vh] scrollbar-hide">
+            <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
                 <Table fieldClick="assetID" handleClick={(assetID) => {
                   router.push(`/edit-html-content?assetID=${assetID}`)
@@ -150,9 +150,7 @@ const Dashboard: FC = () => {
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
-              <div className="h-[15vh]" />
             </div>
-
           </div>
         </div>
 
