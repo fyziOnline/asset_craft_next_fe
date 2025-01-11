@@ -37,6 +37,7 @@ interface DropDownProps {
     isShowOther?: boolean;
     otherFieldText ?: string 
     otherFieldErrorText ?: string
+    preSelectValue ?: string
     onSelected?: (valueSelected: DropDownOptions) => void;
 }
 
@@ -47,6 +48,7 @@ const DropDown: React.FC<DropDownProps> = ({
     dropdownWidthClass = "",
     otherFieldText = 'Specify other target audiences',
     otherFieldErrorText = '',
+    preSelectValue,
     onSelected = () => { },
     isShowOther = true  }) => {
     const [selectedOption, setSelectedOption] = useState('')
@@ -54,6 +56,10 @@ const DropDown: React.FC<DropDownProps> = ({
     const [isOtherSelected, setIsOtherSelected] = useState(false)
 
     const dropdownRef = useRef<HTMLDivElement | null>(null)
+    
+    useEffect(()=>{
+        setSelectedOption(preSelectValue||'')
+    },[preSelectValue])
 
     const handleDropDownList = () => {
         setShowOptionList((prev) => !prev)

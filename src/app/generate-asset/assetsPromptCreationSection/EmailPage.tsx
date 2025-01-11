@@ -9,7 +9,7 @@ import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
-import { AssetHtmlProps, Template } from '@/types/templates';
+import { AssetHtmlProps, CampaignSelectResponse, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { emailType, keyPoints, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
@@ -32,6 +32,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
+    const [existingCampaignDetails,setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
+    
 
     useEffect(() => {
         refFormData.current = {
@@ -39,6 +41,31 @@ const EmailPage = ({ params }: EmailPageProps) => {
             product: params.project_name
         }
     }, [])
+
+    const updateShowList = (value: number) => {
+        setIsShowList((prev) => {
+            if (prev.includes(value)) {
+                return prev.filter((item) => item !== value);
+            } else {
+                return [...prev, value];
+            }
+        })
+    }
+
+    const fetchExistingCampaignData = (data:CampaignSelectResponse | null) => {
+        setExistingCampaignDetails(data)
+        refFormData.current = {
+            ...refFormData.current,
+            campaignGoal : data?.aIPromptCampaign.campaignGoal,
+            targetAudience : data?.aIPromptCampaign.targetAudience,
+            webUrl : data?.aIPromptCampaign.webUrl,
+            outputScale:data?.aIPromptCampaign.outputScale
+            // fileSelected:data?.aIPromptCampaign.fileName,
+        }
+        if (isShowList.includes(1) || checkedList.includes(1)) {
+            doesFormCompleted(2)
+        }
+    }
 
     const doesFormCompleted = (step:number,status?:boolean) => {
         if (step===1) {
@@ -113,8 +140,12 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     isRequire={true}
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
+                    handleShowContent={()=>{updateShowList(0)}}
                 >
-                    <SectionAssetDetails validatingTheData={doesFormCompleted} />
+                    <SectionAssetDetails 
+                        validatingTheData={doesFormCompleted} 
+                        returnCampaignDetails={fetchExistingCampaignData}    
+                    />
                 </Accordion>
             </div>
             <div className='mt-[25px]'>
@@ -124,6 +155,10 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     isRequire={true}
                     HeaderTitle="Campaign Overview"
                     checked={checkedList.includes(1)}
+                    handleShowContent={()=>{
+                        updateShowList(1)
+                        doesFormCompleted(2)
+                    }}
                     >
                     <div>
                         {/* <ChildrenTitle title='Solution & Product' ></ChildrenTitle> */}
@@ -144,6 +179,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                         doesFormCompleted(2)
                                     }}
                                     isShowOther = {false}
+                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.campaignGoal : "" }
                                     selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
@@ -158,16 +194,17 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                         doesFormCompleted(2)
                                     }}
                                     isShowOther = {false}
+                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.targetAudience : "" }
                                     selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
                         </div>
 
-                            <div >
+                            <div>
                                 <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
                                 <TextField handleChange={(e) => { 
                                     handleInputText(e, "webUrl") 
                                     // doesFormCompleted(4)
-                                }}
+                                }}  defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
                                     placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                                 <DragAndDrop onFileSelect={(file) => {
                                     refFormData.current = {
@@ -187,7 +224,10 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     isRequire={true}
                     HeaderTitle="Email - Key Messages & Content"
                     checked={checkedList.includes(2)}
-                    handleShowContent={()=>{doesFormCompleted(3,true)}}
+                    handleShowContent={()=>{
+                        doesFormCompleted(3,true)
+                        updateShowList(2)
+                    }}
                     >
                     <div className='max-w-[90%]'>
                         <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
@@ -238,7 +278,10 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 <Accordion
                     HeaderTitle="Content Brief"
                     checked={checkedList.includes(3)}
-                    handleShowContent={()=>{doesFormCompleted(4)}}
+                    handleShowContent={()=>{
+                        doesFormCompleted(4)
+                        updateShowList(3)
+                    }}
                     >
                     <div>
                         {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
@@ -268,7 +311,8 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                     ...refFormData.current,
                                     outputScale: value
                                 }
-                            }}></RangeSlider>
+                            }} defaultValue = {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.outputScale : 7 }
+                            ></RangeSlider>
                         </div>
                 </Accordion>
             </div>

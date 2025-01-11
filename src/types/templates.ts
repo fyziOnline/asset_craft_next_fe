@@ -19,6 +19,20 @@ export interface Template {
     }[]
 }
 
+export interface CampaignSelectResponse {
+    aIPromptCampaign: {
+    campaignID: string
+    product: string
+    campaignGoal: string
+    targetAudience: string
+    outputScale: number
+    fileName: {} | string
+    webUrl:  string
+  }
+  isSuccess: boolean
+  errorOnFailure: string
+}
+
 
 export interface AssetHtmlProps {
     isSuccess: boolean,
