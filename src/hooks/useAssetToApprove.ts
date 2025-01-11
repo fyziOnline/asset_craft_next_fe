@@ -5,12 +5,14 @@ import { ApiService } from "@/lib/axios_generic"
 import { useEffect, useState } from "react"
 
 interface AssetToApproveProps {
+    versionName: string;
     projectName: string;
     campaignName: string;
     assetName: string;
     assetTypeName: string;
     modifiedOn: string;
     createdOn: string;
+    status : string;
 }
 
 export const useAssetToApprove = () => {
