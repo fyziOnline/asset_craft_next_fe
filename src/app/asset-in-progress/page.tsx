@@ -1,16 +1,15 @@
 'use client'
 
 import { useAssetInProgress } from "@/hooks/useAssetInProgress"
-import { useDashboard } from "@/hooks/useDashboard"
 import { useOverflowHidden } from "@/hooks/useOverflowHidden"
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation"
-import React, { FC, useEffect, useState } from "react"
+import React, { FC } from "react"
 
 const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Created On", "Current Status"]
 const headerHavingSortingToggle = ["Project Name", "Created On"]
-const fieldClick = "assetID"
+const hiddenFields = ["assetVersionID", "layoutName"]
 
 const AssetInProgress: FC = () => {
   useOverflowHidden()
@@ -25,19 +24,18 @@ const AssetInProgress: FC = () => {
     projectName: data.projectName,
     createdOn: formatDate(data.createdOn),
     currentStatus: data.status,
-    assetID: data.assetID
+    assetVersionID: data.assetVersionID,
+    layoutName: data.assetTypeName
   }));
-  console.log(assetsDisplayTable);
-  
-  const handleClick = (assetID: any) => {
-    console.log("item", assetID);
-    router.push(`/edit-html-content?assetID=${assetID}`)
+
+  const handleClick = (item: any) => {
+    router.push(`/edit-html-content?assetVersionID=${item.assetVersionID}&assetName=${item.assetName}&layoutName=${item.layoutName}`)
   }
 
   return (
     <>
       <AssetsPageLayout
-        fieldClick={fieldClick}
+        hiddenFields={hiddenFields}
         campaign_data={assetsDisplayTable}
         tableHeadings={tableHeading}
         headersHavingToggle={headerHavingSortingToggle}

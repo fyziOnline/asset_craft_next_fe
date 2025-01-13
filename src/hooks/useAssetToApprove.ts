@@ -2,23 +2,13 @@ import { urls } from "@/apis/urls"
 import { useLoading } from "@/components/global/Loading/LoadingContext"
 import { useAppData } from "@/context/AppContext"
 import { ApiService } from "@/lib/axios_generic"
+import { AllUserAssignedProps } from "@/types/asset"
 import { useEffect, useState } from "react"
-
-interface AssetToApproveProps {
-    versionName: string;
-    projectName: string;
-    campaignName: string;
-    assetName: string;
-    assetTypeName: string;
-    modifiedOn: string;
-    createdOn: string;
-    status : string;
-}
 
 export const useAssetToApprove = () => {
     const { setShowLoading } = useLoading()
     const { setError } = useAppData()
-    const [assetToApprove, setAssetToApprove] = useState<AssetToApproveProps[]>([])
+    const [assetToApprove, setAssetToApprove] = useState<AllUserAssignedProps[]>([])
 
     useEffect(() => {
         getAssetToApproveData()
