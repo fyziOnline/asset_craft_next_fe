@@ -169,7 +169,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
 
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
+                                <ChildrenTitle title='Campaign Goal' customClass='mt-5' showStar={true} ></ChildrenTitle>
                                 <DropDown
                                     onSelected={(optionSelected) => {
                                         refFormData.current = {
@@ -184,7 +184,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             </div>
 
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
+                                <ChildrenTitle title='Target audience' customClass='mt-5' showStar={true} ></ChildrenTitle>
                                 <DropDown
                                     onSelected={(optionSelected) => {
                                         refFormData.current = {
@@ -230,7 +230,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     }}
                     >
                     <div className='max-w-[90%]'>
-                        <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
+                        <ChildrenTitle showStar={true} customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
                         <TextField handleChange={(e) => { 
                             handleInputText(e, "topic") 
                             // doesFormCompleted(3)
@@ -239,7 +239,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
 
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Email Type' customClass='mt-5' />
+                                <ChildrenTitle showStar={true} title='Email Type' customClass='mt-5' />
                                 <DropDown onSelected={(optionSelected) => {
                                     refFormData.current = {
                                         ...refFormData.current,
@@ -250,7 +250,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             </div>
 
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Key Points' customClass='mt-5 mb-b' />
+                                <ChildrenTitle showStar={true} title='Key Points' customClass='mt-5 mb-b' />
                                 <DropDown onSelected={(optionSelected) => {
                                     refFormData.current = {
                                         ...refFormData.current,

@@ -38,7 +38,7 @@ const navOption: NavOptions[] = [
             {
                 label: 'Assets to Approve',
                 href: '/assets-to-approve',
-                component: <AssetIcon />,
+                component: <FolderIcon />,
                 id: 'asset-approve'
             }
         ]

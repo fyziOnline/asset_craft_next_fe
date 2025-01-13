@@ -167,7 +167,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
 
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
+                                <ChildrenTitle showStar={true} title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown
                                     onSelected={(optionSelected) => {
                                         refFormData.current = {
@@ -182,7 +182,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                             </div>
 
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
+                                <ChildrenTitle showStar={true} title='Target audience' customClass='mt-5' ></ChildrenTitle>
                                 <DropDown
                                     onSelected={(optionSelected) => {
                                         refFormData.current = {
@@ -228,7 +228,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     }}
                     >
                     <div>
-                        <ChildrenTitle customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
+                        <ChildrenTitle showStar={true} customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
                         <TextField
                             handleChange={(e) => { 
                                 handleInputText(e, "topic") 
