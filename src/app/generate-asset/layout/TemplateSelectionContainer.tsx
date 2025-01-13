@@ -22,9 +22,7 @@ const TemplateSelectionContainer: FC<TemplateViewerProps> = ({ templateData = []
       <div className="pt-5 pb-10 px-10 border-t border-solid border-[#D9D9D9]">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-center">
-            <p className="font-bold text-black text-2xl tracking-wide whitespace-nowrap">
-              {/* {title} */}
-            </p>
+            <p className="text-lg tracking-wide font-semibold">Select one of the templates</p>
           </div>
           <div className="flex justify-evenly gap-5 w-full mt-4 flex-wrap">
             {templateData.map((template) => (
@@ -40,7 +38,7 @@ const TemplateSelectionContainer: FC<TemplateViewerProps> = ({ templateData = []
                   <img
                     src={template.templateImageURL || ""}
                     alt={template.description || ""}
-                    className="bg-no-repeat bg-center bg-cover border border-solid border-[#dadada]"
+                    className="bg-no-repeat bg-center bg-cover border-2 border-solid border-[#dadada]"
                   />
                 </div>
 

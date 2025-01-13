@@ -29,7 +29,7 @@ const Header: React.FC = () => {
           <div className="w-full flex items-center justify-between">
             <div className="flex items-center gap-5">
               <h1 className="text-2xl font-bold">Dashboard</h1>
-              <SearchBox customClass="bg-[#F6F6F6]" />
+              {/* <SearchBox customClass="bg-[#F6F6F6]" /> */}
             </div>
             <h3 className="text-xl font-bold text-[#00A881] pr-3">Welcome, <span>{userDetails?.name}</span></h3>
           </div>
