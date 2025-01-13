@@ -39,6 +39,8 @@ export const useDashboard = () => {
     const [dashboardAssets, setDashboardAssets] = useState<AllAssetsTypeProps[]>([])
     const [userDetails, setUserDetails] = useState<UserDetailsProps | null>(null);
 
+    const userRole = Cookies.get(nkey.userRole)
+
     useEffect(() => {
         getListProjects()
         getAssetTypes()
@@ -359,6 +361,7 @@ export const useDashboard = () => {
         projectName: assetDetails.project_name,
         handleChangeAssetDetails,
         userDetails,
-        pendingApproval
+        pendingApproval,
+        userRole
     };
 };

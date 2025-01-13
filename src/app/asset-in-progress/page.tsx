@@ -7,7 +7,7 @@ import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation"
 import React, { FC } from "react"
 
-const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Created On", "Current Status"]
+const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Approver", "Created On", "Current Status"]
 const headerHavingSortingToggle = ["Project Name", "Created On"]
 const hiddenFields = ["assetVersionID", "layoutName"]
 
@@ -22,6 +22,7 @@ const AssetInProgress: FC = () => {
     version: data.versionName,
     campaignName: data.campaignName,
     projectName: data.projectName,
+    assignedTo: data.approverName || "",
     createdOn: formatDate(data.createdOn),
     currentStatus: data.status,
     assetVersionID: data.assetVersionID,

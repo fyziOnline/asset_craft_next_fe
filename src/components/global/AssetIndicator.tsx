@@ -1,5 +1,5 @@
 // import { EmailIcon, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon"
-import { LinkedinIcon, MailIcon, SalesCallIcon } from "@/assets/icons/AssetIcons"
+import { LandingPageIcon, LinkedinIcon, MailIcon, SalesCallIcon } from "@/assets/icons/AssetIcons"
 import {  ComponentType, FC } from "react"
 
 // Standardize the icon props interface
@@ -15,7 +15,8 @@ type IconComponent = ComponentType<IconProps>
 const ASSET_ICONS: Record<string, IconComponent> = {
   'Email': MailIcon,
   'LinkedIn': LinkedinIcon,
-  'Call Script': SalesCallIcon
+  'Call Script': SalesCallIcon,
+  "Landing Page": LandingPageIcon
 }
 
 
