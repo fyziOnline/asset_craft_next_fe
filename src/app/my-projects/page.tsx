@@ -63,7 +63,7 @@ const MyProjects: FC = () => {
 
   return (
     <>
-      <ProjectPageLayout fieldClick="dataClick" viewType="project" project_data={tableData} onSelectingProjects={onSelectingProject} tableHeadings={tableHeading} headersHavingToggle={arrowshowItems} page="My Project" />
+      <ProjectPageLayout hiddenFields={["dataClick"]} viewType="project" project_data={tableData} onSelectingProjects={onSelectingProject} tableHeadings={tableHeading} headersHavingToggle={arrowshowItems} page="My Project" />
     </>
   )
 }
