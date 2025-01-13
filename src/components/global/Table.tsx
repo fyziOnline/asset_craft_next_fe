@@ -119,7 +119,7 @@ const Table: React.FC<TableProps> = ({ listItems,
     <div className='w-full'>
       <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}>
         {tableHeadings.map((heading, index) => (
-          <div key={index} className='flex items-center gap-2 justify-center'>
+          <div key={index} className='flex px-2 items-center gap-2 justify-center'>
             <p className='text-base font-thin text-[#969696]'>{heading}</p>
             {arrowInHeadings.includes(heading) && (
               <span className={`cursor-pointer transition-transform ${sortArrows[heading] ? "rotate-180" : ""}`} onClick={() => handleSort(index)}>
@@ -150,7 +150,7 @@ const Table: React.FC<TableProps> = ({ listItems,
               {visibleHeadings.map((heading, idx) => (
                 <div
                   key={idx}
-                  className={`flex items-center gap-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
+                  className={`flex items-center gap-2 px-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
                 >
                   {heading === 'assetName' ? (
                     <div className="flex items-center gap-2">

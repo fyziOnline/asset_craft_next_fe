@@ -227,7 +227,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             }}
                             placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <div className='flex items-center gap-[16%]'>
+                        <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
                                 <ChildrenTitle title='Linkedin Type' customClass='mt-5' />
                                 <DropDown onSelected={(optionSelected) => {

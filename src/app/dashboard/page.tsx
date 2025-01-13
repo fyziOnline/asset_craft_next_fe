@@ -34,7 +34,8 @@ const Dashboard: FC = () => {
     selectAssetType,
     dashboardAssets,
     userDetails,
-    pendingApproval
+    pendingApproval,
+    userRole
   } = useDashboard()
 
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
@@ -156,7 +157,7 @@ const Dashboard: FC = () => {
         </div>
 
         <div className="w-[27%] mt-[7.7rem] lg:mt-0">
-          <p className="text-lg font-bold pl-10 pb-2">Pending Approval</p>
+          <p className="text-lg font-bold pl-10 pb-2">{userRole === "Approver" ? "Assets to Approve" : "Pending Approval"}</p>
           <div className="w-full bg-[#F9F9F9] rounded-[14px] ml-4">
             <div className="p-5 max-h-[580px] overflow-y-auto">
 
@@ -165,12 +166,12 @@ const Dashboard: FC = () => {
                   <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
                     <div className="flex items-center justify-between">
                       <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
-                      <p>{data.projectName}</p>
+                      <p>{formatDate(data.createdOn)}</p>
                     </div>
                     <p className="text-sm text-[#636363]">{data.versionName}</p>
-                    <div className="w-full flex items-center justify-between mt-2">
-                      <p className="w-[70%]">{data.campaignName}</p>
-                      <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
+                    <div className="w-full flex flex-col mt-2">
+                      <p className="w-full">{data.campaignName}</p>
+                      <p className="w-full">{data.projectName}</p>
                     </div>
                   </div>
                 ))) : (

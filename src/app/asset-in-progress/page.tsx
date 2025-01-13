@@ -8,7 +8,7 @@ import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation"
 import React, { FC, useEffect, useState } from "react"
 
-const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Created On", "Current Status"]
+const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "AssingedBy", "Created On", "Current Status"]
 const headerHavingSortingToggle = ["Project Name", "Created On"]
 const fieldClick = "assetID"
 
@@ -23,6 +23,7 @@ const AssetInProgress: FC = () => {
     version: data.versionName,
     campaignName: data.campaignName,
     projectName: data.projectName,
+    AssingedBy: data.approverName || "",
     createdOn: formatDate(data.createdOn),
     currentStatus: data.status,
     assetID: data.assetID
