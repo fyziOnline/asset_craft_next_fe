@@ -99,7 +99,7 @@ type AssetDetails = {
 export const useDashboard = () => {
     const [clientAssetTypes, setClientAssetTypes] = useState<ClientAssetTypeProps[]>([])
     const { setShowLoading } = useLoading()
-    const { setContextData , setError } = useAppData();
+    const { setContextData, setError } = useAppData();
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
@@ -110,6 +110,7 @@ export const useDashboard = () => {
     const [listProjects, setListProjects] = useState<DropDownOptions[]>([]);
     const [listCampaigns, setListCampaigns] = useState<CampaignsProps[]>([]);
     const [listAssets, setListAssets] = useState<AssetsProps[]>([]);
+    const [pendingApproval, setPendingApproval] = useState<any[]>([])
     const campaignIDRef = useRef("")
     const isCampaignSelect = useRef(false)
 
@@ -127,6 +128,7 @@ export const useDashboard = () => {
         getAssetTypes()
         getUserDetails()
         getAssetAllAtDashboard()
+        getPendingApproval()
     }, [])
 
     const getListProjects = async () => {
@@ -395,7 +397,29 @@ export const useDashboard = () => {
         }
     }
 
+    const getPendingApproval = async () => {
+        setShowLoading(true)
 
+        try {
+            const response = await ApiService.post<any>(`${urls.getAssetsToApprove}`, {
+                assignedTo: Cookies.get('userRole') === 'Approver' ? 1 : 0
+            })
+
+            if (response.isSuccess) {
+                setPendingApproval(response.assets)
+            }
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        }
+        finally {
+            setShowLoading(false)
+        }
+    }
 
     return {
         isProductNameValid,
@@ -418,6 +442,7 @@ export const useDashboard = () => {
         dashboardAssets,
         projectName: assetDetails.project_name,
         handleChangeAssetDetails,
-        userDetails
+        userDetails,
+        pendingApproval
     };
 };

@@ -33,15 +33,16 @@ const Dashboard: FC = () => {
     handleChangeAssetDetails,
     selectAssetType,
     dashboardAssets,
-    userDetails
+    userDetails,
+    pendingApproval
   } = useDashboard()
 
-  const { updatedDashboardData, assetsDisplayTable, pendingApproval } = processDashboardAssets(dashboardAssets);
+  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
 
   const { setContextData } = useAppData()
 
-  console.log("pendingApproval" , pendingApproval);
-  
+  console.log("pendingApproval", pendingApproval);
+
 
   useEffect(() => {
     setContextData({
@@ -162,10 +163,14 @@ const Dashboard: FC = () => {
               {pendingApproval && pendingApproval.length > 0 ? (
                 pendingApproval.map((data, index) => (
                   <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
-                    <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
-                    <div className="flex items-center justify-between mt-2">
-                      <p className="text-[#636363] font-thin text-sm">Last Updated :</p>
-                      <p className="text-[#636363] text-sm font-normal">{formatDate(data.modifiedOn)}</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
+                      <p>{data.projectName}</p>
+                    </div>
+                    <p className="text-sm text-[#636363]">{data.versionName}</p>
+                    <div className="w-full flex items-center justify-between mt-2">
+                      <p className="w-[70%]">{data.campaignName}</p>
+                      <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
                     </div>
                   </div>
                 ))) : (
