@@ -11,6 +11,7 @@ interface Asset {
 }
 
 interface AssetsPageProps {
+  fieldClick?: string;
   campaign_data: Asset[]
   // onSelectingCampaign : (campaign_name:string)=>void
   tableHeadings: string[]

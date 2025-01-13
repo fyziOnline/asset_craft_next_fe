@@ -12,6 +12,7 @@ interface Project {
 }
 
 interface ProjectSectionProps {
+  fieldClick?: string;
   project_data: Project[]
   onSelectingProjects: (project_name: string) => void
   tableHeadings: string[]
