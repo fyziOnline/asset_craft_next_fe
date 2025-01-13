@@ -110,7 +110,9 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDas
         projectName: data.project,
         createdOn: formatDate(data.createdOn),
         currentStatus: data.status,
-        assetID: data.assetID
+        assetID: data.assetID,
+        assetVersionID: data.assetVersionID,
+        layoutName: data.assetTypeName
     }));
 
     return { updatedDashboardData, assetsDisplayTable, pendingApproval };
