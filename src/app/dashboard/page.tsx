@@ -171,18 +171,18 @@ const Dashboard: FC = () => {
                       }}
                       key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
                       <div className="flex items-center justify-between">
-                        <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
-                        <p>{data.projectName}</p>
+                        <p className="text-[##2F363F] text-wrap text-lg font-bold">{data.assetName}</p>
+                        <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
                       </div>
                       <p className="text-sm text-[#636363]">{data.versionName}</p>
-                      <div className="w-full flex items-center justify-between mt-2">
-                        <p className="w-[70%]">{data.campaignName}</p>
-                        <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
+                      <div className="w-full flex flex-col items-center">
+                        <p className="w-full text-wrap">{data.campaignName}</p>
+                        <p className="w-full text-wrap">{data.projectName}</p>
                       </div>
                     </div>
                   )
                 })) : (
-                <div className="text-center text-[#636363] font-inter text-sm ">
+                <div className="text-center text-[#636363] text-sm ">
                   No data available
                 </div>
               )}
