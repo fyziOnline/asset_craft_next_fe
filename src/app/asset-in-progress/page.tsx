@@ -16,7 +16,6 @@ const AssetInProgress: FC = () => {
   useOverflowHidden()
   const router = useRouter();
   const { assetInProgress } = useAssetInProgress()
-  console.log("assetInProgress", assetInProgress);
 
   const assetsDisplayTable = assetInProgress.map((data) => ({
     assetTypeIcon: data.assetTypeName,
@@ -28,7 +27,8 @@ const AssetInProgress: FC = () => {
     currentStatus: data.status,
     assetID: data.assetID
   }));
-
+  console.log(assetsDisplayTable);
+  
   const handleClick = (assetID: any) => {
     console.log("item", assetID);
     router.push(`/edit-html-content?assetID=${assetID}`)
