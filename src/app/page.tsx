@@ -116,7 +116,7 @@ const Home: FC = () => {
 
              <p className="text-[0.7rem] text-white">Don't receive OTP? </p>
 
-             <p className=" text-white pt-[1px] mb-[4%] border-b border-white inline-block leading-none">Resend OTP </p>
+             <p onClick={handleLogin} className=" text-white pt-[1px] mb-[4%] border-b border-white inline-block leading-none cursor-pointer">Resend OTP </p>
 
 
             <div className="flex justify-between px-[1rem] py-[.75rem]">
