@@ -166,10 +166,10 @@ const Dashboard: FC = () => {
                   <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
                     <div className="flex items-center justify-between">
                       <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
-                      <p>{formatDate(data.createdOn)}</p>
+                      <p className="text-sm">{formatDate(data.createdOn)}</p>
                     </div>
                     <p className="text-sm text-[#636363]">{data.versionName}</p>
-                    <div className="w-full flex flex-col mt-2">
+                    <div className="w-full flex flex-col">
                       <p className="w-full">{data.campaignName}</p>
                       <p className="w-full">{data.projectName}</p>
                     </div>
