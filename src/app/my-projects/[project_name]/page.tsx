@@ -80,7 +80,7 @@ const ProjectPage: FC = () => {
         tableHeadings={tableHeading}
         headersHavingToggle={headerHavingSortingToggle}
         page={project_name}
-        fieldClick="campaignID"
+        hiddenFields={["campaignID"]}
         viewType='campaign'
       />
     </>
