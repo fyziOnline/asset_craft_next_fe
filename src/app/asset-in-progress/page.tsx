@@ -9,7 +9,7 @@ import React, { FC } from "react"
 
 const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Created On", "Current Status"]
 const headerHavingSortingToggle = ["Project Name", "Created On"]
-const hiddenFields = ["assetVersionID", "layoutName"]
+const hiddenFields = ["assetID"]
 
 const AssetInProgress: FC = () => {
   useOverflowHidden()
@@ -24,12 +24,11 @@ const AssetInProgress: FC = () => {
     projectName: data.projectName,
     createdOn: formatDate(data.createdOn),
     currentStatus: data.status,
-    assetVersionID: data.assetVersionID,
-    layoutName: data.assetTypeName
+    assetID: data.assetID,
   }));
 
   const handleClick = (item: any) => {
-    router.push(`/edit-html-content?assetVersionID=${item.assetVersionID}&assetName=${item.assetName}&layoutName=${item.layoutName}`)
+    router.push(`/edit-html-content?assetID=${item.assetID}`)
   }
 
   return (
