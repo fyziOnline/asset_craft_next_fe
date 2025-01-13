@@ -16,7 +16,8 @@ export const urls = {
   asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
   asset_generate: "/asset/generate",
   assetVersionBlock_update: "/AssetVersionBlock/update",
-  aiPrompt_Asset_select:"/aiPrompt/Asset/select",
+  assetVersionBlock_updateIgnoreStatus: "/AssetVersionBlock/updateIgnoreStatus",
+  aiPrompt_Asset_select: "/aiPrompt/Asset/select",
   aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
   aiPrompt_Asset_update: "/aiPrompt/Asset/update",
   aiPrompt_Campaign_select: "/aiPrompt/Campaign/select",
@@ -35,5 +36,5 @@ export const urls = {
   getuserDetails: "/userProfile/select",
   updateuserDetails: "/userProfile/update",
   approval_approver_select_all: "/approval/approver/select/all",
-  approval_assetApproval_SubmitForApproval: "/approval/assetApproval/SubmitForApproval"
+  approval_assetApproval_SubmitForApproval: "/approval/assetApproval/SubmitForApproval",
 };

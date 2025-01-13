@@ -21,16 +21,16 @@ export interface Template {
 
 export interface CampaignSelectResponse {
     aIPromptCampaign: {
-    campaignID: string
-    product: string
-    campaignGoal: string
-    targetAudience: string
-    outputScale: number
-    fileName: {} | string
-    webUrl:  string
-  }
-  isSuccess: boolean
-  errorOnFailure: string
+        campaignID: string
+        product: string
+        campaignGoal: string
+        targetAudience: string
+        outputScale: number
+        fileName: {} | string
+        webUrl: string
+    }
+    isSuccess: boolean
+    errorOnFailure: string
 }
 
 
@@ -73,6 +73,7 @@ export interface AssetHtmlProps {
                     schema: string,
                     uiSchema: string,
                     html: string,
+                    ignoreBlock: number,
                     isStatic: boolean
                 }
             ]
@@ -104,6 +105,7 @@ export interface AssetVersionProps {
             schema: string,
             uiSchema: string,
             html: string,
+            ignoreBlock: number,
             isStatic: boolean
         }
     ]
@@ -123,12 +125,13 @@ export interface AssetBlockProps {
     schema: string,
     uiSchema: string,
     html: string,
+    ignoreBlock: number,
     isStatic: boolean
 }
 
 export interface ProjectDetails {
-        project_name: string
-        campaign_name: string 
-        asset_name: string
-        campaignID : string
+    project_name: string
+    campaign_name: string
+    asset_name: string
+    campaignID: string
 }

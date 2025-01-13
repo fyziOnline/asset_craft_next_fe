@@ -208,48 +208,41 @@ export const useEditHTMLContent = () => {
         } finally {
             setShowLoading(false)
         }
+    }
 
-        // try {
-        //     let project_name = ""
-        //     let campaign_name = ""
-        //     let asset_name = ""
-        //     if (typeof window !== "undefined") {
-        //         const params = new URLSearchParams(window.location.search);
-        //         project_name = params.get("project_name") || ""
-        //         campaign_name = params.get("campaign_name") || ""
-        //         asset_name = params.get("asset_name") || ""
-        //     }
-        //     const currentDate = moment().format('DD.MM.YYYY')
-        //     const email_login = Cookies.get(nkey.email_login) || ""
-        //     let name = ""
-        //     try {
-        //         name = email_login.split("@")[0];
-        //     } catch (error) {
-
-        //     }
-
-        //     const asset: AssetInProgressProps = {
-        //         assetVersionId: versionSelected.assetVersionID,
-        //         assetVersion: versionSelected,
-        //         projectName: project_name,
-        //         campaignName: campaign_name,
-        //         assetName: asset_name,
-        //         versionName: versionSelected.versionName,
-        //         assetType: "",
-        //         createdOn: currentDate,
-        //         approvedBy: name,
-        //         approvedOn: "",
-        //         currentStatus: "Pending Approval"
-        //     }
-
-        //     let assetInProgressTemporary = JSON.parse(localStorage.getItem(nkey.assetInProgressTemporary) || "[]") as AssetInProgressProps[]
-        //     assetInProgressTemporary = assetInProgressTemporary.filter((item) => item.assetVersionId !== asset.assetVersionId)
-        //     assetInProgressTemporary.push(asset)
-        //     localStorage.setItem(nkey.assetInProgressTemporary, JSON.stringify(assetInProgressTemporary));
-        // } catch (error) {
-        //     console.log('error: ', error);
-        // }
-        // router.replace("/dashboard")
+    const handleHideBlock = async (assetVersionBlockID: string, ignoreBlock: number) => {
+        try {
+            setShowLoading(true)
+            const resUpdateIgnoreStatus = await ApiService.put<any>(urls.assetVersionBlock_updateIgnoreStatus, {
+                "assetVersionBlockID": assetVersionBlockID,
+                "status": ignoreBlock == 1 ? 0 : 1
+            })
+            if (resUpdateIgnoreStatus.isSuccess) {
+                const resGenerate = await ApiService.get<any>(`${urls.asset_version_generate}?assetVersionID=${versionSelected.assetVersionID}`)
+                if (resGenerate.isSuccess) {
+                    const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${versionSelected.assetVersionID}`)
+                    if (resSelect.isSuccess) {
+                        const AssetHtml = contextData.AssetHtml
+                        const indexVersion = contextData.AssetHtml.assetVersions.findIndex((item) => item.assetVersionID === versionSelected.assetVersionID)
+                        const assetVersions = contextData.AssetHtml.assetVersions
+                        assetVersions[indexVersion] = resSelect
+                        AssetHtml.assetVersions = assetVersions
+                        setVersionSelected(resSelect)
+                        setVersionList(assetVersions)
+                        setContextData({ AssetHtml: AssetHtml })
+                    }
+                }
+            }
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        } finally {
+            setShowLoading(false)
+        }
     }
 
     return {
@@ -273,6 +266,7 @@ export const useEditHTMLContent = () => {
         setIsShowModelEdit,
         onGenerateWithAI,
         onSubmit,
-        setSectionEdit
+        setSectionEdit,
+        handleHideBlock
     };
 };
