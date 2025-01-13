@@ -1,4 +1,4 @@
-import { update } from "lodash";
+import { get, update } from "lodash";
 
 export const urls = {
   login: "/user/login",
@@ -35,5 +35,6 @@ export const urls = {
   getuserDetails: "/userProfile/select",
   updateuserDetails: "/userProfile/update",
   approval_approver_select_all: "/approval/approver/select/all",
-  approval_assetApproval_SubmitForApproval: "/approval/assetApproval/SubmitForApproval"
+  approval_assetApproval_SubmitForApproval: "/approval/assetApproval/SubmitForApproval",
+  getAssetsToApprove: "/approval/assetApproval/select/GetAllUserAssigned",
 };
