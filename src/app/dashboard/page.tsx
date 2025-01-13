@@ -146,9 +146,10 @@ const Dashboard: FC = () => {
             </div>
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table fieldClick="assetID" handleClick={(assetID) => {
-                  router.push(`/edit-html-content?assetID=${assetID}`)
-                }} listItems={assetsDisplayTable} tableHeadings={tableHeading} />
+                <Table hiddenFields={["assetID", "assetVersionID", "layoutName"]} handleClick={(item) => {
+                  router.push(`/edit-html-content?assetVersionID=${item.assetVersionID}&assetName=${item.assetName}&layoutName=${item.layoutName}`)
+                }}
+                  listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
@@ -162,19 +163,25 @@ const Dashboard: FC = () => {
             <div className="p-5 max-h-[580px] overflow-y-auto">
 
               {pendingApproval && pendingApproval.length > 0 ? (
-                pendingApproval.map((data, index) => (
-                  <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
-                    <div className="flex items-center justify-between">
-                      <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
-                      <p className="text-sm">{formatDate(data.createdOn)}</p>
+                pendingApproval.map((data, index) => {
+                  return (
+                    <div
+                      onClick={() => {
+                        router.push(`/edit-html-content?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}`)
+                      }}
+                      key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
+                      <div className="flex items-center justify-between">
+                        <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
+                        <p>{data.projectName}</p>
+                      </div>
+                      <p className="text-sm text-[#636363]">{data.versionName}</p>
+                      <div className="w-full flex items-center justify-between mt-2">
+                        <p className="w-[70%]">{data.campaignName}</p>
+                        <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
+                      </div>
                     </div>
-                    <p className="text-sm text-[#636363]">{data.versionName}</p>
-                    <div className="w-full flex flex-col">
-                      <p className="w-full">{data.campaignName}</p>
-                      <p className="w-full">{data.projectName}</p>
-                    </div>
-                  </div>
-                ))) : (
+                  )
+                })) : (
                 <div className="text-center text-[#636363] font-inter text-sm ">
                   No data available
                 </div>

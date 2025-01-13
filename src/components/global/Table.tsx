@@ -26,7 +26,7 @@ interface TableProps {
   tableHeadings: string[];
   arrowInHeadings?: string[];
   columnWidths?: string[];
-  fieldClick?: string;
+  hiddenFields?: string[];
   tablePlaceitems?: string;
   handleClick?: (value: any) => void;
   isPagination?: boolean;
@@ -36,7 +36,7 @@ const Table: React.FC<TableProps> = ({ listItems,
   tableHeadings,
   arrowInHeadings = [],
   columnWidths = [],
-  fieldClick,
+  hiddenFields = [],
   tablePlaceitems = "flex-start",
   handleClick = () => { },
   isPagination = false
@@ -46,7 +46,7 @@ const Table: React.FC<TableProps> = ({ listItems,
   const [sortArrows, setSortArrows] = useState<{ [key: string]: boolean }>({ ...tableHeadings.reduce((acc, heading) => ({ ...acc, [heading]: true }), {}) });
 
   // Extract column names from the first item in the list
-  const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]).filter((item) => item != fieldClick) : []
+  const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]).filter((item) => !hiddenFields.includes(item)) : []
   const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
 
   useEffect(() => {
@@ -138,11 +138,7 @@ const Table: React.FC<TableProps> = ({ listItems,
           const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
           return (
             <div
-              onClick={() => {
-                if (fieldClick !== undefined) {
-                  handleClick(data[fieldClick])
-                }
-              }}
+              onClick={() => { handleClick(data) }}
               key={index}
               className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F6F6F6]'}`}
               style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}
