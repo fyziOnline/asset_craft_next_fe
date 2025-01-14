@@ -9,92 +9,8 @@ import { ListTypePage } from '@/data/dataGlobal';
 import { debounce } from 'lodash';
 import { DropDownOptions } from '@/components/global/DropDown';
 import moment from 'moment';
-import { AppData, useAppData } from '@/context/AppContext';
-
-interface ClientAssetTypeProps {
-    clientAssetTypeID?: string,
-    clientID?: string,
-    assetTypeID?: string,
-    isEnabled?: boolean,
-    assetTypeName: string,
-    description?: string
-}
-
-interface CampaignsProps {
-    campaignID: string,
-    project: string,
-    campaignName: string,
-    country: string,
-    squad: string,
-    startDate: string,
-    endDate: string,
-    status: string,
-    isVisible: number
-}
-
-interface AssetsProps {
-    assetName: string,
-    language: string,
-    assetAIPrompt: string,
-    isVisible: number,
-    layoutID: string,
-    assetTypeID: string,
-    assetTypeName: string,
-    modifiedOn: string,
-    assetID: string
-}
-
-
-interface AllAssetsTypeProps {
-    project: string;
-    campaignName: string;
-    status: string;
-    approvedBy: string;
-    approvedOn: string;
-    assetID: string;
-    assetTypeName: string;
-    clientID: string;
-    campaignID: string;
-    assetVersionID: string;
-    assetName: string;
-    language: string;
-    createdOn: string;
-    assetAIPrompt: string;
-    isVisible: number;
-    layoutID: string;
-    layoutName: string;
-    layoutHTML: string;
-    assetVersions: AssetVersion[];
-    isSuccess: boolean;
-    errorOnFailure: string;
-}
-
-interface AssetVersion {
-    assetVersionID: string;
-    assetID: string;
-    templateID: string;
-    versionNumber: number;
-    versionName: string;
-    htmlGenerated: string;
-    htmlFileURL: string | null;
-    zipFileURL: string | null;
-    status: string;
-}
-
-interface UserDetailsProps {
-    userID: string;
-    name: string;
-    email: string;
-    userRole: string;
-    isActive: number;
-}
-
-
-type AssetDetails = {
-    project_name: string;
-    campaign_name: string;
-    asset_name: string;
-};
+import { useAppData } from '@/context/AppContext';
+import { AllAssetsTypeProps, AssetDetails, AssetsProps, CampaignsProps, ClientAssetTypeProps, UserDetailsProps } from '@/types/asset';
 
 export const useDashboard = () => {
     const [clientAssetTypes, setClientAssetTypes] = useState<ClientAssetTypeProps[]>([])
@@ -122,6 +38,8 @@ export const useDashboard = () => {
 
     const [dashboardAssets, setDashboardAssets] = useState<AllAssetsTypeProps[]>([])
     const [userDetails, setUserDetails] = useState<UserDetailsProps | null>(null);
+
+    const userRole = Cookies.get(nkey.userRole)
 
     useEffect(() => {
         getListProjects()
@@ -443,6 +361,7 @@ export const useDashboard = () => {
         projectName: assetDetails.project_name,
         handleChangeAssetDetails,
         userDetails,
-        pendingApproval
+        pendingApproval,
+        userRole
     };
 };

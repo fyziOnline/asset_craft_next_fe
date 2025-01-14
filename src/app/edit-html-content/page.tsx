@@ -118,7 +118,7 @@ const Page = () => {
 
         // render other layout 
         const listLayout = ["landing", "linkedin", "callscript"]
-        const hasMatchLayoutName = listLayout.some(substring => contextData.AssetHtml.layoutName.toLowerCase().includes(substring.toLowerCase()));
+        const hasMatchLayoutName = listLayout.some(substring => contextData.AssetHtml?.layoutName?.toLowerCase().includes(substring.toLowerCase()));
         if (hasMatchLayoutName) {
             return <div className='flex justify-center'>
                 <ShadowDomContainer onClick={handleClickEdit} htmlContent={htmlOtherAsset()}></ShadowDomContainer>

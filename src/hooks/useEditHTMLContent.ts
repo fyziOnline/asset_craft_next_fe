@@ -49,12 +49,17 @@ export const useEditHTMLContent = () => {
 
     const resAssetHtml = async () => {
         try {
-            setShowLoading(true)
             let assetID = ""
             if (typeof window !== "undefined") {
                 const params = new URLSearchParams(window.location.search);
                 assetID = params.get("assetID") as string
             }
+
+            if (!assetID) {
+                return await resAssetVersion()
+            }
+
+            setShowLoading(true)
 
             assetIDTemplateRef.current = assetID
             const res = await getAssetHTML()
@@ -65,6 +70,40 @@ export const useEditHTMLContent = () => {
                 setVersionSelected(AssetHtml.assetVersions?.[0])
             } else {
                 alert("An error occurred, please try again later.")
+            }
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        } finally {
+            setShowLoading(false)
+        }
+    }
+
+    const resAssetVersion = async () => {
+        try {
+            setShowLoading(true)
+            let assetVersionID = ""
+            let assetName = ""
+            let layoutName = ""
+            if (typeof window !== "undefined") {
+                const params = new URLSearchParams(window.location.search);
+                assetVersionID = params.get("assetVersionID") as string
+                assetName = params.get("assetName") as string
+                layoutName = params.get("layoutName") as string
+            }
+            const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersionID}`)
+            if (resSelect.isSuccess) {
+                let AssetHtml = contextData.AssetHtml
+                AssetHtml.assetVersions = [resSelect]
+                AssetHtml.assetName = assetName
+                AssetHtml.layoutName = layoutName
+                setVersionSelected(resSelect)
+                setVersionList([resSelect])
+                setContextData({ AssetHtml: AssetHtml })
             }
         } catch (error) {
             const apiError = ApiService.handleError(error)

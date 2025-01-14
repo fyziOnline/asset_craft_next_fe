@@ -11,17 +11,18 @@ interface Asset {
 }
 
 interface AssetsPageProps {
+  fieldClick?: string;
   campaign_data: Asset[]
   // onSelectingCampaign : (campaign_name:string)=>void
   tableHeadings: string[]
   headersHavingToggle: string[]
-  fieldClick?: string
+  hiddenFields?: string[]
   columnWidthsTable?: string[]
   handleClick?: (value: any) => void;
   page: string
 }
 
-const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, fieldClick = '', page, handleClick, columnWidthsTable = [] }) => {
+const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, hiddenFields = [], page, handleClick, columnWidthsTable = [] }) => {
   const [isList, setIsList] = useState<Boolean>(true)
   const toggleListType = () => {
     setIsList(pre => !pre)
@@ -51,7 +52,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
               isPagination={true}
               columnWidths={columnWidthsTable}
               handleClick={handleClick}
-              fieldClick={fieldClick}
+              hiddenFields={hiddenFields}
               listItems={campaign_data}
               tableHeadings={tableHeadings}
               arrowInHeadings={headersHavingToggle} />}

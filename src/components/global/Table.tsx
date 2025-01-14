@@ -26,7 +26,7 @@ interface TableProps {
   tableHeadings: string[];
   arrowInHeadings?: string[];
   columnWidths?: string[];
-  fieldClick?: string;
+  hiddenFields?: string[];
   tablePlaceitems?: string;
   handleClick?: (value: any) => void;
   isPagination?: boolean;
@@ -36,7 +36,7 @@ const Table: React.FC<TableProps> = ({ listItems,
   tableHeadings,
   arrowInHeadings = [],
   columnWidths = [],
-  fieldClick,
+  hiddenFields = [],
   tablePlaceitems = "flex-start",
   handleClick = () => { },
   isPagination = false
@@ -46,7 +46,7 @@ const Table: React.FC<TableProps> = ({ listItems,
   const [sortArrows, setSortArrows] = useState<{ [key: string]: boolean }>({ ...tableHeadings.reduce((acc, heading) => ({ ...acc, [heading]: true }), {}) });
 
   // Extract column names from the first item in the list
-  const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]).filter((item) => item != fieldClick) : []
+  const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]).filter((item) => !hiddenFields.includes(item)) : []
   const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
 
   useEffect(() => {
@@ -119,7 +119,7 @@ const Table: React.FC<TableProps> = ({ listItems,
     <div className='w-full'>
       <div className="grid gap-[10px] text-center p-6" style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}>
         {tableHeadings.map((heading, index) => (
-          <div key={index} className='flex items-center gap-2 justify-center'>
+          <div key={index} className='flex px-2 items-center gap-2 justify-center'>
             <p className='text-base font-thin text-[#969696]'>{heading}</p>
             {arrowInHeadings.includes(heading) && (
               <span className={`cursor-pointer transition-transform ${sortArrows[heading] ? "rotate-180" : ""}`} onClick={() => handleSort(index)}>
@@ -138,11 +138,7 @@ const Table: React.FC<TableProps> = ({ listItems,
           const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
           return (
             <div
-              onClick={() => {
-                if (fieldClick !== undefined) {
-                  handleClick(data[fieldClick])
-                }
-              }}
+              onClick={() => { handleClick(data) }}
               key={index}
               className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F6F6F6]'}`}
               style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}
@@ -150,7 +146,7 @@ const Table: React.FC<TableProps> = ({ listItems,
               {visibleHeadings.map((heading, idx) => (
                 <div
                   key={idx}
-                  className={`flex items-center gap-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
+                  className={`flex items-center gap-2 px-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
                 >
                   {heading === 'assetName' ? (
                     <div className="flex items-center gap-2">

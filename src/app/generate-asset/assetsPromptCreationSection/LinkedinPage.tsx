@@ -32,7 +32,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
-    const [existingCampaignDetails,setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
+    const [existingCampaignDetails, setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
 
     useEffect(() => {
         refFormData.current = {
@@ -51,44 +51,44 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
         })
     }
 
-    const fetchExistingCampaignData = (data:CampaignSelectResponse | null) => {
-            setExistingCampaignDetails(data)
-            refFormData.current = {
-                ...refFormData.current,
-                campaignGoal : data?.aIPromptCampaign.campaignGoal,
-                targetAudience : data?.aIPromptCampaign.targetAudience,
-                webUrl : data?.aIPromptCampaign.webUrl,
-                outputScale:data?.aIPromptCampaign.outputScale
-                // fileSelected:data?.aIPromptCampaign.fileName,
-            }
-            if (isShowList.includes(1) || checkedList.includes(1)) {
-                doesFormCompleted(2)
-            }
+    const fetchExistingCampaignData = (data: CampaignSelectResponse | null) => {
+        setExistingCampaignDetails(data)
+        refFormData.current = {
+            ...refFormData.current,
+            campaignGoal: data?.aIPromptCampaign.campaignGoal,
+            targetAudience: data?.aIPromptCampaign.targetAudience,
+            webUrl: data?.aIPromptCampaign.webUrl,
+            outputScale: data?.aIPromptCampaign.outputScale
+            // fileSelected:data?.aIPromptCampaign.fileName,
+        }
+        if (isShowList.includes(1) || checkedList.includes(1)) {
+            doesFormCompleted(2)
+        }
     }
 
-    
-    const doesFormCompleted = (step:number,status?:boolean) => {
-        if (step===1) {
+
+    const doesFormCompleted = (step: number, status?: boolean) => {
+        if (step === 1) {
             setCheckedList((prev) =>
                 status
-                  ? prev.includes(0) ? prev : [...prev, 0] 
-                  : prev.filter((item) => item !== 0)
-              ) 
+                    ? prev.includes(0) ? prev : [...prev, 0]
+                    : prev.filter((item) => item !== 0)
+            )
         }
-        if(step===2) {
+        if (step === 2) {
             if (
                 refFormData.current?.campaignGoal?.length &&
-                refFormData.current?.targetAudience?.length 
-             )  {
+                refFormData.current?.targetAudience?.length
+            ) {
                 setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
-             } else {
+            } else {
                 setCheckedList((prev) => prev.filter((item) => item !== 1))
             }
         }
-        if (step===3) {
+        if (step === 3) {
             setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
         }
-        if (step===4) {
+        if (step === 4) {
             setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
         }
     }
@@ -139,7 +139,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
                 >
-                    <SectionAssetDetails 
+                    <SectionAssetDetails
                         validatingTheData={doesFormCompleted}
                         returnCampaignDetails={fetchExistingCampaignData}
                     />
@@ -151,15 +151,15 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     isRequire={true}
                     HeaderTitle="Campaign Overview"
                     checked={checkedList.includes(1)}
-                    handleShowContent={()=>{
+                    handleShowContent={() => {
                         updateShowList(1)
                         doesFormCompleted(2)
                     }}
-                    >
+                >
                     <div>
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
+                                <ChildrenTitle title='Campaign Goal' customClass='mt-5' showStar={true} ></ChildrenTitle>
                                 <DropDown
                                     onSelected={(optionSelected) => {
                                         refFormData.current = {
@@ -168,12 +168,12 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         }
                                         doesFormCompleted(2)
                                     }}
-                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.campaignGoal : "" }
+                                    preSelectValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.campaignGoal : ""}
                                     selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
+                                <ChildrenTitle title='Target audience' customClass='mt-5' showStar={true} ></ChildrenTitle>
                                 <DropDown
                                     onSelected={(optionSelected) => {
                                         refFormData.current = {
@@ -182,27 +182,27 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         }
                                         doesFormCompleted(2)
                                     }}
-                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.targetAudience : "" }
+                                    preSelectValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.targetAudience : ""}
                                     selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
                         </div>
                         <div >
-                                <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
-                                <TextField handleChange={(e) => { 
-                                    handleInputText(e, "webUrl") 
-                                    // doesFormCompleted(4)
-                                }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
+                            <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
+                            <TextField handleChange={(e) => {
+                                handleInputText(e, "webUrl")
+                                // doesFormCompleted(4)
+                            }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
 
-                                    placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
-                                <DragAndDrop onFileSelect={(file) => {
-                                    refFormData.current = {
-                                        ...refFormData.current,
-                                        fileSelected: file
-                                    }
-                                    // doesFormCompleted(4)
-                                }} />
+                                placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                            <DragAndDrop onFileSelect={(file) => {
+                                refFormData.current = {
+                                    ...refFormData.current,
+                                    fileSelected: file
+                                }
+                                // doesFormCompleted(4)
+                            }} />
 
-                            </div> 
+                        </div>
 
                     </div>
                 </Accordion>
@@ -213,34 +213,34 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                     isRequire={true}
                     HeaderTitle="Post Context"
                     checked={checkedList.includes(2)}
-                    handleShowContent={()=>{
-                        doesFormCompleted(3,true)
+                    handleShowContent={() => {
+                        doesFormCompleted(3, true)
                         updateShowList(2)
                     }}
-                    >
+                >
                     <div className='max-w-[90%]'>
-                        <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
+                        <ChildrenTitle customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' showStar={true} />
                         <TextField
-                            handleChange={(e) => { 
-                                handleInputText(e, "topic") 
+                            handleChange={(e) => {
+                                handleInputText(e, "topic")
                                 doesFormCompleted(3)
                             }}
                             placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
-                        <div className='flex items-center gap-[16%]'>
+                        <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Linkedin Type' customClass='mt-5' />
+                                <ChildrenTitle title='Linkedin Type' customClass='mt-5' showStar={true} />
                                 <DropDown onSelected={(optionSelected) => {
                                     refFormData.current = {
                                         ...refFormData.current,
                                         type: optionSelected.value
                                     }
-                                // doesFormCompleted(3)
+                                    // doesFormCompleted(3)
                                 }} selectPlaceHolder="Select Post Type" optionLists={emailType} />
                             </div>
 
                             <div className='w-[260px]'>
-                                <ChildrenTitle title='Key Points' customClass='mt-5' />
+                                <ChildrenTitle title='Key Points' customClass='mt-5' showStar={true} />
                                 <DropDown onSelected={(optionSelected) => {
                                     refFormData.current = {
                                         ...refFormData.current,
@@ -260,14 +260,14 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                 <Accordion
                     HeaderTitle="Content Brief"
                     checked={checkedList.includes(3)}
-                    handleShowContent={()=>{
+                    handleShowContent={() => {
                         doesFormCompleted(4)
                         updateShowList(3)
                     }}
-                    >
+                >
                     <div>
                         {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
-                            if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
+                            if (params.template.templatesBlocks && refSection.current.length < params.template?.templatesBlocks.filter((item) => !item.isStatic).length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
                                     templateBlockID: item.templateBlockID || "",
                                     aiPrompt: item.aiPrompt || ""
@@ -278,38 +278,24 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                 <div key={index}>
                                     <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
                                     <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
-                                    <TextField handleChange={(e) => { 
-                                        handleInputSection(e, index) 
+                                    <TextField handleChange={(e) => {
+                                        handleInputSection(e, index)
                                         // doesFormCompleted(5)    
                                     }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
                                 </div>
                             )
                         })}
                     </div>
-                    {/* <div>
-                        <ChildrenTitle title='Hook/Headline & Introduction' customClass="text-[18px]" />
-                        <ChildrenTitle title='Catchy introduction to the topic/product along with a brief overview.' />
-                        <TextField customClass='h-16' placeholder={`"Write a compelling headline that promotes the benefits of HPE GreenLake’s hybrid cloud solution, followed by a 2-3 sentence introduction explaining the benefits of HPE GreenLake and why attending StorageAsia 2024 is beneficial."`} />
-
-                        <ChildrenTitle title='Main Message & Call-to-Action (CTA)' customClass="text-[18px] mt-[20px]" />
-                        <ChildrenTitle title='Highlight the core benefits of the product along with actionable event details.' />
-                        <TextField placeholder={`"List 2-3 key benefits of HPE GreenLake, focusing on flexibility, control, and cost efficiency. Write a 2-3 sentence event promotion with a call-to-action that encourages users to attend StorageAsia 2024 and engage with HPE experts."`} rows={2} />
-
-                        <ChildrenTitle title='Hashtags & Keywords' customClass="text-[18px] mt-[20px]" />
-                        <ChildrenTitle title='Industry-relevant hashtags for discoverability.' />
-                        <TextField placeholder={`"Generate 4-5 relevant hashtags for an HPE GreenLake LinkedIn post on hybrid cloud solutions."`} rows={1} />
-
-                    </div> */}
                     <div className='w-[300px]'>
-                            <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
-                            <RangeSlider onSelectValue={(value) => {
-                                refFormData.current = {
-                                    ...refFormData.current,
-                                    outputScale: value
-                                }
-                            }} defaultValue = {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.outputScale : 7 }
-                            ></RangeSlider>
-                        </div>
+                        <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
+                        <RangeSlider onSelectValue={(value) => {
+                            refFormData.current = {
+                                ...refFormData.current,
+                                outputScale: value
+                            }
+                        }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.outputScale : 7}
+                        ></RangeSlider>
+                    </div>
                 </Accordion>
             </div>
             <div className='flex justify-end my-[30px]'>

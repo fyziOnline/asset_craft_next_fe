@@ -34,15 +34,13 @@ const Dashboard: FC = () => {
     selectAssetType,
     dashboardAssets,
     userDetails,
-    pendingApproval
+    pendingApproval,
+    userRole
   } = useDashboard()
 
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
 
   const { setContextData } = useAppData()
-
-  console.log("pendingApproval", pendingApproval);
-
 
   useEffect(() => {
     setContextData({
@@ -145,9 +143,10 @@ const Dashboard: FC = () => {
             </div>
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table fieldClick="assetID" handleClick={(assetID) => {
-                  router.push(`/edit-html-content?assetID=${assetID}`)
-                }} listItems={assetsDisplayTable} tableHeadings={tableHeading} />
+                <Table hiddenFields={["assetID"]} handleClick={(item) => {
+                  router.push(`/edit-html-content?assetID=${item.assetID}`)
+                }}
+                  listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
                 <p></p> // Optionally, display a message if no data is available
               )}
@@ -156,25 +155,31 @@ const Dashboard: FC = () => {
         </div>
 
         <div className="w-[27%] mt-[7.7rem] lg:mt-0">
-          <p className="text-lg font-bold pl-10 pb-2">Pending Approval</p>
+          <p className="text-lg font-bold pl-10 pb-2">{userRole === "Approver" ? "Assets to Approve" : "Pending Approval"}</p>
           <div className="w-full bg-[#F9F9F9] rounded-[14px] ml-4">
             <div className="p-5 max-h-[580px] overflow-y-auto">
 
               {pendingApproval && pendingApproval.length > 0 ? (
-                pendingApproval.map((data, index) => (
-                  <div key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
-                    <div className="flex items-center justify-between">
-                      <p className="text-[##2F363F] font-inter text-base font-bold mb-1">{data.assetName}</p>
-                      <p>{data.projectName}</p>
+                pendingApproval.map((data, index) => {
+                  return (
+                    <div
+                      onClick={() => {
+                        router.push(`/edit-html-content?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}`)
+                      }}
+                      key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
+                      <div className="flex items-center justify-between">
+                        <p className="text-[##2F363F] text-wrap text-lg font-bold">{data.assetName}</p>
+                        <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
+                      </div>
+                      <p className="text-sm text-[#636363]">{data.versionName}</p>
+                      <div className="w-full flex flex-col items-center">
+                        <p className="w-full text-wrap">{data.campaignName}</p>
+                        <p className="w-full text-wrap">{data.projectName}</p>
+                      </div>
                     </div>
-                    <p className="text-sm text-[#636363]">{data.versionName}</p>
-                    <div className="w-full flex items-center justify-between mt-2">
-                      <p className="w-[70%]">{data.campaignName}</p>
-                      <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
-                    </div>
-                  </div>
-                ))) : (
-                <div className="text-center text-[#636363] font-inter text-sm ">
+                  )
+                })) : (
+                <div className="text-center text-[#636363] text-sm ">
                   No data available
                 </div>
               )}
