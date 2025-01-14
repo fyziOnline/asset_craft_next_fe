@@ -1,5 +1,3 @@
-import { get, update } from "lodash";
-
 export const urls = {
   login: "/user/login",
   finalise: "/user/login/finalise",
@@ -16,7 +14,8 @@ export const urls = {
   asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
   asset_generate: "/asset/generate",
   assetVersionBlock_update: "/AssetVersionBlock/update",
-  aiPrompt_Asset_select:"/aiPrompt/Asset/select",
+  assetVersionBlock_updateIgnoreStatus: "/AssetVersionBlock/updateIgnoreStatus",
+  aiPrompt_Asset_select: "/aiPrompt/Asset/select",
   aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
   aiPrompt_Asset_update: "/aiPrompt/Asset/update",
   aiPrompt_Campaign_select: "/aiPrompt/Campaign/select",
