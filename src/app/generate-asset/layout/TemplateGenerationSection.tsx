@@ -1,7 +1,6 @@
 'use client';
 import React, { FC, useState } from 'react';
 import Image from 'next/image';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useAppData } from '@/context/AppContext';
 import { Template } from '@/types/templates';
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
@@ -88,23 +87,6 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const sidebarStep3 = () => {
         return (
             <>
-                {/* {
-                    <TransformWrapper
-                        initialScale={0.4}
-                        minScale={0.4}
-                        maxScale={0.4}
-                        panning={{ lockAxisX: true }}
-                        centerZoomedOut
-                        smooth
-                        centerOnInit
-                    >
-                        <TransformComponent
-                            wrapperStyle={{ width: '100%', height: '100%' }}
-                        >
-                            <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
-                        </TransformComponent>
-                    </TransformWrapper>
-                } */}
                 <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
             </>
         );

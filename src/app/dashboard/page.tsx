@@ -42,9 +42,6 @@ const Dashboard: FC = () => {
 
   const { setContextData } = useAppData()
 
-  console.log("pendingApproval", pendingApproval);
-
-
   useEffect(() => {
     setContextData({
       isRegenerateHTML: false,

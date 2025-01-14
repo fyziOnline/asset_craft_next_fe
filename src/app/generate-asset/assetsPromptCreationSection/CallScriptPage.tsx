@@ -40,8 +40,6 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
     const router = useRouter();
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
-    const [isShowList, setIsShowList] = useState<number[]>([]);
-    const [html_content, setHtml_content] = useState("");
     const { refFormData, refSection, handleInputSection, handleInputText } = useInputFormDataGenerate()
     const [existingCampaignDetails, setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
     const { assetIDTemplateRef, generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
@@ -55,16 +53,6 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
         }
     }, [])
 
-    const updateShowList = (value: number) => {
-        setIsShowList((pre) => {
-            if (pre.includes(value)) {
-                return pre.filter((item) => item != value)
-            } else {
-                return [...pre, value];
-            }
-        })
-    }
-
     const handleGenerate = async () => {
         if (generateStep === 2 || checkedList.length !== 4) {
             return;
@@ -74,7 +62,6 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
 
         if (newStep > 3) { // Reset after completing step 3
             newStep = 1;
-            setIsShowList([]);
             setCheckedList([]);
             setContextData({ assetTemplateShow: false });
         } else {
