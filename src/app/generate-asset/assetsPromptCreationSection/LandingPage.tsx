@@ -116,15 +116,16 @@ const LandingPage = ({ params }: LandingPageProps) => {
                 setShowLoading(true)
                 const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.ProjectDetails, contextData.isRegenerateHTML)
                 setShowLoading(false)
+                router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}`)
                 // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isRegenerateHTML: true });
                 // setContextData({ AssetHtml: res as AssetHtmlProps });
-                if (res?.isSuccess) {
-                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}`)
-                } else {
-                    setGenerateStep(3);
-                    setContextData({ assetGenerateStatus: 3 })
-                    setContextData({ AssetHtml: res as AssetHtmlProps });
-                }
+                // if (res?.isSuccess) {
+                //     router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}`)
+                // } else {
+                //     setGenerateStep(3);
+                //     setContextData({ assetGenerateStatus: 3 })
+                //     setContextData({ AssetHtml: res as AssetHtmlProps });
+                // }
                 return
             }
         }
