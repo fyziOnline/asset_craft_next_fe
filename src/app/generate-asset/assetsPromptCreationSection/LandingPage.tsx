@@ -281,25 +281,6 @@ const LandingPage = ({ params }: LandingPageProps) => {
                             )
                         })}
                     </div>
-                    {/* <div>
-                        <ChildrenTitle title='Section 1: Hero Section' customClass="text-[18px]" />
-                        <ChildrenTitle title='Headline:' />
-                        <TextField customClass='h-16' placeholder={`"Generate a compelling headline that captures attention and introduces the product. The product is [Product Name], and it is designed to help [Target Audience] with [Main Benefit]."`} />
-
-                        <ChildrenTitle title='Subheading:' customClass="text-[18px] mt-[20px]" />
-                        <TextField placeholder={`"Generate a brief subheading or tagline that supports the headline and highlights the product’s core value. Focus on [Key Feature] for [Target Audience]."`} rows={2} />
-
-                        <ChildrenTitle title='Call-to-Action (CTA):' customClass="text-[18px] mt-[20px]" />
-                        <TextField placeholder={`"Generate a clear call-to-action (CTA) encouraging users to engage. Focus on [Desired User Action]."`} rows={1} />
-
-                        <ChildrenTitle title='Section 2: Feature Highlights' customClass="text-[18px] mt-[20px]" />
-                        <ChildrenTitle title='Main Features:' />
-                        <TextField placeholder={`“List 3-5 main features or benefits of the product. Focus on [Key Features] and how they help [Target Audience]."`} rows={1} />
-
-                        <ChildrenTitle title='Section 3: Closing CTA' customClass="text-[18px] mt-[20px]" />
-                        <ChildrenTitle title='Final Call-to-Action:' />
-                        <TextField placeholder={`"Sign up for a free demo and experience cloud efficiency today!"`} rows={1} />
-                    </div> */}
                     <div className='w-[300px]'>
                         <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
                         <RangeSlider onSelectValue={(value) => {

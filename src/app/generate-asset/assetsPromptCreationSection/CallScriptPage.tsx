@@ -5,8 +5,6 @@ import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
 import DropDown from '@/components/global/DropDown';
 import RangeSlider from '@/components/global/RangeSlider';
-import { ApiService } from '@/lib/axios_generic';
-import { urls } from '@/apis/urls';
 import ChooseLabel from '@/components/global/ChooseLabel';
 import { useAppData } from '@/context/AppContext';
 import ChildrenTitle from '@/components/global/ChildrenTitle';
@@ -19,98 +17,91 @@ import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { useRouter } from 'next/navigation';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 
+const ListTargetAudience = [
+    { label: 'General Public', value: 'General Public' },
+    { label: 'Existing Customers', value: 'Existing Customers' },
+    { label: 'Prospective Customers', value: 'Prospective Customers' }
+]
+
+const ListTone = [
+    { label: 'Empathetic (for grievance/support)', value: 'Empathetic (for grievance/support)' },
+    { label: 'Professional and Technical', value: 'Professional and Technical' },
+    { label: 'Conversational and Collaborative', value: 'Conversational and Collaborative' },
+    { label: 'Persuasive and Sales-Oriented', value: 'Persuasive and Sales-Oriented' }
+]
 interface CallScriptPageProps {
-    params : {
-        template : Template
-        project_name ?: string
+    params: {
+        template: Template
+        project_name?: string
     }
 }
 
-
-const CallScriptPage = ({params}:CallScriptPageProps) => {
-    // const [isOpen, setIsOpen] = useState(false);
+const CallScriptPage = ({ params }: CallScriptPageProps) => {
     const router = useRouter();
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
     const [isShowList, setIsShowList] = useState<number[]>([]);
     const [html_content, setHtml_content] = useState("");
-    const {refFormData,refSection,handleInputSection,handleInputText} = useInputFormDataGenerate()
-    const [existingCampaignDetails,setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
+    const { refFormData, refSection, handleInputSection, handleInputText } = useInputFormDataGenerate()
+    const [existingCampaignDetails, setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
     const { assetIDTemplateRef, generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' as string } })
-    const {contextData,setContextData} = useAppData()
+    const { contextData, setContextData } = useAppData()
     const { setShowLoading } = useLoading()
 
     useEffect(() => {
-        refFormData.current={
+        refFormData.current = {
             ...refFormData.current,
-            product:params.project_name
+            product: params.project_name
         }
     }, [])
 
-    const updateShowList = (value : number) => {
-        setIsShowList((pre)=>{
+    const updateShowList = (value: number) => {
+        setIsShowList((pre) => {
             if (pre.includes(value)) {
-                return pre.filter((item)=>item != value)
+                return pre.filter((item) => item != value)
             } else {
                 return [...pre, value];
             }
         })
     }
-    
-
-    const ListTargetAudience = [
-        { label: 'General Public', value: 'General Public' },
-        { label: 'Existing Customers', value: 'Existing Customers' },
-        { label: 'Prospective Customers', value: 'Prospective Customers' }
-    ]
-
-    const ListTone = [
-        { label: 'Empathetic (for grievance/support)', value: 'Empathetic (for grievance/support)' },
-        { label: 'Professional and Technical', value: 'Professional and Technical' },
-        { label: 'Conversational and Collaborative', value: 'Conversational and Collaborative' },
-        { label: 'Persuasive and Sales-Oriented', value: 'Persuasive and Sales-Oriented' }
-    ]
 
     const handleGenerate = async () => {
-            if (generateStep === 2 || checkedList.length !== 4) {
-                return;
-            }
-    
-            let newStep = generateStep + 1;
-    
-            if (newStep > 3) { // Reset after completing step 3
-                newStep = 1;
-                setIsShowList([]);
-                setCheckedList([]);
-                setContextData({ assetTemplateShow: false });
-            } else {
-                setContextData({ assetTemplateShow: true });
-    
-                if (newStep === 2) {
-                    setCheckedList([0, 1, 2, 3, 4]);
-                    setContextData({ assetGenerateStatus: newStep });
-                    setGenerateStep(newStep);
-                    setShowLoading(true)
-                    const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.ProjectDetails, contextData.isRegenerateHTML)
-                    setShowLoading(false)
-                    // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isRegenerateHTML: true });
-                    // setContextData({ AssetHtml: res as AssetHtmlProps });
-                    if (res?.isSuccess) {
-                        router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}`)
-                    } else {
-                        setGenerateStep(3);
-                        setContextData({ assetGenerateStatus: 3 })
-                        setContextData({ AssetHtml: res as AssetHtmlProps });
-                    }
-                    return
+        if (generateStep === 2 || checkedList.length !== 4) {
+            return;
+        }
+
+        let newStep = generateStep + 1;
+
+        if (newStep > 3) { // Reset after completing step 3
+            newStep = 1;
+            setIsShowList([]);
+            setCheckedList([]);
+            setContextData({ assetTemplateShow: false });
+        } else {
+            setContextData({ assetTemplateShow: true });
+
+            if (newStep === 2) {
+                setCheckedList([0, 1, 2, 3, 4]);
+                setContextData({ assetGenerateStatus: newStep });
+                setGenerateStep(newStep);
+                setShowLoading(true)
+                const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.ProjectDetails, contextData.isRegenerateHTML)
+                setShowLoading(false)
+                // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isRegenerateHTML: true });
+                // setContextData({ AssetHtml: res as AssetHtmlProps });
+                if (res?.isSuccess) {
+                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}`)
+                } else {
+                    setGenerateStep(3);
+                    setContextData({ assetGenerateStatus: 3 })
+                    setContextData({ AssetHtml: res as AssetHtmlProps });
                 }
+                return
             }
-            setContextData({ assetGenerateStatus: newStep });
-            setGenerateStep(newStep);
-        };
-
-
-
+        }
+        setContextData({ assetGenerateStatus: newStep });
+        setGenerateStep(newStep);
+    };
 
     const doesFormCompleted = (step: number, status?: boolean) => {
         if (step === 1) {
@@ -133,21 +124,17 @@ const CallScriptPage = ({params}:CallScriptPageProps) => {
         }
     }
 
-    const fetchExistingCampaignData = (data:CampaignSelectResponse | null) => {
+    const fetchExistingCampaignData = (data: CampaignSelectResponse | null) => {
         setExistingCampaignDetails(data)
         refFormData.current = {
             ...refFormData.current,
-            campaignGoal : data?.aIPromptCampaign.campaignGoal,
-            targetAudience : data?.aIPromptCampaign.targetAudience,
-            webUrl : data?.aIPromptCampaign.webUrl,
-            outputScale:data?.aIPromptCampaign.outputScale
+            campaignGoal: data?.aIPromptCampaign.campaignGoal,
+            targetAudience: data?.aIPromptCampaign.targetAudience,
+            webUrl: data?.aIPromptCampaign.webUrl,
+            outputScale: data?.aIPromptCampaign.outputScale
             // fileSelected:data?.aIPromptCampaign.fileName,
         }
     }
-
-
-
-
 
     return (
         <div>
@@ -170,54 +157,54 @@ const CallScriptPage = ({params}:CallScriptPageProps) => {
                     checked={checkedList.includes(1)}
                     handleShowContent={() => { doesFormCompleted(2) }}
                 >
-                   <div className='flex items-start gap-[16%]'>
-                            <div className='w-[260px]'>
-                                <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
-                                <DropDown
-                                    onSelected={(optionSelected) => {
-                                        refFormData.current = {
-                                            ...refFormData.current,
-                                            campaignGoal: optionSelected.value
-                                        }
-                                        doesFormCompleted(2)
-                                    }}
-                                    isShowOther = {false}
-                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.campaignGoal : "" }
-                                    selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
-                            </div>
-
-                            <div className='w-[260px]'>
-                                <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
-                                <DropDown
-                                    onSelected={(optionSelected) => {
-                                        refFormData.current = {
-                                            ...refFormData.current,
-                                            targetAudience: optionSelected.value
-                                        }
-                                        doesFormCompleted(2)
-                                    }}
-                                    isShowOther = {false}
-                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.targetAudience : "" }
-                                    selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
-                            </div>
-                        </div>
-
-                            <div>
-                                <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
-                                <TextField handleChange={(e) => { 
-                                    handleInputText(e, "webUrl") 
-                                    // doesFormCompleted(4)
-                                }}  defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
-                                    placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
-                                <DragAndDrop onFileSelect={(file) => {
+                    <div className='flex items-start gap-[16%]'>
+                        <div className='w-[260px]'>
+                            <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
+                            <DropDown
+                                onSelected={(optionSelected) => {
                                     refFormData.current = {
                                         ...refFormData.current,
-                                        fileSelected: file
+                                        campaignGoal: optionSelected.value
                                     }
-                                    // doesFormCompleted(4)
-                                }} />
+                                    doesFormCompleted(2)
+                                }}
+                                isShowOther={false}
+                                preSelectValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.campaignGoal : ""}
+                                selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
+                        </div>
 
-                            </div>
+                        <div className='w-[260px]'>
+                            <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
+                            <DropDown
+                                onSelected={(optionSelected) => {
+                                    refFormData.current = {
+                                        ...refFormData.current,
+                                        targetAudience: optionSelected.value
+                                    }
+                                    doesFormCompleted(2)
+                                }}
+                                isShowOther={false}
+                                preSelectValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.targetAudience : ""}
+                                selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
+                        </div>
+                    </div>
+
+                    <div>
+                        <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
+                        <TextField handleChange={(e) => {
+                            handleInputText(e, "webUrl")
+                            // doesFormCompleted(4)
+                        }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
+                            placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                        <DragAndDrop onFileSelect={(file) => {
+                            refFormData.current = {
+                                ...refFormData.current,
+                                fileSelected: file
+                            }
+                            // doesFormCompleted(4)
+                        }} />
+
+                    </div>
                 </Accordion>
             </div>
             <div className='mt-[25px]'>
@@ -229,37 +216,37 @@ const CallScriptPage = ({params}:CallScriptPageProps) => {
                 >
                     <div className='max-w-[90%]'>
                         <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
-                        <TextField 
-                            placeholder="What is the purpose of the call? What would you like to communicate?" 
+                        <TextField
+                            placeholder="What is the purpose of the call? What would you like to communicate?"
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'
-                            handleChange={(e)=>{
-                                handleInputText(e,"topic")
+                            handleChange={(e) => {
+                                handleInputText(e, "topic")
                             }}
                         ></TextField>
 
                         <ChildrenTitle title='Describe the key messages you want to highlight' customClass='mt-5' ></ChildrenTitle>
-                        <TextField 
-                            placeholder="What are the 2-3 key points you want to highlight in this post?" 
+                        <TextField
+                            placeholder="What are the 2-3 key points you want to highlight in this post?"
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'
-                            handleChange={(e)=>{
-                                handleInputText(e, "keyPoints") 
-                            }}    
+                            handleChange={(e) => {
+                                handleInputText(e, "keyPoints")
+                            }}
                         ></TextField>
                     </div>
                     <div className='max-w-[90%] flex mt-5'>
                         <div className='flex-1'>
                             <ChildrenTitle title='What tone should the call have?'></ChildrenTitle>
-                            <ChooseLabel 
-                                onSelect={(selectedOption)=>{
+                            <ChooseLabel
+                                onSelect={(selectedOption) => {
                                     refFormData.current = {
                                         ...refFormData.current,
-                                        tone : selectedOption.value
+                                        tone: selectedOption.value
                                     }
                                 }}
                                 optionLists={ListTone}
                             ></ChooseLabel>
                         </div>
-                        
+
                     </div>
                 </Accordion>
             </div>
@@ -272,32 +259,32 @@ const CallScriptPage = ({params}:CallScriptPageProps) => {
                 >
                     <div>
                         {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
-                                if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
-                                    refSection.current = [...refSection.current as SectionProps[], {
-                                        templateBlockID: item.templateBlockID || "",
-                                        aiPrompt: item.aiPrompt || ""
-                                    }]
-                                }
+                            if (params.template.templatesBlocks && refSection.current.length < params.template?.templatesBlocks.filter((item) => !item.isStatic).length) {
+                                refSection.current = [...refSection.current as SectionProps[], {
+                                    templateBlockID: item.templateBlockID || "",
+                                    aiPrompt: item.aiPrompt || ""
+                                }]
+                            }
 
-                                return (
-                                    <div key={index}>
-                                        <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
-                                        <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
-                                        <TextField handleChange={(e) => {
-                                            handleInputSection(e, index) 
-                                            //  doesFormCompleted(5)
-                                        }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
-                                    </div>
-                                )
+                            return (
+                                <div key={index}>
+                                    <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
+                                    <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
+                                    <TextField handleChange={(e) => {
+                                        handleInputSection(e, index)
+                                        //  doesFormCompleted(5)
+                                    }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
+                                </div>
+                            )
                         })}
 
                     </div>
                     <div className='flex-1'>
                         <ChildrenTitle title='How creative you want the output?'></ChildrenTitle>
-                        <RangeSlider onSelectValue={(value)=>{
-                            refFormData.current={
+                        <RangeSlider onSelectValue={(value) => {
+                            refFormData.current = {
                                 ...refFormData.current,
-                                outputScale : value
+                                outputScale: value
                             }
                         }}
                         ></RangeSlider>
