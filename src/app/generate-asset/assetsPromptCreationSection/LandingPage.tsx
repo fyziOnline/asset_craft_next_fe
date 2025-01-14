@@ -32,8 +32,8 @@ const LandingPage = ({ params }: LandingPageProps) => {
     const { refFormData, refSection, handleInputText, handleInputSection } = useInputFormDataGenerate()
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
-    const [existingCampaignDetails,setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
-    
+    const [existingCampaignDetails, setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
+
 
     useEffect(() => {
         refFormData.current = {
@@ -52,43 +52,43 @@ const LandingPage = ({ params }: LandingPageProps) => {
         })
     }
 
-    const fetchExistingCampaignData = (data:CampaignSelectResponse | null) => {
-            setExistingCampaignDetails(data)
-            refFormData.current = {
-                ...refFormData.current,
-                campaignGoal : data?.aIPromptCampaign.campaignGoal,
-                targetAudience : data?.aIPromptCampaign.targetAudience,
-                webUrl : data?.aIPromptCampaign.webUrl,
-                outputScale:data?.aIPromptCampaign.outputScale
-                // fileSelected:data?.aIPromptCampaign.fileName,
-            }
-            if (isShowList.includes(1) || checkedList.includes(1)) {
-                doesFormCompleted(2)
-            }
+    const fetchExistingCampaignData = (data: CampaignSelectResponse | null) => {
+        setExistingCampaignDetails(data)
+        refFormData.current = {
+            ...refFormData.current,
+            campaignGoal: data?.aIPromptCampaign.campaignGoal,
+            targetAudience: data?.aIPromptCampaign.targetAudience,
+            webUrl: data?.aIPromptCampaign.webUrl,
+            outputScale: data?.aIPromptCampaign.outputScale
+            // fileSelected:data?.aIPromptCampaign.fileName,
+        }
+        if (isShowList.includes(1) || checkedList.includes(1)) {
+            doesFormCompleted(2)
+        }
     }
 
-    const doesFormCompleted = (step:number,status?:boolean) => {
-        if (step===1) {
+    const doesFormCompleted = (step: number, status?: boolean) => {
+        if (step === 1) {
             setCheckedList((prev) =>
                 status
-                  ? prev.includes(0) ? prev : [...prev, 0] 
-                  : prev.filter((item) => item !== 0)
-              ) 
+                    ? prev.includes(0) ? prev : [...prev, 0]
+                    : prev.filter((item) => item !== 0)
+            )
         }
-        if(step===2) {
+        if (step === 2) {
             if (
                 refFormData.current?.campaignGoal?.length &&
-                refFormData.current?.targetAudience?.length 
-             )  {
+                refFormData.current?.targetAudience?.length
+            ) {
                 setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
-             } else {
+            } else {
                 setCheckedList((prev) => prev.filter((item) => item !== 1))
             }
         }
-        if (step===3) {
+        if (step === 3) {
             setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
         }
-        if (step===4) {
+        if (step === 4) {
             setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
         }
     }
@@ -140,9 +140,9 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
                 >
-                    <SectionAssetDetails 
+                    <SectionAssetDetails
                         validatingTheData={doesFormCompleted}
-                        returnCampaignDetails={fetchExistingCampaignData}    
+                        returnCampaignDetails={fetchExistingCampaignData}
                     />
                 </Accordion>
             </div>
@@ -152,11 +152,11 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     isRequire={true}
                     HeaderTitle="Campaign Overview"
                     checked={checkedList.includes(1)}
-                    handleShowContent={()=>{
+                    handleShowContent={() => {
                         updateShowList(1)
                         doesFormCompleted(2)
                     }}
-                    >
+                >
                     <div>
                         {/* <ChildrenTitle title='Product/Solution' ></ChildrenTitle>
                         <TextField
@@ -177,7 +177,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                         doesFormCompleted(2)
                                     }}
                                     isShowOther={false}
-                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.campaignGoal : "" }
+                                    preSelectValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.campaignGoal : ""}
                                     selectPlaceHolder="Select Campaign Goal" optionLists={listofcampains} ></DropDown>
                             </div>
 
@@ -192,27 +192,27 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                         doesFormCompleted(2)
                                     }}
                                     isShowOther={false}
-                                    preSelectValue= {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.targetAudience : "" }
+                                    preSelectValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.targetAudience : ""}
                                     selectPlaceHolder="Select Target Audience" optionLists={ListTargetAudience} ></DropDown>
                             </div>
                         </div>
 
                         <div >
-                                <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
-                                <TextField handleChange={(e) => { 
-                                    handleInputText(e, "webUrl") 
-                                    // doesFormCompleted(4)
-                                }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
-                                    placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
-                                <DragAndDrop onFileSelect={(file) => {
-                                    refFormData.current = {
-                                        ...refFormData.current,
-                                        fileSelected: file
-                                    }
-                                    // doesFormCompleted(4)
-                                }} />
+                            <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
+                            <TextField handleChange={(e) => {
+                                handleInputText(e, "webUrl")
+                                // doesFormCompleted(4)
+                            }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
+                                placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                            <DragAndDrop onFileSelect={(file) => {
+                                refFormData.current = {
+                                    ...refFormData.current,
+                                    fileSelected: file
+                                }
+                                // doesFormCompleted(4)
+                            }} />
 
-                            </div> 
+                        </div>
                     </div>
                 </Accordion>
             </div>
@@ -222,24 +222,24 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     isRequire={true}
                     HeaderTitle="Key Message & Content"
                     checked={checkedList.includes(2)}
-                    handleShowContent={()=>{
-                        doesFormCompleted(3,true)
+                    handleShowContent={() => {
+                        doesFormCompleted(3, true)
                         updateShowList(2)
                     }}
-                    >
+                >
                     <div>
                         <ChildrenTitle showStar={true} customClass='mt-5' title='What is the primary message of the landing page?'></ChildrenTitle>
                         <TextField
-                            handleChange={(e) => { 
-                                handleInputText(e, "topic") 
+                            handleChange={(e) => {
+                                handleInputText(e, "topic")
                                 // doesFormCompleted(3)
                             }}
                             placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <ChildrenTitle customClass='mt-5' title='Provide additional information that supports the main message.'></ChildrenTitle>
                         <TextField
-                            handleChange={(e) => { 
-                                handleInputText(e, "keyPoints") 
+                            handleChange={(e) => {
+                                handleInputText(e, "keyPoints")
                                 // doesFormCompleted(3)
                             }}
                             rows={4}
@@ -255,14 +255,14 @@ const LandingPage = ({ params }: LandingPageProps) => {
                 <Accordion
                     HeaderTitle="Content Brief"
                     checked={checkedList.includes(3)}
-                    handleShowContent={()=>{
+                    handleShowContent={() => {
                         doesFormCompleted(4)
                         updateShowList(3)
                     }}
-                    >
+                >
                     <div>
                         {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
-                            if (params.template.templatesBlocks && refSection.current.length < params.template.templatesBlocks.length) {
+                            if (params.template.templatesBlocks && refSection.current.length < params.template?.templatesBlocks.filter((item) => !item.isStatic).length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
                                     templateBlockID: item.templateBlockID || "",
                                     aiPrompt: item.aiPrompt || ""
@@ -273,8 +273,8 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                 <div key={index}>
                                     <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
                                     <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
-                                    <TextField handleChange={(e) => { 
-                                        handleInputSection(e, index) 
+                                    <TextField handleChange={(e) => {
+                                        handleInputSection(e, index)
                                         // doesFormCompleted(5)    
                                     }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
                                 </div>
@@ -301,15 +301,15 @@ const LandingPage = ({ params }: LandingPageProps) => {
                         <TextField placeholder={`"Sign up for a free demo and experience cloud efficiency today!"`} rows={1} />
                     </div> */}
                     <div className='w-[300px]'>
-                            <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
-                            <RangeSlider onSelectValue={(value) => {
-                                refFormData.current = {
-                                    ...refFormData.current,
-                                    outputScale: value
-                                }
-                            }} defaultValue = {existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.outputScale : 7 }
-                            ></RangeSlider>
-                        </div>
+                        <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
+                        <RangeSlider onSelectValue={(value) => {
+                            refFormData.current = {
+                                ...refFormData.current,
+                                outputScale: value
+                            }
+                        }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.outputScale : 7}
+                        ></RangeSlider>
+                    </div>
                 </Accordion>
             </div>
             <div className='flex justify-end my-[30px]'>
