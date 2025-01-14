@@ -286,20 +286,6 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             )
                         })}
                     </div>
-                    {/* <div>
-                        <ChildrenTitle title='Hook/Headline & Introduction' customClass="text-[18px]" />
-                        <ChildrenTitle title='Catchy introduction to the topic/product along with a brief overview.' />
-                        <TextField customClass='h-16' placeholder={`"Write a compelling headline that promotes the benefits of HPE GreenLake’s hybrid cloud solution, followed by a 2-3 sentence introduction explaining the benefits of HPE GreenLake and why attending StorageAsia 2024 is beneficial."`} />
-
-                        <ChildrenTitle title='Main Message & Call-to-Action (CTA)' customClass="text-[18px] mt-[20px]" />
-                        <ChildrenTitle title='Highlight the core benefits of the product along with actionable event details.' />
-                        <TextField placeholder={`"List 2-3 key benefits of HPE GreenLake, focusing on flexibility, control, and cost efficiency. Write a 2-3 sentence event promotion with a call-to-action that encourages users to attend StorageAsia 2024 and engage with HPE experts."`} rows={2} />
-
-                        <ChildrenTitle title='Hashtags & Keywords' customClass="text-[18px] mt-[20px]" />
-                        <ChildrenTitle title='Industry-relevant hashtags for discoverability.' />
-                        <TextField placeholder={`"Generate 4-5 relevant hashtags for an HPE GreenLake LinkedIn post on hybrid cloud solutions."`} rows={1} />
-
-                    </div> */}
                     <div className='w-[300px]'>
                         <ChildrenTitle title='How creative you want the output?' customClass='mt-5' ></ChildrenTitle>
                         <RangeSlider onSelectValue={(value) => {

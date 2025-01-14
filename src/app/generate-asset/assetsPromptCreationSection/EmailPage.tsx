@@ -34,7 +34,6 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const { contextData, setContextData } = useAppData();
     const [existingCampaignDetails, setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
 
-
     useEffect(() => {
         refFormData.current = {
             ...refFormData.current,
