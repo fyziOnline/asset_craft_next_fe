@@ -213,7 +213,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                         </div> : null}
                         <div className='flex-1 h-[86vh] overflow-y-scroll scrollbar-hide px-5 py-2'>
                             <div className='mt-7' />
-                            {!assetBlock.isStatic ? <div className='border-b border-solid border-[#D9D9D9] pb-3'>
+                            {!assetBlock.isStatic ? <div className='pb-3'>
                                 <div className='flex flex-row mb-1 mt-2 items-center'>
                                     <div className='flex-grow text-[14px] font-bold'>AI Prompt:</div>
                                     {!isEditPrompt ? <div onClick={() => {
