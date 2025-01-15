@@ -35,14 +35,14 @@ const TaglineContents: TaglineObj[] = [
 const Home: FC = () => {
   const {
     isLoading, isOtpVisible, emailLoginDefault, handleLogin, onChangeEmail,
-    handleOtpSubmit, onChangeOtp, handleCancelOtp,checkIsUserAuthorized
+    handleOtpSubmit, onChangeOtp, handleCancelOtp, checkIsUserAuthorized
   } = useLogin();
 
   const router = useRouter()
   useLayoutEffect(() => {
     if (checkIsUserAuthorized()) {
       router.push('/dashboard');
-    } 
+    }
   }, [])
 
   return (
@@ -54,7 +54,7 @@ const Home: FC = () => {
             <p className="text-wrap text-base">Simplifying Marketing Content with AI-Driven</p>
           </section>
 
-          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-10 padbot10 flex flex-col items-center ">
+          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-10 padbot10 flex flex-col items-center">
             <div className="absolute top-[35%] left-[25%]">
               <div className="color-wheel ">
                 <div className="eclipse-1"></div>
@@ -63,20 +63,20 @@ const Home: FC = () => {
               </div>
             </div>
             <UserIcon className="mb-[1.5rem] " color="white" />
-            <input 
-              defaultValue={emailLoginDefault} 
-              onChange={onChangeEmail} 
-              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full" 
-              placeholder="Enter Your email id" 
-              type="text" 
-/>
+            <input
+              defaultValue={emailLoginDefault}
+              onChange={onChangeEmail}
+              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider"
+              placeholder="Enter Your email id"
+              type="text"
+            />
             <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[32ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
-            <p className="text-[0.7rem] mb-[0.7rem] ">Not a member? <span className="text-green-100">Sign up now</span></p>
+            <p className="text-[0.8rem] mb-[0.7rem]">Not a member? <span className="text-green-100 cursor-pointer pl-[2px]">Sign up now</span></p>
           </div>
         </div>
-        
-        
-        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mt-[2%] mb-[2%]">   
+
+
+        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mt-[2%] mb-[2%]">
         </div>
 
         <div className="grid grid-cols-4 gap-7 mb-[2%]">
@@ -92,39 +92,36 @@ const Home: FC = () => {
 
       </div>
 
-
       {isOtpVisible && (
-        <div className="fixed inset-0 bg-gray-900  bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gradient-to-br from-[#00A881]  to-[#073634] w-fit px-6 pt-[1rem] pb-10 padbot10 flex flex-col items-center rounded-[6%] border-white border-[1px]">
+        <div className="fixed inset-0 bg-gray-900  bg-opacity-50 flex items-center justify-center pb-20 z-50">
+          <div className="bg-gradient-to-br from-[#00A881]  to-[#073634] w-fit px-6 pt-[1rem] pb-8 padbot10 flex flex-col items-center rounded-[6%] border-white border">
 
-           <div className="w-full flex justify-end">
+            <div className="w-full flex justify-end">
               <button
-              onClick={handleCancelOtp}
-               className="text-white text-3xl mb-1">
-              <IoMdClose />
+                onClick={handleCancelOtp}
+                className="text-white text-2xl mb-1">
+                <IoMdClose />
               </button>
-           </div>
-
-
-            <h3 className="text-xl mb-4 text-white font-bold">Enter OTP Code</h3>
+            </div>
+            <h3 className="text-xl mb-4 text-white font-semibold tracking-widest">Enter OTP Code</h3>
             <input
               type="text"
-              placeholder="Enter Your OTP ..."
+              placeholder="Enter Your OTP"
               onChange={onChangeOtp}
-              className="w-[32ch] p-3  mb-3 bg-transparent  text-white border border-white placeholder:text-white rounded-full outline-none"
+              className="w-[32ch] p-3  mb-3 bg-transparent  text-white border border-white placeholder:text-white rounded-full outline-none text-center tracking-widest placeholder:tracking-wide"
             />
 
-             <p className="text-[0.7rem] text-white">Don't receive OTP? </p>
+            <p className="text-[0.9rem] text-white mb-1 tracking-wider">Didn't receive the OTP?</p>
 
-             <p className=" text-white pt-[1px] mb-[4%] border-b border-white inline-block leading-none">Resend OTP </p>
+            <p onClick={handleLogin} className=" text-white pt-[1px] mb-[3%] border-b border-white inline-block leading-none cursor-pointer tracking-wide">Resend OTP </p>
 
 
             <div className="flex justify-between px-[1rem] py-[.75rem]">
-              
-              <Button 
+
+              <Button
                 buttonText={isLoading ? "Verifying OTP..." : "Submit OTP"}
                 showIcon={false}
-                textStyle='text-[1rem] font-base text-[#00A881]'
+                textStyle='text-[1rem] font-medium text-[#00A881] tracking-wide'
                 backgroundColor={"bg-custom-gradient-green"}
                 handleClick={handleOtpSubmit}
                 customClass='static px-[1.4rem] py-2 group-hover:border-white gap-0 w-[32ch] px-[1rem] py-[0.7rem]' />
@@ -135,7 +132,7 @@ const Home: FC = () => {
       )}
 
     </div>
-  ); 
+  );
 }
 
 

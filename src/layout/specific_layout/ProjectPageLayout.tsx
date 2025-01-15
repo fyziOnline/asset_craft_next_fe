@@ -12,16 +12,17 @@ interface Project {
 }
 
 interface ProjectSectionProps {
+  fieldClick?: string;
   project_data: Project[]
   onSelectingProjects: (project_name: string) => void
   tableHeadings: string[]
   headersHavingToggle: string[]
-  fieldClick?: string
+  hiddenFields?: string[]
   page: string
   viewType: 'project' | 'campaign'
 }
 
-const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingProjects, tableHeadings, headersHavingToggle, fieldClick = '', page, viewType }) => {
+const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingProjects, tableHeadings, headersHavingToggle, hiddenFields = [], page, viewType }) => {
   const [isList, setIsList] = useState<Boolean>(true)
   const toggleListType = () => {
     setIsList(pre => !pre)
@@ -48,7 +49,14 @@ const ProjectPageLayout: FC<ProjectSectionProps> = ({ project_data, onSelectingP
             </div>
             : (
               project_data.length > 0 ?
-                <Table columnWidths={['8fr', '2fr', '1fr']} handleClick={onSelectingProjects} fieldClick={fieldClick} listItems={project_data} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />
+                <Table
+                  isPagination={true}
+                  columnWidths={['8fr', '2fr', '1fr']}
+                  handleClick={onSelectingProjects}
+                  hiddenFields={hiddenFields}
+                  listItems={project_data}
+                  tableHeadings={tableHeadings}
+                  arrowInHeadings={headersHavingToggle} />
                 : <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
             )
         }

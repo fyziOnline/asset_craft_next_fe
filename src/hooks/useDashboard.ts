@@ -9,97 +9,13 @@ import { ListTypePage } from '@/data/dataGlobal';
 import { debounce } from 'lodash';
 import { DropDownOptions } from '@/components/global/DropDown';
 import moment from 'moment';
-import { AppData, useAppData } from '@/context/AppContext';
-
-interface ClientAssetTypeProps {
-    clientAssetTypeID?: string,
-    clientID?: string,
-    assetTypeID?: string,
-    isEnabled?: boolean,
-    assetTypeName: string,
-    description?: string
-}
-
-interface CampaignsProps {
-    campaignID: string,
-    project: string,
-    campaignName: string,
-    country: string,
-    squad: string,
-    startDate: string,
-    endDate: string,
-    status: string,
-    isVisible: number
-}
-
-interface AssetsProps {
-    assetName: string,
-    language: string,
-    assetAIPrompt: string,
-    isVisible: number,
-    layoutID: string,
-    assetTypeID: string,
-    assetTypeName: string,
-    modifiedOn: string,
-    assetID: string
-}
-
-
-interface AllAssetsTypeProps {
-    project: string;
-    campaignName: string;
-    status: string;
-    approvedBy: string;
-    approvedOn: string;
-    assetID: string;
-    assetTypeName: string;
-    clientID: string;
-    campaignID: string;
-    assetVersionID: string;
-    assetName: string;
-    language: string;
-    createdOn: string;
-    assetAIPrompt: string;
-    isVisible: number;
-    layoutID: string;
-    layoutName: string;
-    layoutHTML: string;
-    assetVersions: AssetVersion[];
-    isSuccess: boolean;
-    errorOnFailure: string;
-}
-
-interface AssetVersion {
-    assetVersionID: string;
-    assetID: string;
-    templateID: string;
-    versionNumber: number;
-    versionName: string;
-    htmlGenerated: string;
-    htmlFileURL: string | null;
-    zipFileURL: string | null;
-    status: string;
-}
-
-interface UserDetailsProps {
-    userID: string;
-    name: string;
-    email: string;
-    userRole: string;
-    isActive: number;
-}
-
-
-type AssetDetails = {
-    project_name: string;
-    campaign_name: string;
-    asset_name: string;
-};
+import { useAppData } from '@/context/AppContext';
+import { AllAssetsTypeProps, AssetDetails, AssetsProps, CampaignsProps, ClientAssetTypeProps, UserDetailsProps } from '@/types/asset';
 
 export const useDashboard = () => {
     const [clientAssetTypes, setClientAssetTypes] = useState<ClientAssetTypeProps[]>([])
     const { setShowLoading } = useLoading()
-    const { setContextData , setError } = useAppData();
+    const { setContextData, setError } = useAppData();
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
@@ -110,6 +26,7 @@ export const useDashboard = () => {
     const [listProjects, setListProjects] = useState<DropDownOptions[]>([]);
     const [listCampaigns, setListCampaigns] = useState<CampaignsProps[]>([]);
     const [listAssets, setListAssets] = useState<AssetsProps[]>([]);
+    const [pendingApproval, setPendingApproval] = useState<any[]>([])
     const campaignIDRef = useRef("")
     const isCampaignSelect = useRef(false)
 
@@ -122,11 +39,14 @@ export const useDashboard = () => {
     const [dashboardAssets, setDashboardAssets] = useState<AllAssetsTypeProps[]>([])
     const [userDetails, setUserDetails] = useState<UserDetailsProps | null>(null);
 
+    const userRole = Cookies.get(nkey.userRole)
+
     useEffect(() => {
         getListProjects()
         getAssetTypes()
         getUserDetails()
         getAssetAllAtDashboard()
+        getPendingApproval()
     }, [])
 
     const getListProjects = async () => {
@@ -395,7 +315,29 @@ export const useDashboard = () => {
         }
     }
 
+    const getPendingApproval = async () => {
+        setShowLoading(true)
 
+        try {
+            const response = await ApiService.post<any>(`${urls.getAssetsToApprove}`, {
+                assignedTo: Cookies.get('userRole') === 'Approver' ? 1 : 0
+            })
+
+            if (response.isSuccess) {
+                setPendingApproval(response.assets)
+            }
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        }
+        finally {
+            setShowLoading(false)
+        }
+    }
 
     return {
         isProductNameValid,
@@ -418,6 +360,8 @@ export const useDashboard = () => {
         dashboardAssets,
         projectName: assetDetails.project_name,
         handleChangeAssetDetails,
-        userDetails
+        userDetails,
+        pendingApproval,
+        userRole
     };
 };

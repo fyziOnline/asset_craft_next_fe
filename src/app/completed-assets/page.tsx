@@ -34,7 +34,7 @@ const CompletedAssets: FC = () => {
 
   const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Approved By", "Approved On", "Current Status"]
   const arrowshowItems = ["Project Name", "Created On", "Approved On"]
-  const fieldClick = "dataItem"
+  const hiddenFields = ["dataItem"]
 
   const handleClick = (item: any) => {
     router.push(`/edit-html-content?project_name=${item.projectName}&campaign_name=${item.campaignName}&asset_name=${item.assetName}`)
@@ -43,13 +43,13 @@ const CompletedAssets: FC = () => {
   return (
     <>
       <AssetsPageLayout
-        fieldClick={fieldClick}
+        hiddenFields={hiddenFields}
         handleClick={handleClick}
         campaign_data={assetsDisplayTable}
         tableHeadings={tableHeading}
         headersHavingToggle={arrowshowItems}
         columnWidthsTable={["repeat(7, 1fr)"]}
-        page="Completed Assets"
+        page=""
       />
     </>
   )

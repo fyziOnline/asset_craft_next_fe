@@ -13,18 +13,18 @@ interface Asset {
 }
 
 interface AssetsPageProps {
+  fieldClick?: string;
   campaign_data: Asset[]
   // onSelectingCampaign : (campaign_name:string)=>void
   tableHeadings: string[]
   headersHavingToggle: string[]
-  fieldClick?: string
+  hiddenFields?: string[]
   columnWidthsTable?: string[]
   handleClick?: (value: any) => void;
   page: string
 }
 
-
-const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, fieldClick = '', page, handleClick, columnWidthsTable = [] }) => {
+const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, hiddenFields = [], page, handleClick, columnWidthsTable = [] }) => {
   const [isList, setIsList] = useState<Boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
   
@@ -81,7 +81,14 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
               ))}
             </div>
             :
-            <Table columnWidths={columnWidthsTable} handleClick={handleClick} fieldClick={fieldClick} listItems={filteredData} tableHeadings={tableHeadings} arrowInHeadings={headersHavingToggle} />}
+            <Table
+              isPagination={true}
+              columnWidths={columnWidthsTable}
+              handleClick={handleClick}
+              hiddenFields={hiddenFields}
+              listItems={filteredData}
+              tableHeadings={tableHeadings}
+              arrowInHeadings={headersHavingToggle} />}
         <div className='h-[10vh]' />
       </div>
     </>

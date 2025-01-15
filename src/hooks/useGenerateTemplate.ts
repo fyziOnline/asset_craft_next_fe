@@ -56,11 +56,11 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
             } catch (innerError) {
               const apiError = ApiService.handleError(innerError)
               console.error("API Error for item:", item, apiError);
-              setError({
-                  status: apiError.statusCode,
-                  message: apiError.message,
-                  showError: true
-              })
+              // setError({
+              //   status: apiError.statusCode,
+              //   message: apiError.message,
+              //   showError: true
+              // })
               return { isSuccess: false };
             }
           });
@@ -95,12 +95,12 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
             return { isSuccess: false };
           } catch (innerError) {
             const apiError = ApiService.handleError(innerError)
-            console.error( "API Error for item:", apiError);
-            setError({
-                status: apiError.statusCode,
-                message: apiError.message,
-                showError: true
-            })
+            console.error("API Error for item:", apiError);
+            // setError({
+            //   status: apiError.statusCode,
+            //   message: apiError.message,
+            //   showError: true
+            // })
             return { isSuccess: false };
           }
         }
@@ -145,16 +145,16 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
   //   Check if the campaign exist and return true or false
-  const aiPromptCampaignExist = async (id: string = "") => {
-    try {
-      const resAIPromptCampaign = await ApiService.get<any>(
-        `${urls.aiPrompt_Campaign_select}?CampaignID=${id ?? campaignID}`
-      );
-      return resAIPromptCampaign.isSuccess;
-    } catch (error) {
-      return false;
-    }
-  };
+  // const aiPromptCampaignExist = async (id: string = "") => {
+  //   try {
+  //     const resAIPromptCampaign = await ApiService.get<any>(
+  //       `${urls.aiPrompt_Campaign_select}?CampaignID=${id ?? campaignID}`
+  //     );
+  //     return resAIPromptCampaign.isSuccess;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
 
   const aiPromptCampaignInsert = async (
     FormData: FormDataProps,
@@ -272,11 +272,11 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       }
     } catch (error) {
       const apiError = ApiService.handleError(error)
-      setError({
-          status: apiError.statusCode,
-          message: apiError.message,
-          showError: true
-      })
+      // setError({
+      //   status: apiError.statusCode,
+      //   message: apiError.message,
+      //   showError: true
+      // })
       return {
         campaignID: "",
         status: false
@@ -361,11 +361,11 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       }
     } catch (error) {
       const apiError = ApiService.handleError(error)
-      setError({
-          status: apiError.statusCode,
-          message: apiError.message,
-          showError: true
-      })
+      // setError({
+      //     status: apiError.statusCode,
+      //     message: apiError.message,
+      //     showError: true
+      // })
       return returnError(apiError.message);
     }
   };
@@ -407,11 +407,12 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       }
     } catch (error) {
       const apiError = ApiService.handleError(error)
-      setError({
-          status: apiError.statusCode,
-          message: apiError.message,
-          showError: true
-      })
+      // setError({
+      //   status: apiError.statusCode,
+      //   message: apiError.message,
+      //   showError: true
+      // })
+      return returnError(apiError.message);
     }
   };
 

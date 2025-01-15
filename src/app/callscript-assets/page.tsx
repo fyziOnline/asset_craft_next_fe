@@ -1,11 +1,7 @@
 import { FC } from "react"
-// import Breadcrumb from "@/components/global/Breadcrumb"
-import LayoutWrapper from "@/layout/LayoutWrapper"
 import Table from "@/components/global/Table"
-import { SalesCallIcon } from "@/assets/icons/TableIcon"
 
-  
-const page:FC = () => {
+const page: FC = () => {
 
   const tableData = [
     {
@@ -29,24 +25,17 @@ const page:FC = () => {
       approvedOn: '22.01.2024',
       currentStatus: 'Pending Approval',
     }
-];
+  ];
 
-  const tableHeading = ["Asset Name", "Created On" , "Approver" , "Last Edited" , "Current Status"]
+  const tableHeading = ["Asset Name", "Created On", "Approver", "Last Edited", "Current Status"]
 
-  const arrowshowItems = ["Asset Name", "Created On" , "Approver" , "Last Edited"]
- 
+  const arrowshowItems = ["Asset Name", "Created On", "Approver", "Last Edited"]
 
   return (
     <>
-        <LayoutWrapper layout="main" >
-            <div className="pt-[2rem] px-[1.5rem]">
-                {/* <Breadcrumb TaskType="Call Script Assets"/> */}
-            </div>
-
-            <div className="px-16">
-              <Table IconComponent={<SalesCallIcon />} IconAssetName="assetName" columnWidths={["4fr" , "1fr" ,"1fr" ,"1fr" ,"1fr"]} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
-          </div>
-        </LayoutWrapper>
+      <div className="px-16">
+        <Table columnWidths={["4fr", "1fr", "1fr", "1fr", "1fr"]} listItems={tableData} tableHeadings={tableHeading} arrowInHeadings={arrowshowItems} />
+      </div>
     </>
   )
 }

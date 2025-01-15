@@ -6,6 +6,7 @@ export interface FormDataProps {
     targetAudience?: string,
     outputScale?: number,
     topic?: string,
+    tone ?:string
     type?: string,
     keyPoints?: string,
     fileSelected?: File,

@@ -1,53 +1,47 @@
 'use client'
 
-import { useAppData } from "@/context/AppContext"
-import { useDashboard } from "@/hooks/useDashboard"
+import { useGetAsset } from "@/hooks/useGetAsset"
+import { useOverflowHidden } from "@/hooks/useOverflowHidden"
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation"
-import React, { FC, useEffect, useState } from "react"
+import React, { FC } from "react"
+
+const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Approver", "Created On", "Current Status"]
+const headerHavingSortingToggle = ["Project Name", "Created On"]
+const hiddenFields = ["assetID"]
 
 const AssetInProgress: FC = () => {
+  useOverflowHidden()
   const router = useRouter();
-  const { setContextData } = useAppData();
-  const { dashboardAssets } = useDashboard()
-  const [assetsDisplayTable, setAssetsDisplayTable] = useState<any[]>([])
+  const { listAssets } = useGetAsset({ assignedTo: 0 })
 
-  useEffect(() => {
-    const assetInProgress = dashboardAssets.filter(asset => asset.status === "In Progress" || asset.status === "On Review")
-    console.log('assetInProgress: ', assetInProgress);
+  const assetsDisplayTable = listAssets.map((data) => ({
+    assetTypeIcon: data.assetTypeName,
+    assetName: data.assetName,
+    version: data.versionName,
+    campaignName: data.campaignName,
+    projectName: data.projectName,
+    assignedTo: data.approverName || "",
+    createdOn: formatDate(data.createdOn),
+    currentStatus: data.status,
+    assetID: data.assetID,
+  }));
 
-    const newAssetsDisplayTable = assetInProgress.map((data) => ({
-      projectName: data.project,
-      campaignName: data.campaignName,
-      assetTypeIcon: data.assetTypeName,
-      assetName: data.assetName,
-      createdOn: formatDate(data.createdOn),
-      currentStatus: data.status,
-      assetID: data.assetID
-    }));
-    setAssetsDisplayTable(newAssetsDisplayTable)
-  }, [dashboardAssets])
-
-  const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Current Status"]
-  const headerHavingSortingToggle = ["Project Name", "Created On"]
-  const fieldClick = "assetID"
-
-  const handleClick = (assetID: any) => {
-    console.log("item", assetID);
-    router.push(`/edit-html-content?assetID=${assetID}`)
+  const handleClick = (item: any) => {
+    router.push(`/edit-html-content?assetID=${item.assetID}`)
   }
 
   return (
     <>
       <AssetsPageLayout
-        fieldClick={fieldClick}
+        hiddenFields={hiddenFields}
         campaign_data={assetsDisplayTable}
         tableHeadings={tableHeading}
         headersHavingToggle={headerHavingSortingToggle}
         columnWidthsTable={["repeat(7, 1fr)"]}
         handleClick={handleClick}
-        page="Asset In Progress"
+        page=""
       />
     </>
   )

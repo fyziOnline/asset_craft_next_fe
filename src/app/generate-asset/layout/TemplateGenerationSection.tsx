@@ -1,7 +1,6 @@
 'use client';
 import React, { FC, useState } from 'react';
 import Image from 'next/image';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useAppData } from '@/context/AppContext';
 import { Template } from '@/types/templates';
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
@@ -88,23 +87,6 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const sidebarStep3 = () => {
         return (
             <>
-                {/* {
-                    <TransformWrapper
-                        initialScale={0.4}
-                        minScale={0.4}
-                        maxScale={0.4}
-                        panning={{ lockAxisX: true }}
-                        centerZoomedOut
-                        smooth
-                        centerOnInit
-                    >
-                        <TransformComponent
-                            wrapperStyle={{ width: '100%', height: '100%' }}
-                        >
-                            <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
-                        </TransformComponent>
-                    </TransformWrapper>
-                } */}
                 <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
             </>
         );
@@ -115,11 +97,11 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
             <div className="flex">
                 <div className="flex-1 py-4">
                     <div className="flex items-center justify-center">
-                        <p className="font-inter font-bold text-black text-lg tracking-[0] leading-[normal] whitespace-nowrap pb-[20px] pt-4">
+                        <p className="font-bold text-black text-lg tracking-[0] leading-[normal] whitespace-nowrap pb-[20px] pt-4">
                             {/* Please provide the necessary information to generate AI content */}
                         </p>
                     </div>
-                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[79vh]'>
+                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[82vh]'>
                         {renderAssetGenerateContent()}
                     </div>
                 </div>
