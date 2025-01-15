@@ -47,9 +47,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const pageProgressComponents: { [key: number]: ProgressComponent } = {
     0: (
       <TemplateSelectionContainer
-        aspect_ratio='1 / 2'
         templateData={listTemplates}
-        title='Select one of the templates'
         onProceed={handleNext}
       />
     ),

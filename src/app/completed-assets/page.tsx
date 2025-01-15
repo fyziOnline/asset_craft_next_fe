@@ -49,7 +49,7 @@ const CompletedAssets: FC = () => {
         tableHeadings={tableHeading}
         headersHavingToggle={arrowshowItems}
         columnWidthsTable={["repeat(7, 1fr)"]}
-        page="Completed Assets"
+        page=""
       />
     </>
   )
