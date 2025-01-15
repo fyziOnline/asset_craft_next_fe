@@ -157,7 +157,7 @@ const Dashboard: FC = () => {
         <div className="w-[27%] mt-[7.7rem] lg:mt-0">
           <p className="text-lg font-bold pl-10 pb-2">{userRole === "Approver" ? "Assets to Approve" : "Pending Approval"}</p>
           <div className="w-full bg-[#F9F9F9] rounded-[14px] ml-4">
-            <div className="p-5 max-h-[580px] overflow-y-auto">
+            <div className="p-5 max-h-[620px] overflow-y-auto">
 
               {pendingApproval && pendingApproval.length > 0 ? (
                 pendingApproval.map((data, index) => {
