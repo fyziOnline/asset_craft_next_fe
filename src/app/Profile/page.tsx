@@ -91,7 +91,7 @@ const page: React.FC = () => {
                 </div>
 
                 <div className="relative bg-green-100 w-full h-[200px] rounded-2xl p-6 mb-8">
-                    <p className="text-white text-4xl font-semibold text-end absolute bottom-4 right-5">{userDetails?.userRole} Access</p>
+                    <p className="text-white text-3xl font-semibold text-end absolute bottom-4 right-5">Access Level: {userDetails?.userRole}</p>
                     <div className="absolute bottom-[-50px] flex items-center justify-between">
                         <div className="flex relative items-center gap-4">
                             <div className="w-[100px] h-[100px] aspect-square bg-[url('/images/userProfile.jpeg')] bg-cover bg-center rounded-full" />
