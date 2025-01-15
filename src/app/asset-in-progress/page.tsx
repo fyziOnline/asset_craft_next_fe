@@ -1,6 +1,6 @@
 'use client'
 
-import { useAssetInProgress } from "@/hooks/useAssetInProgress"
+import { useGetAsset } from "@/hooks/useGetAsset"
 import { useOverflowHidden } from "@/hooks/useOverflowHidden"
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 import { formatDate } from "@/utils/formatDate"
@@ -14,9 +14,9 @@ const hiddenFields = ["assetID"]
 const AssetInProgress: FC = () => {
   useOverflowHidden()
   const router = useRouter();
-  const { assetInProgress } = useAssetInProgress()
+  const { listAssets } = useGetAsset({ assignedTo: 0 })
 
-  const assetsDisplayTable = assetInProgress.map((data) => ({
+  const assetsDisplayTable = listAssets.map((data) => ({
     assetTypeIcon: data.assetTypeName,
     assetName: data.assetName,
     version: data.versionName,
