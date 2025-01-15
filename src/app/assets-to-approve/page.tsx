@@ -36,7 +36,7 @@ const AssetsToApprove: React.FC = () => {
                 campaign_data={assetsToApprove}
                 tableHeadings={tableHeading}
                 headersHavingToggle={headerHavingSortingToggle}
-                page='Assets to Approve'
+                page=''
                 columnWidthsTable={["repeat(8, 1fr)"]}
                 hiddenFields={hiddenFields}
                 handleClick={handleClick}

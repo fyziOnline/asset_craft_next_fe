@@ -41,7 +41,7 @@ const AssetInProgress: FC = () => {
         headersHavingToggle={headerHavingSortingToggle}
         columnWidthsTable={["repeat(7, 1fr)"]}
         handleClick={handleClick}
-        page="Asset In Progress"
+        page=""
       />
     </>
   )
