@@ -55,7 +55,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
   }
 
   return (
-    <div className='flex flex-col border border-sectionGrey-darker bg-sectionGrey rounded-[20px] w-full'>
+    <div className={`flex flex-col border ${checked ? "border-sectionGrey-Liner bg-sectionGrey-lighter": "border-sectionGrey-darker bg-sectionGrey"} rounded-[20px] w-full`}>
       <div onClick={toggleContent} className={`flex items-center justify-between px-[8%] w-full h-[80px] cursor-pointer `}>
         <div className="flex items-center gap-9">
           <div>
@@ -83,7 +83,9 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
           </div>
         </div>
         <div className={`cursor-pointer transition-transform ${showContent ? "rotate-180" : ""}`}>
-          <DownArrow />
+          <DownArrow 
+            color= {!checked ? "#BBBBBB" : "#dedede"}
+          />
         </div>
       </div>
 

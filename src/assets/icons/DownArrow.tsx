@@ -1,6 +1,8 @@
-import React from "react";
+import React, { FC } from "react";
+import { icon } from "./AppIcons";
 
-export const DownArrow = () => {
+
+export const DownArrow:FC<icon> = ({color}) => {
   return (
     <svg
       width="32"
@@ -11,7 +13,7 @@ export const DownArrow = () => {
     >
       <path
         d="M2.3877 2L18.0612 18L33.7346 2"
-        stroke="#BBBBBB"
+        stroke={color}
         strokeWidth="4"
       />
     </svg>
@@ -20,8 +22,17 @@ export const DownArrow = () => {
 
 export const SearchDownArrow = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="11" viewBox="0 0 18 11" fill="none">
-      <path d="M1.11279 1.21533L8.96836 9.23456L16.8239 1.21533" stroke="#6F6F6F" strokeWidth="1.1456"/>
+    <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="18" 
+    height="11" 
+    viewBox="0 0 18 11" 
+    fill="none"
+    >
+      <path 
+        d="M1.11279 1.21533L8.96836 9.23456L16.8239 1.21533" 
+        stroke="#6F6F6F" 
+        strokeWidth="1.1456"/>
     </svg>
   )
 }
