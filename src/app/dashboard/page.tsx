@@ -54,54 +54,7 @@ const Dashboard: FC = () => {
 
   return (
     <div className="mt-10">
-      {/* <ProjectSetUpModal title="Project Details" selectedValue={selectedButton?.assetTypeName} onNext={handleNext} isOpen={isModalOpen} onClose={closeModal} > */}
-      {/* <div className='w-full flex flex-col gap-3 px-12 pb-7'>
-          <div className='pt-[15px] flex flex-col gap-3'>
-            <p className='text-[#160647] text-base tracking-wide font-semibold'>Project/Solution Name</p>
-            <DropDown
-              onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value,optionSelected.label || '') }}
-              selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name"  otherFieldErrorText={!isProductNameValid ? `Product/Solution name cannot be ${projectName}` : '' }></DropDown>
-          </div>
-          <div className='flex flex-col gap-3'>
-            <p className='text-[#160647] text-base tracking-wide font-semibold'>Campaign Name</p>
-            <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here, E.g. New year campaign, Launch campaign etc" listData={listCampaigns.map((value) => value.campaignName)} onChange={(value) => { handleChangeAssetDetails("campaign_name", value) }} />
-          </div>
-          {selectedButton?.assetTypeName !== "All in One" &&
-            <div className='flex flex-col gap-3'>
-              <p className='text-[#160647] text-base tracking-wide font-semibold'>Digital Marketing Asset Name</p>
-              <TextField customClass='h-12' placeholder='Type the name of your Digital Marketing Assets here, E.g. Email_1, Linkedin_1 etc' name="asset_name" handleChange={onChangeAssetDetails} />
-              {isAssetNameExists ? <p className='text-red-500 text-[12px] mt-[-10px]'>Asset name already exists, please enter another asset name.</p> : null}
-            </div>
-          }
-        </div> */}
-      {/* <SectionAssetDetails /> */}
-      {/* </ProjectSetUpModal> */}
-
-      {/* <ProjectSetUpModal title="Choose your Assets" onClose={closeAssetModal} selectedValue="All in One" isOpen={chooseAssetModal} onNext={handleNext}>
-        <div className="flex items-center justify-between px-11 py-8 ">
-          {options.map((data, index) => (
-            <div key={index} className="cursor-pointer" onClick={() => onSelect(data.id)}>
-              <div className={` ${selectedIndexes.includes(data.id) ? "bg-green-300" : "bg-white border border-foreground"} flex items-center flex-col rounded-2xl py-4 w-[160px]`}>
-                {data.icon}
-                <p className={`text-cente text-base tracking-wide ${selectedIndexes.includes(data.id) ? "text-white" : "text-black"}`}>{data.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </ProjectSetUpModal> */}
-
-      {/* <div className="px-8 p-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl tracking-wide text-green-100 font-bold leading-normal">
-            Welcome, {userDetails?.name}
-          </h1>
-          <SearchBox />
-        </div>
-        <p className="text-base font-bold tracking-wide">Overview:</p>
-      </div> */}
-
-      {/* <div className="w-full px-8 flex items-center justify-between mt-5 gap-10"> */}
-      <div className="w-[100%] grid grid-cols-3 lg:grid-cols-5 gap-10 px-8">
+      <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-4 md:px-8">
         {updatedDashboardData.map((data, index) => (
           <DashboardCard
             key={index}
