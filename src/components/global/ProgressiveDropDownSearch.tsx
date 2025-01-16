@@ -20,6 +20,8 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [autofillHint,setAutoFillHint] = useState("")
   const [highlightedIndex,setHighlightedIndex] = useState<number>(-1)
+  const [highlightedIndexOnHover,setHighlightedIndexOnHover] = useState<number>(-1)
+  const [isMouseOverItem,setIsMouseOverItem] = useState<boolean>(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -35,7 +37,7 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
   }, [searchTerm, data])
 
   useEffect(() => {
-    if (dropdownRef.current && highlightedIndex !== -1) {
+    if (dropdownRef.current && highlightedIndex !== -1 && !isMouseOverItem) {
       const item = dropdownRef.current.children[highlightedIndex] as HTMLElement
       if (item) {
         item.scrollIntoView({
@@ -44,11 +46,12 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
         })
       }
     }
-  }, [highlightedIndex])
+  }, [highlightedIndex,isMouseOverItem])
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newSearch = e.target.value
     setSearchTerm(newSearch)
+    setHighlightedIndex(0)
     setIsDropdownOpen(true)
     if (onSelect) {
       onSelect(newSearch)
@@ -114,15 +117,27 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
         <div
           ref={dropdownRef} 
           style={{scrollBehavior: "smooth"}}
+          onMouseEnter={()=>setIsMouseOverItem(true)}
+          onMouseLeave={()=>{
+            setIsMouseOverItem(false)
+            setHighlightedIndex(highlightedIndexOnHover)
+            setHighlightedIndexOnHover(-1)
+          }}
           className="absolute max-h-[8rem] w-full mt-3 bg-white border-none rounded-lg shadow-lg  overflow-y-auto z-99">
           {filteredData.map((item,index) => (
             <div
               key={item.label}
               className={`px-4 py-2 cursor-pointer ${
-                index === highlightedIndex ? 'bg-gray-200' : 'hover:bg-gray-100'
-              }`}
+                highlightedIndexOnHover !== -1 && highlightedIndexOnHover === index
+                ? 'bg-gray-200'
+                : highlightedIndexOnHover === -1 && highlightedIndex === index
+                ? 'bg-gray-200'
+                : 'hover:bg-gray-100'
+             }`}
               onMouseDown={() => handleItemSelect(item)} 
-              onMouseEnter={() => setHighlightedIndex(index)}
+              onMouseEnter={() => {
+                setHighlightedIndexOnHover(index)
+              }}
             >
               {item.value}
             </div>
