@@ -8,7 +8,7 @@ interface DashboardCardProps {
   inProgress: number;
 }
 
-const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDate, totalAssets, underReview, inProgress }) => {
+const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDate, totalAssets, underReview, inProgress }) => {  
   return (
     <div className="w-auto group bg-[#F6F6F6] hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] p-4 hover:border-none">
       <h2 className="text-lg text-[#073634] leading-none font-bold mb-2 group-hover:text-white">{projectName}</h2>
@@ -16,7 +16,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDa
       <div className={`${allProjectDate ? "flex items-baseline gap-1" : ""} border-b pb-3`}>
         <div className='flex gap-3 items-center'>
           <p className="text-4xl md:text-5xl leading-none font-bold text-teal-600 group-hover:text-white">{totalAssets}</p>
-          <p className="text-lg font-semibold group-hover:text-white">Total Assets</p>
+          <p className="text-lg font-semibold group-hover:text-white">{projectName === "All Projects" ? "Total Assets" : "Assets"}</p>
         </div>
       </div>
 
