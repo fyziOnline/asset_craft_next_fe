@@ -66,7 +66,9 @@ const config: Config = {
         // // 'lighter-grey-500' : '#383838', 
         sectionGrey:{
           DEFAULT : '#F6F6F6',
-          darker : '#dedede'
+          darker : '#dedede',
+          Liner : '#eeeeee',
+          lighter : '#fbfbfb'
         },
         card: {
   				DEFAULT: 'hsl(var(--card))',
