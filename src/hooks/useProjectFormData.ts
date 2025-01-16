@@ -115,6 +115,7 @@ export const useProjectFormData = () => {
     }
 
     const handleChangeAssetDetails = debounce((key: string, value: string, label?: string) => {
+
         setAssetDetails(pre => ({
             ...pre,
             [key]: value
@@ -150,7 +151,8 @@ export const useProjectFormData = () => {
 
 
     const handleCheckCampNameExists = (listCampaigns: CampaignsProps[], value: string) => {
-        const checkCampNameExists = listCampaigns.filter((item) => item.campaignName.toLowerCase() === value.toLowerCase())
+        const trimmedValue = value.trim()
+        const checkCampNameExists = listCampaigns.filter((item) => item.campaignName.toLowerCase() === trimmedValue.toLowerCase())
         if (checkCampNameExists.length > 0) {
             // campaignIDRef.current = checkCampNameExists[0].campaignID
             setAssetDetails(pre=>({...pre,campaignID:checkCampNameExists[0].campaignID}))
@@ -162,6 +164,7 @@ export const useProjectFormData = () => {
             isCampaignSelect.current = false
             setListAssets([])
             setIsAssetNameExists(false)
+            setExistingCampaignDetails(null)
         }
     }
 

@@ -12,7 +12,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDa
   return (
     <div className="w-auto group bg-[#F6F6F6] hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] p-4 hover:border-none">
       <h2 className="text-lg text-[#073634] leading-none font-bold mb-2 group-hover:text-white">{projectName}</h2>
-      {/* <p className='text-base text-[#7B7B7B] group-hover:text-white'>{allProjectDate}</p> */}
 
       <div className={`${allProjectDate ? "flex items-baseline gap-1" : ""} border-b pb-3`}>
         <div className='flex gap-3 items-center'>
@@ -21,16 +20,29 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDa
         </div>
       </div>
 
-      <div className="flex flex-col items-start mt-3">
-        <div className='flex items-baseline gap-4'>
+      <div className="grid card_res gap-1 mt-3 items-start">
+        {/* sec 1 */}
+        <div className="grid grid-rows-2 gap-2 h-full">
+          <p className="text-3xl font-bold group-hover:text-white">{underReview}</p>
+          <p className="text-3xl font-bold group-hover:text-white">{inProgress}</p>
+        </div>
+        {/* sec 2 */}
+        <div className="grid grid-rows-2 gap-2 h-full items-center">
+          <p className="text-base text-[#00A881] leading-none text-start pl-3 group-hover:text-white">Under Review</p>
+          <p className="text-base text-[#B0890E] leading-none text-start pl-3 group-hover:text-white">In Progress</p>
+        </div>
+      </div>
+        {/* <div className='grid grid-cols-[5ch_120px] items-baseline gap-4'>
           <p className="text-3xl w-4 font-bold group-hover:text-white">{underReview}</p>
           <p className="text-base text-[#00A881] leading-none text-start w-[120px] pl-3 group-hover:text-[white]">Under Review</p>
         </div>
-        <div className='flex items-baseline gap-4'>
-          <p className="text-3xl w-4 font-bold group-hover:text-white">{inProgress}</p>
-          <p className="text-base text-[#B0890E] leading-none text-start w-[120px] pl-3 group-hover:text-white">In Progress</p>
+        <div className="grid grid-cols-[5ch_120px] items-baseline gap-4">
+          <p className="text-3xl font-bold group-hover:text-white">{inProgress}</p>
+          <p className="text-base text-[#B0890E] leading-none text-start pl-3 group-hover:text-white">
+            In Progress
+          </p>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
