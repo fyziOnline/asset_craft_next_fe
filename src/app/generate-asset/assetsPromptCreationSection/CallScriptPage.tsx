@@ -100,7 +100,14 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
             )
         }
         if (step === 2) {
-            setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
+            if (
+                refFormData.current?.campaignGoal?.length &&
+                refFormData.current?.targetAudience?.length
+            ) {
+                setCheckedList((prev) => (prev.includes(1) ? prev : [...prev, 1]))
+            } else {
+                setCheckedList((prev) => prev.filter((item) => item !== 1))
+            }
         }
         if (step === 3) {
             setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
@@ -143,11 +150,12 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                 <Accordion
                     HeaderTitle="Call Objective and Target Audience"
                     checked={checkedList.includes(1)}
+                    isRequire
                     handleShowContent={() => { doesFormCompleted(2) }}
                 >
                     <div className='flex items-start gap-[16%]'>
                         <div className='w-[260px]'>
-                            <ChildrenTitle title='Campaign Goal' customClass='mt-5' ></ChildrenTitle>
+                            <ChildrenTitle title='Campaign Goal' showStar customClass='mt-5' ></ChildrenTitle>
                             <DropDown
                                 onSelected={(optionSelected) => {
                                     refFormData.current = {
@@ -162,7 +170,7 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                         </div>
 
                         <div className='w-[260px]'>
-                            <ChildrenTitle title='Target audience' customClass='mt-5' ></ChildrenTitle>
+                            <ChildrenTitle title='Target audience' showStar customClass='mt-5' ></ChildrenTitle>
                             <DropDown
                                 onSelected={(optionSelected) => {
                                     refFormData.current = {
@@ -261,14 +269,14 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                                     <TextField handleChange={(e) => {
                                         handleInputSection(e, index)
                                         //  doesFormCompleted(5)
-                                    }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
+                                    }} customClass='h-16' placeholder={item.aiPrompt || ''} />
                                 </div>
                             )
                         })}
 
                     </div>
                     <div className='flex-1'>
-                        <ChildrenTitle title='How creative you want the output?'></ChildrenTitle>
+                        <ChildrenTitle title='How creative you want the output?' customClass='mt-5'></ChildrenTitle>
                         <RangeSlider onSelectValue={(value) => {
                             refFormData.current = {
                                 ...refFormData.current,

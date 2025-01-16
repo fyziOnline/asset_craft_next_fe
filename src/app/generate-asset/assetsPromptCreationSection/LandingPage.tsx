@@ -86,7 +86,14 @@ const LandingPage = ({ params }: LandingPageProps) => {
             }
         }
         if (step === 3) {
-            setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
+            if (
+                refFormData.current?.topic?.length &&
+                refFormData.current.keyPoints?.length
+            ) {
+                setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
+            } else {
+                setCheckedList((prev) => prev.filter((item) => item !== 2))
+            }
         }
         if (step === 4) {
             setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
@@ -224,7 +231,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     HeaderTitle="Key Message & Content"
                     checked={checkedList.includes(2)}
                     handleShowContent={() => {
-                        doesFormCompleted(3, true)
+                        doesFormCompleted(3)
                         updateShowList(2)
                     }}
                 >
@@ -233,7 +240,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                         <TextField
                             handleChange={(e) => {
                                 handleInputText(e, "topic")
-                                // doesFormCompleted(3)
+                                doesFormCompleted(3)
                             }}
                             placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
@@ -241,7 +248,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                         <TextField
                             handleChange={(e) => {
                                 handleInputText(e, "keyPoints")
-                                // doesFormCompleted(3)
+                                doesFormCompleted(3)
                             }}
                             rows={4}
                             placeholder={`HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility.\nFeature 1\nFeature 2\nFeature 3`}
@@ -277,7 +284,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                     <TextField handleChange={(e) => {
                                         handleInputSection(e, index)
                                         // doesFormCompleted(5)    
-                                    }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
+                                    }} customClass='h-16' placeholder={item.aiPrompt || ''} />
                                 </div>
                             )
                         })}
