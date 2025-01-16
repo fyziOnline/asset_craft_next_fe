@@ -5,25 +5,28 @@ import { ApiService } from "@/lib/axios_generic"
 import { AllUserAssignedProps } from "@/types/asset"
 import { useEffect, useState } from "react"
 
-export const useAssetToApprove = () => {
+interface useGetAssetProps {
+    assignedTo: number
+}
+
+export const useGetAsset = ({ assignedTo = 0 }: useGetAssetProps) => {
     const { setShowLoading } = useLoading()
     const { setError } = useAppData()
-    const [assetToApprove, setAssetToApprove] = useState<AllUserAssignedProps[]>([])
+    const [listAssets, setListAssets] = useState<AllUserAssignedProps[]>([])
 
     useEffect(() => {
-        getAssetToApproveData()
+        getAssetData()
     }, [])
 
-    const getAssetToApproveData = async () => {
+    const getAssetData = async () => {
         setShowLoading(true)
-
         try {
             const response = await ApiService.post<any>(`${urls.getAssetsToApprove}`, {
-                assignedTo: 1
+                assignedTo: assignedTo
             })
 
             if (response.isSuccess) {
-                setAssetToApprove(response.assets)
+                setListAssets(response.assets as AllUserAssignedProps[])
             }
         } catch (error) {
             const apiError = ApiService.handleError(error)
@@ -39,6 +42,6 @@ export const useAssetToApprove = () => {
     }
 
     return {
-        assetToApprove
+        listAssets
     }
-}
+};

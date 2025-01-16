@@ -54,7 +54,7 @@ const Home: FC = () => {
             <p className="text-wrap text-base">Simplifying Marketing Content with AI-Driven</p>
           </section>
 
-          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-10 padbot10 flex flex-col items-center ">
+          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-8 padbot10 flex flex-col items-center">
             <div className="absolute top-[35%] left-[25%]">
               <div className="color-wheel ">
                 <div className="eclipse-1"></div>
@@ -66,12 +66,12 @@ const Home: FC = () => {
             <input
               defaultValue={emailLoginDefault}
               onChange={onChangeEmail}
-              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full"
+              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider"
               placeholder="Enter Your email id"
               type="text"
             />
             <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[32ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
-            <p className="text-[0.7rem] mb-[0.7rem] ">Not a member? <span className="text-green-100">Sign up now</span></p>
+            {/* <p className="text-[0.8rem] mb-[0.7rem]">Not a member? <span className="text-green-100 cursor-pointer pl-[2px]">Sign up now</span></p> */}
           </div>
         </div>
 

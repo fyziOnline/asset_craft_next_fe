@@ -1,10 +1,10 @@
 'use client'
 
-import { useAssetToApprove } from '@/hooks/useAssetToApprove'
 import AssetsPageLayout from '@/layout/specific_layout/AssetsPageLayout'
 import React from 'react'
 import { formatDate } from '@/utils/formatDate'
 import { useRouter } from 'next/navigation'
+import { useGetAsset } from '@/hooks/useGetAsset'
 
 const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Created On", "Current Status"]
 const headerHavingSortingToggle = ["Project Name", "Created On"]
@@ -12,9 +12,9 @@ const hiddenFields = ["assetVersionID", "layoutName"]
 
 const AssetsToApprove: React.FC = () => {
     const router = useRouter();
-    const { assetToApprove } = useAssetToApprove()
+    const { listAssets } = useGetAsset({ assignedTo: 1 })
 
-    const assetsToApprove = assetToApprove.map((data) => ({
+    const assetsToApprove = listAssets.map((data) => ({
         assetTypeIcon: data.assetTypeName,
         assetName: data.assetName,
         version: data.versionName,
