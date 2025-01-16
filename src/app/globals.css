@@ -245,3 +245,13 @@
   position: relative;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 }
+
+.card_res{
+  grid-template-columns: 1fr 100%;
+}
+@media screen and (max-width: 1150px) and (min-width: 1024px) {
+  .card_res {
+    grid-template-columns: 1fr auto;
+  }
+}
+

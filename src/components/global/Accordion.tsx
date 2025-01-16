@@ -87,7 +87,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
         </div>
       </div>
 
-      <div ref={contentRef} className="overflow-hidden transition-all duration-500 relative bottom-4" style={{ height: showContent ? `auto` : "0px", }}>
+      <div ref={contentRef} className={`${!showContent && "overflow-hidden" } transition-all duration-500 relative bottom-4`} style={{ height: showContent ? `auto` : "0px", }}>
         <div className="px-[15%] pb-4">{children}</div>
       </div>
     </div>

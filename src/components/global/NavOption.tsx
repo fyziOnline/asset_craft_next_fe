@@ -1,4 +1,5 @@
-import { cloneElement, FC, ReactElement } from "react"
+'use client'
+import { cloneElement, FC, ReactElement, useEffect, useState } from "react"
 import Link from "next/link"
 
 interface NavOptionProp {
@@ -12,6 +13,15 @@ interface NavOptionProp {
 }
 
 const NavOption:FC<NavOptionProp> = ({children,href,label,spanClass='',childClass='',pathname=''}) => {
+  const [clientSide, setClientSide] = useState(false)
+  useEffect(() => {
+    setClientSide(true);
+  }, [])
+
+  if (!clientSide) {
+    return null 
+  }
+
   const isActive = pathname.startsWith(href)
   const iconColor = isActive ? '#00A881' : '#ADB3CC'
   return (

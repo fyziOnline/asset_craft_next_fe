@@ -1,10 +1,12 @@
 import { FC, useEffect } from "react"
 import DropDown from "../global/DropDown"
-import InputAreaSearch from "../global/InputAreaSearch"
+// import InputAreaSearch from "../global/InputAreaSearch"
 import TextField from "../global/TextField"
 import { useAppData } from "@/context/AppContext"
 import { useProjectFormData } from "@/hooks/useProjectFormData"
 import { CampaignSelectResponse, ProjectDetails } from "@/types/templates"
+// import Search from "../global/Search"
+import ProgressiveDropDownSearch from "../global/ProgressiveDropDownSearch"
 
 type SectionAssetDetailsProps = {
   validatingTheData: (step: number,status : boolean) => void
@@ -60,9 +62,15 @@ const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,ret
 
         <div className='flex flex-col gap-3'>
           <p className='text-black text-base tracking-wide font-thin'>Campaign Name <span className="text-red-500">*</span></p>
-          <DropDown
+          <ProgressiveDropDownSearch 
+            data={listofcampains}
+            placeholder="Search campaign name"
+            messageForNewData = "Create new campaign : "
+            onSelect={(name)=>{handleChangeAssetDetails("campaign_name",name,name)}}
+          />
+          {/* <DropDown
             onSelected={(optionSelected) => { handleChangeAssetDetails("campaign_name", optionSelected.value, optionSelected.label || '') }}
-            selectPlaceHolder="Select Campaign Name" optionLists={listofcampains} otherFieldText="Specify campaign name" />
+            selectPlaceHolder="Select Campaign Name" optionLists={listofcampains} otherFieldText="Specify campaign name" /> */}
           {/* <InputAreaSearch name="campaign_name" placeholder="Type the name of your Campaign here, E.g. New year campaign, Launch campaign etc" listData={listCampaigns.map((value) => value.campaignName)} onChange={(value) => { handleChangeAssetDetails("campaign_name", value) }} /> */}
         </div>
         <div className='flex flex-col gap-3'>
