@@ -1,4 +1,4 @@
-interface icon {
+export interface icon {
   width?: number | string
   height?: number | string
   className?: string
