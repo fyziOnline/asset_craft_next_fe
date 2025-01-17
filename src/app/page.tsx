@@ -66,7 +66,7 @@ const Home: FC = () => {
             <input
               defaultValue={emailLoginDefault}
               onChange={onChangeEmail}
-              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider"
+              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider focus:placeholder:text-gray-300"
               placeholder="Enter Your email id"
               type="text"
             />
@@ -108,7 +108,7 @@ const Home: FC = () => {
               type="text"
               placeholder="Enter Your OTP"
               onChange={onChangeOtp}
-              className="w-[32ch] p-3  mb-3 bg-transparent  text-white border border-white placeholder:text-white rounded-full outline-none text-center tracking-widest placeholder:tracking-wide"
+              className="w-[32ch] p-3  mb-3 bg-transparent  text-white border border-white placeholder:text-white rounded-full outline-none text-center tracking-widest placeholder:tracking-wide focus:placeholder:text-gray-300"
             />
 
             <p className="text-[0.9rem] text-white mb-1 tracking-wider">Didn't receive the OTP?</p>
