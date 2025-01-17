@@ -1,6 +1,6 @@
 // this layout is used for /my-projects , /my-projects/[project] 
 
-import { FC, useState } from 'react'
+import { FC, useState, } from 'react'
 // import Breadcrumb from '../../components/global/Breadcrumb'
 import { GridIcon, ListIcon } from '@/assets/icons/AppIcons'
 import MyProjectCard from '../../components/wrapper/MyProjectCard'

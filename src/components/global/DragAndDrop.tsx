@@ -68,30 +68,26 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, dragAndDropOute
   return (
     <div className={`h-[230px] rounded-3xl shadow overflow-hidden flex flex-col ${dragAndDropOuterClass}`}>
       <div className="w-full h-[68px] flex items-center justify-center bg-white border-b border-[#EBEFF2]">
-        <div className="flex items-center gap-1 bg-[#f2f6f9] rounded-3xl p-[5px] relative">
+        <div className="relative flex items-center w-[240px] h-[40px] bg-[#e6ecf1] rounded-full p-1">
+          {/* Sliding Toggle Background */}
           <div
-            className={`absolute transition-all duration-300 ease-in-out rounded-3xl bg-[#00A881]
-        ${activeButton === 'upload'
-                ? 'left-[5px] w-[90px] h-[30px]'
-                : 'left-[100px] w-[90px] h-[30px]'
+            className={`absolute top-1 left-1 h-[calc(100%-8px)] w-[48%] bg-[#00A881] rounded-full shadow-md transition-transform duration-300 ease-in-out ${activeButton === "upload" ? "translate-x-0" : "translate-x-full"
               }`}
           />
 
+          {/* Upload Button */}
           <button
             onClick={() => handleButtonClick("upload")}
-            className={`w-[90px] py-[7px] rounded-3xl text-xs relative z-10 transition-colors duration-300 text-center ${activeButton === "upload"
-                ? "text-white"
-                : "text-black"
+            className={`relative z-10 flex-1 text-sm  text-center rounded-full py-2 transition-colors duration-300 ${activeButton === "upload" ? "text-white" : "text-gray-400"
               }`}
           >
             New Upload
           </button>
 
+          {/* Recent Button */}
           <button
             onClick={() => handleButtonClick("recent")}
-            className={`w-[90px] py-[7px] rounded-3xl text-xs relative z-10 transition-colors duration-300 text-center ${activeButton === "recent"
-                ? "text-white"
-                : "text-black"
+            className={`relative z-10 flex-1 text-sm text-center rounded-full py-2 transition-colors duration-300 ${activeButton === "recent" ? "text-white" : "text-gray-400"
               }`}
           >
             Recent

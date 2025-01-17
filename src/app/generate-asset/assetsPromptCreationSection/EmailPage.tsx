@@ -85,10 +85,22 @@ const EmailPage = ({ params }: EmailPageProps) => {
             }
         }
         if (step === 3) {
-            setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
+            if (
+                refFormData.current?.topic?.length &&
+                refFormData.current.type?.length &&
+                refFormData.current.keyPoints?.length
+            ) {
+                setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
+            } else {
+                setCheckedList((prev) => prev.filter((item) => item !== 2))
+            }
         }
         if (step === 4) {
+            // if (condition) {
+                
+            // }
             setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
+
         }
     }
 
@@ -225,7 +237,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     HeaderTitle="Email - Key Messages & Content"
                     checked={checkedList.includes(2)}
                     handleShowContent={() => {
-                        doesFormCompleted(3, true)
+                        doesFormCompleted(3)
                         updateShowList(2)
                     }}
                 >
@@ -233,7 +245,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         <ChildrenTitle showStar={true} customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
                         <TextField handleChange={(e) => {
                             handleInputText(e, "topic")
-                            // doesFormCompleted(3)
+                            doesFormCompleted(3)
                         }}
                             placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
@@ -245,7 +257,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                         ...refFormData.current,
                                         type: optionSelected.value
                                     }
-                                    // doesFormCompleted(3)
+                                    doesFormCompleted(3)
                                 }} isShowOther={false} selectPlaceHolder="Select Post Type" optionLists={emailType} />
                             </div>
 
@@ -256,7 +268,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                         ...refFormData.current,
                                         keyPoints: optionSelected.value
                                     }
-                                    // doesFormCompleted(3)
+                                    doesFormCompleted(3)
                                 }} isShowOther={false} selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
                             </div>
                         </div>
@@ -299,7 +311,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                     <TextField handleChange={(e) => {
                                         handleInputSection(e, index)
                                         //  doesFormCompleted(5)
-                                    }} customClass='h-16' defaultValue={item.aiPrompt || ''} />
+                                    }} customClass='h-16' placeholder={item.aiPrompt || ''} />
                                 </div>
                             )
                         })}

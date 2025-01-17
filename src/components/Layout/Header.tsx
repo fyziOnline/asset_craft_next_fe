@@ -68,6 +68,7 @@ const Header: React.FC = () => {
     )
   }
 
+
   return (
     <header className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] px-10 z-50 border-b shadow-sm">
       <div className="w-full flex justify-between items-center">
