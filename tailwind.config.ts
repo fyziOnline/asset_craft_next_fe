@@ -63,7 +63,9 @@ const config: Config = {
         'crystal-blue-500':'#5DB9FF',
         'crystal-blue-200':'#EBF6FF',
         // 'lighter-grey-200' : '#F6F6F6',
-        // // 'lighter-grey-500' : '#383838', 
+        // // 'lighter-grey-500' : '#383838',
+        'fileupload-grey' : '#f7f9fb', 
+        'fileupload-text' : "#160647",
         sectionGrey:{
           DEFAULT : '#F6F6F6',
           darker : '#dedede',

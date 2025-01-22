@@ -97,7 +97,9 @@ const Dashboard: FC = () => {
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
                 <Table hiddenFields={["assetID"]} handleClick={(item) => {
-                  router.push(`/edit-html-content?assetID=${item.assetID}`)
+                  console.log('itme', item)
+                  
+                  router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}`)
                 }}
                   listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
