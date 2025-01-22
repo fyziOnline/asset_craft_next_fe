@@ -99,7 +99,7 @@ const Dashboard: FC = () => {
                 <Table hiddenFields={["assetID"]} handleClick={(item) => {
                   console.log('itme', item)
                   
-                  router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}`)
+                  router.push(`/approver-page?assetID=${item.assetID}&status=${item.currentStatus}`)
                 }}
                   listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
@@ -119,7 +119,7 @@ const Dashboard: FC = () => {
                   return (
                     <div
                       onClick={() => {
-                        router.push(`/edit-html-content?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}`)
+                        router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}`)
                       }}
                       key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
                       <div className="flex items-center justify-between">

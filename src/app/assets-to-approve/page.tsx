@@ -27,7 +27,7 @@ const AssetsToApprove: React.FC = () => {
     }))
 
     const handleClick = (item: any) => {
-        router.push(`/edit-html-content?assetVersionID=${item.assetVersionID}&assetName=${item.assetName}&layoutName=${item.layoutName}&status=${item.status}`)
+        router.push(`/approver-page?assetVersionID=${item.assetVersionID}&assetName=${item.assetName}&layoutName=${item.layoutName}&status=${item.status}`)
     }
 
     return (
