@@ -318,6 +318,27 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  .pad20px{
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .padfooter{
+    padding:20px 10px !important;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .headerfix{
+    position: sticky;
+    top: 0;
+  }
+}
+
+
+
 
 
 
