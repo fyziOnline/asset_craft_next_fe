@@ -99,7 +99,7 @@ const Dashboard: FC = () => {
                 <Table hiddenFields={["assetID"]} handleClick={(item) => {
                   console.log('itme', item)
                   
-                  router.push(`/approver-page?assetID=${item.assetID}&status=${item.currentStatus}`)
+                  router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}`)
                 }}
                   listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
