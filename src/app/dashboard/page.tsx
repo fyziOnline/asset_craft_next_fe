@@ -67,9 +67,9 @@ const Dashboard: FC = () => {
         ))}
       </div>
 
-      <div className="pl-8 pt-5 flex w-full mb-32">
-        <div className="w-[70%] border-[#D9D9D9]">
-          <div className="w-[140%] lg:w-full border-b border-[#D9D9D9]">
+      <div className="pl-8 pt-5 flex w-full mb-32 flex-wrap flex-col lg:flex-row">
+        <div className="lg:w-[70%] w-[95%] border-[#D9D9D9] ">
+          <div className="lg:w-full border-b border-[#D9D9D9] ">
             <p className="text-lg font-bold tracking-wide">
               What would you like to create today?
             </p>
@@ -90,6 +90,8 @@ const Dashboard: FC = () => {
               ))}
             </div>
           </div>
+
+
           <div className="border-t border-[#D9D9D9]">
             <div className="mt-5">
               <p className="text-lg font-bold tracking-wide">Recent Assets:</p>
@@ -105,9 +107,12 @@ const Dashboard: FC = () => {
               )}
             </div>
           </div>
+          
         </div>
 
-        <div className="w-[27%] mt-[7.7rem] lg:mt-0">
+ 
+
+        <div className="lg:w-[27%] w-[95%] mt-[3rem] lg:mt-0 ">
           <p className="text-lg font-bold pl-10 pb-2">{userRole === "Approver" ? "Assets to Approve" : "Pending Approval"}</p>
           <div className="w-full bg-[#F9F9F9] rounded-[14px] ml-4">
             <div className="p-5 max-h-[620px] overflow-y-auto">
@@ -115,11 +120,11 @@ const Dashboard: FC = () => {
               {pendingApproval && pendingApproval.length > 0 ? (
                 pendingApproval.map((data, index) => {
                   return (
-                    <div
+                    <div 
                       onClick={() => {
                         router.push(`/edit-html-content?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}`)
                       }}
-                      key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
+                      key={index} className={`rounded-[15px] border p-3 mt-2 cursor-pointer ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
                       <div className="flex items-center justify-between">
                         <p className="text-[##2F363F] text-wrap text-lg font-bold">{data.assetName}</p>
                         <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
@@ -139,6 +144,11 @@ const Dashboard: FC = () => {
             </div>
           </div>
         </div>
+
+
+
+
+        
       </div>
     </div>
   );

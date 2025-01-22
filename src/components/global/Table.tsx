@@ -77,7 +77,7 @@ const Table: React.FC<TableProps> = ({ listItems,
   const getIcon = (value: string | undefined) => {
     const icons: { [key: string]: JSX.Element } = {
       "Email": <EmailIcon />,
-      "Landing Page": <LandingAssetIcon2 height='27' width='27' strokeWidth='6' />,
+      "Landing Page": <LandingAssetIcon2 height='27' width='50' strokeWidth='6' />,
       "LinkedIn": <LinkedinIcon />,
       "Call Script": <SalesCallIcon />,
     };
