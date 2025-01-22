@@ -297,7 +297,7 @@
   }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 767px) {
   .height130{
     height: 135vh;
     background-color:  #050502;
