@@ -20,7 +20,8 @@ const Layout = {
 
 const LayoutWrapper: FC<WrapperProps> = ({ children }) => {
     const pathname = usePathname()
-    const layoutType: LayoutType = ["/edit-html-content"].includes(pathname) ? "navbarFooterLayout" : pathname === "/" ? "home" : "main";
+    // const layoutType: LayoutType = ["/edit-html-content"].includes(pathname) ? "navbarFooterLayout" : pathname === "/" ? "home" : "main";
+    const layoutType: LayoutType =  pathname === "/" ? "home" : "main";
     const WrappingLayout = Layout[layoutType];
 
     return <WrappingLayout>{children}</WrappingLayout>

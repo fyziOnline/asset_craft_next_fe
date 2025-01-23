@@ -97,9 +97,7 @@ const Dashboard: FC = () => {
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
                 <Table hiddenFields={["assetID"]} handleClick={(item) => {
-                  console.log('itme', item)
-                  
-                  router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}`)
+                  router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}`)
                 }}
                   listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
@@ -119,7 +117,7 @@ const Dashboard: FC = () => {
                   return (
                     <div
                       onClick={() => {
-                        router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}`)
+                        router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`)
                       }}
                       key={index} className={`rounded-[15px] border p-3 mt-2 ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
                       <div className="flex items-center justify-between">
