@@ -30,6 +30,7 @@ interface TableProps {
   tablePlaceitems?: string;
   handleClick?: (value: any) => void;
   isPagination?: boolean;
+  isIconRequired ?:boolean
 }
 
 const Table: React.FC<TableProps> = ({ listItems,
@@ -39,7 +40,8 @@ const Table: React.FC<TableProps> = ({ listItems,
   hiddenFields = [],
   tablePlaceitems = "flex-start",
   handleClick = () => { },
-  isPagination = false
+  isPagination = false,
+  isIconRequired = true
 }) => {
   const [page, setPage] = React.useState(1);
   const [sortListData, setSortListData] = useState<Options[]>(listItems);
@@ -150,7 +152,7 @@ const Table: React.FC<TableProps> = ({ listItems,
                 >
                   {heading === 'assetName' ? (
                     <div className="flex items-center gap-2">
-                      {getIcon(data['assetTypeIcon'])}
+                      {isIconRequired && getIcon(data['assetTypeIcon'])}
                       <span>{data[heading]}</span>
                     </div>
                   ) : (

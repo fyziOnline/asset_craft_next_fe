@@ -46,7 +46,7 @@ const APP_DATA: AppData = {
         campaignID: "" 
     },
     AssetHtml: {} as AssetHtmlProps,
-    isRegenerateHTML: false
+    isRegenerateHTML: false,
 };
 
 const ERROR_APP: ErrorData = {

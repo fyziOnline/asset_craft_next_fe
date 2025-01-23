@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
 const Dashboard: FC = () => {
+  // const [loading,setLoading] = useState(true)
   const router = useRouter();
   const {
     clientAssetTypes,
@@ -39,7 +40,6 @@ const Dashboard: FC = () => {
   } = useDashboard()
 
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
-
   const { setContextData } = useAppData()
 
   useEffect(() => {
@@ -141,6 +141,9 @@ const Dashboard: FC = () => {
         </div>
       </div>
     </div>
+  // }
+    
+  //   </>
   );
 };
 

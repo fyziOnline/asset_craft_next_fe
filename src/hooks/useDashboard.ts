@@ -297,7 +297,6 @@ export const useDashboard = () => {
         setShowLoading(true)
         try {
             const respone = await ApiService.get<any>(`${urls.getAssetsAllDashboard}?timePeriod=${90}`)
-
             if (respone.isSuccess) {
                 setDashboardAssets(respone.assets)
             }

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import React from 'react'
 
 interface DashboardCardProps {
@@ -9,8 +10,15 @@ interface DashboardCardProps {
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDate, totalAssets, underReview, inProgress }) => {  
+  const router = useRouter()
+  const navigateToAssetPage = () => {
+    router.push(`/asset?type=${projectName}`)
+  }
   return (
-    <div className="w-auto group bg-[#F6F6F6] hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] p-4 hover:border-none">
+    <div 
+      className="w-auto group cursor-pointer bg-[#F6F6F6] hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] p-4 hover:border-none"
+      onClick={navigateToAssetPage}  
+      >
       <h2 className="text-lg text-[#073634] leading-none font-bold mb-2 group-hover:text-white">{projectName}</h2>
 
       <div className={`${allProjectDate ? "flex items-baseline gap-1" : ""} border-b pb-3`}>

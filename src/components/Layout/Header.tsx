@@ -1,6 +1,6 @@
 import { UserIcon } from "@/assets/icons/AppIcons"
 import Link from 'next/link'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import SearchBox from "@/components/global/SearchBox";
 import { useDashboard } from "@/hooks/useDashboard";
 import { useAppData } from "@/context/AppContext";
@@ -10,12 +10,13 @@ const Header: React.FC = () => {
   const { userDetails } = useDashboard()
 
   const pathname = usePathname()
-  const params = useParams()
+  // const params = useParams()
+  const params = useSearchParams()
   const router = useRouter()
   const { contextData, setContextData } = useAppData()
 
+
   const handleReturnToPrevious = () => {
-    console.log('clicking the return');
 
     if (contextData.stepGenerate === 1) {
       setContextData({ stepGenerate: 0 })
@@ -47,7 +48,10 @@ const Header: React.FC = () => {
       return "Completed Assets"
     } else if (pathname === "/assets-to-approve") {
       return "Assets to Approve"
-    }
+    } else if (pathname === '/asset') {
+      let type = params.get('type')
+      return `Assets : ${type}`
+    } 
     return ""
   }
 

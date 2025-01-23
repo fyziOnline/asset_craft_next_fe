@@ -22,9 +22,10 @@ interface AssetsPageProps {
   columnWidthsTable?: string[]
   handleClick?: (value: any) => void;
   page: string
+  isIconRequired ?: boolean
 }
 
-const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, hiddenFields = [], page, handleClick, columnWidthsTable = [] }) => {
+const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, hiddenFields = [], page, handleClick, columnWidthsTable = [],isIconRequired = true }) => {
   const [isList, setIsList] = useState<Boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
   
@@ -62,9 +63,8 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
         <Title titleName={page} />
 
         <SearchBox customClass="bg-[#F6F6F6]" setSearchQuery={setSearchQuery}/>
-            
-           </div >
-
+          
+        </div >
 
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
       </div>
@@ -88,6 +88,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
               hiddenFields={hiddenFields}
               listItems={filteredData}
               tableHeadings={tableHeadings}
+              isIconRequired={isIconRequired}
               arrowInHeadings={headersHavingToggle} />}
         <div className='h-[10vh]' />
       </div>
