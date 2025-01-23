@@ -4,11 +4,8 @@ import React, { Suspense, useMemo, useState } from 'react';
 import Button from '@/components/global/Button';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
-import { UserIcon } from "@/assets/icons/AppIcons"
-import Link from 'next/link'
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { MdOutlineFileUpload } from "react-icons/md";
@@ -22,9 +19,7 @@ import SubmitVersionModel from '../edit-html-content/components/SubmitVersionMod
 const Page = () => {
     const { contextData } = useAppData();
     const router = useRouter();
-    const searchParams = useSearchParams();
 
-    const status = searchParams.get('status');
     const [showUploadPopup, setShowUploadPopup] = useState(false);
 
     const handleShowPopUp = () => {
@@ -186,11 +181,8 @@ const Page = () => {
                         {/* Edit section header  */}
                         <div className='flex justify-end px-14 py-6'>
                             <div className='flex gap-4'>
-                                {
-                                    status === "On Review" && (
                                         <Button handleClick={handleShowPopUp} buttonText='Upload' showIcon={false} iconComponentEnd={<MdOutlineFileUpload size={22} />} customClass='px-6 border border-green-300' backgroundColor='bg-transparent' textColor='text-green-300' textStyle="font-semibold" />
-                                    )
-                                }
+                                
                                 <div className='relative w-[150px] bg-white shadow-sm rounded'>
                                     <div onClick={() => { setShowSave(!isShowSave) }} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
                                         <p className='text-base px-2'>Download</p>
