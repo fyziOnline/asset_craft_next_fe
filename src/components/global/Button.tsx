@@ -34,6 +34,7 @@ interface ButtonProps {
   handleClick?: () => void;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
+  iconComponentEnd?: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -48,11 +49,12 @@ const Button: React.FC<ButtonProps> = ({
   showIcon = true,
   handleClick,
   type = "button",
-  disabled = false
+  disabled = false,
+  iconComponentEnd
 }) => {
   return (
     <button disabled={disabled} onClick={handleClick} type={type} className={` ${customClass} inline-flex whitespace-nowrap items-center justify-center rounded-full ${showIcon ? `gap-3` : ``} ${backgroundColor}`}>
-      <p className={`flex items-center gap-1 text-base leading-[24px] font-bold ${textColor} ${textStyle}`}>{IconComponent}{buttonText}</p>
+      <p className={`flex items-center gap-1 text-base leading-[24px] font-bold ${textColor} ${textStyle}`}>{IconComponent}{buttonText}{iconComponentEnd}</p>
       <div className={customClassIcon}>
         {showIcon && <RightArrow color={iconColor} />}
       </div>

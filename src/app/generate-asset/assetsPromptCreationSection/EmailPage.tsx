@@ -126,8 +126,10 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setGenerateStep(newStep);
                 setShowLoading(true)
                 const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.ProjectDetails, contextData.isRegenerateHTML)
+                console.log('contextData',contextData);
+                
                 setShowLoading(false)
-                router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}`)
+                router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}`)
                 // setContextData({ assetGenerateStatus: 3, AssetHtml: res as AssetHtmlProps, isRegenerateHTML: true });
                 // setContextData({ AssetHtml: res as AssetHtmlProps });
                 // if (res?.isSuccess) {
