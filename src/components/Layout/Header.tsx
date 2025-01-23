@@ -15,12 +15,11 @@ const Header: React.FC = () => {
   const router = useRouter()
   const { contextData, setContextData } = useAppData()
 
-  const searchParms = useSearchParams()
-  const projectName = searchParms.get('projectName')
-  const campaignName = searchParms.get('campaignName')
+  const searchParams = useSearchParams()
+  const projectName = searchParams.get('projectName')
+  const campaignName = searchParams.get('campaignName')
   
   const handleReturnToPrevious = () => {
-    console.log('clicking the return');
 
     if (contextData.stepGenerate === 1) {
       setContextData({ stepGenerate: 0 })
@@ -52,7 +51,10 @@ const Header: React.FC = () => {
       return "Completed Assets"
     } else if (pathname === "/assets-to-approve") {
       return "Assets to Approve"
-    }
+    } else if (pathname === '/asset') {
+      let type = searchParams.get('type')
+      return `Assets : ${type}`
+    } 
     return ""
   }
 

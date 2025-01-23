@@ -1,3 +1,4 @@
+import { AssetData, AssetType } from "@/types/asset";
 import { formatDate } from "@/utils/formatDate";
 
 // Define the type for each asset in the dashboard
@@ -21,6 +22,8 @@ interface DashboardAsset {
     assetVersions: AssetVersion[];
     isSuccess: boolean;
     errorOnFailure: string;
+    approvedOn ?: string
+    approvedBy ?: string
 }
 
 interface AssetVersion {
@@ -44,6 +47,18 @@ interface DashboardData {
     inProgress: number;
 }
 
+// type AssetData = {
+//     assetTypeIcon:string
+//     assetName:string
+//     campaignName:string
+//     projectName:string
+//     createdOn:string
+//     currentStatus:string
+//     assetID:string
+//     approvedOn ?: string | undefined
+//     approvedBy ?: string | undefined
+// }
+
 // Helper function to filter and count assets based on type and status
 const countAssetsByTypeAndStatus = (assets: DashboardAsset[], type: string, status: string) => {
     const filteredAssets = assets.filter(asset => asset.assetTypeName === type);
@@ -60,7 +75,7 @@ const getCurrentDateFormatted = (): string => {
 };
 
 // The main function that processes the dashboard assets
-const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDashboardData: DashboardData[], assetsDisplayTable: any[], pendingApproval: any[] } => {
+const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:AssetType="email"): { updatedDashboardData: DashboardData[], assetsDisplayTable: any[], pendingApproval: any[], assetData : any[] } => {
     const dashboardData: DashboardData[] = [
         { projectName: "All Projects", allProjectDate: `as of ${getCurrentDateFormatted()}`, totalAssets: 0, underReview: 0, inProgress: 0 },
         { projectName: "Email", totalAssets: 0, underReview: 0, inProgress: 0 },
@@ -102,18 +117,54 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[]): { updatedDas
         return data;
     });
 
-    // Format the dashboard asset data for the display table
-    const assetsDisplayTable = dashboardAssets.slice(0, 5).map((data) => ({
+    const mappedAssets = mapAssetsByType(dashboardAssets,assetType);
+    const assetData = mappedAssets.assetData
+    const assetsDisplayTable = mappedAssets.assetsDisplayTable;
+    return { updatedDashboardData, assetsDisplayTable, pendingApproval,assetData};
+};
+
+
+
+const mapAssetsByType = (assets:DashboardAsset[],type:AssetType) => {
+  const result = {
+    assetData : [] as AssetData[],
+    assetsDisplayTable: [] as AssetData[]
+  };
+
+  for (let i = 0; i < assets.length; i++) {
+    const data = assets[i];
+    const mappedData:AssetData = {
+        projectName: data.project,
+        campaignName: data.campaignName,
         assetTypeIcon: data.assetTypeName,
         assetName: data.assetName,
-        campaignName: data.campaignName,
-        projectName: data.project,
         createdOn: formatDate(data.createdOn),
         currentStatus: data.status,
-        assetID: data.assetID
-    }));
+        assetID: data.assetID,
+    };
+    const assetName = data.assetTypeName.toLocaleLowerCase() 
+    if (assetName === type?.toLocaleLowerCase()) {
+      result.assetData.push({
+        ...mappedData,
+        approvedOn : data.approvedOn,
+        approvedBy : data.approvedBy
+    })
+    } 
+    if (type?.toLocaleLowerCase() === 'all projects') {
+        result.assetData.push({
+            ...mappedData,
+            approvedOn : data.approvedOn,
+            approvedBy : data.approvedBy
+        })
+    }
 
-    return { updatedDashboardData, assetsDisplayTable, pendingApproval };
-};
+    if (result.assetsDisplayTable.length < 5) {
+      result.assetsDisplayTable.push(mappedData)
+    }
+  }
+
+  return result;
+}
+
 
 export default processDashboardAssets;

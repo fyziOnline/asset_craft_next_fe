@@ -94,3 +94,17 @@ export interface AllUserAssignedProps {
     status: string;
     createdOn: string;
 }
+
+export interface AssetData {
+    assetTypeIcon:string
+    assetName:string
+    campaignName:string
+    projectName:string
+    createdOn:string
+    currentStatus:string
+    assetID:string
+    approvedOn ?: string | undefined
+    approvedBy ?: string | undefined
+}
+
+export type AssetType = 'email' | 'linkedin' | 'landing page' | 'call script' | null
