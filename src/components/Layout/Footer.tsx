@@ -35,8 +35,8 @@ const gitLabel = process.env.NEXT_PUBLIC_GIT_VERSION_ID ? `${process.env.NEXT_PU
 
 const Footer: React.FC = () => {
   return (
-    <footer className="fixed right-0 left-0 bottom-0 z-50 bg-off-white-primary px-[2.5rem] py-[1.8rem] padbot15 md:pb-[0.75rem] ">
-      <div className="flex justify-between align-bottom">
+    <footer className="fixed right-0 left-0 bottom-0 z-50 bg-off-white-primary px-[2.5rem] py-[1.8rem] padbot15 md:pb-[0.75rem] padfooter">
+      <div className="md:flex justify-between align-bottom">
         <p className="text-xs">© Copyright 2025 Hewlett Packard Enterprise Development LP <span className="text-xs text-gray-400">{gitLabel}</span></p>
         <div className="flex gap-[7px]">
           {footerLinks.map((link, index) => (
