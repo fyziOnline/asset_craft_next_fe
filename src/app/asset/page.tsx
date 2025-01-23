@@ -4,7 +4,7 @@ import { useDashboard } from '@/hooks/useDashboard'
 import AssetsPageLayout from '@/layout/specific_layout/AssetsPageLayout'
 // import { formatDate } from '@/utils/formatDate'
 import { useSearchParams } from 'next/navigation'
-import { FC } from 'react'
+import { FC, Suspense } from 'react'
 import processDashboardAssets from '../dashboard/utils/dashboardFilters'
 import { AssetType } from '@/types/asset'
 

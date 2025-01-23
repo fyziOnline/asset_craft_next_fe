@@ -2,6 +2,7 @@ import Footer from "@/components/Layout/Footer";
 import Header from "@/components/Layout/Header";
 import Navbar from "@/components/Layout/Navbar";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,7 +13,9 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   
   return (
     <>
+    <Suspense fallback={<div>Loading...</div>}>
       <Header />
+    </Suspense>
       <Navbar />
       <main className={`${pathname === "/Profile" ? 'ml-[2.5rem]' : 'ml-[5.5rem]'} mt-[2.5rem] pb-[2rem] overflow-auto`}>
         {children}

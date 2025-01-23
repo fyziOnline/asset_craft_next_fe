@@ -31,17 +31,10 @@ const Header: React.FC = () => {
   const getTitlePage = () => {
     if (pathname === "/generate-asset") {
       let assetType = ""
-      try {
-        if (typeof window !== 'undefined') {
-          const urlParams = new URLSearchParams(window.location.search);
-          assetType = urlParams.get('asset-type') as string
-        }
-      } catch (error) {
-
-      }
+      assetType = searchParams.get('asset-type') || ""
 
       if (contextData.stepGenerate === 0) {
-        return "Select one of the templates"
+        return "Select One Of The Templates"
       } else {
         return `Build Your Prompt to Generate the ${assetType}`
       }
