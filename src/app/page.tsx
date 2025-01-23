@@ -47,52 +47,61 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div className="h-full flex flex-col justify-between min-h-[75vh]">
-        <div className="content-wrapper flex relative items-center justify-between mr-[15vw] 2xl:pt-[5%]">
-          <section className="text-white w-[25rem]">
-            <h1 className="text-[3.45rem] leading-[6rem] font-medium font-metric text-green-100 tracking-wide">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
-            <p className="text-wrap text-xl tracking-wide">Simplifying Marketing Content with AI-Driven</p>
-          </section>
 
-          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-8 2xl:pt-[4rem] 2xl:pb-[4rem] padbot10 flex flex-col items-center">
-            <div className="absolute top-[35%] left-[25%]">
-              <div className="color-wheel ">
-                <div className="eclipse-1"></div>
-                <div className="eclipse-2"></div>
-                <div className="eclipse-3"></div>
+      <div className="h-full flex flex-col justify-around min-h-[75vh]">
+              <div className="flex flex-col lg:flex-row relative items-center justify-between md:mr-[15vw] gap-9">
+                <section className="text-white w-[24rem] md:w-[25rem] pad16px">
+                  <h1 className="text-[3.45rem] leading-[6rem] font-medium font-metric text-green-100 tracking-wide">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
+                  <p className="text-wrap text-xl tracking-wide">Simplifying Marketing Content with AI-Driven</p>
+                </section>
+                   
+                   <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-8 padbot10 flex flex-col items-center">
+
+                   <div className="absolute top-[35%] left-[25%]">
+                    <div className="color-wheel ">
+                      <div className="eclipse-1"></div>
+                      <div className="eclipse-2"></div>
+                      <div className="eclipse-3"></div>
+                    </div>
+                  </div>
+
+                  <UserIcon className="mb-[1.5rem] " color="white" />
+                  <input
+                    defaultValue={emailLoginDefault}
+                    onChange={onChangeEmail}
+                    className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider focus:placeholder:text-gray-300"
+                    placeholder="Enter Your email id"
+                    type="text"
+                  />
+
+                    <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[32ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
+
+
+                   </div>
+
+      
+                
               </div>
+      
+      
+              <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mt-[2%] mb-[2%] margin2rem">
+              </div>
+      
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-7 mb-[2%]">
+                {TaglineContents.map(tagline => {
+                  return (
+                    <section key={tagline.title} className="text-white">
+                      <h2 className="mb-2 font-semibold tracking-wide ">{tagline.title}</h2>
+                      <p className="text-grey-200 text-sm tracking-wide">{tagline.content}</p>
+                    </section>
+                  )
+                })}
+              </div>
+      
             </div>
-            <UserIcon className="mb-[1.5rem] " color="white" />
-            <input
-              defaultValue={emailLoginDefault}
-              onChange={onChangeEmail}
-              className="home-box-element text-sm p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[30ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider"
-              placeholder="Enter Your email id"
-              type="text"
-            />
-            <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-sm home-box-element px-[1rem] py-[0.7rem] w-[30ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
-            {/* <p className="text-[0.8rem] mb-[0.7rem]">Not a member? <span className="text-green-100 cursor-pointer pl-[2px]">Sign up now</span></p> */}
-          </div>
-        </div>
 
 
-        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mt-[2%] mb-[2%]">
-        </div>
-
-        <div className="grid grid-cols-4 gap-7 mb-[2%]">
-          {TaglineContents.map(tagline => {
-            return (
-              <section key={tagline.title} className="text-white">
-                <h2 className="mb-2 font-semibold tracking-wide xl:text-lg 2xl:text-2xl">{tagline.title}</h2>
-                <p className="text-grey-200 tracking-wide 2xl:text-lg">{tagline.content}</p>
-              </section>
-            )
-          })}
-        </div>
-
-      </div>
-
-      {isOtpVisible && (
+            {isOtpVisible && (
         <div className="fixed inset-0 bg-gray-900  bg-opacity-50 flex items-center justify-center pb-20 z-50">
           <div className="bg-gradient-to-br from-[#00A881]  to-[#073634] w-fit px-6 pt-[1rem] pb-8 padbot10 flex flex-col items-center rounded-[6%] border-white border">
 
@@ -108,7 +117,7 @@ const Home: FC = () => {
               type="text"
               placeholder="Enter Your OTP"
               onChange={onChangeOtp}
-              className="w-[32ch] p-3  mb-3 bg-transparent  text-white border border-white placeholder:text-white rounded-full outline-none text-center tracking-widest placeholder:tracking-wide"
+              className="w-[32ch] p-3  mb-3 bg-transparent  text-white border border-white placeholder:text-white rounded-full outline-none text-center tracking-widest placeholder:tracking-wide focus:placeholder:text-gray-300"
             />
 
             <p className="text-[0.9rem] text-white mb-1 tracking-wider">Didn't receive the OTP?</p>
@@ -130,6 +139,7 @@ const Home: FC = () => {
           </div>
         </div>
       )}
+
 
     </div>
   );
