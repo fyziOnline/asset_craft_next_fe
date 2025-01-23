@@ -1,6 +1,6 @@
 import { CloseIcon, FileIcon } from "@/assets/icons/AssetIcons";
 import formatFileSize from "@/utils/formatFileSize";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 /**
  * DragAndDrop Component
@@ -13,14 +13,17 @@ import React, { useState } from "react";
 interface DragAndDropProps {
   onFileSelect?: (file: File) => void;
   dragAndDropOuterClass?: string;
+  showButtons?: boolean;
 }
 
-const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, dragAndDropOuterClass = "" }) => {
+const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, dragAndDropOuterClass = "", showButtons = true }) => {
   const [files, setFiles] = useState<File | null>(null);
   const [selectedFile, setSelectedFile] = useState<string>("");
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [activeButton, setActiveButton] = useState<"upload" | "recent">("upload");
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   // Handles button click events and updates the active state.
   const handleButtonClick = (button: "upload" | "recent") => {
     setActiveButton(button);
@@ -39,9 +42,6 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, dragAndDropOute
     if (selectedFile) {
       setSelectedFile(selectedFile.name);
       setFiles(selectedFile);
-      console.log('====================================');
-      console.log('filenmae :', selectedFile);
-      console.log('====================================');
       if (onFileSelect) onFileSelect(selectedFile);
     }
   };
@@ -62,39 +62,45 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, dragAndDropOute
   const handleFileRemove = () => {
     setFiles(null);
     setSelectedFile("");
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
 
   return (
-    <div className={`h-[230px] rounded-3xl shadow overflow-hidden flex flex-col ${dragAndDropOuterClass}`}>
-      <div className="w-full h-[68px] flex items-center justify-center bg-white border-b border-[#EBEFF2]">
-        <div className="relative flex items-center w-[240px] h-[40px] bg-[#e6ecf1] rounded-full p-1">
-          {/* Sliding Toggle Background */}
-          <div
-            className={`absolute top-1 left-1 h-[calc(100%-8px)] w-[48%] bg-[#00A881] rounded-full shadow-md transition-transform duration-300 ease-in-out ${activeButton === "upload" ? "translate-x-0" : "translate-x-full"
-              }`}
-          />
+    <div className={`${showButtons ? "h-[230px]" : "h-full"} rounded-3xl overflow-hidden flex flex-col ${dragAndDropOuterClass}`}>
+      {
+        showButtons &&
+        <div className="w-full h-[68px] flex items-center justify-center bg-white border-b border-[#EBEFF2]">
+          <div className="relative flex items-center w-[240px] h-[40px] bg-[#e6ecf1] rounded-full p-1">
+            {/* Sliding Toggle Background */}
+            <div
+              className={`absolute top-1 left-1 h-[calc(100%-8px)] w-[48%] bg-[#00A881] rounded-full shadow-md transition-transform duration-300 ease-in-out ${activeButton === "upload" ? "translate-x-0" : "translate-x-full"
+                }`}
+            />
 
-          {/* Upload Button */}
-          <button
-            onClick={() => handleButtonClick("upload")}
-            className={`relative z-10 flex-1 text-sm  text-center rounded-full py-2 transition-colors duration-300 ${activeButton === "upload" ? "text-white" : "text-gray-400"
-              }`}
-          >
-            New Upload
-          </button>
+            {/* Upload Button */}
+            <button
+              onClick={() => handleButtonClick("upload")}
+              className={`relative z-10 flex-1 text-sm  text-center rounded-full py-2 transition-colors duration-300 ${activeButton === "upload" ? "text-white" : "text-gray-400"
+                }`}
+            >
+              New Upload
+            </button>
 
-          {/* Recent Button */}
-          <button
-            onClick={() => handleButtonClick("recent")}
-            className={`relative z-10 flex-1 text-sm text-center rounded-full py-2 transition-colors duration-300 ${activeButton === "recent" ? "text-white" : "text-gray-400"
-              }`}
-          >
-            Recent
-          </button>
+            {/* Recent Button */}
+            <button
+              onClick={() => handleButtonClick("recent")}
+              className={`relative z-10 flex-1 text-sm text-center rounded-full py-2 transition-colors duration-300 ${activeButton === "recent" ? "text-white" : "text-gray-400"
+                }`}
+            >
+              Recent
+            </button>
+          </div>
         </div>
-      </div>
-
+      }
 
       <div className={`w-full flex-1 p-8 flex items-center relative ${activeButton === 'upload' ? "bg-[#F7F9FB] justify-center" : "bg-white"}`}>
         {activeButton === "upload" && (
@@ -115,6 +121,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, dragAndDropOute
               </div>
               <input
                 type="file"
+                ref={fileInputRef}
                 onChange={handleFileInputChange}
                 className="hidden"
                 id="file-input"
@@ -124,7 +131,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, dragAndDropOute
                 className="absolute w-full h-full top-0 left-0 cursor-pointer"
               ></label>
             </div>
-            {files && <div className=" mt-2 bg-slate-100 p-1 rounded-sm relative">
+            {files && <div className=" mt-2 bg-slate-100 p-2 rounded-lg relative">
               <div className="flex items-end">
                 <FileIcon color="#EDEDED" text={files.type.split('/')[1]} />
                 <div className="text-xs text-[#242634] opacity-50">
