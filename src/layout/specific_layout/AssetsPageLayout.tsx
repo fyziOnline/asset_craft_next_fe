@@ -33,7 +33,6 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [getSelectedStatus, setGetSelectedStatus] = useState<string>('')
   const [getSelectedAssetType, setGetSelectedAssetType] = useState<string>('');
-  console.log('getSelectedAssetType', getSelectedAssetType);
 
 
   const params = new URLSearchParams(window.location.search);
@@ -41,7 +40,6 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const [gridCurrentPage, setGridCurrentPage] = useState<number>(1)
   const ITEM_PER_PAGE = 9
 
-  console.log('campaign_data', campaign_data)
 
   const toggleListType = () => {
     setIsList(pre => !pre)
