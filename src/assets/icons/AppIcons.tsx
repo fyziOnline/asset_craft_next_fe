@@ -84,7 +84,7 @@ export const GridIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 50 50" fill="none">
       <path d="M20.8333 6.25H6.25V20.8333H20.8333V6.25Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M43.7503 6.25H29.167V20.8333H43.7503V6.25Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M43.7503 6.25H29.167V20.8333H43.7503V6.25Z" stroke="#01A982" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M43.7503 29.1667H29.167V43.75H43.7503V29.1667Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M20.8333 29.1667H6.25V43.75H20.8333V29.1667Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
@@ -95,10 +95,10 @@ export const ListIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 50 50" fill="none">
       <path d="M17 12.5H44.625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M17 25H44.625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17 25H44.625" stroke="#01A982" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M17 37.5H44.625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M6.375 12.5H6.39625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M6.375 25H6.39625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6.375 25H6.39625" stroke="#01A982" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M6.375 37.5H6.39625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
