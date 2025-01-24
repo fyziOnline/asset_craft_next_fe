@@ -32,11 +32,16 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const [isList, setIsList] = useState<Boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [getSelectedStatus, setGetSelectedStatus] = useState<string>('')
+  const [getSelectedAssetType, setGetSelectedAssetType] = useState<string>('');
+  console.log('getSelectedAssetType', getSelectedAssetType);
+
 
   const params = new URLSearchParams(window.location.search);
   const type = params.get('type')
   const [gridCurrentPage, setGridCurrentPage] = useState<number>(1)
-  const ITEM_PER_PAGE = 9  
+  const ITEM_PER_PAGE = 9
+
+  console.log('campaign_data', campaign_data)
 
   const toggleListType = () => {
     setIsList(pre => !pre)
@@ -56,7 +61,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   ]
 
   const filteredData = useMemo(() => {
-    if (!searchQuery.trim() && !getSelectedStatus) return campaign_data
+    if (!searchQuery.trim() && !getSelectedStatus && !getSelectedAssetType) return campaign_data;
 
     return campaign_data.filter((item) => {
       const projectName = item['projectName']?.toLowerCase() || '';
@@ -64,16 +69,16 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
       const assetName = item['assetName']?.toLowerCase() || '';
       const query = searchQuery.toLowerCase();
 
-      const matchSearchQurey = projectName.includes(query) ||
+      const matchSearchQuery = projectName.includes(query) ||
         campaignName.includes(query) ||
-        assetName.includes(query)
+        assetName.includes(query);
 
-      const matcheStatus = getSelectedStatus ? item['currentStatus'] === getSelectedStatus : true
+      const matchStatus = getSelectedStatus ? item['currentStatus'] === getSelectedStatus : true;
+      const matchAssetType = getSelectedAssetType ? item['assetTypeIcon'] === getSelectedAssetType : true;
 
-      return matchSearchQurey && matcheStatus
-    })
-  }, [searchQuery, campaign_data, getSelectedStatus])
-
+      return matchSearchQuery && matchStatus && matchAssetType;
+    });
+  }, [searchQuery, campaign_data, getSelectedStatus, getSelectedAssetType]);
 
   const paginatedGridData = useMemo(() => {
     const startIndex = (gridCurrentPage - 1) * ITEM_PER_PAGE;
@@ -85,7 +90,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const gridTotalPages = Math.ceil(filteredData.length / ITEM_PER_PAGE);
 
 
-  const handleGridPageChange = (event: React.ChangeEvent<unknown>, value: number) => {    
+  const handleGridPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setGridCurrentPage(value)
   }
   return (
@@ -107,7 +112,15 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
               }}
             />            {
               type !== 'Email' && type !== 'Landing Page' && type !== 'Call Script' && type !== 'LinkedIn' &&
-              <FilterDropdown placeholder='Select Asset Type' optionLists={filterOptionsAsset} customClass="bg-[#F6F6F6]" />
+              <FilterDropdown
+                placeholder="Select Asset Type"
+                optionLists={filterOptionsAsset}
+                customClass="bg-[#F6F6F6]"
+                selectedValue={(value) => {
+                  setGetSelectedAssetType(value);
+                  setGridCurrentPage(1);
+                }}
+              />
             }
             <FilterDropdown placeholder='Select Status' optionLists={filterOptionsStatus} customClass="bg-[#F6F6F6]" selectedValue={(value) => {
               setGetSelectedStatus(value);
