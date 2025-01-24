@@ -6,6 +6,7 @@ import { GridIcon, ListIcon } from '@/assets/icons/AppIcons'
 import Table from '@/components/global/Table'
 import Title from '@/components/global/Title'
 import SearchBox from "@/components/global/SearchBox";
+import { Pagination, Stack } from '@mui/material'
 
 
 interface Asset {
@@ -22,15 +23,19 @@ interface AssetsPageProps {
   columnWidthsTable?: string[]
   handleClick?: (value: any) => void;
   page: string
-  isIconRequired ?: boolean
+  isIconRequired?: boolean
 }
 
-const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, hiddenFields = [], page, handleClick, columnWidthsTable = [],isIconRequired = true }) => {
+const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, hiddenFields = [], page, handleClick, columnWidthsTable = [], isIconRequired = true }) => {
   const [isList, setIsList] = useState<Boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
-  
+  const [gridCurrentPage, setGridCurrentPage] = useState<number>(1)
+  const ITEM_PER_PAGE = 9
+
+
   const toggleListType = () => {
     setIsList(pre => !pre)
+    setGridCurrentPage(1)
   }
 
   const filteredData = useMemo(() => {
@@ -38,9 +43,9 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
 
     return campaign_data.filter((item) => {
       const projectName = item['projectName']?.toLowerCase() || '';
-    const campaignName = item['campaignName']?.toLowerCase() || '';
-    const assetName = item['assetName']?.toLowerCase() || '';
-    const query = searchQuery.toLowerCase();
+      const campaignName = item['campaignName']?.toLowerCase() || '';
+      const assetName = item['assetName']?.toLowerCase() || '';
+      const query = searchQuery.toLowerCase();
 
       return (
         projectName.includes(query) ||
@@ -49,21 +54,37 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
       )
     })
   }, [searchQuery, campaign_data])
-  
 
-  
 
+  const paginatedGridData = useMemo(() => {
+    const startIndex = (gridCurrentPage - 1) * ITEM_PER_PAGE;
+    const endIndex = startIndex + ITEM_PER_PAGE;
+    return filteredData.slice(startIndex, endIndex);
+  }, [gridCurrentPage, filteredData])
+
+
+  const gridTotalPages = Math.ceil(filteredData.length / ITEM_PER_PAGE);
+
+
+  const handleGridPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setGridCurrentPage(value)
+  }
   return (
     <>
       <div className="flex items-center justify-between pt-[1rem] px-[1.5rem] mt-5">
 
-      <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5">
 
-        {/* <Breadcrumb TaskType={page} /> */}
-        <Title titleName={page} />
+          {/* <Breadcrumb TaskType={page} /> */}
+          <Title titleName={page} />
 
-        <SearchBox customClass="bg-[#F6F6F6]" setSearchQuery={setSearchQuery}/>
-          
+          <SearchBox
+            customClass="bg-[#F6F6F6]"
+            setSearchQuery={(query) => {
+              setSearchQuery(query)
+              setGridCurrentPage(1)
+            }}
+          />
         </div >
 
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
@@ -72,14 +93,30 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
         {filteredData.length === 0 ?
           <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
           : !isList ?
-            <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
-              {filteredData.map((data, index) => (
-                <div key={index}
-                >
-                  <AssetCard data={data} />
+            <>
+              <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
+                {paginatedGridData.map((data, index) => (
+                  <div key={index}
+                  >
+                    <AssetCard data={data} />
+                  </div>
+                ))}
+              </div>
+
+              {gridTotalPages > 1 && (
+                <div className='flex justify-center mt-2'>
+                  <Stack spacing={2}>
+                    <Pagination
+                      count={gridTotalPages}
+                      page={gridCurrentPage}
+                      showFirstButton
+                      showLastButton
+                      onChange={handleGridPageChange}
+                    />
+                  </Stack>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
             :
             <Table
               isPagination={true}
