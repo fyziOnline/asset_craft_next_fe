@@ -8,6 +8,7 @@ import Title from '@/components/global/Title'
 import SearchBox from "@/components/global/SearchBox";
 import DropDown from '@/components/global/DropDown'
 import FilterDropdown from '@/components/global/FilterDropdown'
+import { Pagination, Stack } from '@mui/material'
 
 
 interface Asset {
@@ -35,9 +36,13 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
 
   const params = new URLSearchParams(window.location.search);
   const type = params.get('type')
+  const [gridCurrentPage, setGridCurrentPage] = useState<number>(1)
+  const ITEM_PER_PAGE = 9
+
 
   const toggleListType = () => {
     setIsList(pre => !pre)
+    setGridCurrentPage(1)
   }
 
   const filterOptionsAsset = [
@@ -70,8 +75,19 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   }, [searchQuery, campaign_data])
 
 
+  const paginatedGridData = useMemo(() => {
+    const startIndex = (gridCurrentPage - 1) * ITEM_PER_PAGE;
+    const endIndex = startIndex + ITEM_PER_PAGE;
+    return filteredData.slice(startIndex, endIndex);
+  }, [gridCurrentPage, filteredData])
 
 
+  const gridTotalPages = Math.ceil(filteredData.length / ITEM_PER_PAGE);
+
+
+  const handleGridPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setGridCurrentPage(value)
+  }
   return (
     <>
       <div className="flex items-center justify-between pt-[1rem] px-[1.5rem] mt-5">
@@ -82,14 +98,28 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
           <Title titleName={page} />
 
           <div className='flex items-center gap-4'>
-            <SearchBox customClass="bg-[#F6F6F6]" setSearchQuery={setSearchQuery} />
-            {
+
+          <SearchBox
+            customClass="bg-[#F6F6F6]"
+            setSearchQuery={(query) => {
+              setSearchQuery(query)
+              setGridCurrentPage(1)
+            }}
+          />            {
               type !== 'Email' && type !== 'Landing Page' && type !== 'Call Script' && type !== 'LinkedIn' &&
               <FilterDropdown placeholder='Select Asset Type' optionLists={filterOptionsAsset} customClass="bg-[#F6F6F6]" selectedValue={setSelectedValue} />
             }
             <FilterDropdown placeholder='Select Status' optionLists={filterOptionsStatus} customClass="bg-[#F6F6F6]" selectedValue={setSelectedValue} />
           </div>
 
+{/* 
+          <SearchBox
+            customClass="bg-[#F6F6F6]"
+            setSearchQuery={(query) => {
+              setSearchQuery(query)
+              setGridCurrentPage(1)
+            }}
+          /> */}
         </div >
 
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
@@ -98,14 +128,30 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
         {filteredData.length === 0 ?
           <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
           : !isList ?
-            <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
-              {filteredData.map((data, index) => (
-                <div key={index}
-                >
-                  <AssetCard data={data} />
+            <>
+              <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
+                {paginatedGridData.map((data, index) => (
+                  <div key={index}
+                  >
+                    <AssetCard data={data} />
+                  </div>
+                ))}
+              </div>
+
+              {gridTotalPages > 1 && (
+                <div className='flex justify-center mt-2'>
+                  <Stack spacing={2}>
+                    <Pagination
+                      count={gridTotalPages}
+                      page={gridCurrentPage}
+                      showFirstButton
+                      showLastButton
+                      onChange={handleGridPageChange}
+                    />
+                  </Stack>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
             :
             <Table
               isPagination={true}
