@@ -1,9 +1,8 @@
 'use client';
 
-import React, { Suspense, useMemo, useState } from 'react';
+import { FC, Suspense, useMemo, useState } from 'react';
 import Button from '@/components/global/Button';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
-import { useRouter } from 'next/navigation';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
@@ -15,15 +14,16 @@ import AddVersionModel from '../edit-html-content/components/AddVersionModel';
 import EditContentModel from '../edit-html-content/components/EditContentModel';
 import ShadowDomContainer from '../edit-html-content/components/ShadowDomContainer';
 import SubmitVersionModel from '../edit-html-content/components/SubmitVersionModel';
+import { useAssetApproval } from '@/hooks/useAssetApproval';
 
-const Page = () => {
+const Page:FC = () => {
     const { contextData } = useAppData();
-    const router = useRouter();
 
     const [showUploadPopup, setShowUploadPopup] = useState(false);
-
+    
     const handleShowPopUp = () => {
         setShowUploadPopup((prev) => !prev)
+        setIsReAssignSuccessFull(false)
     }
 
     useOverflowHidden()
@@ -51,6 +51,27 @@ const Page = () => {
         setSectionEdit,
         handleHideBlock
     } = useEditHTMLContent()
+
+    const { 
+        getApprovalDetails,
+        handleUploadFile,
+        handleRemoveFile,
+        setIsReAssignSuccessFull,
+        eventInputComment,
+        isReAssignSuccessFull,
+        reAssignLoading 
+    } = useAssetApproval(
+        {assetVersionID : versionSelected?.assetVersionID || "",
+            assetID: versionSelected?.assetID || ""}
+    )
+
+    const handleReAssignToEditor = async () => {
+        if (versionSelected?.assetVersionID && versionSelected?.assetID) {
+            await getApprovalDetails();
+        } else {
+            console.error("Invalid versionSelected data");
+        }
+    };
 
     const htmlOtherAsset = () => {
         let htmlContent = ''
@@ -152,10 +173,6 @@ const Page = () => {
             )
         }))
     }, [versionSelected])
-
-    const handleApprove = () => {
-        console.log('Approving.....')
-    };
 
     return (
         <>
@@ -262,7 +279,7 @@ const Page = () => {
             </Suspense>
 
             {
-                showUploadPopup &&
+                showUploadPopup && !isReAssignSuccessFull &&
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                     <div className="w-[46%] bg-white rounded-xl shadow-lg">
                         <div className="flex justify-between items-center p-6 border-b">
@@ -270,24 +287,32 @@ const Page = () => {
                             <button
                                 className="text-gray-500 hover:text-gray-700 transition-colors"
                             >
-                                <MdOutlineClose color='#00A881' onClick={() => setShowUploadPopup(false)} className="w-6 h-6" />
+                                <MdOutlineClose color='#00A881' 
+                                onClick={() => {
+                                    setShowUploadPopup(false)
+                                    setIsReAssignSuccessFull(false)
+                                }} 
+                                className="w-6 h-6" />
                             </button>
                         </div>
 
                         <div className="p-6">
                             <p className="text-lg font-semibold text-fileupload-text mb-4">Attach your file</p>
-                            <DragAndDrop showButtons={false} />
+                            <DragAndDrop onFileSelect={(file)=>{handleUploadFile(file)}} onRemoveSelectedFile={handleRemoveFile} showButtons={false} />
                         </div>
 
                         <div className="px-6 pb-6">
                             <p className="text-lg font-semibold text-fileupload-text mb-4">Enter your comments here</p>
                             <textarea
                                 placeholder="Type your comments"
+                                onChange={(e)=>{eventInputComment(e)}}
                                 className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none "
                             />
                             <div className="flex justify-end">
                                 <button
-                                    className="bg-green-300 text-white px-8 py-1 rounded-full font-medium"
+                                    className={`${!reAssignLoading ? "bg-green-300" : "to-grey-500"} text-white px-8 py-1 rounded-full font-medium`}
+                                    onClick={handleReAssignToEditor}
+                                    disabled = {reAssignLoading}
                                 >
                                     submit
                                 </button>
