@@ -178,7 +178,7 @@ const Page = () => {
                 <div className="flex p-1 px-2">
                     <div className='flex-1'>
                     </div>
-                    <div className='w-full flex items-center justify-between p-[0.6rem]'>
+                    {/* <div className='w-full flex items-center justify-between p-[0.6rem]'>
 
                         <div onClick={() => router.back()} className="relative w-7 h-7 rounded-full bg-[#00A881] cursor-pointer">
                             <svg className="absolute top-1 left-[0.40rem]" width="17" height="18" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -187,7 +187,7 @@ const Page = () => {
                         </div>
 
                         <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Edit section  */}

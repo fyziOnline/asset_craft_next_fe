@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import SearchBox from "@/components/global/SearchBox";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
 const Dashboard: FC = () => {
+  // const [loading,setLoading] = useState(true)
   const router = useRouter();
   const {
     clientAssetTypes,
@@ -39,7 +40,6 @@ const Dashboard: FC = () => {
   } = useDashboard()
 
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
-
   const { setContextData } = useAppData()
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const Dashboard: FC = () => {
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
                 <Table hiddenFields={["assetID"]} handleClick={(item) => {
-                  router.push(`/edit-html-content?assetID=${item.assetID}`)
+                  router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}`)
                 }}
                   listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
@@ -122,7 +122,7 @@ const Dashboard: FC = () => {
                   return (
                     <div 
                       onClick={() => {
-                        router.push(`/edit-html-content?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}`)
+                        router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`)
                       }}
                       key={index} className={`rounded-[15px] border p-3 mt-2 cursor-pointer ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
                       <div className="flex items-center justify-between">
@@ -151,6 +151,9 @@ const Dashboard: FC = () => {
         
       </div>
     </div>
+  // }
+    
+  //   </>
   );
 };
 
