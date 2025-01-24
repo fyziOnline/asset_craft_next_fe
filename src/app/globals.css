@@ -337,6 +337,21 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  .feedback-panel {
+    position: fixed; /* Keeps the panel fixed in place */
+    top: 77%;        /* Positions the panel in the middle vertically */
+    right: 0%;      /* Positions the panel in the middle horizontally */
+    transform: translate(0, -50%); /* Adjusts for proper centering */
+    width: 35vw;     /* Sets width to 20% of the viewport width */
+    height: 35vh;    /* Sets height to 20% of the viewport height */
+    z-index: 50;     /* Ensures it appears on top of other content */
+    background-color: white; /* Sets background color */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adds subtle shadow */
+    border-radius: 8px; /* Optional: Adds rounded corners */
+  }
+}
+
 
 
 
