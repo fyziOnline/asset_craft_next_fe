@@ -1,4 +1,4 @@
-import { FC, useState, useMemo } from 'react'
+import { FC, useState, useMemo, useEffect } from 'react'
 // import LayoutWrapper from '../LayoutWrapper'
 // import Breadcrumb from '@/components/global/Breadcrumb'
 import AssetCard from '@/components/wrapper/AssetCard'
@@ -33,14 +33,21 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [getSelectedStatus, setGetSelectedStatus] = useState<string>('')
   const [getSelectedAssetType, setGetSelectedAssetType] = useState<string>('');
+  const [type, setType] = useState<string>('');
 
 
-  const params = new URLSearchParams(window.location.search);
-  const type = params.get('type')
+  // const params = new URLSearchParams(window.location.search);
+  // const type = params.get('type')
   const [gridCurrentPage, setGridCurrentPage] = useState<number>(1)
   const ITEM_PER_PAGE = 9
 
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      setType(params.get('type') || "");
+    }
+  }, []);
   const toggleListType = () => {
     setIsList(pre => !pre)
     setGridCurrentPage(1)
