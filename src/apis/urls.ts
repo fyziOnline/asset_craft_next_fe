@@ -36,4 +36,7 @@ export const urls = {
   approval_approver_select_all: "/approval/approver/select/all",
   approval_assetApproval_SubmitForApproval: "/approval/assetApproval/SubmitForApproval",
   getAssetsToApprove: "/approval/assetApproval/select/GetAllUserAssigned",
+  getAssetApprovalDetails : "/asset/assetApproval/ViewDetails",
+  updateAssetReAssignFile : "/approval/image/update",
+  updateAssetReassignFinal : "/approval/assetApproval/ReAssign",
 };

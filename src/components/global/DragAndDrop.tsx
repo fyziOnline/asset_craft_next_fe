@@ -12,11 +12,12 @@ import React, { useRef, useState } from "react";
 
 interface DragAndDropProps {
   onFileSelect?: (file: File) => void;
+  onRemoveSelectedFile ?: () => void
   dragAndDropOuterClass?: string;
   showButtons?: boolean;
 }
 
-const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, dragAndDropOuterClass = "", showButtons = true }) => {
+const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect,onRemoveSelectedFile, dragAndDropOuterClass = "", showButtons = true }) => {
   const [files, setFiles] = useState<File | null>(null);
   const [selectedFile, setSelectedFile] = useState<string>("");
   const [dragActive, setDragActive] = useState<boolean>(false);
@@ -62,7 +63,9 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, dragAndDropOute
   const handleFileRemove = () => {
     setFiles(null);
     setSelectedFile("");
-
+    if (onRemoveSelectedFile) {
+      onRemoveSelectedFile();
+    }
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
