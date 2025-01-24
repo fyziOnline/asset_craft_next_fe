@@ -30,6 +30,11 @@ interface AssetsPageProps {
 const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, hiddenFields = [], page, handleClick, columnWidthsTable = [], isIconRequired = true }) => {
   const [isList, setIsList] = useState<Boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [getSelectedValue, setSelectedValue] = useState<string>('')
+  console.log('getSelectedValue', getSelectedValue);
+
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get('type')
 
   const toggleListType = () => {
     setIsList(pre => !pre)
@@ -78,8 +83,11 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
 
           <div className='flex items-center gap-4'>
             <SearchBox customClass="bg-[#F6F6F6]" setSearchQuery={setSearchQuery} />
-            <FilterDropdown placeholder='Select Asset Type' optionLists={filterOptionsAsset} customClass="bg-[#F6F6F6]" />
-            <FilterDropdown placeholder='Select Status' optionLists={filterOptionsStatus} customClass="bg-[#F6F6F6]" />
+            {
+              type !== 'Email' && type !== 'Landing Page' && type !== 'Call Script' && type !== 'LinkedIn' &&
+              <FilterDropdown placeholder='Select Asset Type' optionLists={filterOptionsAsset} customClass="bg-[#F6F6F6]" selectedValue={setSelectedValue} />
+            }
+            <FilterDropdown placeholder='Select Status' optionLists={filterOptionsStatus} customClass="bg-[#F6F6F6]" selectedValue={setSelectedValue} />
           </div>
 
         </div >

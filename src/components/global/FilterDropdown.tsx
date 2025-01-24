@@ -10,9 +10,10 @@ interface FilterDropdownProps {
     customClass?: string;
     optionLists: DropDownOptions[];
     placeholder?: string
+    selectedValue?: (value: string) => void
 }
 
-const FilterDropdown: FC<FilterDropdownProps> = ({ customClass, optionLists, placeholder = 'Select' }) => {
+const FilterDropdown: FC<FilterDropdownProps> = ({ customClass, optionLists, placeholder = 'Select', selectedValue }) => {
     const [showOptionList, setShowOptionList] = useState(false)
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedLabel, setSelectedLabel] = useState('')
@@ -27,6 +28,7 @@ const FilterDropdown: FC<FilterDropdownProps> = ({ customClass, optionLists, pla
         setSelectedOption(options.value)
         setSelectedLabel(options.label)
         setShowOptionList(false)
+        selectedValue && selectedValue(options.value)
     }
 
     useEffect(() => {
@@ -44,7 +46,7 @@ const FilterDropdown: FC<FilterDropdownProps> = ({ customClass, optionLists, pla
     return (
         <div ref={dropdownRef} className='relative'>
             <div onClick={handleDropDownList} className={`flex items-center justify-between gap-2 rounded-full w-[200px] border border-[rgba(217,217,217,0.93)] px-3 py-1 cursor-pointer ${customClass}`} >
-                <p className={`text-base tracking-wide ${!selectedOption ? "text-[#666666]" : "" }`}>{selectedLabel || placeholder}</p>
+                <p className={`text-base tracking-wide ${!selectedOption ? "text-[#666666]" : ""}`}>{selectedLabel || placeholder}</p>
                 <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown color='#00A881' size={25} /></span>
             </div>
             {showOptionList &&
