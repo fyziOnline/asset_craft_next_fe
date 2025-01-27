@@ -285,7 +285,7 @@ const Page: FC = () => {
                             {/* Feedback Panel */}
                             {isFeedbackOpen && (
                                 <div
-                                    className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[25%] md:h-[60%] overflow-y-auto custom-scrollbar feedback-panel ${isFeedbackOpen ? "block" : "hidden "
+                                    className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[35%] md:h-[60%] overflow-y-auto custom-scrollbar feedback-panel ${isFeedbackOpen ? "block" : "hidden "
                                         }`}
                                 >
                                     {/* Header */}
