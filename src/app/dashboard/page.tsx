@@ -1,40 +1,25 @@
 'use client';
 
-import React, { FC, useEffect, useState } from "react";
-import SearchBox from "@/components/global/SearchBox";
+import React, { FC, useEffect } from "react";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
-import { EmailIcon, LandingAssetIcon2, LinkedinIcon, SalesCallIcon } from "@/assets/icons/TableIcon";
 import { ExpressIcon } from "@/assets/icons/AppIcons";
 import { useDashboard } from "@/hooks/useDashboard";
-import InputAreaSearch from "@/components/global/InputAreaSearch";
-import DropDown from "@/components/global/DropDown";
 import processDashboardAssets from "@/app/dashboard/utils/dashboardFilters"
 import { formatDate } from "@/utils/formatDate";
 import { useAppData } from "@/context/AppContext";
 import { AssetHtmlProps } from "@/types/templates";
 import { useRouter } from "next/navigation";
 
-
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
 const Dashboard: FC = () => {
-  // const [loading,setLoading] = useState(true)
   const router = useRouter();
   const {
     clientAssetTypes,
-    selectedIndexes,
-    selectedButton,
-    handleNext,
-    closeModal,
-    closeAssetModal,
-    handleShowPopup,
-    onSelect,
-    handleChangeAssetDetails,
     selectAssetType,
     dashboardAssets,
-    userDetails,
     pendingApproval,
     userRole
   } = useDashboard()
@@ -107,10 +92,10 @@ const Dashboard: FC = () => {
               )}
             </div>
           </div>
-          
+
         </div>
 
- 
+
 
         <div className="lg:w-[27%] w-[95%] mt-[3rem] lg:mt-0 ">
           <p className="text-lg font-bold pl-10 pb-2">{userRole === "Approver" ? "Assets to Approve" : "Pending Approval"}</p>
@@ -120,7 +105,7 @@ const Dashboard: FC = () => {
               {pendingApproval && pendingApproval.length > 0 ? (
                 pendingApproval.map((data, index) => {
                   return (
-                    <div 
+                    <div
                       onClick={() => {
                         router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`)
                       }}
@@ -144,16 +129,8 @@ const Dashboard: FC = () => {
             </div>
           </div>
         </div>
-
-
-
-
-        
       </div>
     </div>
-  // }
-    
-  //   </>
   );
 };
 

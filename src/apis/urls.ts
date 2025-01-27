@@ -23,8 +23,7 @@ export const urls = {
   aiPrompt_Campaign_update: "/aiPrompt/Campaign/update",
   aiPrompt_image_update: "/aiPrompt/image/update",
   aiPrompt_GenerateAssetPrompt: "/aiPrompt/GenerateAssetPrompt",
-  assetVersionBlock_aiPromptUpdateByTemplateID:
-    "/AssetVersionBlock/aiPromptUpdateByTemplateID",
+  assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID",
   asset_version_getDataUsingAI: "/asset/version/getDataUsingAI",
   asset_version_generate: "/asset/version/generate",
   asset_version_select: "/asset/version/select",

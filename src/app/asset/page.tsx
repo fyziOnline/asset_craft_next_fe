@@ -7,7 +7,7 @@ import { FC, Suspense, useEffect, useState } from 'react'
 import processDashboardAssets from '../dashboard/utils/dashboardFilters'
 import { AssetType } from '@/types/asset'
 
-const Page:FC = () => {
+const Page: FC = () => {
   const [type, setType] = useState<AssetType | null>(null);
 
   useEffect(() => {
@@ -15,24 +15,24 @@ const Page:FC = () => {
     setType(urlParams.get('type') as AssetType);
   }, []);
 
-  const {dashboardAssets} = useDashboard()
-  const {assetData} = processDashboardAssets(dashboardAssets, type)
+  const { dashboardAssets } = useDashboard()
+  const { assetData } = processDashboardAssets(dashboardAssets, type)
 
-  const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On","Current Status", "Approved By", "Approved On"]
+  const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status", "Approved On", "Approved By"]
   const arrowshowItems = ["Project Name", "Created On", "Approved On"]
-  const hiddenFields = ["dataItem","assetID"]
+  const hiddenFields = ["dataItem", "assetID"]
 
   return (
     <>
-      <AssetsPageLayout 
-        hiddenFields={hiddenFields} 
-        handleClick={()=>{}} 
-        campaign_data={assetData} 
-        tableHeadings={tableHeading} 
-        headersHavingToggle={arrowshowItems} 
-        columnWidthsTable={["repeat(7, 1fr)"]} 
-        page="" 
-        isIconRequired = {false}
+      <AssetsPageLayout
+        hiddenFields={hiddenFields}
+        handleClick={() => { }}
+        campaign_data={assetData}
+        tableHeadings={tableHeading}
+        headersHavingToggle={arrowshowItems}
+        columnWidthsTable={["repeat(7, 1fr)"]}
+        page=""
+        isIconRequired={false}
       />
     </>
   )
