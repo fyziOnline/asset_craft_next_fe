@@ -15,7 +15,7 @@ const FeedBackCard: React.FC<FeedBackCardProps> = ({ isFeedbackOpen, setIsFeedba
 
         <div className="relative">
             {/* Message Icon */}
-            {isFeedbackOpen && ( // Show icon only if feedback is closed. please provide ! for show icon
+            {!isFeedbackOpen && ( // Show icon only if feedback is closed. please provide ! for show icon
                 <div
                     className="p-[10px] relative rounded-full bg-[#00A881] cursor-pointer my-1 w-9 h-9 flex items-center"
                     onClick={() => setIsFeedbackOpen(true)} // Open feedback panel
