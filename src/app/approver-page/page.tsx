@@ -16,11 +16,11 @@ import ShadowDomContainer from '../edit-html-content/components/ShadowDomContain
 // import SubmitVersionModel from '../edit-html-content/components/SubmitVersionModel';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 
-const Page:FC = () => {
+const Page: FC = () => {
     const { contextData } = useAppData();
 
     const [showUploadPopup, setShowUploadPopup] = useState(false);
-    
+
     const handleShowPopUp = () => {
         setShowUploadPopup((prev) => !prev)
         setIsReAssignSuccessFull(false)
@@ -50,18 +50,20 @@ const Page:FC = () => {
         handleHideBlock
     } = useEditHTMLContent()
 
-    const { 
+    const {
         reAssignAsset,
         handleUploadFile,
         handleRemoveFile,
         setIsReAssignSuccessFull,
         approveAsset,
+        reAssignLoading,
         eventInputComment,
         isReAssignSuccessFull,
-        reAssignLoading 
     } = useAssetApproval(
-        {assetVersionID : versionSelected?.assetVersionID || "",
-            assetID: versionSelected?.assetID || ""}
+        {
+            assetVersionID: versionSelected?.assetVersionID || "",
+            assetID: versionSelected?.assetID || ""
+        }
     )
 
     const handleReAssignToEditor = async () => {
@@ -197,8 +199,8 @@ const Page:FC = () => {
                         {/* Edit section header  */}
                         <div className='flex justify-end px-14 py-6'>
                             <div className='flex gap-4'>
-                                        <Button handleClick={handleShowPopUp} buttonText='Upload' showIcon={false} iconComponentEnd={<MdOutlineFileUpload size={22} />} customClass='px-6 border border-green-300' backgroundColor='bg-transparent' textColor='text-green-300' textStyle="font-semibold" />
-                                
+                                <Button handleClick={handleShowPopUp} buttonText='Upload' showIcon={false} iconComponentEnd={<MdOutlineFileUpload size={22} />} customClass='px-6 border border-green-300' backgroundColor='bg-transparent' textColor='text-green-300' textStyle="font-semibold" />
+
                                 <div className='relative w-[150px] bg-white shadow-sm rounded'>
                                     <div onClick={() => { setShowSave(!isShowSave) }} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
                                         <p className='text-base px-2'>Download</p>
@@ -230,7 +232,7 @@ const Page:FC = () => {
                                         </div>}
                                 </div>
                                 <div className='h-full w-[1.5px] bg-sectionGrey'></div>
-                                <Button buttonText='Approve' handleClick={ approveAsset} showIcon={false} customClass='px-10 py-1' />
+                                <Button buttonText='Approve' handleClick={approveAsset} showIcon={false} customClass='px-10 py-1' />
                             </div>
                         </div>
 
@@ -280,35 +282,45 @@ const Page:FC = () => {
                             <button
                                 className="text-gray-500 hover:text-gray-700 transition-colors"
                             >
-                                <MdOutlineClose color='#00A881' 
-                                onClick={() => {
-                                    setShowUploadPopup(false)
-                                    setIsReAssignSuccessFull(false)
-                                }} 
-                                className="w-6 h-6" />
+                                <MdOutlineClose color='#00A881'
+                                    onClick={() => {
+                                        setShowUploadPopup(false)
+                                        setIsReAssignSuccessFull(false)
+                                    }}
+                                    className="w-6 h-6" />
                             </button>
                         </div>
 
                         <div className="p-6">
                             <p className="text-lg font-semibold text-fileupload-text mb-4">Attach your file</p>
-                            <DragAndDrop onFileSelect={(file)=>{handleUploadFile(file)}} onRemoveSelectedFile={handleRemoveFile} showButtons={false} />
+                            <DragAndDrop onFileSelect={(file) => { handleUploadFile(file) }} onRemoveSelectedFile={handleRemoveFile} showButtons={false} />
                         </div>
 
                         <div className="px-6 pb-6">
                             <p className="text-lg font-semibold text-fileupload-text mb-4">Enter your comments here</p>
                             <textarea
                                 placeholder="Type your comments"
-                                onChange={(e)=>{eventInputComment(e)}}
-                                className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none "
+                                onChange={(e) => { eventInputComment(e) }}
+                                className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none"
                             />
                             <div className="flex justify-end">
-                                <button
+                                {/* <button
                                     className={`${!reAssignLoading ? "bg-green-300" : "to-grey-500"} text-white px-8 py-1 rounded-full font-medium`}
                                     onClick={handleReAssignToEditor}
                                     disabled = {reAssignLoading}
                                 >
                                     submit
-                                </button>
+                                </button> */}
+
+                                <Button
+                                    buttonText='Submit'
+                                    handleClick={handleReAssignToEditor}
+                                    disabled={reAssignLoading}
+                                    showIcon={false}
+                                    customClass={`text-white px-8 py-1 rounded-full font-medium`}
+                                    backgroundColor={`${!reAssignLoading ? "bg-green-300" : "bg-[#B1B1B1]"}`}
+                                />
+
                             </div>
                         </div>
                     </div>

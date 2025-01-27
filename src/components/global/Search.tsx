@@ -101,7 +101,7 @@ const Search: React.FC<SearchProps> = ({
                 <SearchIcon customColor='#00A881' />
                 {selectValue?.label ?
                     <div className='flex items-start px-1 w-full '>
-                        <div className='flex items-center gap-[10px] ring-1 ring-emerald-500 ring-offset-0 rounded-full p-[5px]' >
+                        <div className='flex items-center gap-[10px]  rounded-full p-[5px]' >
                             <div className='flex items-center justify-center w-5 h-5 rounded-full bg-[#D2D2D2] text-white'>
                                 <span className='text-sm'>{selectValue.firstLetter}</span>
                             </div>
