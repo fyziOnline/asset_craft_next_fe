@@ -1,12 +1,9 @@
 import { FC, useState, useMemo, useEffect } from 'react'
-// import LayoutWrapper from '../LayoutWrapper'
-// import Breadcrumb from '@/components/global/Breadcrumb'
 import AssetCard from '@/components/wrapper/AssetCard'
 import { GridIcon, ListIcon } from '@/assets/icons/AppIcons'
 import Table from '@/components/global/Table'
 import Title from '@/components/global/Title'
 import SearchBox from "@/components/global/SearchBox";
-import DropDown from '@/components/global/DropDown'
 import FilterDropdown from '@/components/global/FilterDropdown'
 import { Pagination, Stack } from '@mui/material'
 
@@ -18,7 +15,6 @@ interface Asset {
 interface AssetsPageProps {
   fieldClick?: string;
   campaign_data: Asset[]
-  // onSelectingCampaign : (campaign_name:string)=>void
   tableHeadings: string[]
   headersHavingToggle: string[]
   hiddenFields?: string[]
@@ -35,9 +31,6 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const [getSelectedAssetType, setGetSelectedAssetType] = useState<string>('');
   const [type, setType] = useState<string>('');
 
-
-  // const params = new URLSearchParams(window.location.search);
-  // const type = params.get('type')
   const [gridCurrentPage, setGridCurrentPage] = useState<number>(1)
   const ITEM_PER_PAGE = 9
 
@@ -104,7 +97,6 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
 
         <div className="flex items-center gap-5">
 
-          {/* <Breadcrumb TaskType={page} /> */}
           <Title titleName={page} />
 
           <div className='flex items-center gap-4'>

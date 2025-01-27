@@ -94,9 +94,6 @@
   .asset-grid-padding {
     @apply px-4 lg:px-16 xl:px-20;
   }
-  /* .color-wheel-circle {
-    @apply w-8 aspect-square
-  } */
 }
 .bg-custom-gradient-green {
   background: linear-gradient(
@@ -148,9 +145,6 @@
 
 .color-wheel {
   position: relative;
-  /* right: 10%;
-  height: 100%; */
-  /* animation: rotate-wheel 2s ease; */
 }
 .eclipse-1 {
   position: absolute;
@@ -175,9 +169,6 @@
   top: 9.4rem;
   animation: eclipse-green-translation 2s ease;
   filter: blur(150px);
-  /* bottom: 0; */
-  /* right: -52%;
-    bottom: 10%; */
 }
 
 .eclipse-2 {

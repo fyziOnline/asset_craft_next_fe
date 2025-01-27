@@ -184,7 +184,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       }
       return { isSuccess: false };
     } catch (error) {
-      console.log(' campaign error :', error);
+      console.error(' campaign error :', error);
       return { isSuccess: false };
     }
   };
@@ -207,11 +207,10 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
           webUrl: FormData?.webUrl || "",
         }
       );
-      console.log('update campaign :', resCampaignInsert);
 
       return resCampaignInsert;
     } catch (error) {
-      console.log('update campaign error :', error);
+      console.error('update campaign error :', error);
 
       return { isSuccess: false };
     }
