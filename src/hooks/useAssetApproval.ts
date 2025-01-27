@@ -5,6 +5,7 @@ import { AssetApprovalHookArg, AssetApprovalResponse, ReAssignApprovalDetailsStr
 import { useAppData } from "@/context/AppContext"
 import { convertFileToBase64 } from "@/lib/utils"
 import { debounce } from "lodash"
+import { useRouter } from "next/navigation"
 
 class ApiError extends Error {
     status?: number;
@@ -19,7 +20,10 @@ class ApiError extends Error {
   }
 
 export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
+    const router = useRouter()
+
     const [reAssignLoading, setReAssignLoading] = useState<boolean>(false)
+    const [loadingApproval,setLoadingApproval] = useState<boolean>(false)
     const [isReAssignSuccessFull, setIsReAssignSuccessFull] = useState<boolean>(false)
     const {setError} = useAppData()
     const [approvalDetails,setApprovalDetails] = useState<AssetApprovalResponse>({})
@@ -31,8 +35,14 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
     })
     
     useEffect(() => {
-      
-    }, [reAssignAssetDetails,fileConversionError])
+        if (assetData.assetVersionID) {
+            init_hook()
+        }
+    }, [assetData.assetVersionID])
+
+    const init_hook = async () => {
+        await getApprovalDetails()
+    }
 
     const handleUploadFile = async (file:File) => {
         
@@ -71,7 +81,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         }))
         setFileConversionError(null)
     }
-    
+
     const getApprovalDetails = async () => {
         try {
             setReAssignLoading(true)
@@ -80,12 +90,27 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
                 throw new ApiError('Approval details fetch failed', 400, res_approvalDetails.errorOnFailure);
             }
             setApprovalDetails(res_approvalDetails.assetApproval)
-            const resRemoteFileUpload = await uploadReAssignFile(res_approvalDetails.assetApproval)
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setIsReAssignSuccessFull(false)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        } finally {
+            setReAssignLoading(false)
+        }
+    }
+    
+    const reAssignAsset = async () => {
+        try {
+            const resRemoteFileUpload = await uploadReAssignFile(approvalDetails)
 
             if(!resRemoteFileUpload?.status) {
                 throw new ApiError('Uploading file failed', 500, {});
             }
-            const resReAssignment = await updateAssetReassign (res_approvalDetails.assetApproval)
+            const resReAssignment = await updateAssetReassign (approvalDetails)
             if (resReAssignment?.status) { 
                 setIsReAssignSuccessFull(true)
             }
@@ -150,6 +175,26 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         }
     }
 
+    const approveAsset = async () => {
+        try {
+            setLoadingApproval(true)
+            const res_approveAsset = await ApiService.put<any>(`${urls.approveAsset}?assetVersionID=${approvalDetails.assetVersionID}`)
+            if (!res_approveAsset || res_approveAsset.errorOnFailure.length>0) {
+                throw new ApiError('Unable to approve this asset', 400, res_approveAsset.errorOnFailure);
+            }
+            router.back()
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        } finally {
+            setLoadingApproval(false)
+        }
+    }
+
     return {
         fileConversionError,
         eventInputComment,
@@ -158,6 +203,8 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         setIsReAssignSuccessFull,
         handleUploadFile,
         handleRemoveFile,
-        getApprovalDetails
+        getApprovalDetails,
+        reAssignAsset,
+        approveAsset
     }
 }

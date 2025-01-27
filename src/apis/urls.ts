@@ -38,4 +38,5 @@ export const urls = {
   getAssetApprovalDetails : "/asset/assetApproval/ViewDetails",
   updateAssetReAssignFile : "/approval/image/update",
   updateAssetReassignFinal : "/approval/assetApproval/ReAssign",
+  approveAsset : "/approval/assetApproval/approve",
 };
