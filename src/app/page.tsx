@@ -33,75 +33,83 @@ const TaglineContents: TaglineObj[] = [
 ]
 
 const Home: FC = () => {
+  const router = useRouter()
+
   const {
-    isLoading, isOtpVisible, emailLoginDefault, handleLogin, onChangeEmail,
-    handleOtpSubmit, onChangeOtp, handleCancelOtp, checkIsUserAuthorized
+    isLoading,
+    isOtpVisible,
+    emailLoginDefault,
+    handleLogin,
+    onChangeEmail,
+    handleOtpSubmit,
+    onChangeOtp,
+    handleCancelOtp,
+    checkIsUserAuthorized
   } = useLogin();
 
-  const router = useRouter()
   useLayoutEffect(() => {
     if (checkIsUserAuthorized()) {
       router.push('/dashboard');
     }
-  }, [])
+  }, [checkIsUserAuthorized]);
 
   return (
     <div>
 
       <div className="h-full flex flex-col justify-around min-h-[75vh]">
-              <div className="flex flex-col lg:flex-row relative items-center justify-between md:mr-[15vw] gap-9">
-                <section className="text-white w-[24rem] md:w-[25rem] pad16px">
-                  <h1 className="text-[3.45rem] leading-[6rem] font-medium font-metric text-green-100 tracking-wide">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
-                  <p className="text-wrap text-xl tracking-wide">Simplifying Marketing Content with AI-Driven</p>
-                </section>
-                   
-                   <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-8 padbot10 flex flex-col items-center">
+        <div className="flex flex-col lg:flex-row relative items-center justify-between md:mr-[15vw] gap-9">
+          <section className="text-white w-[24rem] md:w-[25rem] pad16px">
+            <h1 className="text-[3.45rem] leading-[6rem] font-medium font-metric text-green-100 tracking-wide">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
+            <p className="text-wrap text-xl tracking-wide">Simplifying Marketing Content with AI-Driven</p>
+          </section>
 
-                   <div className="absolute top-[35%] left-[25%]">
-                    <div className="color-wheel ">
-                      <div className="eclipse-1"></div>
-                      <div className="eclipse-2"></div>
-                      <div className="eclipse-3"></div>
-                    </div>
-                  </div>
+          <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-8 padbot10 flex flex-col items-center">
 
-                  <UserIcon className="mb-[1.5rem] " color="white" />
-                  <input
-                    defaultValue={emailLoginDefault}
-                    onChange={onChangeEmail}
-                    className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider focus:placeholder:text-gray-300"
-                    placeholder="Enter Your email id"
-                    type="text"
-                  />
-
-                    <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[32ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
-
-
-                   </div>
-
-      
-                
+            <div className="absolute top-[35%] left-[25%]">
+              <div className="color-wheel ">
+                <div className="eclipse-1"></div>
+                <div className="eclipse-2"></div>
+                <div className="eclipse-3"></div>
               </div>
-      
-      
-              <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mt-[2%] mb-[2%] margin2rem">
-              </div>
-      
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-7 mb-[2%]">
-                {TaglineContents.map(tagline => {
-                  return (
-                    <section key={tagline.title} className="text-white">
-                      <h2 className="mb-2 font-semibold tracking-wide ">{tagline.title}</h2>
-                      <p className="text-grey-200 text-sm tracking-wide">{tagline.content}</p>
-                    </section>
-                  )
-                })}
-              </div>
-      
             </div>
 
+            <UserIcon className="mb-[1.5rem] " color="white" />
+            <input
+              defaultValue={emailLoginDefault}
+              onChange={onChangeEmail}
+              className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider focus:placeholder:text-gray-300"
+              placeholder="Enter Your email id"
+              type="text"
+            />
 
-            {isOtpVisible && (
+            <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[32ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
+
+
+          </div>
+
+
+
+        </div>
+
+
+        <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mt-[2%] mb-[2%] margin2rem">
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-7 mb-[2%]">
+          {TaglineContents.map(tagline => {
+            return (
+              <section key={tagline.title} className="text-white">
+                <h2 className="mb-2 font-semibold tracking-wide ">{tagline.title}</h2>
+                <p className="text-grey-200 text-sm tracking-wide">{tagline.content}</p>
+              </section>
+            )
+          })}
+        </div>
+
+      </div>
+
+
+      {isOtpVisible && (
         <div className="fixed inset-0 bg-gray-900  bg-opacity-50 flex items-center justify-center pb-20 z-50">
           <div className="bg-gradient-to-br from-[#00A881]  to-[#073634] w-fit px-6 pt-[1rem] pb-8 padbot10 flex flex-col items-center rounded-[6%] border-white border">
 

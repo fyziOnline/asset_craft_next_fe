@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import LayoutWrapper from "@/layout/LayoutWrapper";
-// import Breadcrumb from "@/components/global/Breadcrumb";
 import Image from 'next/image';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
@@ -198,7 +197,7 @@ const Page = () => {
         <LayoutWrapper layout="main">
             <div className="flex py-[2rem] px-[1.5rem]">
                 <div className='flex-1'>
-                    {/* <Breadcrumb projectName="GreenLake" TaskName="Storage Asia 2024" TaskType="LinkedIn_1" /> */}
+
                 </div>
                 {generateStep === 3 ? <div className='flex'>
                     <Button

@@ -1,6 +1,4 @@
 import { ChangeEvent, useEffect, useState } from "react"
-// import Cookies from "js-cookie"
-// import { nkey } from "@/data/keyStore"
 import { ApiService } from "@/lib/axios_generic"
 import { urls } from "@/apis/urls"
 import { AssetApprovalHookArg, AssetApprovalResponse, ReAssignApprovalDetailsStruct } from "@/types/approval"
@@ -35,7 +33,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         fileName : "",
         comment : "" 
     })
-    // const client_ID = Cookies.get(nkey.client_ID)
+    
     useEffect(() => {
         if (assetData.assetVersionID) {
             init_hook()

@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import LayoutWrapper from "@/layout/LayoutWrapper";
-// import Breadcrumb from "@/components/global/Breadcrumb"
 import FormCard from './components/FormCard';
 
 const Page = () => {
@@ -31,7 +30,6 @@ const Page = () => {
     return (
         <LayoutWrapper layout="main">
             <div className="pt-[2rem] pb-5 px-[1.5rem]">
-                {/* <Breadcrumb projectName="GreenLake" TaskType='Storage Asia 2024' /> */}
             </div>
             <div className="py-5 px-16 border-t border-solid border-[#D9D9D9]">
                 <div className="max-w-6xl mx-auto">
