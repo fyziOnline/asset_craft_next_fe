@@ -73,7 +73,6 @@ export const useLogin = () => {
 
             if (resToken.isSuccess) {
                 const decodedToken:any = jwtDecode(resToken.loginToken);
-                console.log("Decoded Token:", decodedToken);
                 const { UserID , UserRole } = decodedToken;
 
                 Cookies.set(nkey.userID, UserID, { expires: 180 });
