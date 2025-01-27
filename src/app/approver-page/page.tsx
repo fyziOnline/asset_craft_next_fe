@@ -13,7 +13,7 @@ import DragAndDrop from '@/components/global/DragAndDrop';
 import AddVersionModel from '../edit-html-content/components/AddVersionModel';
 import EditContentModel from '../edit-html-content/components/EditContentModel';
 import ShadowDomContainer from '../edit-html-content/components/ShadowDomContainer';
-import SubmitVersionModel from '../edit-html-content/components/SubmitVersionModel';
+// import SubmitVersionModel from '../edit-html-content/components/SubmitVersionModel';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 
 const Page:FC = () => {
@@ -31,7 +31,6 @@ const Page:FC = () => {
         sectionEdit,
         isLoadingGenerate,
         isShowAddVer,
-        isShowSubmitVer,
         versionSelected,
         isShowSave,
         versionList,
@@ -45,7 +44,6 @@ const Page:FC = () => {
         handleSave,
         setIsShowModelEdit,
         setIsShowAddVer,
-        setIsShowSubmitVer,
         onGenerateWithAI,
         onSubmit,
         setSectionEdit,
@@ -53,10 +51,11 @@ const Page:FC = () => {
     } = useEditHTMLContent()
 
     const { 
-        getApprovalDetails,
+        reAssignAsset,
         handleUploadFile,
         handleRemoveFile,
         setIsReAssignSuccessFull,
+        approveAsset,
         eventInputComment,
         isReAssignSuccessFull,
         reAssignLoading 
@@ -67,7 +66,7 @@ const Page:FC = () => {
 
     const handleReAssignToEditor = async () => {
         if (versionSelected?.assetVersionID && versionSelected?.assetID) {
-            await getApprovalDetails();
+            await reAssignAsset();
         } else {
             console.error("Invalid versionSelected data");
         }
@@ -231,7 +230,7 @@ const Page:FC = () => {
                                         </div>}
                                 </div>
                                 <div className='h-full w-[1.5px] bg-sectionGrey'></div>
-                                <Button buttonText='Approve' handleClick={() => setIsShowSubmitVer(true)} showIcon={false} customClass='px-10 py-1' />
+                                <Button buttonText='Approve' handleClick={ approveAsset} showIcon={false} customClass='px-10 py-1' />
                             </div>
                         </div>
 
@@ -263,12 +262,6 @@ const Page:FC = () => {
                                 handleChangeTextVersion={handleChangeTextVersion} /> : null}
                         </div>
                     </div>
-                    {isShowSubmitVer ? <SubmitVersionModel
-                        isShowSubmitVer={isShowSubmitVer}
-                        setIsShowSubmitVer={setIsShowSubmitVer}
-                        listApprovers={listApprovers}
-                        handleSubmitVersion={onSubmit}
-                    /> : null}
                     {isShowModelEdit ? <EditContentModel
                         setVersionList={setVersionList}
                         setVersionSelected={setVersionSelected}
