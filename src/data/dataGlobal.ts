@@ -5,10 +5,6 @@ export const ListTypePage = {
     LandingPage: "landing-page",
 }
 
-export const TypeToAssetPageMap = {
-    
-}
-
 export const ListTargetAudience = [
     { label: 'General Public', value: 'General Public' },
     { label: 'Existing Customers', value: 'Existing Customers' },
