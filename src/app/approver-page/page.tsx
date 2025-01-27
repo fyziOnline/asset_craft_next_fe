@@ -289,7 +289,7 @@ const Page: FC = () => {
                                         }`}
                                 >
                                     {/* Header */}
-                                    <div className="bg-[#00A881] text-white p-4 flex justify-between items-center gap-4">
+                                    <div className="bg-[#00A881] text-white p-4 flex justify-between items-center gap-4 sticky top-0">
 
 
                                         <div className='flex justify-start'>
