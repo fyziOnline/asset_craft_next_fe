@@ -15,6 +15,7 @@ import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { BiMessageAltError } from "react-icons/bi";
 import FeedBackCard from '@/components/cards/FeedBackCard';
+import { useAssetApproval } from '@/hooks/useAssetApproval';
 
 
 
@@ -49,6 +50,11 @@ const Page = () => {
         setSectionEdit,
         handleHideBlock
     } = useEditHTMLContent()
+
+
+    const { approvalDetails } = useAssetApproval({ assetVersionID: versionSelected.assetVersionID, assetID: versionSelected.assetID })
+    
+    
 
     const htmlOtherAsset = () => {
         let htmlContent = ''
