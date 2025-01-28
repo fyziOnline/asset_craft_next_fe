@@ -14,6 +14,7 @@
     "@jsonforms/core": "^3.4.1",
     "@jsonforms/material-renderers": "^3.4.1",
     "@jsonforms/react": "^3.4.1",
+    "@lottiefiles/react-lottie-player": "^3.6.0",
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.10",
     "@mui/x-date-pickers": "^7.23.1",
