@@ -47,18 +47,6 @@ interface DashboardData {
     inProgress: number;
 }
 
-// type AssetData = {
-//     assetTypeIcon:string
-//     assetName:string
-//     campaignName:string
-//     projectName:string
-//     createdOn:string
-//     currentStatus:string
-//     assetID:string
-//     approvedOn ?: string | undefined
-//     approvedBy ?: string | undefined
-// }
-
 // Helper function to filter and count assets based on type and status
 const countAssetsByTypeAndStatus = (assets: DashboardAsset[], type: string, status: string) => {
     const filteredAssets = assets.filter(asset => asset.assetTypeName === type);
@@ -134,15 +122,17 @@ const mapAssetsByType = (assets:DashboardAsset[],type:AssetType) => {
   for (let i = 0; i < assets.length; i++) {
     const data = assets[i];
     const mappedData:AssetData = {
-        projectName: data.project,
+        assetName: data.assetName,
         campaignName: data.campaignName,
         assetTypeIcon: data.assetTypeName,
-        assetName: data.assetName,
+        projectName: data.project,
         createdOn: formatDate(data.createdOn),
         currentStatus: data.status,
         assetID: data.assetID,
     };
+
     const assetName = data.assetTypeName.toLocaleLowerCase() 
+    
     if (assetName === type?.toLocaleLowerCase()) {
       result.assetData.push({
         ...mappedData,

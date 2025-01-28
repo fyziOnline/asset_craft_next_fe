@@ -6,27 +6,35 @@ import AssetsPageLayout from '@/layout/specific_layout/AssetsPageLayout'
 import { FC, Suspense, useEffect, useState } from 'react'
 import processDashboardAssets from '../dashboard/utils/dashboardFilters'
 import { AssetType } from '@/types/asset'
+import { useRouter } from 'next/navigation'
 
-const Page:FC = () => {
+const Page: FC = () => {
   const [type, setType] = useState<AssetType | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     setType(urlParams.get('type') as AssetType);
   }, []);
 
-  const {dashboardAssets} = useDashboard()
-  const {assetData} = processDashboardAssets(dashboardAssets, type)
+  const { dashboardAssets } = useDashboard()
+  const { assetData } = processDashboardAssets(dashboardAssets, type)
 
-  const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On","Current Status", "Approved By", "Approved On"]
+  const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status", "Approved On", "Approved By"]
   const arrowshowItems = ["Project Name", "Created On", "Approved On"]
-  const hiddenFields = ["dataItem","assetID"]
+  const hiddenFields = ["dataItem", "assetID"]
+
+  const handleClick = (item:any) => {
+    // console.log('item::', item);
+    router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}`)
+  }
 
   return (
     <>
       <AssetsPageLayout 
         hiddenFields={hiddenFields} 
-        handleClick={()=>{}} 
+        handleClick={handleClick} 
         campaign_data={assetData} 
         tableHeadings={tableHeading} 
         headersHavingToggle={arrowshowItems} 

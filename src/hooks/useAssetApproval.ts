@@ -1,6 +1,4 @@
 import { ChangeEvent, useEffect, useState } from "react"
-// import Cookies from "js-cookie"
-// import { nkey } from "@/data/keyStore"
 import { ApiService } from "@/lib/axios_generic"
 import { urls } from "@/apis/urls"
 import { AssetApprovalHookArg, AssetApprovalResponse, ReAssignApprovalDetailsStruct } from "@/types/approval"
@@ -35,7 +33,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         fileName : "",
         comment : "" 
     })
-    // const client_ID = Cookies.get(nkey.client_ID)
+    
     useEffect(() => {
         if (assetData.assetVersionID) {
             init_hook()
@@ -88,7 +86,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
 
     const getApprovalDetails = async () => {
         try {
-            setReAssignLoading(true)
+            // setReAssignLoading(true)
             const res_approvalDetails = await ApiService.get<any>(`${urls.getAssetApprovalDetails}?assetVersionID=${assetData.assetVersionID}`)
             if (!res_approvalDetails || res_approvalDetails.errorOnFailure.length > 0 ) {
                 throw new ApiError('Approval details fetch failed', 400, res_approvalDetails.errorOnFailure);
@@ -102,13 +100,13 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
                 message: apiError.message,
                 showError: true
             })
-        } finally {
-            setReAssignLoading(false)
-        }
+        } 
     }
     
     const reAssignAsset = async () => {
         try {
+            setReAssignLoading(true)
+
             const resRemoteFileUpload = await uploadReAssignFile(approvalDetails)
 
             if(!resRemoteFileUpload?.status) {

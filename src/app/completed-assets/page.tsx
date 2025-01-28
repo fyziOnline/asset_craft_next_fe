@@ -1,22 +1,14 @@
 'use client'
-import { FC, useState } from "react"
-import { GridIcon, ListIcon } from "@/assets/icons/AppIcons"
-// import Breadcrumb from "@/components/global/Breadcrumb"
-import Table from "@/components/global/Table"
-import Title from "@/components/global/Title"
-import AssetCard from "@/components/wrapper/AssetCard"
+import { FC } from "react"
 import { useDashboard } from "@/hooks/useDashboard"
 import { formatDate } from "@/utils/formatDate"
-import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
-import { AssetHtmlProps } from "@/types/templates"
-import { useAppData } from "@/context/AppContext"
 import { useRouter } from "next/navigation";
+import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 
 
 const CompletedAssets: FC = () => {
   const router = useRouter()
   const { dashboardAssets } = useDashboard()
-  const { setContextData } = useAppData()
 
   const completedAssets = dashboardAssets.filter(asset => asset.status === "Completed")
 
