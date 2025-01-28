@@ -61,7 +61,9 @@ const Page:FC = () => {
         reAssignLoading 
     } = useAssetApproval(
         {assetVersionID : versionSelected?.assetVersionID || "",
-            assetID: versionSelected?.assetID || ""}
+            assetID: versionSelected?.assetID || "",
+            versionStatus : versionSelected?.status || ""
+        }
     )
 
     const handleReAssignToEditor = async () => {

@@ -1,21 +1,18 @@
 import React, { useState } from 'react'
 
 // Define props type
+
 interface FeedBackCardProps {
     isFeedbackOpen: boolean; // Boolean state to track feedback visibility
     setIsFeedbackOpen: React.Dispatch<React.SetStateAction<boolean>>; // Function to update the state
 }
 
 const FeedBackCard: React.FC<FeedBackCardProps> = ({ isFeedbackOpen, setIsFeedbackOpen }) => {
-
-
-
-
     return (
 
         <div className="relative">
             {/* Message Icon */}
-            {isFeedbackOpen && ( // Show icon only if feedback is closed. please provide ! for show icon
+            {!isFeedbackOpen && ( // Show icon only if feedback is closed. please provide ! for show icon
                 <div
                     className="p-[10px] relative rounded-full bg-[#00A881] cursor-pointer my-1 w-9 h-9 flex items-center"
                     onClick={() => setIsFeedbackOpen(true)} // Open feedback panel

@@ -52,9 +52,14 @@ const Page = () => {
     } = useEditHTMLContent()
 
 
-    const { approvalDetails } = useAssetApproval({ assetVersionID: versionSelected.assetVersionID, assetID: versionSelected.assetID })
-    
-    
+    const { 
+        approvalDetails 
+    } = useAssetApproval(
+        {assetVersionID : versionSelected?.assetVersionID || "",
+            assetID: versionSelected?.assetID || "",
+            versionStatus : versionSelected?.status || ""
+        }
+    )
 
     const htmlOtherAsset = () => {
         let htmlContent = ''

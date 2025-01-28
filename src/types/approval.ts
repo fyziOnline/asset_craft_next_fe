@@ -8,6 +8,7 @@ export interface ApproverProps {
 export type AssetApprovalHookArg = {
   assetVersionID?: string
   assetID?: string  
+  versionStatus?: string
 }
 
 export interface AssetApprovalResponse  {
