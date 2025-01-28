@@ -78,6 +78,14 @@ const Page: FC = () => {
         }
     };
 
+    const handleDownload = () => {
+        const link = document.createElement('a');
+        link.href = approvalDetails.fileUrl,
+        link.download = 'filename',
+        link.click();
+      }
+
+
     const htmlOtherAsset = () => {
         let htmlContent = ''
         versionSelected.assetVersionBlocks.forEach((item) => {
@@ -254,15 +262,14 @@ const Page: FC = () => {
 
                         {/* FeedBack logo */}
 
-                        {approvalDetails.comments?.length > 0 || approvalDetails.fileUrl?.length>0 && 
+                        {(approvalDetails.comments?.length > 0 || approvalDetails.fileUrl?.length>0) && 
                             <div className='flex justify-end pr-16 items-center py-2'>
-
-                            <FeedBackCard
-                                isFeedbackOpen={isFeedbackOpen}
-                                setIsFeedbackOpen={setIsFeedbackOpen} // Pass state to the feedback card
-                            />
-
-                        </div>}
+                                <FeedBackCard
+                                    isFeedbackOpen={isFeedbackOpen}
+                                    setIsFeedbackOpen={setIsFeedbackOpen} // Pass state to the feedback card
+                                />
+                            </div>
+                        } 
                         <div className="flex h-[92vh] relative mx-14">
 
                             {/* Edit section main  */}
@@ -284,7 +291,7 @@ const Page: FC = () => {
                             </div>
 
                             {/* Feedback Panel */}
-                            {approvalDetails.comments?.length>0 || approvalDetails.fileUrl?.length>0 && isFeedbackOpen && (
+                            {isFeedbackOpen && (
                                 <div
                                     className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[35%] md:h-[65%] overflow-y-auto custom-scrollbar feedback-panel ${isFeedbackOpen ? "block" : "hidden "
                                         }`}
@@ -326,7 +333,10 @@ const Page: FC = () => {
                                                     {approvalDetails.comments}
                                                 </p>
                                             </div>
-                                            <button className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md">
+                                            <button 
+                                                className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md"
+                                                onClick={handleDownload}    
+                                            >
                                                 Download
                                             </button>
                                         </div>

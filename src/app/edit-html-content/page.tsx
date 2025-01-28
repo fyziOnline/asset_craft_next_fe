@@ -61,6 +61,13 @@ const Page = () => {
         }
     )
 
+    const handleDownload = () => {
+        const link = document.createElement('a');
+        link.href = approvalDetails.fileUrl,
+        link.download = 'filename',
+        link.click();
+      }
+
     const htmlOtherAsset = () => {
         let htmlContent = ''
         versionSelected.assetVersionBlocks.forEach((item) => {
@@ -258,7 +265,7 @@ const Page = () => {
 
 
                         {/* message logo  please provide ! to show icon for isFeedbackOpen && in feedbackcard.tsx*/}
-                        {approvalDetails.comments?.length > 0 || approvalDetails.fileUrl?.length>0 && <div className="">
+                        {(approvalDetails.comments?.length > 0 || approvalDetails.fileUrl?.length>0) && <div className="">
                             <FeedBackCard
                                 isFeedbackOpen={isFeedbackOpen}
                                 setIsFeedbackOpen={setIsFeedbackOpen} // Pass state to the feedback card
@@ -290,7 +297,7 @@ const Page = () => {
                         </div>
 
                         {/* Feedback Panel */}
-                        {approvalDetails.comments?.length>0 || approvalDetails.fileUrl?.length>0 && isFeedbackOpen && (
+                        {isFeedbackOpen && (
                             <div
                                 className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[25%] md:h-[60%] overflow-y-auto custom-scrollbar feedback-panel ${isFeedbackOpen ? "block" : "hidden "
                                     }`}
@@ -332,7 +339,10 @@ const Page = () => {
                                                     {approvalDetails.comments}
                                                 </p>
                                             </div>
-                                            <button className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md">
+                                            <button 
+                                                className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md"
+                                                onClick={handleDownload}
+                                            >
                                                 Download
                                             </button>
                                         </div>
