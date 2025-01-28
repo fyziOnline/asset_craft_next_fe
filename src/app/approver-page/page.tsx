@@ -393,13 +393,6 @@ const Page: FC = () => {
                                 className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none "
                             />
                             <div className="flex justify-end">
-                                {/* <button
-                                    className={`${!reAssignLoading ? "bg-green-300" : "to-grey-500"} text-white px-8 py-1 rounded-full font-medium`}
-                                    onClick={handleReAssignToEditor}
-                                    disabled={reAssignLoading}
-                                >
-                                    submit
-                                </button> */}
 
                                 <Button
                                     buttonText='Submit'
