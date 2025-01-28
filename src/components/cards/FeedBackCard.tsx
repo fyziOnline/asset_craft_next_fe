@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
 
 // Define props type
+
 interface FeedBackCardProps {
     isFeedbackOpen: boolean; // Boolean state to track feedback visibility
     setIsFeedbackOpen: React.Dispatch<React.SetStateAction<boolean>>; // Function to update the state
 }
 
 const FeedBackCard: React.FC<FeedBackCardProps> = ({ isFeedbackOpen, setIsFeedbackOpen }) => {
-
-
-
-
     return (
 
         <div className="relative">
