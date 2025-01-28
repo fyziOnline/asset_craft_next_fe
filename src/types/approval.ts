@@ -22,8 +22,8 @@ export interface AssetApprovalResponse  {
     createdOn?: string
     modifiedBy?: string
     modifiedOn?: string
-    fileUrl?: string
-    comments?: string
+    fileUrl: string
+    comments: string
   }
   
 

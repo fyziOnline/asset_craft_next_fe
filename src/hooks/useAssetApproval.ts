@@ -26,7 +26,22 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
     const [loadingApproval,setLoadingApproval] = useState<boolean>(false)
     const [isReAssignSuccessFull, setIsReAssignSuccessFull] = useState<boolean>(false)
     const {setError} = useAppData()
-    const [approvalDetails,setApprovalDetails] = useState<AssetApprovalResponse>({})
+    const [approvalDetails,setApprovalDetails] = useState<AssetApprovalResponse>(
+        {
+            assetApprovalID: "",
+            assetID: "",
+            assetVersionID: "",
+            approverID: "",
+            editorID: "",
+            assignedTo: 0,
+            createdBy: "",
+            createdOn: "",
+            modifiedBy: "",
+            modifiedOn: "",
+            fileUrl: "",
+            comments: ""
+        }
+    )
     const [fileConversionError,setFileConversionError] = useState<{}|null>(null)
     const [reAssignAssetDetails,setReAssignAssetDetails]=useState<ReAssignApprovalDetailsStruct>({
         fileInBase64 : "",
