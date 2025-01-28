@@ -345,6 +345,9 @@
 
 
 
-
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+   /* Firefox */
+}
 
 

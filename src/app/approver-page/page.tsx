@@ -15,11 +15,14 @@ import EditContentModel from '../edit-html-content/components/EditContentModel';
 import ShadowDomContainer from '../edit-html-content/components/ShadowDomContainer';
 // import SubmitVersionModel from '../edit-html-content/components/SubmitVersionModel';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
+import FeedBackCard from '@/components/cards/FeedBackCard';
 
 const Page: FC = () => {
     const { contextData } = useAppData();
 
     const [showUploadPopup, setShowUploadPopup] = useState(false);
+
+    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
 
     const handleShowPopUp = () => {
         setShowUploadPopup((prev) => !prev)
@@ -248,21 +251,107 @@ const Page: FC = () => {
                             })}
                         </div> */}
 
-                        {/* Edit section main  */}
-                        <div className="flex flex-col bg-[#e4e4e4] h-[92vh] pb-10 mx-14 px-20 overflow-x-hidden overflow-y-scroll scrollbar-hide relative ">
-                            <div>
-                                <div id="container">
-                                    <div className='h-[20px]' />
-                                    {renderHTMLSelect}
-                                    <div className='h-[20vh]' />
-                                </div>
-                            </div>
-                            {isShowAddVer ? <AddVersionModel
-                                isShowAddVer={isShowAddVer}
-                                setIsShowAddVer={setIsShowAddVer}
-                                handleAddVersion={handleAddVersion}
-                                handleChangeTextVersion={handleChangeTextVersion} /> : null}
+                        {/* FeedBack logo */}
+
+                        <div className='flex justify-end pr-16 items-center py-2'>
+
+                            <FeedBackCard
+                                isFeedbackOpen={isFeedbackOpen}
+                                setIsFeedbackOpen={setIsFeedbackOpen} // Pass state to the feedback card
+                            />
+
                         </div>
+                        <div className="flex h-[92vh] relative mx-14">
+
+                            {/* Edit section main  */}
+                            <div className="flex flex-col bg-[#e4e4e4] pb-10  px-20 overflow-x-hidden overflow-y-scroll scrollbar-hide relative w-[100%]">
+                                <div>
+                                    <div id="container">
+                                        <div className='h-[20px]' />
+                                        {renderHTMLSelect}
+                                        <div className='h-[20vh]' />
+                                    </div>
+                                </div>
+                                {isShowAddVer ? <AddVersionModel
+                                    isShowAddVer={isShowAddVer}
+                                    setIsShowAddVer={setIsShowAddVer}
+                                    handleAddVersion={handleAddVersion}
+                                    handleChangeTextVersion={handleChangeTextVersion} /> : null}
+
+
+                            </div>
+
+                            {/* Feedback Panel */}
+                            {isFeedbackOpen && (
+                                <div
+                                    className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[35%] md:h-[65%] overflow-y-auto custom-scrollbar feedback-panel ${isFeedbackOpen ? "block" : "hidden "
+                                        }`}
+                                >
+                                    {/* Header */}
+                                    <div className="bg-[#00A881] text-white p-4 flex justify-between items-center gap-4 sticky top-0">
+
+
+                                        <div className='flex justify-start'>
+
+                                            <svg width="30" height="20" viewBox="0 0 43 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M4.625 17.5C2.5625 17.5 0.875 15.8125 0.875 13.75V4.375C0.875 2.3125 2.5625 0.625 4.625 0.625H19.625C21.6875 0.625 23.375 2.3125 23.375 4.375V13.75C23.375 15.8125 21.6875 17.5 19.625 17.5H15.875V23.125L10.25 17.5H4.625ZM38.375 28.75C40.4375 28.75 42.125 27.0625 42.125 25V15.625C42.125 13.5625 40.4375 11.875 38.375 11.875H27.125V13.75C27.125 17.875 23.75 21.25 19.625 21.25V25C19.625 27.0625 21.3125 28.75 23.375 28.75H27.125V34.375L32.75 28.75H38.375Z" fill="white" />
+                                            </svg>
+                                            <span className="font-semibold text-base ps-1">Feedbacks</span>
+
+                                        </div>
+
+                                        <button
+                                            onClick={() => setIsFeedbackOpen(false)} // Minimize feedback panel
+                                            className="text-white hover:text-gray-300"
+                                        >
+                                            <svg width="18" height="5" viewBox="0 0 26 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="26" height="4" rx="2" fill="white" />
+                                            </svg>
+
+
+                                        </button>
+                                    </div>
+
+                                    {/* Feedback Content */}
+
+                                    <div className="h-auto overflow-y-auto p-4 space-y-6  ">
+                                        {/* comment 1 */}
+                                        <div>
+                                            <p className="text-sm text-gray-500 mb-2">1 May 24, 01:31 pm, Neel Moorthi</p>
+                                            <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
+                                                <div className='overflow-y-auto max-h-40'>
+                                                    <p className="text-gray-700 text-sm">
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                                        tempor incididunt ut labore et dolore magna aliqua
+                                                    </p>
+                                                </div>
+                                                <button className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md">
+                                                    Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500 mb-2">1 May 24, 01:31 pm, Neel Moorthi</p>
+                                            <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
+                                                <div className='overflow-y-auto max-h-40'>
+                                                    <p className="text-gray-700 text-sm">
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                                        tempor incididunt ut labore et dolore magna aliqua
+                                                    </p>
+                                                </div>
+                                                <button className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md">
+                                                    Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+
+
+
                     </div>
                     {isShowModelEdit ? <EditContentModel
                         setVersionList={setVersionList}
@@ -301,13 +390,13 @@ const Page: FC = () => {
                             <textarea
                                 placeholder="Type your comments"
                                 onChange={(e) => { eventInputComment(e) }}
-                                className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none"
+                                className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none "
                             />
                             <div className="flex justify-end">
                                 {/* <button
                                     className={`${!reAssignLoading ? "bg-green-300" : "to-grey-500"} text-white px-8 py-1 rounded-full font-medium`}
                                     onClick={handleReAssignToEditor}
-                                    disabled = {reAssignLoading}
+                                    disabled={reAssignLoading}
                                 >
                                     submit
                                 </button> */}
