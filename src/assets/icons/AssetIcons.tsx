@@ -256,3 +256,135 @@ export const LandingPageIcon: FC<IconProps> = ({ width = "25", height = "25", st
 
   )
 }
+
+// export const LandingPageIcon: FC<IconProps> = ({
+//   width = "27",
+//   height = "27",
+//   color = "black",
+//   strokeWidth = "1.45496",
+// }) => {
+//   return (
+//     <svg
+//       version="1.1"
+//       xmlns="http://www.w3.org/2000/svg"
+//       viewBox="0 0 32 32"
+//       width={width}
+//       height={height}
+//       fill={color}
+//     >
+//       <g>
+//         <line
+//           x1="3"
+//           y1="11"
+//           x2="29"
+//           y2="11"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <line
+//           x1="7"
+//           y1="8"
+//           x2="7"
+//           y2="8"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <line
+//           x1="10"
+//           y1="8"
+//           x2="10"
+//           y2="8"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <line
+//           x1="13"
+//           y1="8"
+//           x2="13"
+//           y2="8"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <rect
+//           x="3"
+//           y="5"
+//           width="26"
+//           height="22"
+//           fill="none"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <rect
+//           x="6"
+//           y="14"
+//           width="10"
+//           height="10"
+//           fill="none"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <rect
+//           x="19"
+//           y="21"
+//           width="7"
+//           height="3"
+//           fill="none"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <line
+//           x1="20"
+//           y1="15"
+//           x2="26"
+//           y2="15"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <line
+//           x1="23"
+//           y1="18"
+//           x2="26"
+//           y2="18"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <polyline
+//           points="6,22 12,19 16,22"
+//           fill="none"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//         <line
+//           x1="9"
+//           y1="17"
+//           x2="9"
+//           y2="17"
+//           stroke={color}
+//           strokeWidth={strokeWidth}
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//         />
+//       </g>
+//     </svg>
+//   );
+// };

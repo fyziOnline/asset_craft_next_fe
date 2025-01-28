@@ -17,7 +17,6 @@ import ShadowDomContainer from '../edit-html-content/components/ShadowDomContain
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 import FeedBackCard from '@/components/cards/FeedBackCard';
 
-
 const Page: FC = () => {
     const { contextData } = useAppData();
 
@@ -60,9 +59,9 @@ const Page: FC = () => {
         handleRemoveFile,
         setIsReAssignSuccessFull,
         approveAsset,
+        reAssignLoading,
         eventInputComment,
         isReAssignSuccessFull,
-        reAssignLoading
     } = useAssetApproval(
         {
             assetVersionID: versionSelected?.assetVersionID || "",
@@ -394,13 +393,16 @@ const Page: FC = () => {
                                 className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none "
                             />
                             <div className="flex justify-end">
-                                <button
-                                    className={`${!reAssignLoading ? "bg-green-300" : "to-grey-500"} text-white px-8 py-1 rounded-full font-medium`}
-                                    onClick={handleReAssignToEditor}
+
+                                <Button
+                                    buttonText='Submit'
+                                    handleClick={handleReAssignToEditor}
                                     disabled={reAssignLoading}
-                                >
-                                    submit
-                                </button>
+                                    showIcon={false}
+                                    customClass={`text-white px-8 py-1 rounded-full font-medium`}
+                                    backgroundColor={`${!reAssignLoading ? "bg-green-300" : "bg-[#B1B1B1]"}`}
+                                />
+
                             </div>
                         </div>
                     </div>

@@ -6,9 +6,12 @@ import AssetsPageLayout from '@/layout/specific_layout/AssetsPageLayout'
 import { FC, Suspense, useEffect, useState } from 'react'
 import processDashboardAssets from '../dashboard/utils/dashboardFilters'
 import { AssetType } from '@/types/asset'
+import { useRouter } from 'next/navigation'
 
 const Page: FC = () => {
   const [type, setType] = useState<AssetType | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -22,17 +25,22 @@ const Page: FC = () => {
   const arrowshowItems = ["Project Name", "Created On", "Approved On"]
   const hiddenFields = ["dataItem", "assetID"]
 
+  const handleClick = (item:any) => {
+    // console.log('item::', item);
+    router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}`)
+  }
+
   return (
     <>
-      <AssetsPageLayout
-        hiddenFields={hiddenFields}
-        handleClick={() => { }}
-        campaign_data={assetData}
-        tableHeadings={tableHeading}
-        headersHavingToggle={arrowshowItems}
-        columnWidthsTable={["repeat(7, 1fr)"]}
-        page=""
-        isIconRequired={false}
+      <AssetsPageLayout 
+        hiddenFields={hiddenFields} 
+        handleClick={handleClick} 
+        campaign_data={assetData} 
+        tableHeadings={tableHeading} 
+        headersHavingToggle={arrowshowItems} 
+        columnWidthsTable={["repeat(7, 1fr)"]} 
+        page="" 
+        isIconRequired = {false}
       />
     </>
   )
