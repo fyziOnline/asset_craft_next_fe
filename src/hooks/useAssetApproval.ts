@@ -26,7 +26,22 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
     const [loadingApproval,setLoadingApproval] = useState<boolean>(false)
     const [isReAssignSuccessFull, setIsReAssignSuccessFull] = useState<boolean>(false)
     const {setError} = useAppData()
-    const [approvalDetails,setApprovalDetails] = useState<AssetApprovalResponse>({})
+    const [approvalDetails,setApprovalDetails] = useState<AssetApprovalResponse>(
+        {
+            assetApprovalID: "",
+            assetID: "",
+            assetVersionID: "",
+            approverID: "",
+            editorID: "",
+            assignedTo: 0,
+            createdBy: "",
+            createdOn: "",
+            modifiedBy: "",
+            modifiedOn: "",
+            fileUrl: "",
+            comments: ""
+        }
+    )
     const [fileConversionError,setFileConversionError] = useState<{}|null>(null)
     const [reAssignAssetDetails,setReAssignAssetDetails]=useState<ReAssignApprovalDetailsStruct>({
         fileInBase64 : "",
@@ -41,7 +56,9 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
     }, [assetData.assetVersionID])
 
     const init_hook = async () => {
-        await getApprovalDetails()
+        if (assetData.versionStatus === "On Review") {
+            await getApprovalDetails()
+        }
     }
 
     const handleUploadFile = async (file:File) => {
@@ -84,7 +101,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
 
     const getApprovalDetails = async () => {
         try {
-            setReAssignLoading(true)
+            // setReAssignLoading(true)
             const res_approvalDetails = await ApiService.get<any>(`${urls.getAssetApprovalDetails}?assetVersionID=${assetData.assetVersionID}`)
             if (!res_approvalDetails || res_approvalDetails.errorOnFailure.length > 0 ) {
                 throw new ApiError('Approval details fetch failed', 400, res_approvalDetails.errorOnFailure);
@@ -98,13 +115,13 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
                 message: apiError.message,
                 showError: true
             })
-        } finally {
-            setReAssignLoading(false)
-        }
+        } 
     }
     
     const reAssignAsset = async () => {
         try {
+            setReAssignLoading(true)
+
             const resRemoteFileUpload = await uploadReAssignFile(approvalDetails)
 
             if(!resRemoteFileUpload?.status) {
@@ -127,6 +144,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         }
         
     }
+
 
     const uploadReAssignFile = async (approvalDetails:AssetApprovalResponse) => {
         
@@ -200,6 +218,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         eventInputComment,
         isReAssignSuccessFull,
         reAssignLoading,
+        approvalDetails,
         setIsReAssignSuccessFull,
         handleUploadFile,
         handleRemoveFile,

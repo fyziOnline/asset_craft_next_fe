@@ -79,9 +79,9 @@ const Header: React.FC = () => {
               </svg>
             </div>
             <div className="flex gap-2 pl-4">
-              <span className="text-xl">{projectName}</span>
-              <span className="text-xl">|</span>
-              <span className="text-xl">{campaignName}</span>
+              <span className="text-xl text-[#7F7F7F] leading-normal font-bold">{projectName}</span>
+              <span className="text-xl text-[#7F7F7F] leading-normal font-bold">|</span>
+              <span className="text-xl text-[#7F7F7F] leading-normal font-bold">{campaignName}</span>
             </div>
             <Title classNameCustom="ml-4" titleName={getTitlePage()} />
           </div>

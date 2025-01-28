@@ -8,6 +8,7 @@ export interface ApproverProps {
 export type AssetApprovalHookArg = {
   assetVersionID?: string
   assetID?: string  
+  versionStatus?: string
 }
 
 export interface AssetApprovalResponse  {
@@ -21,8 +22,8 @@ export interface AssetApprovalResponse  {
     createdOn?: string
     modifiedBy?: string
     modifiedOn?: string
-    fileUrl?: string
-    comments?: string
+    fileUrl: string
+    comments: string
   }
   
 
