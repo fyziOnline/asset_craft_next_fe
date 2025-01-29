@@ -1,11 +1,20 @@
 import React from 'react';
+import { Player } from '@lottiefiles/react-lottie-player'
+import loadingAnimation from '../../../../public/loadingIcon.json'
 
 const LoadingOverlay: React.FC<{ loading: boolean }> = ({ loading }) => {
     if (!loading) return null;
 
     return (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-45 flex justify-center items-center z-[1000]">
-            <div className="border-t-4 border-[#00A881] border-solid w-16 h-16 rounded-full animate-spin"></div>
+        <div className="fixed inset-0 bg-[#d0cece54] backdrop-blur-[2px] flex justify-center items-center z-[1000] pointer-events-none">
+            <div className='pointer-events-none'>
+                <Player
+                    src={loadingAnimation}
+                    loop
+                    autoplay
+                    style={{ height: '500px', width: '500px' }}
+                />
+            </div>
         </div>
     );
 };

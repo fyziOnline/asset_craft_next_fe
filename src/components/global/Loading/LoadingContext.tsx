@@ -15,8 +15,8 @@ export const LoadingProvider: React.FC<{ children: ReactNode }> = ({ children })
 
     return (
         <LoadingContext.Provider value={{ showLoading, setShowLoading }}>
-            {children}
             <LoadingOverlay loading={showLoading} />
+            {children}
         </LoadingContext.Provider>
     );
 };
