@@ -8,11 +8,25 @@ interface IconProps {
 }
 
 
-export const EmailIcon: FC<IconProps> = ({ width = "27", height = "27", strokeColor = "black", strokeWidth = "2" }) => {
+export const EmailIcon: FC<IconProps> = ({ width = "45", height = "45", strokeColor = "black", strokeWidth = "2" }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 27 27" fill="none">
-      <path d="M4.5 4.5H22.5C23.7375 4.5 24.75 5.5125 24.75 6.75V20.25C24.75 21.4875 23.7375 22.5 22.5 22.5H4.5C3.2625 22.5 2.25 21.4875 2.25 20.25V6.75C2.25 5.5125 3.2625 4.5 4.5 4.5Z" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M24.75 6.75L13.5 14.625L2.25 6.75" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 45 45"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Background Rectangle */}
+      <rect width={width} height={height} rx="8" fill="#E6E6E6" fillOpacity="0.8" />
+
+      {/* Email Icon */}
+      <g transform="translate(-7, -8) scale(1.3)">
+        <path
+          d="M10.9766 18.8392V28.0976C10.9766 29.0873 11.3813 30.0365 12.1017 30.7363C12.8221 31.4361 13.7992 31.8293 14.818 31.8293H30.1839C31.2027 31.8293 32.1798 31.4361 32.9002 30.7363C33.6206 30.0365 34.0253 29.0873 34.0253 28.0976V16.9025C34.0253 15.9127 33.6206 14.9636 32.9002 14.2637C32.1798 13.5639 31.2027 13.1707 30.1839 13.1707H14.818C13.7992 13.1707 12.8221 13.5639 12.1017 14.2637C11.3813 14.9636 10.9766 15.9127 10.9766 16.9025V18.8392ZM14.818 15.0366H30.1839C30.6933 15.0366 31.1818 15.2332 31.542 15.5831C31.9022 15.933 32.1046 16.4076 32.1046 16.9025V18.2832L22.501 23.3061L12.8973 18.2832V16.9025C12.8973 16.4076 13.0997 15.933 13.4599 15.5831C13.8201 15.2332 14.3086 15.0366 14.818 15.0366ZM12.8973 20.4028L22.0457 25.1868C22.1856 25.26 22.3421 25.2983 22.501 25.2983C22.6598 25.2983 22.8163 25.26 22.9562 25.1868L32.1046 20.4028V28.0976C32.1046 28.5924 31.9022 29.067 31.542 29.4169C31.1818 29.7668 30.6933 29.9634 30.1839 29.9634H14.818C14.3086 29.9634 13.8201 29.7668 13.4599 29.4169C13.0997 29.067 12.8973 28.5924 12.8973 28.0976V20.4028Z"
+          fill="#00A881"
+        />
+      </g>
     </svg>
   )
 }

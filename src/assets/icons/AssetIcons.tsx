@@ -27,6 +27,7 @@ export const MailIcon: FC<IconProps> = ({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+
       <path
         d="M7.33366 7.33325H36.667C38.6837 7.33325 40.3337 8.98325 40.3337 10.9999V32.9999C40.3337 35.0166 38.6837 36.6666 36.667 36.6666H7.33366C5.31699 36.6666 3.66699 35.0166 3.66699 32.9999V10.9999C3.66699 8.98325 5.31699 7.33325 7.33366 7.33325Z"
         stroke={color}
@@ -248,143 +249,144 @@ export const FileIcon: FC<IconProps> = ({
   );
 }
 
-export const LandingPageIcon: FC<IconProps> = ({ width = "25", height = "25", strokeColor = "black", strokeWidth = "1.45496" }) => {
+export const LandingPageIcon: FC<IconProps> = ({ width = "25", height = "25", color = "black", strokeWidth = "1.45496", className = '' }) => {
   return (
     <svg id="Layer_1" enableBackground="new 0 0 512 512" height={height} viewBox="0 0 512 512" width={width} xmlns="http://www.w3.org/2000/svg">
-      <path stroke={strokeColor} strokeWidth={strokeWidth} d="m465 14.9h-418c-25.9 0-47 21.1-47 47v388.3c0 25.9 21.1 47 47 47h418c25.9 0 47-21.1 47-47v-388.3c0-25.9-21.1-47-47-47zm-418 24h418c12.7 0 23 10.3 23 23v63.1h-233.9l-44.4-49.5c-2.3-2.5-5.5-4-8.9-4h-176.8v-9.6c0-12.7 10.3-23 23-23zm418 434.2h-418c-12.7 0-23-10.3-23-23v-354.6h171.3l44.4 49.5c2.3 2.5 5.5 4 8.9 4h239.4v301.2c0 12.6-10.3 22.9-23 22.9zm-388.5-109.8h184c6.6 0 12-5.4 12-12v-145c0-6.6-5.4-12-12-12h-184c-6.6 0-12 5.4-12 12v145c0 6.7 5.4 12 12 12zm12-24v-24.5c.4-.3.8-.6 1.1-1l42.9-42.9 42.9 42.9c2.3 2.3 5.4 3.5 8.5 3.5s6.1-1.2 8.5-3.5c4.7-4.7 4.7-12.3 0-17l-7.4-7.4 19.6-19.6 42.9 42.9c.3.3.6.6 1 .9v25.7zm160-121v61.5l-35.4-35.4c-2.3-2.3-5.3-3.5-8.5-3.5s-6.2 1.3-8.5 3.5l-28.1 28.1-27-27c-2.3-2.3-5.3-3.5-8.5-3.5s-6.2 1.3-8.5 3.5l-35.5 35.5v-62.7zm206.5-12c0 6.6-5.4 12-12 12h-116c-6.6 0-12-5.4-12-12s5.4-12 12-12h116c6.6 0 12 5.4 12 12zm0 67.9c0 6.6-5.4 12-12 12h-116c-6.6 0-12-5.4-12-12s5.4-12 12-12h116c6.6 0 12 5.3 12 12zm0 67.8c0 6.6-5.4 12-12 12h-116c-6.6 0-12-5.4-12-12s5.4-12 12-12h116c6.6 0 12 5.4 12 12zm-.5 67.8c0 6.6-5.4 12-12 12h-366c-6.6 0-12-5.4-12-12s5.4-12 12-12h366c6.6 0 12 5.4 12 12zm-164.3-327.9c0-6.6 5.3-12 12-12h.1c6.6 0 12 5.4 12 12s-5.4 12-12 12c-6.7 0-12.1-5.4-12.1-12zm61.8 0c0-6.6 5.3-12 12-12h.1c6.6 0 12 5.4 12 12s-5.4 12-12 12c-6.7 0-12.1-5.4-12.1-12zm61.8 0c0-6.6 5.3-12 12-12h.1c6.6 0 12 5.4 12 12s-5.4 12-12 12c-6.7 0-12.1-5.4-12.1-12z" />
+      <path fill={color} strokeWidth={strokeWidth} d="m465 14.9h-418c-25.9 0-47 21.1-47 47v388.3c0 25.9 21.1 47 47 47h418c25.9 0 47-21.1 47-47v-388.3c0-25.9-21.1-47-47-47zm-418 24h418c12.7 0 23 10.3 23 23v63.1h-233.9l-44.4-49.5c-2.3-2.5-5.5-4-8.9-4h-176.8v-9.6c0-12.7 10.3-23 23-23zm418 434.2h-418c-12.7 0-23-10.3-23-23v-354.6h171.3l44.4 49.5c2.3 2.5 5.5 4 8.9 4h239.4v301.2c0 12.6-10.3 22.9-23 22.9zm-388.5-109.8h184c6.6 0 12-5.4 12-12v-145c0-6.6-5.4-12-12-12h-184c-6.6 0-12 5.4-12 12v145c0 6.7 5.4 12 12 12zm12-24v-24.5c.4-.3.8-.6 1.1-1l42.9-42.9 42.9 42.9c2.3 2.3 5.4 3.5 8.5 3.5s6.1-1.2 8.5-3.5c4.7-4.7 4.7-12.3 0-17l-7.4-7.4 19.6-19.6 42.9 42.9c.3.3.6.6 1 .9v25.7zm160-121v61.5l-35.4-35.4c-2.3-2.3-5.3-3.5-8.5-3.5s-6.2 1.3-8.5 3.5l-28.1 28.1-27-27c-2.3-2.3-5.3-3.5-8.5-3.5s-6.2 1.3-8.5 3.5l-35.5 35.5v-62.7zm206.5-12c0 6.6-5.4 12-12 12h-116c-6.6 0-12-5.4-12-12s5.4-12 12-12h116c6.6 0 12 5.4 12 12zm0 67.9c0 6.6-5.4 12-12 12h-116c-6.6 0-12-5.4-12-12s5.4-12 12-12h116c6.6 0 12 5.3 12 12zm0 67.8c0 6.6-5.4 12-12 12h-116c-6.6 0-12-5.4-12-12s5.4-12 12-12h116c6.6 0 12 5.4 12 12zm-.5 67.8c0 6.6-5.4 12-12 12h-366c-6.6 0-12-5.4-12-12s5.4-12 12-12h366c6.6 0 12 5.4 12 12zm-164.3-327.9c0-6.6 5.3-12 12-12h.1c6.6 0 12 5.4 12 12s-5.4 12-12 12c-6.7 0-12.1-5.4-12.1-12zm61.8 0c0-6.6 5.3-12 12-12h.1c6.6 0 12 5.4 12 12s-5.4 12-12 12c-6.7 0-12.1-5.4-12.1-12zm61.8 0c0-6.6 5.3-12 12-12h.1c6.6 0 12 5.4 12 12s-5.4 12-12 12c-6.7 0-12.1-5.4-12.1-12z" />
     </svg>
 
   )
 }
 
-// export const LandingPageIcon: FC<IconProps> = ({
-//   width = "27",
-//   height = "27",
-//   color = "black",
-//   strokeWidth = "1.45496",
-// }) => {
-//   return (
-//     <svg
-//       version="1.1"
-//       xmlns="http://www.w3.org/2000/svg"
-//       viewBox="0 0 32 32"
-//       width={width}
-//       height={height}
-//       fill={color}
-//     >
-//       <g>
-//         <line
-//           x1="3"
-//           y1="11"
-//           x2="29"
-//           y2="11"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <line
-//           x1="7"
-//           y1="8"
-//           x2="7"
-//           y2="8"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <line
-//           x1="10"
-//           y1="8"
-//           x2="10"
-//           y2="8"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <line
-//           x1="13"
-//           y1="8"
-//           x2="13"
-//           y2="8"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <rect
-//           x="3"
-//           y="5"
-//           width="26"
-//           height="22"
-//           fill="none"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <rect
-//           x="6"
-//           y="14"
-//           width="10"
-//           height="10"
-//           fill="none"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <rect
-//           x="19"
-//           y="21"
-//           width="7"
-//           height="3"
-//           fill="none"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <line
-//           x1="20"
-//           y1="15"
-//           x2="26"
-//           y2="15"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <line
-//           x1="23"
-//           y1="18"
-//           x2="26"
-//           y2="18"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <polyline
-//           points="6,22 12,19 16,22"
-//           fill="none"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//         <line
-//           x1="9"
-//           y1="17"
-//           x2="9"
-//           y2="17"
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//         />
-//       </g>
-//     </svg>
-//   );
-// };
+/* export const LandingPageIcon: FC<IconProps> = ({
+  width = "27",
+  height = "27",
+  color = "black",
+  strokeWidth = "1.45496",
+}) => {
+  return (
+    <svg
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      width={width}
+      height={height}
+      fill={color}
+    >
+      <g>
+        <line
+          x1="3"
+          y1="11"
+          x2="29"
+          y2="11"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <line
+          x1="7"
+          y1="8"
+          x2="7"
+          y2="8"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <line
+          x1="10"
+          y1="8"
+          x2="10"
+          y2="8"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <line
+          x1="13"
+          y1="8"
+          x2="13"
+          y2="8"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <rect
+          x="3"
+          y="5"
+          width="26"
+          height="22"
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <rect
+          x="6"
+          y="14"
+          width="10"
+          height="10"
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <rect
+          x="19"
+          y="21"
+          width="7"
+          height="3"
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <line
+          x1="20"
+          y1="15"
+          x2="26"
+          y2="15"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <line
+          x1="23"
+          y1="18"
+          x2="26"
+          y2="18"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <polyline
+          points="6,22 12,19 16,22"
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <line
+          x1="9"
+          y1="17"
+          x2="9"
+          y2="17"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+};
+ */

@@ -79,7 +79,7 @@ const Table: React.FC<TableProps> = ({ listItems,
   const getIcon = (value: string | undefined) => {
     const icons: { [key: string]: JSX.Element } = {
       "Email": <EmailIcon />,
-      "Landing Page": <LandingAssetIcon2 height='27' width='50' strokeWidth='6' />,
+      "Landing Page": <LandingAssetIcon2 height='27' width='35' strokeWidth='6' />,
       "LinkedIn": <LinkedinIcon />,
       "Call Script": <SalesCallIcon />,
     };
@@ -151,9 +151,9 @@ const Table: React.FC<TableProps> = ({ listItems,
                   className={`flex items-center gap-2 px-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
                 >
                   {heading === 'assetName' ? (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full">
                       {isIconRequired && getIcon(data['assetTypeIcon'])}
-                      <span>{data[heading]}</span>
+                      <span className='w-full'>{data[heading]}</span>
                     </div>
                   ) : (
                     heading !== 'assetTypeIcon' && data[heading]
