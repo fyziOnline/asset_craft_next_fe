@@ -85,10 +85,10 @@ const Page = () => {
             if ((item.blockData !== "{}" && item.blockData !== "" && item.blockHTMLGenerated)) {
                 htmlContent += (item.ignoreBlock === 0 ? `
                     <div style="position:relative;">
-                   <div style="right:-145px; z-index:20; position:absolute; display:flex; align-items:center; gap: 8px; background-color: #f9f9f9; border: 2px dashed #ccc; border-radius: 5px; padding:6px 10px;">
+                   <div style="right:-145px; z-index:20; position:absolute; display:flex; align-items:center; gap: 2px; background-color: #f9f9f9; border: 2px dashed #ccc; border-radius: 5px; padding:6px 10px;">
 
     <div id="handle-button" data-block-id="${item.assetVersionBlockID}" data-type-div="edit"
-        style="display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; cursor: pointer;"
+        style="display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; cursor: pointer; border-right: 2px solid #ccc; padding-right: 5px;"
         onmouseover="this.querySelectorAll('svg path').forEach(p => p.setAttribute('stroke', '#01a982'))"
         onmouseout="this.querySelectorAll('svg path').forEach(p => p.setAttribute('stroke', 'black'))">
         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 39 39" fill="none">
