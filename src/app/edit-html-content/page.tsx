@@ -382,7 +382,15 @@ const Page = () => {
                                 <div className="h-auto overflow-y-auto p-4 space-y-6 ">
                                     {/* comment 1 */}
                                     <div>
-                                        <p className="text-sm text-gray-500 mb-2">{approvalDetails.modifiedOn}, {approvalDetails.modifiedBy}</p>
+                                    <p className="text-sm text-gray-500 mb-2">
+                                                {approvalDetails.modifiedOn
+                                                    ? `${new Date(approvalDetails.modifiedOn).toISOString().split("T")[0]} - ${new Date(approvalDetails.modifiedOn).toLocaleTimeString("en-US", {
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                    })}`
+                                                    : "N/A"}
+                                            </p>
+                                        {/* <p className="text-sm text-gray-500 mb-2">{approvalDetails.modifiedOn}, {approvalDetails.modifiedBy}</p> */}
                                         <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
                                             <div className='overflow-y-auto max-h-40'>
                                                 <p className="text-gray-700 text-sm">
