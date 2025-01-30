@@ -30,7 +30,7 @@ interface TableProps {
   tablePlaceitems?: string;
   handleClick?: (value: any) => void;
   isPagination?: boolean;
-  isIconRequired ?:boolean
+  isIconRequired?: boolean
 }
 
 const Table: React.FC<TableProps> = ({ listItems,
@@ -151,9 +151,11 @@ const Table: React.FC<TableProps> = ({ listItems,
                   className={`flex items-center gap-2 px-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
                 >
                   {heading === 'assetName' ? (
-                    <div className="flex items-center gap-2 w-full">
-                      {isIconRequired && getIcon(data['assetTypeIcon'])}
-                      <span className='w-full'>{data[heading]}</span>
+                    <div className="flex items-start gap-3 w-full">
+                      <div className=''>
+                        {isIconRequired && getIcon(data['assetTypeIcon'])}
+                      </div>
+                      <div><span className='w-full'>{data[heading]}</span></div>
                     </div>
                   ) : (
                     heading !== 'assetTypeIcon' && data[heading]
