@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import LayoutWrapper from '@/layout/LayoutWrapper'
 import Button from '@/components/global/Button'
 import Cookies from 'js-cookie';
@@ -8,6 +8,9 @@ import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/hooks/useProfile';
 import { SignOutIcon, UserDetailsIcon } from '@/assets/icons/AppIcons';
+import { CiCamera } from "react-icons/ci";
+import { convertImageToBase64 } from '@/utils/convertToBase64';
+
 
 interface FormValues {
     name: string;
@@ -23,7 +26,7 @@ interface FormValues {
 
 const page: React.FC = () => {
     const router = useRouter()
-    const { userDetails, updateUserDetails } = useProfile()
+    const { userDetails, updateUserDetails, updateUserProfile } = useProfile()
     const [formValues, setFormValues] = useState<FormValues>({
         name: '',
         email: '',
@@ -34,6 +37,7 @@ const page: React.FC = () => {
         timeZone: '',
         isActive: 1,
     });
+
 
     useEffect(() => {
         if (userDetails) {
@@ -68,6 +72,30 @@ const page: React.FC = () => {
         router.push('/')
     }
 
+    const [isHovered, setIsHovered] = useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileSelect = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+
+        if (file) {
+            const base64Image = await convertImageToBase64(file as File);
+
+            const data = {
+                userID: userDetails?.userID,
+                originalImageName: "Name.png",
+                imageAsBase64String: base64Image
+            }
+
+            await updateUserProfile(data);
+        }
+
+    };
+
     return (
         <LayoutWrapper layout='main'>
             <div className='w-[80%] h-full mx-auto'>
@@ -88,9 +116,37 @@ const page: React.FC = () => {
                     <p className="text-white text-3xl font-semibold text-end absolute bottom-4 right-5">Access Level: {userDetails?.userRole}</p>
                     <div className="absolute bottom-[-50px] flex items-center justify-between">
                         <div className="flex relative items-center gap-4">
-                            <div className="w-[100px] h-[100px] aspect-square bg-[url('/images/userProfile.jpeg')] bg-cover bg-center rounded-full" />
-                            <div className='absolute bottom-0 top-16 left-[112px]'>
-                                <p className="text-gray-500 text-base w-[400px]">{userDetails?.email}</p>
+                            <div
+                                className="relative w-[100px] h-[100px] rounded-full overflow-hidden"
+                                onMouseEnter={() => setIsHovered(true)}
+                                onMouseLeave={() => setIsHovered(false)}
+                                onClick={handleFileSelect}
+                                style={{
+                                    backgroundImage: `url(${userDetails?.fileUrl || '/images/userProfile.jpeg'})`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}
+                            >
+                                {isHovered && (
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center cursor-pointer transition-opacity duration-200">
+                                        <CiCamera className="text-white" size={24} />
+                                    </div>
+                                )}
+
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                />
+                            </div>
+
+
+                            <div className="absolute bottom-0 top-16 left-[112px]">
+                                <p className="text-gray-500 text-base w-[400px]">
+                                    {userDetails?.email}
+                                </p>
                             </div>
                         </div>
                     </div>

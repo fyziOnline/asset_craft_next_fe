@@ -16,6 +16,7 @@ interface UserDetailsProps {
     timeZone: string;
     userRole: string;
     isActive: number;
+    fileUrl: string;
 }
 
 export const useProfile = () => {
@@ -70,9 +71,34 @@ export const useProfile = () => {
         }
     }
 
+    const updateUserProfile = async (data: any) => {
+        setShowLoading(true)
+
+        try {
+            const response = await ApiService.put<any>(urls.userImageUpdate ,data)
+
+            if (response.isSuccess) {
+                await getUserDetails()
+            }
+            
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+            return false
+        }
+        finally {
+            setShowLoading(false)
+        }
+    }
+
     return {
         userDetails,
-        updateUserDetails
+        updateUserDetails,
+        updateUserProfile
     }
 }
 
