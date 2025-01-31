@@ -47,6 +47,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   }
 
   const filterOptionsAsset = [
+    { label: 'All', value: 'All' },
     { label: 'Email', value: 'Email' },
     { label: 'LinkedIn', value: 'LinkedIn' },
     { label: 'Landing Page', value: 'Landing Page' },
@@ -54,12 +55,15 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   ]
 
   const filterOptionsStatus = [
+    { label: 'All', value: 'All' },
     { label: 'In Progress', value: 'In Progress' },
     { label: 'On Review', value: 'On Review' },
   ]
 
   const filteredData = useMemo(() => {
-    if (!searchQuery.trim() && !getSelectedStatus && !getSelectedAssetType) return campaign_data;
+    if (!searchQuery.trim() && (getSelectedStatus === 'All' || !getSelectedStatus) && (getSelectedAssetType === 'All' || !getSelectedAssetType)) {
+      return campaign_data;
+    }
 
     return campaign_data.filter((item) => {
       const projectName = item['projectName']?.toLowerCase() || '';
@@ -67,12 +71,9 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
       const assetName = item['assetName']?.toLowerCase() || '';
       const query = searchQuery.toLowerCase();
 
-      const matchSearchQuery = projectName.includes(query) ||
-        campaignName.includes(query) ||
-        assetName.includes(query);
-
-      const matchStatus = getSelectedStatus ? item['currentStatus'] === getSelectedStatus : true;
-      const matchAssetType = getSelectedAssetType ? item['assetTypeIcon'] === getSelectedAssetType : true;
+      const matchSearchQuery = projectName.includes(query) || campaignName.includes(query) || assetName.includes(query);
+      const matchStatus = getSelectedStatus === 'All' || !getSelectedStatus ? true : item['currentStatus'] === getSelectedStatus;
+      const matchAssetType = getSelectedAssetType === 'All' || !getSelectedAssetType ? true : item['assetTypeIcon'] === getSelectedAssetType;
 
       return matchSearchQuery && matchStatus && matchAssetType;
     });
@@ -119,10 +120,15 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
                 }}
               />
             }
-            <FilterDropdown placeholder='Select Status' optionLists={filterOptionsStatus} customClass="bg-[#F9F9F9]" selectedValue={(value) => {
-              setGetSelectedStatus(value);
-              setGridCurrentPage(1);
-            }} />
+            <FilterDropdown
+              placeholder='Select Status'
+              optionLists={filterOptionsStatus}
+              customClass="bg-[#F9F9F9]"
+              selectedValue={(value) => {
+                setGetSelectedStatus(value);
+                setGridCurrentPage(1);
+              }}
+            />
           </div>
         </div >
 
