@@ -13,10 +13,10 @@ const CompletedAssets: FC = () => {
   const completedAssets = dashboardAssets.filter(asset => asset.status === "Completed")
 
   const assetsDisplayTable = completedAssets.map((data) => ({
-    projectName: data.project,
-    campaignName: data.campaignName,
     assetTypeIcon: data.assetTypeName,
     assetName: data.assetName,
+    campaignName: data.campaignName,
+    projectName: data.project,
     createdOn: formatDate(data.createdOn),
     approvedBy: data.approvedBy || "N/A",
     approvedOn: formatDate(data.approvedOn),
@@ -24,7 +24,7 @@ const CompletedAssets: FC = () => {
   }));
 
 
-  const tableHeading = ["Project Name", "Campaign Name", "Asset Name", "Created On", "Approved By", "Approved On", "Current Status"]
+  const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Approved By", "Approved On", "Current Status"]
   const arrowshowItems = ["Project Name", "Created On", "Approved On"]
   const hiddenFields = ["dataItem"]
 

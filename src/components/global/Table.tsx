@@ -79,7 +79,7 @@ const Table: React.FC<TableProps> = ({ listItems,
   const getIcon = (value: string | undefined) => {
     const icons: { [key: string]: JSX.Element } = {
       "Email": <EmailIcon />,
-      "Landing Page": <LandingAssetIcon2 height='27' width='35' strokeWidth='6' />,
+      "Landing Page": <LandingAssetIcon2 />,
       "LinkedIn": <LinkedinIcon />,
       "Call Script": <SalesCallIcon />,
     };
@@ -142,7 +142,7 @@ const Table: React.FC<TableProps> = ({ listItems,
             <div
               onClick={() => { handleClick(data) }}
               key={index}
-              className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F6F6F6]'}`}
+              className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F9F9F9]'}`}
               style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}
             >
               {visibleHeadings.map((heading, idx) => (

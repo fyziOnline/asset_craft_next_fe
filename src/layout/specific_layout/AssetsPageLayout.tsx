@@ -102,7 +102,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
           <div className='flex items-center gap-4'>
 
             <SearchBox
-              customClass="bg-[#F6F6F6]"
+              customClass="bg-[#F9F9F9]"
               setSearchQuery={(query) => {
                 setSearchQuery(query)
                 setGridCurrentPage(1)
@@ -112,14 +112,14 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
               <FilterDropdown
                 placeholder="Select Asset Type"
                 optionLists={filterOptionsAsset}
-                customClass="bg-[#F6F6F6]"
+                customClass="bg-[#F9F9F9]"
                 selectedValue={(value) => {
                   setGetSelectedAssetType(value);
                   setGridCurrentPage(1);
                 }}
               />
             }
-            <FilterDropdown placeholder='Select Status' optionLists={filterOptionsStatus} customClass="bg-[#F6F6F6]" selectedValue={(value) => {
+            <FilterDropdown placeholder='Select Status' optionLists={filterOptionsStatus} customClass="bg-[#F9F9F9]" selectedValue={(value) => {
               setGetSelectedStatus(value);
               setGridCurrentPage(1);
             }} />
