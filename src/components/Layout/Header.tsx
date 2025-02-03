@@ -70,7 +70,7 @@ const Header: React.FC = () => {
 
   if (pathname === "/approver-page" || pathname === "/edit-html-content") {    
     return (
-      <header className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] px-10 z-50 border-b shadow-sm">
+      <header className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] px-7 md:px-10 z-50 border-b shadow-sm">
         <div className="w-full flex justify-between items-center">
           <div className="flex flex-row items-center">
             <div onClick={handleReturnToPrevious} className="relative w-7 h-7 rounded-full bg-[#00A881] cursor-pointer">
@@ -79,16 +79,16 @@ const Header: React.FC = () => {
               </svg>
             </div>
             <div className="flex gap-2 pl-4">
-              <span className="text-xl text-[#7F7F7F] leading-normal font-bold">{projectName}</span>
-              <span className="text-xl text-[#7F7F7F] leading-normal font-bold">|</span>
-              <span className="text-xl text-[#7F7F7F] leading-normal font-bold">{campaignName}</span>
+              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{projectName}</span>
+              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">|</span>
+              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{campaignName}</span>
             </div>
             <Title classNameCustom="ml-4" titleName={getTitlePage()} />
           </div>
 
           <div className="flex items-center gap-3">
             <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
-            <h1 className="text-xl tracking-wide">{userDetails?.name}</h1>
+            <h1 className="text-sm md:text-xl tracking-wide">{userDetails?.name}</h1>
           </div>
         </div>
       </header>

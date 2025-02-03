@@ -134,7 +134,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
 
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
       </div>
-      <div className="px-4 lg:px-16 xl:px-20 overflow-y-scroll h-[85vh] scrollbar-hide">
+      <div className="px-4 lg:px-12 overflow-y-scroll h-[85vh] scrollbar-hide">
         {filteredData.length === 0 ?
           <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
           : !isList ?
