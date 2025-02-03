@@ -41,6 +41,12 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
       setType(params.get('type') || "");
     }
   }, []);
+
+  // Debugging log to check the `page` prop value
+  useEffect(() => {
+    console.log("AssetsPageLayout Page Prop:", page);
+  }, [page]);
+
   const toggleListType = () => {
     setIsList(pre => !pre)
     setGridCurrentPage(1)
@@ -120,15 +126,18 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
                 }}
               />
             }
-            <FilterDropdown
-              placeholder='Select Status'
-              optionLists={filterOptionsStatus}
-              customClass="bg-[#F9F9F9]"
-              selectedValue={(value) => {
-                setGetSelectedStatus(value);
-                setGridCurrentPage(1);
-              }}
-            />
+            {/* Hide Status filter for "assets-to-approve" & "completed-assets" pages */}
+            {page !== "assets-to-approve" && page !== "completed-assets" && (
+              <FilterDropdown
+                placeholder='Select Status'
+                optionLists={filterOptionsStatus}
+                customClass="bg-[#F9F9F9]"
+                selectedValue={(value) => {
+                  setGetSelectedStatus(value);
+                  setGridCurrentPage(1);
+                }}
+              />
+            )}
           </div>
         </div >
 
