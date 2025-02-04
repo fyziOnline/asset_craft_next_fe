@@ -26,7 +26,6 @@ const Page: FC = () => {
   const hiddenFields = ["dataItem", "assetID"]
 
   const handleClick = (item:any) => {
-    // console.log('item::', item);
     router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&assetTypeIcon=${item.assetTypeIcon}`)
   }
 

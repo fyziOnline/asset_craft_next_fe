@@ -39,7 +39,8 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
             modifiedBy: "",
             modifiedOn: "",
             fileUrl: "",
-            comments: ""
+            comments: "",
+            editorName: ""
         }
     )
     const [fileConversionError,setFileConversionError] = useState<{}|null>(null)
