@@ -44,7 +44,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
 
   // Debugging log to check the `page` prop value
   useEffect(() => {
-    console.log("AssetsPageLayout Page Prop:", page);
+  
   }, [page]);
 
   const toggleListType = () => {

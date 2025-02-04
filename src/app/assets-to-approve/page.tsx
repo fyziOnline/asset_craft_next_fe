@@ -1,12 +1,12 @@
 'use client'
 
-import AssetsPageLayout from '@/layout/specific_layout/AssetsPageLayout'
 import React from 'react'
 import { formatDate } from '@/utils/formatDate'
 import { useRouter } from 'next/navigation'
 import { useGetAsset } from '@/hooks/useGetAsset'
+import AssetsPageLayout from '@/layout/specific_layout/AssetsPageLayout'
 
-const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Created On", "Current Status"]
+const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Created On", "Submitted By", "Current Status"]
 const headerHavingSortingToggle = ["Project Name", "Created On"]
 const hiddenFields = ["assetVersionID", "layoutName"]
 
@@ -21,6 +21,7 @@ const AssetsToApprove: React.FC = () => {
         campaignName: data.campaignName,
         projectName: data.projectName,
         createdOn: formatDate(data.createdOn),
+        submittedBy: data.editorName,
         status: data.status,
         assetVersionID: data.assetVersionID,
         layoutName: data.assetTypeName
