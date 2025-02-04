@@ -143,7 +143,7 @@ const Table: React.FC<TableProps> = ({ listItems,
               onClick={() => { handleClick(data) }}
               key={index}
               className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F9F9F9]'}`}
-              style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}
+              style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems, alignItems: "center" }}
             >
               {visibleHeadings.map((heading, idx) => (
                 <div
@@ -151,7 +151,7 @@ const Table: React.FC<TableProps> = ({ listItems,
                   className={`flex items-center gap-2 px-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
                 >
                   {heading === 'assetName' ? (
-                    <div className="flex items-start gap-3 w-full">
+                    <div className="flex items-center gap-3 w-full">
                       <div className=''>
                         {isIconRequired && getIcon(data['assetTypeIcon'])}
                       </div>
