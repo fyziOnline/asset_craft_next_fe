@@ -60,7 +60,7 @@ const Home: FC = () => {
         <div className="flex flex-col lg:flex-row relative items-center justify-between md:mr-[15vw] gap-9">
           <section className="text-white w-[24rem] md:w-[25rem] pad16px">
             <h1 className="text-[3.45rem] leading-[6rem] font-medium font-metric text-green-100 tracking-wide">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
-            <p className="text-wrap text-xl tracking-wide">Simplifying Marketing Content with AI-Driven</p>
+            <p className="text-wrap text-xl tracking-wide">Simplifying Marketing Content with AI-Driven Tech</p>
           </section>
 
           <div className="relative text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-6 pt-8 pb-8 padbot10 flex flex-col items-center">
