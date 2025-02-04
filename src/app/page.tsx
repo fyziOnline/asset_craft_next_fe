@@ -78,11 +78,11 @@ const Home: FC = () => {
               defaultValue={emailLoginDefault}
               onChange={onChangeEmail}
               className="home-box-element text-xs p-[0.7rem] mb-[1.3rem] placeholder:text-white w-[32ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider focus:placeholder:text-gray-300"
-              placeholder="Enter Your email id"
+              placeholder="Enter your email id"
               type="text"
             />
 
-            <button disabled={isLoading} onClick={handleLogin} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[32ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
+            <button disabled={isLoading} onClick={() => handleLogin(true)} className={`mb-[1.3rem] text-xs home-box-element px-[1rem] py-[0.7rem] w-[32ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
 
 
           </div>
@@ -130,7 +130,7 @@ const Home: FC = () => {
 
             <p className="text-[0.9rem] text-white mb-1 tracking-wider">Didn't receive the OTP?</p>
 
-            <p onClick={handleLogin} className=" text-white pt-[1px] mb-[3%] border-b border-white inline-block leading-none cursor-pointer tracking-wide">Resend OTP </p>
+            <p onClick={() => handleLogin(true)} className=" text-white pt-[1px] mb-[3%] border-b border-white inline-block leading-none cursor-pointer tracking-wide">Resend OTP </p>
 
 
             <div className="flex justify-between px-[1rem] py-[.75rem]">
