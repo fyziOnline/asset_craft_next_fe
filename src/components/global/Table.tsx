@@ -135,6 +135,7 @@ const Table: React.FC<TableProps> = ({ listItems,
       </div>
 
       <div className='grid gap-[10px]'>
+        {/* comment   / */}
         {(isPagination ? sortListData.slice((page - 1) * 10, ((page - 1) * 10) + 10) : sortListData).map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
           const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
