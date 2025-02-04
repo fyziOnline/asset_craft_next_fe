@@ -34,9 +34,9 @@ const StatusLabel: FC<StatusProp> = ({ status_value }) => {
 
   return (
     <div
-      className={`border-2 ${statusData.theme} group-hover:border-black group-hover:bg-white w-fit px-[1rem] rounded-full`}
+      className={`border-2 ${statusData.theme} group-hover:border-white group-hover:bg-white w-fit px-[1rem] rounded-full`}
     >
-      <p className="text-[0.7rem] md:text-sm group-hover:text-black">
+      <p className="text-[0.7rem] md:text-sm font-bold group-hover:text-[#00A881]">
         {statusData.text}
       </p>
     </div>

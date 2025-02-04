@@ -30,7 +30,7 @@ interface TableProps {
   tablePlaceitems?: string;
   handleClick?: (value: any) => void;
   isPagination?: boolean;
-  isIconRequired ?:boolean
+  isIconRequired?: boolean
 }
 
 const Table: React.FC<TableProps> = ({ listItems,
@@ -79,7 +79,7 @@ const Table: React.FC<TableProps> = ({ listItems,
   const getIcon = (value: string | undefined) => {
     const icons: { [key: string]: JSX.Element } = {
       "Email": <EmailIcon />,
-      "Landing Page": <LandingAssetIcon2 height='27' width='50' strokeWidth='6' />,
+      "Landing Page": <LandingAssetIcon2 />,
       "LinkedIn": <LinkedinIcon />,
       "Call Script": <SalesCallIcon />,
     };
@@ -135,6 +135,7 @@ const Table: React.FC<TableProps> = ({ listItems,
       </div>
 
       <div className='grid gap-[10px]'>
+        {/* comment   / */}
         {(isPagination ? sortListData.slice((page - 1) * 10, ((page - 1) * 10) + 10) : sortListData).map((data, index) => {
           if (getListItemsHeadings.length === 0) { return }
           const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
@@ -142,8 +143,8 @@ const Table: React.FC<TableProps> = ({ listItems,
             <div
               onClick={() => { handleClick(data) }}
               key={index}
-              className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F6F6F6]'}`}
-              style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems }}
+              className={`grid p-6 cursor-pointer rounded-lg border ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F9F9F9]'}`}
+              style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems, alignItems: "center" }}
             >
               {visibleHeadings.map((heading, idx) => (
                 <div
@@ -151,9 +152,11 @@ const Table: React.FC<TableProps> = ({ listItems,
                   className={`flex items-center gap-2 px-2 text-base font-thin justify-center ${getStatusClass(data[heading] || '')}`}
                 >
                   {heading === 'assetName' ? (
-                    <div className="flex items-center gap-2">
-                      {isIconRequired && getIcon(data['assetTypeIcon'])}
-                      <span>{data[heading]}</span>
+                    <div className="flex items-center gap-3 w-full">
+                      <div className=''>
+                        {isIconRequired && getIcon(data['assetTypeIcon'])}
+                      </div>
+                      <div><span className='w-full'>{data[heading]}</span></div>
                     </div>
                   ) : (
                     heading !== 'assetTypeIcon' && data[heading]

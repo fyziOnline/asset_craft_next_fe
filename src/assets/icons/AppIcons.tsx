@@ -82,24 +82,27 @@ export const AllinOne = () => {
 
 export const GridIcon = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 50 50" fill="none">
-      <path d="M20.8333 6.25H6.25V20.8333H20.8333V6.25Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M43.7503 6.25H29.167V20.8333H43.7503V6.25Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M43.7503 29.1667H29.167V43.75H43.7503V29.1667Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M20.8333 29.1667H6.25V43.75H20.8333V29.1667Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="45" height="45" rx="22.5" fill="#white" fillOpacity="0.8" />
+      <path d="M20.1667 13.5C20.1667 13.2239 19.9428 13 19.6667 13H12.5C12.2239 13 12 13.2239 12 13.5V19.8889C12 20.165 12.2239 20.3889 12.5 20.3889H19.6667C19.9428 20.3889 20.1667 20.165 20.1667 19.8889V13.5Z"
+        stroke="#00A881" strokeWidth="1.7" />
+      <path d="M33.0006 13.5C33.0006 13.2239 32.7768 13 32.5006 13H25.334C25.0578 13 24.834 13.2239 24.834 13.5V19.8889C24.834 20.165 25.0578 20.3889 25.334 20.3889H32.5006C32.7768 20.3889 33.0006 20.165 33.0006 19.8889V13.5Z"
+        stroke="#00A881" strokeWidth="1.7" />
+      <path d="M33.0006 25.1111C33.0006 24.835 32.7768 24.6111 32.5006 24.6111H25.334C25.0578 24.6111 24.834 24.835 24.834 25.1111V31.5C24.834 31.7762 25.0578 32 25.334 32H32.5006C32.7768 32 33.0006 31.7762 33.0006 31.5V25.1111Z"
+        stroke="#00A881" strokeWidth="1.7" />
+      <path d="M20.1667 25.1111C20.1667 24.835 19.9428 24.6111 19.6667 24.6111H12.5C12.2239 24.6111 12 24.835 12 25.1111V31.5C12 31.7762 12.2239 32 12.5 32H19.6667C19.9428 32 20.1667 31.7762 20.1667 31.5V25.1111Z"
+        stroke="#00A881" strokeWidth="1.7" />
     </svg>
   )
 }
 
 export const ListIcon = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 50 50" fill="none">
-      <path d="M17 12.5H44.625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M17 25H44.625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M17 37.5H44.625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M6.375 12.5H6.39625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M6.375 25H6.39625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M6.375 37.5H6.39625" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="45" height="45" rx="22.5" fill="white" fillOpacity="1" />
+      <path d="M12 13H33" stroke="#00A881" strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M12 22.5023H33" stroke="#00A881" strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M12 32.0045H33" stroke="#00A881" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   )
 }
