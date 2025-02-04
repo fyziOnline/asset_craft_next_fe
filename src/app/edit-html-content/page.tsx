@@ -74,10 +74,7 @@ const Page = () => {
         const params = new URLSearchParams(window.location.search);
         const assetType = params.get("assetTypeIcon");
         setAssetType(assetType as string);
-    }, [])
-
-    console.log("assetType", assetType)
-    
+    }, [])    
 
     const htmlOtherAsset = () => {
         let htmlContent = '';

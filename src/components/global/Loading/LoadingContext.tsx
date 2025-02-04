@@ -1,27 +1,27 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, FC } from 'react';
 import LoadingOverlay from './LoadingOverlay';
 
-interface LoadingContextType {
+type LoadingContextType = {
     showLoading: boolean;
-    setShowLoading: (loading: boolean) => void;
-}
+    setShowLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 
-export const LoadingProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const LoadingProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [showLoading, setShowLoading] = useState(false);
 
     return (
         <LoadingContext.Provider value={{ showLoading, setShowLoading }}>
-            <LoadingOverlay loading={showLoading} />
+            {showLoading && <LoadingOverlay loading={showLoading} />}
             {children}
         </LoadingContext.Provider>
     );
 };
 
-export const useLoading = () => {
+export const useLoading = (): LoadingContextType => {
     const context = useContext(LoadingContext);
     if (!context) {
         throw new Error('useLoading must be used within a LoadingProvider');
