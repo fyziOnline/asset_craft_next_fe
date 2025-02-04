@@ -24,6 +24,7 @@ export interface AssetApprovalResponse  {
     modifiedOn?: string
     fileUrl: string
     comments: string
+    editorName?: string
   }
   
 

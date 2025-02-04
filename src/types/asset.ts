@@ -91,6 +91,7 @@ export interface AllUserAssignedProps {
     assetName: string;
     approverName: string;
     assetTypeName: string;
+    editorName: string;
     status: string;
     createdOn: string;
 }
