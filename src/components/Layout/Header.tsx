@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   const { userDetails } = useDashboard()
 
   const pathname = usePathname()
-    
+
   const params = useParams()
   const router = useRouter()
   const { contextData, setContextData } = useAppData()
@@ -18,7 +18,7 @@ const Header: React.FC = () => {
   const searchParams = useSearchParams()
   const projectName = searchParams.get('projectName')
   const campaignName = searchParams.get('campaignName')
-  
+
   const handleReturnToPrevious = () => {
 
     if (contextData.stepGenerate === 1) {
@@ -47,7 +47,7 @@ const Header: React.FC = () => {
     } else if (pathname === '/asset') {
       let type = searchParams.get('type')
       return `Assets : ${type}`
-    } 
+    }
     return ""
   }
 
@@ -68,7 +68,7 @@ const Header: React.FC = () => {
     )
   }
 
-  if (pathname === "/approver-page" || pathname === "/edit-html-content") {    
+  if (pathname === "/approver-page" || pathname === "/edit-html-content") {
     return (
       <header className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] px-7 md:px-10 z-50 border-b shadow-sm">
         <div className="w-full flex justify-between items-center">
@@ -110,7 +110,7 @@ const Header: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
-          <h1 className="text-xl tracking-wide">{userDetails?.name}</h1>
+          <h1 className="text-xl tracking-wide text-[#00A881] font-bold">{userDetails?.name}</h1>
         </div>
       </div>
     </header>
