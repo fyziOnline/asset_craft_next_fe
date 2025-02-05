@@ -16,8 +16,6 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({ title = "Error" }) => {
     const router = useRouter();
     const { error, setError } = useAppData();
 
-    if (!error.showError) return null
-
     const isAuthError = error.status === 401 || error.status === 403;
     const errorTitle = isAuthError ? "Session Expired" : title;
     const buttonText = isAuthError ? "LOGIN AGAIN" : "TRY AGAIN";
@@ -40,24 +38,28 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({ title = "Error" }) => {
     }, [setError]);
 
     useEffect(() => {
-        const accessToken = Cookies.get(nkey.auth_token);
-        if (!accessToken) {
-            resetError();
-            clearCookies();
-            router.push("/");
+        if (error.showError) {
+            const accessToken = Cookies.get(nkey.auth_token);
+            if (!accessToken) {
+                resetError();
+                clearCookies();
+                router.push("/");
+            }
         }
-    }, [clearCookies, resetError, router]);
+    }, [error.showError, clearCookies, resetError, router]);
 
     const handleClick = useCallback(() => {
         if (isAuthError) {
-          resetError();
-          clearCookies();
-          router.push("/");
+            resetError();
+            clearCookies();
+            router.push("/");
         } else {
-          resetError();
-          router.back();
+            resetError();
+            router.back();
         }
-      }, [isAuthError, clearCookies, resetError, router]);
+    }, [isAuthError, clearCookies, resetError, router]);
+
+    if (!error.showError) return null;
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-[999] overflow-hidden">
