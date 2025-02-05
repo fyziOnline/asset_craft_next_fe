@@ -21,12 +21,19 @@ export const useLogin = () => {
     const loginRef = useRef<ResLoginProps>();
     const otpRef = useRef("");
     const { setError } = useAppData()
+    const [isResending, setIsResending] = useState(false);
 
     useEffect(() => {
         const email_login = Cookies.get(nkey.email_login);
         emailRef.current = email_login as string
         setEmailLoginDefault(email_login as string)
     }, [])
+
+    const handleResendOtp = async () => {
+        setIsResending(true);
+        await handleLogin(true);
+        setIsResending(false);
+    };
 
     const handleLogin = async (skipLoading = false) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -130,11 +137,13 @@ export const useLogin = () => {
     return {
         emailLoginDefault,
         isLoading,
+        isResending,
         isOtpVisible,
         handleLogin,
         onChangeEmail,
         handleOtpSubmit,
         onChangeOtp,
+        handleResendOtp,
         handleCancelOtp,
         checkIsUserAuthorized
     };
