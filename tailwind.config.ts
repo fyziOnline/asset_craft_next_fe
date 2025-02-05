@@ -66,6 +66,7 @@ const config: Config = {
         // // 'lighter-grey-500' : '#383838',
         'fileupload-grey' : '#f7f9fb', 
         'fileupload-text' : "#160647",
+        'yellow-shade-300' : "#B0890E",
         sectionGrey:{
           DEFAULT : '#F6F6F6',
           darker : '#dedede',
