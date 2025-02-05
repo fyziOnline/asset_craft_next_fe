@@ -28,14 +28,18 @@ export const useLogin = () => {
         setEmailLoginDefault(email_login as string)
     }, [])
 
-    const handleLogin = async () => {
+    const handleLogin = async (skipLoading = false) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         try {
             if (emailRef.current.trim().length === 0 || !emailRegex.test(emailRef.current)) {
                 return;
             }
 
-            setIsLoading(true);
+            if (!skipLoading) {
+                setIsLoading(true);
+            }
+    
+
             const resLogin = await ApiService.post<any>(urls.login, {
                 "email": emailRef.current
             });
@@ -53,7 +57,9 @@ export const useLogin = () => {
                 showError: true
             })
         } finally {
-            setIsLoading(false);
+            if (!skipLoading) {
+                setIsLoading(false);
+            }
         }
     }
 

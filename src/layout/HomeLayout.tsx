@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const HomeLayout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div className='h-screen w-screen bg-black '>
+    <div className='h-screen w-full bg-black '>
       <HomeHeader />
       <main className="px-16 md:px-32 relative height130">
         {children}

@@ -27,7 +27,7 @@ const AddVersionModel = ({ isShowAddVer, setIsShowAddVer, handleAddVersion, hand
         <div className=" fixed left-0 right-0 h-[82vh] bg-black bg-opacity-55 flex items-center justify-center z-50">
             <div ref={modalRef} className="z-[99] w-[900px] relative bg-white rounded-3xl">
                 <div className="flex items-center px-[50px] pt-[25px]">
-                    <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold font-['Inter'] leading-[17.11px]">
+                    <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold leading-[17.11px]">
                         Save new version as:
                     </div>
                     {/* <Button
@@ -43,7 +43,7 @@ const AddVersionModel = ({ isShowAddVer, setIsShowAddVer, handleAddVersion, hand
                 </div>
                 <div className="w-full h-px bg-[#ebeff2]" />
                 <div className="mx-[50px] mt-[15px] pb-[35px]">
-                    <div className="text-[#160647] mb-[15px] text-base font-bold font-['Inter'] leading-tight">
+                    <div className="text-[#160647] mb-[15px] text-base font-bold leading-tight">
                         New Version Name
                     </div>
                     <TextField
