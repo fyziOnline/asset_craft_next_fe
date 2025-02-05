@@ -27,6 +27,7 @@ export const useEditHTMLContent = () => {
     const { setShowLoading } = useLoading()
     const { assetIDTemplateRef, getAssetHTML } = useGenerateTemplate({})
     const refVersion = useRef('')
+    const [showErrorMessage, setShowErrorMessage] = useState(false)
 
     useEffect(() => {
         try {
@@ -164,23 +165,36 @@ export const useEditHTMLContent = () => {
     };
 
     const handleAddVersion = async () => {
+        console.log('typed version name===', refVersion.current);
+
         try {
-            const resAddNewVersion = await ApiService.post<any>(urls.asset_version_copy, {
-                assetVersionID: versionSelected.assetVersionID,
-                versionName: refVersion.current
-            })
-            if (resAddNewVersion.isSuccess) {
-                const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${resAddNewVersion.assetVersionID}`)
-                if (resSelect.isSuccess) {
-                    const AssetHtml = contextData.AssetHtml
-                    const assetVersions = contextData.AssetHtml.assetVersions
-                    assetVersions.push(resSelect)
-                    AssetHtml.assetVersions = assetVersions
-                    setVersionSelected(resSelect)
-                    setContextData({ AssetHtml: AssetHtml })
-                    setIsShowAddVer(false)
+            if (refVersion.current !== "") {
+                setShowErrorMessage(false)
+                const resAddNewVersion = await ApiService.post<any>(urls.asset_version_copy, {
+                    assetVersionID: versionSelected.assetVersionID,
+                    versionName: refVersion.current
+
+                })
+
+                if (resAddNewVersion.isSuccess) {
+                    const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${resAddNewVersion.assetVersionID}`)
+
+                    if (resSelect.isSuccess) {
+                        const AssetHtml = contextData.AssetHtml
+                        const assetVersions = contextData.AssetHtml.assetVersions
+                        assetVersions.push(resSelect)
+                        AssetHtml.assetVersions = assetVersions
+                        setVersionSelected(resSelect)
+                        setContextData({ AssetHtml: AssetHtml })
+                        setIsShowAddVer(false)
+                        setShowErrorMessage(false)
+                        refVersion.current = ""
+                    }
                 }
+            } else {
+                setShowErrorMessage(true)
             }
+
         } catch (error) {
             const apiError = ApiService.handleError(error)
             setError({
@@ -306,6 +320,7 @@ export const useEditHTMLContent = () => {
         onGenerateWithAI,
         onSubmit,
         setSectionEdit,
-        handleHideBlock
+        handleHideBlock,
+        showErrorMessage
     };
 };

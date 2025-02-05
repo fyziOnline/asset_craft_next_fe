@@ -87,8 +87,8 @@ const Header: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
             <h1 className="text-sm md:text-xl tracking-wide">{userDetails?.name}</h1>
+            <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
           </div>
         </div>
       </header>
@@ -109,8 +109,8 @@ const Header: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
           <h1 className="text-xl tracking-wide">{userDetails?.name}</h1>
+          <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
         </div>
       </div>
     </header>
