@@ -98,7 +98,7 @@ const page: React.FC = () => {
 
     return (
         <LayoutWrapper layout='main'>
-            <div className='w-[80%] h-screen mx-auto'>
+            <div className='w-[80%] h-full mx-auto'>
                 <div className='flex items-baseline justify-between mb-5'>
                     <h1 className="text-[30px] text-green-100 font-bold leading-normal">
                         Welcome, {userDetails?.name}
@@ -200,7 +200,7 @@ const page: React.FC = () => {
                     </div>
                 </div>
 
-                <div className='flex items-center justify-end gap-2 mt-2'>
+                <div className='flex items-center justify-end gap-2 mt-2 pb-4'>
                     <Button
                         buttonText='Update'
                         customClass='border-2 border-green-300 px-6 py-1'
