@@ -2,7 +2,7 @@ import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
 import React, { useRef, useEffect } from 'react';
 
-const AddVersionModel = ({ isShowAddVer, setIsShowAddVer, handleAddVersion, handleChangeTextVersion }: any) => {
+const AddVersionModel = ({ isShowAddVer, setIsShowAddVer, handleAddVersion, handleChangeTextVersion, showErrorMessage }: any) => {
     const modalRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const AddVersionModel = ({ isShowAddVer, setIsShowAddVer, handleAddVersion, hand
         <div className=" fixed left-0 right-0 h-[82vh] bg-black bg-opacity-55 flex items-center justify-center z-50">
             <div ref={modalRef} className="z-[99] w-[900px] relative bg-white rounded-3xl">
                 <div className="flex items-center px-[50px] pt-[25px]">
-                    <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold leading-[17.11px]">
+                    <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold leading-[17.11px] pb-8">
                         Save new version as:
                     </div>
                     {/* <Button
@@ -50,29 +50,31 @@ const AddVersionModel = ({ isShowAddVer, setIsShowAddVer, handleAddVersion, hand
                         handleChange={handleChangeTextVersion}
                         placeholder="Type the name of your new version."
                         rows={1}
+                        customAreaClass='border border-[#1414]'
                     ></TextField>
+                    {showErrorMessage && <p className='text-red-500 text-sm'>Please enter a version name.</p>}
                 </div>
                 <div className='px-[50px] pb-[25px] w-full flex justify-between'>
                     <Button
-                            buttonText="Cancel"
-                            showIcon = {false}
-                            textStyle="text-[1rem] font-base text-[#00A881]"
-                            textColor="text-[#e06565]"
-                            iconColor="#e06565"
-                            backgroundColor="#fff"
-                            handleClick={handleAddVersion}
-                            customClass="static py-2 group-hover:border-white"
-                        />
+                        buttonText="Cancel"
+                        showIcon={false}
+                        textStyle="text-[1rem] font-base text-[#00A881]"
+                        textColor="text-[#e06565]"
+                        iconColor="#e06565"
+                        backgroundColor="#fff"
+                        handleClick={() => { setIsShowAddVer(false) }}
+                        customClass="static py-2 group-hover:border-white"
+                    />
                     <Button
-                            buttonText="Next"
-                            showIcon
-                            textStyle="text-[1rem] font-base text-[#00A881]"
-                            textColor="text-[#00A881]"
-                            iconColor="#00A881"
-                            backgroundColor="#fff"
-                            handleClick={()=>{setIsShowAddVer(false)}}
-                            customClass="static py-2 group-hover:border-white"
-                        />
+                        buttonText="Next"
+                        showIcon
+                        textStyle="text-[1rem] font-base text-[#00A881]"
+                        textColor="text-[#00A881]"
+                        iconColor="#00A881"
+                        backgroundColor="#fff"
+                        handleClick={handleAddVersion}
+                        customClass="static py-2 group-hover:border-white"
+                    />
                 </div>
             </div>
         </div>

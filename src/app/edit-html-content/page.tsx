@@ -49,7 +49,8 @@ const Page = () => {
         onGenerateWithAI,
         onSubmit,
         setSectionEdit,
-        handleHideBlock
+        handleHideBlock,
+        showErrorMessage
     } = useEditHTMLContent()
 
 
@@ -339,8 +340,10 @@ const Page = () => {
                                     setIsShowAddVer={setIsShowAddVer}
                                     handleAddVersion={handleAddVersion}
                                     handleChangeTextVersion={handleChangeTextVersion}
+                                    showErrorMessage={showErrorMessage}
                                 />
                             ) : null}
+
                         </div>
 
                         {/* Feedback Panel */}
