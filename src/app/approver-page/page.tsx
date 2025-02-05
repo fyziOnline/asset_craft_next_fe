@@ -273,7 +273,7 @@ const Page: FC = () => {
                             <div className='flex justify-end pr-16 items-center py-2'>
                                 <FeedBackCard
                                     isFeedbackOpen={isFeedbackOpen}
-                                    setIsFeedbackOpen={setIsFeedbackOpen} // Pass state to the feedback card
+                                    setIsFeedbackOpen={setIsFeedbackOpen} // Pass state to the feedback card 
                                 />
                             </div>
                         }
