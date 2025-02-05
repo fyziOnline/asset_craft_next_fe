@@ -328,7 +328,7 @@
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 900px) {
   .feedback-panel {
     position: fixed; /* Keeps the panel fixed in place */
     top: 77%;        /* Positions the panel in the middle vertically */
