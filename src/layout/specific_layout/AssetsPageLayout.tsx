@@ -157,7 +157,8 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
                 {paginatedGridData.map((data, index) => (
                   <div key={index}
                   >
-                    <AssetCard data={data} />
+                    <AssetCard data={data}
+                      handleClick={handleClick} />
                   </div>
                 ))}
               </div>
