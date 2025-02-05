@@ -37,11 +37,13 @@ const Home: FC = () => {
 
   const {
     isLoading,
+    isResending,
     isOtpVisible,
     emailLoginDefault,
     handleLogin,
     onChangeEmail,
     handleOtpSubmit,
+    handleResendOtp,
     onChangeOtp,
     handleCancelOtp,
     checkIsUserAuthorized
@@ -56,7 +58,7 @@ const Home: FC = () => {
   return (
     <div>
 
-      <div className="h-full flex flex-col justify-around min-h-[75vh]">
+      <div className="h-full flex flex-col justify-around min-h-[75vh] ">
         <div className="flex flex-col lg:flex-row relative items-center justify-between md:mr-[15vw] gap-9">
           <section className="text-white w-[24rem] md:w-[25rem] pad16px">
             <h1 className="text-[3.45rem] leading-[6rem] font-medium font-metric text-green-100 tracking-wide">BrandCentral<sup className="text-4xl text-white">ai</sup></h1>
@@ -130,7 +132,17 @@ const Home: FC = () => {
 
             <p className="text-[0.9rem] text-white mb-1 tracking-wider">Didn't receive the OTP?</p>
 
-            <p onClick={() => handleLogin(true)} className=" text-white pt-[1px] mb-[3%] border-b border-white inline-block leading-none cursor-pointer tracking-wide">Resend OTP </p>
+            <p
+              onClick={!isResending ? handleResendOtp : undefined}
+              className={`text-white pt-[1px] mb-[3%] inline-flex items-center gap-2 leading-none cursor-pointer tracking-wide ${!isResending ? "border-b border-white" : ""
+                }`}
+            >
+              {isResending ? (
+                <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></span>
+              ) : (
+                "Resend OTP"
+              )}
+            </p>
 
 
             <div className="flex justify-between px-[1rem] py-[.75rem]">
