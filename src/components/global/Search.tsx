@@ -120,7 +120,7 @@ const Search: React.FC<SearchProps> = ({
                 <span className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}><SearchDownArrow /></span>
             </div>
             {isOpen &&
-                <div className='absolute top-12 left-0 right-0 flex flex-col bg-white  max-h-60 overflow-y-auto shadow-search-box-shadow'>
+                <div className='absolute top-12 left-0 right-0 flex flex-col bg-white max-h-60 overflow-y-auto shadow-search-box-shadow [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full'>
                     {getFilteredOptions().map((data, index) => (
                         <div
                             key={index}
