@@ -225,9 +225,6 @@ const Page: FC = () => {
                                         </div>
                                         {isShowSave &&
                                             <div className="absolute z-[100] w-full bg-white shadow-sm flex flex-col rounded-b-md px-2 py-1">
-                                                <button onClick={() => handleSave(1)} className="h-[40px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
-                                                    <span className="text-black text-base font-normal">New Version</span>
-                                                </button>
                                                 <button onClick={() => handleSave(2)} className="h-[40px] flex items-center justify-between px-4 hover:bg-[#00A8811A] hover:text-white rounded">
                                                     <div className="text-black text-base font-normal">HTML File</div>
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
