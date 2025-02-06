@@ -86,7 +86,7 @@ const SubmitVersionModel = ({ isShowSubmitVer, setIsShowSubmitVer, handleSubmitV
 
 
                 </div>
-                <div className="w-full h-px bg-[#ebeff2] mt-4" />
+                <div className="w-full h-px bg-[#ebeff2]" />
                 <div className='flex justify-center items-center mx-[50px] mt-[15px] pb-[35px] p-6'>
                     <div className='flex items-center'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="17" viewBox="0 0 21 17" fill="none">
