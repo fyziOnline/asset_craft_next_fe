@@ -1,9 +1,10 @@
 'use client'
 import { HPE_APP_Logo, HPE_Logo } from "@/assets/icons/HPE_Logo";
-import { AboutIcon, AssetIcon, CompetedIcon, DashboardIcon, DashedSeparator, FolderIcon, SettingsIcon } from "@/assets/icons/NavIcons";
+import { AboutIcon, AssetIcon, CompetedIcon, DashboardIcon, FolderIcon, SettingsIcon } from "@/assets/icons/NavIcons";
 import NavOption from "../global/NavOption";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { LuFolderSearch } from "react-icons/lu";
 
 interface NavOptions {
     label: string
@@ -28,10 +29,10 @@ const navOption: NavOptions[] = [
         id: 'asset-prog'
     },
     {
-        label: 'Completed Assets',
-        href: '/completed-assets',
-        component: <CompetedIcon />,
-        id: 'asset-comp'
+        label: 'Assets Under Review',
+        href: '/assets-under-review',
+        component: <LuFolderSearch size={22} />,
+        id: 'asset-under'
     },
     ...(Approver === 'Approver'
         ? [
@@ -42,10 +43,16 @@ const navOption: NavOptions[] = [
                 id: 'asset-approve'
             }
         ]
-        : [])
-];
+        : []),
+        {
+            label: 'Completed Assets',
+            href: '/completed-assets',
+            component: <CompetedIcon />,
+            id: 'asset-comp'
+        },
+    ];
 
-const bottomOptions: NavOptions[] = [
+    const bottomOptions: NavOptions[] = [
     {
         label: 'Settings',
         href: '/settings',

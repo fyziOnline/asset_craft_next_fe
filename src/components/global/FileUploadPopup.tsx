@@ -96,7 +96,6 @@ const FileUploadPopup: React.FC<FileUploadPopupProps> = ({ isOpen, onClose, onFi
               Recent
             </button>
           </div>
- 
           <div className="flex items-center gap-3 absolute left-auto right-6 cursor-pointer">
             <p className="text-green-300 text-lg font-bold">Next</p>
             <span>
@@ -105,6 +104,7 @@ const FileUploadPopup: React.FC<FileUploadPopupProps> = ({ isOpen, onClose, onFi
             </svg>
             </span>
           </div>
+
         </div>
 
         <div

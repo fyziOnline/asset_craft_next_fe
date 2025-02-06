@@ -9,10 +9,11 @@ interface AssetCardProp {
   data : {
     [key:string] : string
   }
+  handleClick?: (value: any) => void; // Add handleClick prop
 }
 
 
-const AssetCard:FC<AssetCardProp> = ({data}) => {
+const AssetCard:FC<AssetCardProp> = ({ data, handleClick = () => {} }) => {
   const [isHovered,setIsHovered] = useState<boolean>(false)
   const onHover = () => {
     setIsHovered(true)
@@ -43,9 +44,10 @@ const AssetCard:FC<AssetCardProp> = ({data}) => {
 
   return (
     <div 
-      className='group p-[5%] border-2 rounded-3xl hover:bg-green-100'
+      className='group p-[5%] border-2 cursor-pointer  rounded-3xl hover:bg-green-100'
       onMouseEnter={onHover} 
       onMouseLeave={onLeave}
+      onClick={() => handleClick(data)} // Implement handleClick
     >
       <div className='flex items-start justify-between mb-[2%]'>
         <AssetIndicator hoverStatus={isHovered} asset_type={data.assetTypeIcon}/>

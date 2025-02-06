@@ -1,11 +1,11 @@
 'use client'
 
+import React, { FC } from "react"
 import { useGetAsset } from "@/hooks/useGetAsset"
 import { useOverflowHidden } from "@/hooks/useOverflowHidden"
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation"
-import React, { FC } from "react"
 
 const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Approver", "Created On", "Current Status"]
 const headerHavingSortingToggle = ["Project Name", "Created On"]
@@ -16,7 +16,9 @@ const AssetInProgress: FC = () => {
   const router = useRouter();
   const { listAssets } = useGetAsset({ assignedTo: 0 })
 
-  const assetsDisplayTable = listAssets.map((data) => ({
+  const filteredAssets = listAssets.filter((data) => data.status === "In Progress")
+
+  const assetsDisplayTable = filteredAssets.map((data) => ({
     assetTypeIcon: data.assetTypeName,
     assetName: data.assetName,
     version: data.versionName,
@@ -29,7 +31,10 @@ const AssetInProgress: FC = () => {
   }));
 
   const handleClick = (item: any) => {
+    console.log(item);
+    
     router.push(`/edit-html-content?assetID=${item.assetID}`)
+    router.push(`/edit-html-content?assetID=${item.assetID}&campaignName=${item.campaignName}&projectName=${item.projectName}&assetTypeIcon=${item.assetTypeIcon}`)
   }
 
   return (

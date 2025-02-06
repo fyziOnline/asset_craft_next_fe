@@ -178,3 +178,23 @@ export const PeopleIcon = () => {
 
   )
 }
+
+export const BackIcon = () => {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="28" height="28" rx="14" fill="#00A881" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M21 19.9385C18.9 17.6985 17.196 16.4275 15.57 16.1255C13.944 15.8235 12.531 15.771 
+    11.315 16.0135V19.5L5.5 13.5L11.315 7.5V10.822C13.514 10.841 15.405 11.9355 16.9835 13.784C18.562 15.6325 
+    19.4535 17.918 21 19.9385Z"
+        fill="white"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinejoin="round"
+        transform="translate(2, 0)"  //<!-- Moves the arrow 1px to the right -->
+      />
+    </svg>
+  )
+}

@@ -6,7 +6,7 @@ import Title from '@/components/global/Title'
 import SearchBox from "@/components/global/SearchBox";
 import FilterDropdown from '@/components/global/FilterDropdown'
 import { Pagination, Stack } from '@mui/material'
-
+import { usePathname } from 'next/navigation'
 
 interface Asset {
   [key: string]: string
@@ -30,6 +30,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const [getSelectedStatus, setGetSelectedStatus] = useState<string>('')
   const [getSelectedAssetType, setGetSelectedAssetType] = useState<string>('');
   const [type, setType] = useState<string>('');
+  const pathname = usePathname(); // Get current route
 
   const [gridCurrentPage, setGridCurrentPage] = useState<number>(1)
   const ITEM_PER_PAGE = 9
@@ -44,7 +45,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
 
   // Debugging log to check the `page` prop value
   useEffect(() => {
-  
+
   }, [page]);
 
   const toggleListType = () => {
@@ -98,6 +99,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const handleGridPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setGridCurrentPage(value)
   }
+
   return (
     <>
       <div className="flex items-center justify-between pt-[1rem] px-[1.5rem] mt-5">
@@ -126,18 +128,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
                 }}
               />
             }
-            {/* Hide Status filter for "assets-to-approve" & "completed-assets" pages */}
-            {page !== "assets-to-approve" && page !== "completed-assets" && (
-              <FilterDropdown
-                placeholder='Select Status'
-                optionLists={filterOptionsStatus}
-                customClass="bg-[#F9F9F9]"
-                selectedValue={(value) => {
-                  setGetSelectedStatus(value);
-                  setGridCurrentPage(1);
-                }}
-              />
-            )}
+
           </div>
         </div >
 
@@ -152,7 +143,8 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
                 {paginatedGridData.map((data, index) => (
                   <div key={index}
                   >
-                    <AssetCard data={data} />
+                    <AssetCard data={data}
+                      handleClick={handleClick} />
                   </div>
                 ))}
               </div>
