@@ -5,6 +5,7 @@ import SearchBox from "@/components/global/SearchBox";
 import { useDashboard } from "@/hooks/useDashboard";
 import { useAppData } from "@/context/AppContext";
 import Title from "../global/Title";
+import { BackIcon } from "@/assets/icons/AppIcons";
 
 const Header: React.FC = () => {
   const { userDetails } = useDashboard()
@@ -74,9 +75,7 @@ const Header: React.FC = () => {
         <div className="w-full flex justify-between items-center">
           <div className="flex flex-row items-center">
             <div onClick={handleReturnToPrevious} className="relative w-7 h-7 rounded-full bg-[#00A881] cursor-pointer">
-              <svg className="absolute top-1 left-[0.40rem]" width="17" height="18" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd" d="M21 17.918C18.5533 14.9313 16.3807 13.2367 14.482 12.834C12.5833 12.4313 10.7757 12.3705 9.059 12.6515V18L1 9.2725L9.059 1V6.0835C12.2333 6.1085 14.932 7.24733 17.155 9.5C19.3777 11.7527 20.6593 14.5587 21 17.918Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round" />
-              </svg>
+              <BackIcon />
             </div>
             <div className="flex gap-2 pl-4">
               <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{projectName}</span>
@@ -100,11 +99,24 @@ const Header: React.FC = () => {
       <div className="w-full flex justify-between items-center">
 
         <div className="flex flex-row items-center">
-          <div onClick={handleReturnToPrevious} className="relative w-7 h-7 rounded-full bg-[#00A881] cursor-pointer">
-            <svg className="absolute top-1 left-[0.40rem]" width="17" height="18" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M21 17.918C18.5533 14.9313 16.3807 13.2367 14.482 12.834C12.5833 12.4313 10.7757 12.3705 9.059 12.6515V18L1 9.2725L9.059 1V6.0835C12.2333 6.1085 14.932 7.24733 17.155 9.5C19.3777 11.7527 20.6593 14.5587 21 17.918Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+          <div onClick={handleReturnToPrevious} className="w-[30px] h-[30px] cursor-pointer">
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="30" height="30" rx="15" fill="#00A881" />
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M22.5 20.9385C20.165 18.6985 18.4255 17.4275 16.7615 17.1255C15.0975 16.8235 13.531 16.771 
+                12.057 17.0135V21L6 14.4545L12.057 8V11.822C14.425 11.841 16.449 12.9355 18.1165 14.784C19.784 16.6325 
+                20.7445 18.918 22.5 20.9385Z"
+                fill="white"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinejoin="round"
+                transform="translate(2, 0)"  //<!-- Moves the arrow 1px to the right -->
+              />
             </svg>
           </div>
+
           <Title classNameCustom="ml-4" titleName={getTitlePage()} />
         </div>
 

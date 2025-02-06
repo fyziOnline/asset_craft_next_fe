@@ -22,6 +22,7 @@ export const useLogin = () => {
     const otpRef = useRef("");
     const { setError } = useAppData()
     const [isResending, setIsResending] = useState(false);
+    const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
 
     useEffect(() => {
         const email_login = Cookies.get(nkey.email_login);
@@ -45,7 +46,7 @@ export const useLogin = () => {
             if (!skipLoading) {
                 setIsLoading(true);
             }
-    
+
 
             const resLogin = await ApiService.post<any>(urls.login, {
                 "email": emailRef.current
@@ -77,7 +78,7 @@ export const useLogin = () => {
         }
 
         try {
-            setIsLoading(true);
+            setIsVerifyingOtp(true); // Set OTP verification loading state
 
             const resToken = await ApiService.post<any>(urls.finalise, {
                 "twoFactorToken": loginRef.current?.twoFactorToken,
@@ -85,8 +86,8 @@ export const useLogin = () => {
             });
 
             if (resToken.isSuccess) {
-                const decodedToken:any = jwtDecode(resToken.loginToken);
-                const { UserID , UserRole } = decodedToken;
+                const decodedToken: any = jwtDecode(resToken.loginToken);
+                const { UserID, UserRole } = decodedToken;
 
                 Cookies.set(nkey.userID, UserID, { expires: 180 });
                 Cookies.set(nkey.userRole, UserRole, { expires: 180 });
@@ -112,7 +113,7 @@ export const useLogin = () => {
                 showError: true
             })
         } finally {
-            setIsLoading(false);
+            setIsVerifyingOtp(false);
         }
     }
 
@@ -129,7 +130,7 @@ export const useLogin = () => {
         otpRef.current = ""
     }
 
-    const checkIsUserAuthorized = ():boolean => {
+    const checkIsUserAuthorized = (): boolean => {
         const accessToken = Cookies.get(nkey.auth_token);
         return !!accessToken;
     }
@@ -137,6 +138,7 @@ export const useLogin = () => {
     return {
         emailLoginDefault,
         isLoading,
+        isVerifyingOtp,
         isResending,
         isOtpVisible,
         handleLogin,
