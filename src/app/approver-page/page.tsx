@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, Suspense, useMemo, useState } from 'react';
+import { FC, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
@@ -183,6 +183,29 @@ const Page: FC = () => {
         }))
     }, [versionSelected])
 
+    const useClickOutside = (handler: () => void) => {
+        const ref = useRef<HTMLDivElement | null>(null);
+
+        useEffect(() => {
+            const handleClickOutside = (event: MouseEvent) => {
+                if (ref.current && !ref.current.contains(event.target as Node)) {
+                    handler();
+                }
+            };
+
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [handler]);
+
+        return ref;
+    };
+
+    const dropdownRef = useClickOutside(() => {
+        setShowSave(false)
+    });
+
     return (
         <>
             <Suspense>
@@ -218,7 +241,7 @@ const Page: FC = () => {
 
                                 <div className='flex gap-4'>
 
-                                    <div className='relative w-[150px] bg-white shadow-sm rounded'>
+                                    <div className='relative w-[150px] bg-white shadow-sm rounded' ref={dropdownRef}>
                                         <div onClick={() => { setShowSave(!isShowSave) }} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
                                             <p className='text-base px-2'>Download</p>
                                             <span className={`cursor-pointer transition-transform ${isShowSave ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
