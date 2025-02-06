@@ -41,6 +41,8 @@ const Header: React.FC = () => {
       }
     } else if (pathname === "/asset-in-progress") {
       return "Asset In Progress"
+    } else if (pathname === "/assets-under-review") {
+      return "Assets Under Review"
     } else if (pathname === "/completed-assets") {
       return "Completed Assets"
     } else if (pathname === "/assets-to-approve") {

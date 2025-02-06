@@ -100,9 +100,6 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
     setGridCurrentPage(value)
   }
 
-  const hideStatusFilter = pathname.includes("assets-to-approve") || pathname.includes("completed-assets"); // Condition to hide filter
-
-
   return (
     <>
       <div className="flex items-center justify-between pt-[1rem] px-[1.5rem] mt-5">
@@ -131,18 +128,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
                 }}
               />
             }
-            {/* Hide Status filter if the path is "assets-to-approve" or "completed-assets" */}
-            {!hideStatusFilter && (
-              <FilterDropdown
-                placeholder='Select Status'
-                optionLists={filterOptionsStatus}
-                customClass="bg-[#F9F9F9]"
-                selectedValue={(value) => {
-                  setGetSelectedStatus(value);
-                  setGridCurrentPage(1);
-                }}
-              />
-            )}
+
           </div>
         </div >
 
