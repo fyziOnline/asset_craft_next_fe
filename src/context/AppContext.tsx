@@ -52,7 +52,7 @@ const APP_DATA: AppData = {
 const ERROR_APP: ErrorData = {
     status: 0,
     message: "",
-    showError: false
+    showError: false,
 }
 
 // Create a provider component

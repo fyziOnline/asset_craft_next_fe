@@ -55,7 +55,7 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({ title = "Error" }) => {
             router.push("/");
         } else {
             resetError();
-            router.back();
+            // router.back();
         }
     }, [isAuthError, clearCookies, resetError, router]);
 
