@@ -54,6 +54,7 @@ const Page: FC = () => {
         handleRemoveFile,
         setIsReAssignSuccessFull,
         approveAsset,
+        canReassign,
         approvalDetails,
         reAssignLoading,
         eventInputComment,
@@ -430,10 +431,10 @@ const Page: FC = () => {
                                 <Button
                                     buttonText='Submit'
                                     handleClick={handleReAssignToEditor}
-                                    disabled={reAssignLoading}
+                                    disabled={!canReassign || reAssignLoading}
                                     showIcon={false}
                                     customClass={`text-white px-8 py-1 rounded-full font-medium`}
-                                    backgroundColor={`${!reAssignLoading ? "bg-green-300" : "bg-[#B1B1B1]"}`}
+                                    backgroundColor={`${ canReassign ? "bg-green-300" : "bg-[#B1B1B1]"}`}
                                 />
 
                             </div>

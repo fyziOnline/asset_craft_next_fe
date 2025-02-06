@@ -25,6 +25,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
     const [reAssignLoading, setReAssignLoading] = useState<boolean>(false)
     const [loadingApproval,setLoadingApproval] = useState<boolean>(false)
     const [isReAssignSuccessFull, setIsReAssignSuccessFull] = useState<boolean>(false)
+    const [canReassign,setCanReassign] = useState<boolean>(false)
     const {setError} = useAppData()
     const [approvalDetails,setApprovalDetails] = useState<AssetApprovalResponse>(
         {
@@ -89,6 +90,8 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
             ...pre,
             comment : e.target.value
         }))
+        e.target.value.length > 0 ? 
+            setCanReassign(true) : setCanReassign(false)
     },500)
 
     const handleRemoveFile = () => {
@@ -122,12 +125,14 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
     const reAssignAsset = async () => {
         try {
             setReAssignLoading(true)
-
-            const resRemoteFileUpload = await uploadReAssignFile(approvalDetails)
-
-            if(!resRemoteFileUpload?.status) {
-                throw new ApiError('Uploading file failed', 500, {});
+            setCanReassign(false)
+            if(reAssignAssetDetails.fileName !== ""  ) {
+                const resRemoteFileUpload = await uploadReAssignFile(approvalDetails)
+                if(!resRemoteFileUpload?.status) {
+                    throw new ApiError('Uploading file failed', 500, {});
+                }
             }
+
             const resReAssignment = await updateAssetReassign (approvalDetails)
             if (resReAssignment?.status) { 
                 setIsReAssignSuccessFull(true)
@@ -138,10 +143,11 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
             setError({
                 status: apiError.statusCode,
                 message: apiError.message,
-                showError: true
+                showError: true,
             })
         } finally {
             setReAssignLoading(false)
+            setCanReassign(true)
         }
         
     }
@@ -220,6 +226,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         isReAssignSuccessFull,
         reAssignLoading,
         approvalDetails,
+        canReassign,
         setIsReAssignSuccessFull,
         handleUploadFile,
         handleRemoveFile,
