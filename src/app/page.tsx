@@ -39,6 +39,7 @@ const Home: FC = () => {
     isLoading,
     isResending,
     isOtpVisible,
+    isVerifyingOtp,
     emailLoginDefault,
     handleLogin,
     onChangeEmail,
@@ -148,7 +149,7 @@ const Home: FC = () => {
             <div className="flex justify-between px-[1rem] py-[.75rem]">
 
               <Button
-                buttonText={isLoading ? "Verifying OTP..." : "Submit OTP"}
+                buttonText={isVerifyingOtp ? "Verifying OTP..." : "Submit OTP"}
                 showIcon={false}
                 textStyle='text-[1rem] font-medium text-[#00A881] tracking-wide'
                 backgroundColor={"bg-custom-gradient-green"}
