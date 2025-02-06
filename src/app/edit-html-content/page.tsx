@@ -16,7 +16,7 @@ import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { BiMessageAltError } from "react-icons/bi";
 import FeedBackCard from '@/components/cards/FeedBackCard';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
-
+import { FaPlus } from "react-icons/fa";
 
 
 const Page = () => {
@@ -75,7 +75,7 @@ const Page = () => {
         const params = new URLSearchParams(window.location.search);
         const assetType = params.get("assetTypeIcon");
         setAssetType(assetType as string);
-    }, [])    
+    }, [])
 
     const htmlOtherAsset = () => {
         let htmlContent = '';
@@ -128,7 +128,7 @@ const Page = () => {
                 htmlContent += item.blockHTMLGenerated ?? "";
             }
         });
-    
+
         return versionSelected.layoutHTMLGenerated?.replace("[(blocks)]", htmlContent) || '<div>An error occurred, please try again later.</div>';
     };
 
@@ -255,7 +255,6 @@ const Page = () => {
                         <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
                     </div> */}
                 </div>
-
                 {/* Edit section  */}
                 <div className="min-h-[82vh] border-t border-solid">
                     {/* Edit section header  */}
@@ -268,9 +267,9 @@ const Page = () => {
                                 </div>
                                 {isShowSave &&
                                     <div className="absolute z-[100] w-full bg-white shadow-sm flex flex-col rounded-b-md px-2 py-1">
-                                        <button onClick={() => handleSave(1)} className="h-[40px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
+                                        {/* <button onClick={() => handleSave(1)} className="h-[40px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
                                             <span className="text-black text-base font-normal">New Version</span>
-                                        </button>
+                                        </button> */}
                                         <button onClick={() => handleSave(2)} className="h-[40px] flex items-center justify-between px-4 hover:bg-[#00A8811A] hover:text-white rounded">
                                             <div className="text-black text-base font-normal">HTML File</div>
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -298,7 +297,7 @@ const Page = () => {
 
                     <div className='flex justify-between pr-16 items-center'>
 
-                        <div className='pt-2 pl-14'>
+                        <div className='pt-2 pl-14 flex items-center gap-3'>
                             {versionList.map((item, index) => {
                                 return (
                                     <button
@@ -309,8 +308,11 @@ const Page = () => {
                                     </button>)
                             })}
 
-                        </div>
+                            <div onClick={() => handleSave(1)} className='cursor-pointer border w-8 h-8 rounded-full flex items-center justify-center'>
+                                <FaPlus color='#01a982' />
+                            </div>
 
+                        </div>
 
                         {/* message logo  please provide ! to show icon for isFeedbackOpen && in feedbackcard.tsx*/}
                         {(approvalDetails.comments?.length > 0 || approvalDetails.fileUrl?.length > 0) && <div className="">
@@ -382,14 +384,14 @@ const Page = () => {
                                 <div className="h-auto overflow-y-auto p-4 space-y-6 ">
                                     {/* comment 1 */}
                                     <div>
-                                    <p className="text-sm text-gray-500 mb-2">
-                                                {approvalDetails.modifiedOn
-                                                    ? `${new Date(approvalDetails.modifiedOn).toISOString().split("T")[0]} - ${new Date(approvalDetails.modifiedOn).toLocaleTimeString("en-US", {
-                                                        hour: "2-digit",
-                                                        minute: "2-digit",
-                                                    })}`
-                                                    : "N/A"}
-                                            </p>
+                                        <p className="text-sm text-gray-500 mb-2">
+                                            {approvalDetails.modifiedOn
+                                                ? `${new Date(approvalDetails.modifiedOn).toISOString().split("T")[0]} - ${new Date(approvalDetails.modifiedOn).toLocaleTimeString("en-US", {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                })}`
+                                                : "N/A"}
+                                        </p>
                                         {/* <p className="text-sm text-gray-500 mb-2">{approvalDetails.modifiedOn}, {approvalDetails.modifiedBy}</p> */}
                                         <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
                                             <div className='overflow-y-auto max-h-40'>
