@@ -6,9 +6,14 @@ import { useDashboard } from "@/hooks/useDashboard";
 import { useAppData } from "@/context/AppContext";
 import Title from "../global/Title";
 import { BackIcon } from "@/assets/icons/AppIcons";
+import { useEffect } from "react";
 
 const Header: React.FC = () => {
-  const { userDetails } = useDashboard()
+  const { userDetails, getUserDetails } = useDashboard()
+
+  useEffect(() => {
+    getUserDetails()
+  })
 
   const pathname = usePathname()
 

@@ -41,13 +41,13 @@ export const useDashboard = () => {
 
     const userRole = Cookies.get(nkey.userRole)
 
-    useEffect(() => {
-        getListProjects()
-        getAssetTypes()
-        getUserDetails()
-        getAssetAllAtDashboard()
-        getPendingApproval()
-    }, [])
+    // useEffect(() => {
+    //     getListProjects()
+    //     getAssetTypes()
+    //     getUserDetails()
+    //     getAssetAllAtDashboard()
+    //     getPendingApproval()
+    // }, [])
 
     const getListProjects = async () => {
         try {
@@ -361,6 +361,11 @@ export const useDashboard = () => {
         handleChangeAssetDetails,
         userDetails,
         pendingApproval,
-        userRole
+        userRole,
+        getListProjects,
+        getAssetTypes,
+        getUserDetails,
+        getAssetAllAtDashboard,
+        getPendingApproval,
     };
 };
