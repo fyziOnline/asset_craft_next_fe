@@ -16,6 +16,8 @@ import EditContentModel from '../edit-html-content/components/EditContentModel';
 import ShadowDomContainer from '../edit-html-content/components/ShadowDomContainer';
 import FeedBackCard from '@/components/cards/FeedBackCard';
 import { PeopleIcon } from '@/assets/icons/AppIcons';
+import PopupCard from '@/components/global/Popup/PopupCard';
+
 
 const Page: FC = () => {
     const { contextData } = useAppData();
@@ -45,7 +47,7 @@ const Page: FC = () => {
         setIsShowModelEdit,
         setIsShowAddVer,
         setSectionEdit,
-        handleHideBlock
+        handleHideBlock,
     } = useEditHTMLContent()
 
     const {
@@ -398,49 +400,33 @@ const Page: FC = () => {
 
             {
                 showUploadPopup && !isReAssignSuccessFull &&
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="w-[46%] bg-white rounded-xl shadow-lg">
-                        <div className="flex justify-between items-center p-6 border-b">
-                            <h1 className="text-xl font-bold">Enter Your Feedbacks</h1>
-                            <button
-                                className="text-gray-500 hover:text-gray-700 transition-colors"
-                            >
-                                <MdOutlineClose color='#00A881'
-                                    onClick={() => {
-                                        setShowUploadPopup(false)
-                                        setIsReAssignSuccessFull(false)
-                                    }}
-                                    className="w-6 h-6" />
-                            </button>
-                        </div>
-
-                        <div className="p-6">
-                            <p className="text-lg font-semibold text-fileupload-text mb-4">Attach your file</p>
-                            <DragAndDrop onFileSelect={(file) => { handleUploadFile(file) }} onRemoveSelectedFile={handleRemoveFile} showButtons={false} />
-                        </div>
-
-                        <div className="px-6 pb-6">
-                            <p className="text-lg font-semibold text-fileupload-text mb-4">Enter your comments here</p>
-                            <textarea
-                                placeholder="Type your comments"
-                                onChange={(e) => { eventInputComment(e) }}
-                                className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none "
-                            />
-                            <div className="flex justify-end">
-
-                                <Button
-                                    buttonText='Submit'
-                                    handleClick={handleReAssignToEditor}
-                                    disabled={!canReassign || reAssignLoading}
-                                    showIcon={false}
-                                    customClass={`text-white px-8 py-1 rounded-full font-medium`}
-                                    backgroundColor={`${ canReassign ? "bg-green-300" : "bg-[#B1B1B1]"}`}
-                                />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <PopupCard
+                    headerTitle="Enter Your Feedbacks"
+                    onClose={() => {
+                        setShowUploadPopup(false);
+                        setIsReAssignSuccessFull(false);
+                    }}
+                    submitbutton={
+                        <Button
+                            buttonText='Submit'
+                            handleClick={handleReAssignToEditor}
+                            disabled={!canReassign || reAssignLoading}
+                            showIcon={false}
+                            customClass="text-white px-8 py-1 rounded-full font-medium"
+                            backgroundColor={canReassign ? "bg-green-300" : "bg-[#B1B1B1]"}
+                        />
+                    }
+                >
+                    <p className="text-lg font-semibold text-fileupload-text mb-4">Attach your file</p>
+                    <DragAndDrop onFileSelect={handleUploadFile} onRemoveSelectedFile={handleRemoveFile} showButtons={false} />
+                    
+                    <p className="text-lg font-semibold text-fileupload-text mb-4">Enter your comments here</p>
+                    <textarea
+                        placeholder="Type your comments"
+                        onChange={eventInputComment}
+                        className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none "
+                    />
+                </PopupCard>
             }
         </>
     );
