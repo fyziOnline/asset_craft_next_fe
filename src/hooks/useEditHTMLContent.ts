@@ -1,4 +1,5 @@
-import generatePDF, { Options } from "react-to-pdf";
+// import generatePDF, { Options } from "react-to-pdf";
+// need to remove react-to-pdf
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppData } from '@/context/AppContext';
 import { ApiService } from "@/lib/axios_generic";
@@ -11,6 +12,8 @@ import { ApproverProps } from "@/types/approval";
 import { Option } from "@/components/global/Search";
 import { useLoading } from "@/components/global/Loading/LoadingContext";
 import { useGenerateTemplate } from "./useGenerateTemplate";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export const useEditHTMLContent = () => {
     const router = useRouter();
@@ -135,9 +138,54 @@ export const useEditHTMLContent = () => {
         }
     }
 
-    const getTargetElement = () => document.getElementById("container");
 
-    const handleSave = (type: number) => {
+    // code below is older methode to generate pdf ---------->
+
+    // const getTargetElement = (): HTMLElement => {
+    //     const containerDiv = document.createElement('div')
+    //     containerDiv.id = 'pdf-container';
+    //     containerDiv.innerHTML = versionSelected.htmlGenerated
+    //     document.body.appendChild(containerDiv)
+    //     return containerDiv
+    //   }
+    
+    // const cleanupElement = (element: HTMLElement) => {
+    //   if (element && element.parentNode) {
+    //     element.parentNode.removeChild(element);
+    //   }
+    // }
+
+    // const handleSave = async (type: number) => {
+    //     if (type === 1) {
+    //         setIsShowAddVer(true)
+    //     } else {
+    //         if (typeof window !== 'undefined') {
+    //             if (type === 2) {
+    //                 window.open(versionSelected.htmlFileURL, '_blank', 'noopener,noreferrer');
+    //             } else if (type === 3) {
+    //                 window.open(versionSelected.zipFileURL, '_blank', 'noopener,noreferrer');
+    //             }  else if (type === 4) {
+    //                 await new Promise(resolve => setTimeout(resolve, 1000))
+    //                 const options: Options = {
+    //                     filename: `${contextData.AssetHtml.assetName as string} - ${versionSelected.versionName as string}.pdf`,
+    //                     page: {
+    //                         margin: { left: -20, right: -20, top: 0, bottom: 0 }
+    //                     },
+    //                 }
+    //                 try {
+    //                     await generatePDF(getTargetElement,options)
+    //                 } catch (error) {
+    //                     console.error('Error generating PDF:', error);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     setShowSave(false)
+    // }
+
+    // ------> 
+    
+    const handleSave = async (type: number) => {
         if (type === 1) {
             setIsShowAddVer(true)
         } else {
@@ -146,19 +194,38 @@ export const useEditHTMLContent = () => {
                     window.open(versionSelected.htmlFileURL, '_blank', 'noopener,noreferrer');
                 } else if (type === 3) {
                     window.open(versionSelected.zipFileURL, '_blank', 'noopener,noreferrer');
-                } else if (type === 4) {
-                    const options: Options = {
-                        filename: `${contextData.AssetHtml.assetName as string} - ${versionSelected.versionName as string}.pdf`,
-                        page: {
-                            margin: { left: -20, right: -20, top: 0, bottom: 0 }
-                        },
-                    };
-                    generatePDF(getTargetElement, options);
-                }
+                }  else if (type === 4) {
+                    const element = document.createElement('div')
+                    element.innerHTML = versionSelected.htmlGenerated
+                    document.body.appendChild(element)
+                    try {
+                        await new Promise(resolve => setTimeout(resolve,1000))
+                        const canvas = await html2canvas(element,{
+                            scale : 2,
+                            useCORS : true,
+                            logging : true
+                        })
+                        const pdf = new jsPDF('p','mm','a4')
+                        const imgData = canvas.toDataURL('image/png')
+                        const pdfWidth = pdf.internal.pageSize.getWidth()
+                        const pdfHeight = (canvas.height * pdfWidth) / canvas.width
+
+                        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+                        pdf.save(`${contextData.AssetHtml.assetName} - ${versionSelected.versionName}.pdf`)
+
+                        console.log('PDF Generated')
+                    } catch (err) {
+                      console.error('Error generating PDF:', err)
+                    } finally {
+                      if (element.parentNode) {
+                        element.parentNode.removeChild(element)
+                      }
+                    
+                     }
             }
         }
         setShowSave(false)
-    }
+    }}
 
     const handleChangeTextVersion = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         refVersion.current = event.target.value;

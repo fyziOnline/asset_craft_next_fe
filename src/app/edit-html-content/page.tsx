@@ -78,6 +78,9 @@ const Page = () => {
     }, [])
 
     const htmlOtherAsset = () => {
+        console.log('====================================');
+        console.log('selected version :',versionSelected);
+        console.log('====================================');
         let htmlContent = '';
         versionSelected.assetVersionBlocks.forEach((item) => {
             if ((item.blockData !== "{}" && item.blockData !== "" && item.blockHTMLGenerated)) {
