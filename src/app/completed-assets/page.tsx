@@ -1,5 +1,5 @@
 'use client'
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { useDashboard } from "@/hooks/useDashboard"
 import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation";
@@ -8,7 +8,11 @@ import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 
 const CompletedAssets: FC = () => {
   const router = useRouter()
-  const { dashboardAssets } = useDashboard()
+  const { dashboardAssets, getAssetAllAtDashboard } = useDashboard()
+
+  useEffect(() => {
+    getAssetAllAtDashboard()
+  },[])
 
   const completedAssets = dashboardAssets.filter(asset => asset.status === "Completed")
 
