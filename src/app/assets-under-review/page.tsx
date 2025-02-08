@@ -1,30 +1,33 @@
 "use client"
 
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import AssetsPageLayout from '@/layout/specific_layout/AssetsPageLayout'
-import { useGetAsset } from '@/hooks/useGetAsset'
 import { formatDate } from '@/utils/formatDate'
 import { useRouter } from 'next/navigation'
+import { useDashboard } from '@/hooks/useDashboard'
 
 const AssetOnReviw: FC = () => {
     const router = useRouter()
-    const { listAssets } = useGetAsset({ assignedTo: 0 })
+    const { getAssetAllAtDashboard, dashboardAssets } = useDashboard()
 
-    const filteredAssets = listAssets.filter((data) => data.status === "On Review")
+    useEffect(() => {
+        getAssetAllAtDashboard()
+    },[])
+
+    const filteredAssets = dashboardAssets.filter((data) => data.status === "On Review")
 
     const assetsDisplayTable = filteredAssets.map((data) => ({
         assetTypeIcon: data.assetTypeName,
         assetName: data.assetName,
-        version: data.versionName,
         campaignName: data.campaignName,
-        projectName: data.projectName,
-        assignedTo: data.approverName || "",
+        projectName: data.project,
+        assignedTo: data.approvedBy  || "",
         createdOn: formatDate(data.createdOn),
         currentStatus: data.status,
         assetID: data.assetID,
     }))
 
-    const tableHeading = ["Asset Name", "Asset Version", "Campaign Name", "Project Name", "Approver", "Created On", "Current Status"]
+    const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Approver", "Created On", "Current Status"]
     const headerHavingSortingToggle = ["Project Name", "Created On"]
     const hiddenFields = ["assetID"]
 
@@ -36,7 +39,7 @@ const AssetOnReviw: FC = () => {
 
     return (
         <div>
-            <AssetsPageLayout 
+            <AssetsPageLayout
                 hiddenFields={hiddenFields}
                 campaign_data={assetsDisplayTable}
                 tableHeadings={tableHeading}

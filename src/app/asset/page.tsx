@@ -18,7 +18,13 @@ const Page: FC = () => {
     setType(urlParams.get('type') as AssetType);
   }, []);
 
-  const { dashboardAssets } = useDashboard()
+  const { dashboardAssets, getAssetAllAtDashboard } = useDashboard()
+
+  useEffect(() => {
+    getAssetAllAtDashboard()
+  }, [])
+
+
   const { assetData } = processDashboardAssets(dashboardAssets, type)
 
   const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status", "Approved On", "Approved By"]
