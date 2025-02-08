@@ -1,7 +1,6 @@
 import { UserIcon } from "@/assets/icons/AppIcons"
 import Link from 'next/link'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
-import SearchBox from "@/components/global/SearchBox";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useDashboard } from "@/hooks/useDashboard";
 import { useAppData } from "@/context/AppContext";
 import Title from "../global/Title";
@@ -13,11 +12,10 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     getUserDetails()
-  })
+  },[])
 
   const pathname = usePathname()
 
-  const params = useParams()
   const router = useRouter()
   const { contextData, setContextData } = useAppData()
 
