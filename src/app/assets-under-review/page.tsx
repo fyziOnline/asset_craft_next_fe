@@ -21,21 +21,19 @@ const AssetOnReviw: FC = () => {
         assetName: data.assetName,
         campaignName: data.campaignName,
         projectName: data.project,
-        assignedTo: data.approvedBy  || "",
         createdOn: formatDate(data.createdOn),
         currentStatus: data.status,
         assetID: data.assetID,
     }))
 
-    const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Approver", "Created On", "Current Status"]
+    const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
     const headerHavingSortingToggle = ["Project Name", "Created On"]
     const hiddenFields = ["assetID"]
 
     const handleClick = (item: any) => {
         router.push(`/edit-html-content?assetID=${item.assetID}`)
         router.push(`/edit-html-content?assetID=${item.assetID}&campaignName=${item.campaignName}&projectName=${item.projectName}&assetTypeIcon=${item.assetTypeIcon}`)
-    }
-
+    }    
 
     return (
         <div>
@@ -44,7 +42,7 @@ const AssetOnReviw: FC = () => {
                 campaign_data={assetsDisplayTable}
                 tableHeadings={tableHeading}
                 headersHavingToggle={headerHavingSortingToggle}
-                columnWidthsTable={["repeat(7, 1fr)"]}
+                columnWidthsTable={["repeat(5, 1fr)"]}
                 handleClick={handleClick}
                 page=""
             />

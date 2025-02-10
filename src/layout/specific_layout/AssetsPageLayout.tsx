@@ -25,6 +25,7 @@ interface AssetsPageProps {
 }
 
 const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, hiddenFields = [], page, handleClick, columnWidthsTable = [], isIconRequired = true }) => {
+  
   const [isList, setIsList] = useState<Boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [getSelectedStatus, setGetSelectedStatus] = useState<string>('')
@@ -69,7 +70,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
 
   const filteredData = useMemo(() => {
     if (!searchQuery.trim() && (getSelectedStatus === 'All' || !getSelectedStatus) && (getSelectedAssetType === 'All' || !getSelectedAssetType)) {
-      return campaign_data;
+      return campaign_data
     }
 
     return campaign_data.filter((item) => {

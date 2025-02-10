@@ -25,7 +25,8 @@ const Page: FC = () => {
   }, [])
 
 
-  const { assetData } = processDashboardAssets(dashboardAssets, type)
+  const { assetData } = processDashboardAssets(dashboardAssets, type)  
+
 
   const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status", "Approved On", "Approved By"]
   const arrowshowItems = ["Project Name", "Created On", "Approved On"]
