@@ -136,14 +136,15 @@ const mapAssetsByType = (assets:DashboardAsset[],type:AssetType) => {
     if (assetName === type?.toLocaleLowerCase()) {
       result.assetData.push({
         ...mappedData,
-        approvedOn : data.approvedOn,
+        approvedOn : data.approvedOn ? formatDate(data.approvedOn) : "",
         approvedBy : data.approvedBy
     })
     } 
+
     if (type?.toLocaleLowerCase() === 'all projects') {
         result.assetData.push({
             ...mappedData,
-            approvedOn : data.approvedOn,
+            approvedOn : data.approvedOn ? formatDate(data.approvedOn) : "",
             approvedBy : data.approvedBy
         })
     }
