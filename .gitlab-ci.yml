@@ -15,6 +15,6 @@ deploy_staging:
     - echo 'Staging Code Pipeline Execution completed successfully'
   environment:
     name: staging
-    url: https://brandcentral.strat-staging.com
+    url: https://brandlabai.strat-staging.com
   only:
     - main
