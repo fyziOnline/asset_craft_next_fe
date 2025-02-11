@@ -235,7 +235,7 @@ export const useEditHTMLContent = () => {
 
     const onSubmit = async (itemSelected: Option) => {
         try {
-            setShowLoading(true)
+            //setShowLoading(true)
             const resSubmit = await ApiService.post<any>(urls.approval_assetApproval_SubmitForApproval, {
                 "assetID": versionSelected.assetID,
                 "assetVersionID": versionSelected.assetVersionID,
@@ -243,8 +243,11 @@ export const useEditHTMLContent = () => {
             })
 
             if (resSubmit.isSuccess) {
-                setIsShowSubmitVer(false)
-                router.replace("/dashboard")
+                // Delay closing the modal for 3 seconds
+                setTimeout(() => {
+                    setIsShowSubmitVer(false);
+                    // router.replace("/dashboard") // Uncomment if you want to navigate after closing
+                }, 1000);
             } else {
                 alert("Submit failed, please try again later.");
             }

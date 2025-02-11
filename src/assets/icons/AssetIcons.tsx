@@ -127,14 +127,14 @@ export const CloseIcon: FC<IconProps> = ({
           d="M18.8428 6.97705L6.84277 18.9771"
           stroke={color}
           strokeWidth="2"
-          stroke-linecap="round"
+          strokeLinecap="round"
           strokeLinejoin="round" />
         <path
           id="Vector_2"
           d="M6.84277 6.97705L18.8428 18.9771"
           stroke={color}
           strokeWidth="2"
-          stroke-linecap="round"
+          strokeLinecap="round"
           strokeLinejoin="round" />
       </g>
     </svg>
