@@ -33,9 +33,7 @@ const AssetInProgress: FC = () => {
     assetID: data.assetID,
   }));
 
-  const handleClick = (item: any) => {
-    console.log(item);
-    
+  const handleClick = (item: any) => {  
     router.push(`/edit-html-content?assetID=${item.assetID}`)
     router.push(`/edit-html-content?assetID=${item.assetID}&campaignName=${item.campaignName}&projectName=${item.projectName}&assetTypeIcon=${item.assetTypeIcon}`)
   }

@@ -165,8 +165,6 @@ export const useEditHTMLContent = () => {
     };
 
     const handleAddVersion = async () => {
-        console.log('typed version name===', refVersion.current);
-
         try {
             if (refVersion.current !== "") {
                 setShowErrorMessage(false)
@@ -237,7 +235,7 @@ export const useEditHTMLContent = () => {
 
     const onSubmit = async (itemSelected: Option) => {
         try {
-            setShowLoading(true)
+            //setShowLoading(true)
             const resSubmit = await ApiService.post<any>(urls.approval_assetApproval_SubmitForApproval, {
                 "assetID": versionSelected.assetID,
                 "assetVersionID": versionSelected.assetVersionID,
@@ -245,8 +243,11 @@ export const useEditHTMLContent = () => {
             })
 
             if (resSubmit.isSuccess) {
-                setIsShowSubmitVer(false)
-                router.replace("/dashboard")
+                // Delay closing the modal for 3 seconds
+                setTimeout(() => {
+                    setIsShowSubmitVer(false);
+                    // router.replace("/dashboard") // Uncomment if you want to navigate after closing
+                }, 1000);
             } else {
                 alert("Submit failed, please try again later.");
             }
@@ -296,7 +297,28 @@ export const useEditHTMLContent = () => {
         } finally {
             setShowLoading(false)
         }
+
     }
+
+    const handleDelete = async (assetVersionID: string) => {
+        try {
+            const res = await ApiService.delete<any>(`${urls.asset_verdion_delete}?assetVersionID=${assetVersionID}`)
+
+            if(res.isSuccess) {
+                setVersionList(prevList => prevList.filter(item => item.assetVersionID !== assetVersionID));
+            }
+
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        }
+
+    }
+
 
     return {
         sectionEdit,
@@ -321,6 +343,8 @@ export const useEditHTMLContent = () => {
         onSubmit,
         setSectionEdit,
         handleHideBlock,
-        showErrorMessage
+        showErrorMessage,
+        handleDelete
     };
-};
+
+}

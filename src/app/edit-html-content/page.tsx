@@ -8,16 +8,15 @@ import { useRouter } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
-import { UserIcon } from "@/assets/icons/AppIcons"
-import Link from 'next/link'
 import SubmitVersionModel from './components/SubmitVersionModel';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { BiMessageAltError } from "react-icons/bi";
 import FeedBackCard from '@/components/cards/FeedBackCard';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 import { FaPlus } from "react-icons/fa";
 import { formatDate } from '@/utils/formatDate';
+import { MdOutlineDelete } from "react-icons/md";
+import ConfirmationModal from '@/components/global/ConfirmationModal';
 
 
 const Page = () => {
@@ -26,6 +25,7 @@ const Page = () => {
 
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
     const [assetType, setAssetType] = useState<string>("")
+    const [isConfirmModel, setIsConfirmModel] = useState<boolean>(false)
 
     useOverflowHidden()
     const {
@@ -51,7 +51,8 @@ const Page = () => {
         onSubmit,
         setSectionEdit,
         handleHideBlock,
-        showErrorMessage
+        showErrorMessage,
+        handleDelete
     } = useEditHTMLContent()
 
 
@@ -79,7 +80,19 @@ const Page = () => {
         setAssetType(assetType as string);
     }, [])
 
-    console.log("versionSelected", versionSelected);
+    const openConfirmationModal = () => {
+        setIsConfirmModel(true)
+    }
+
+    const closeConfirmationModal = () => {
+        setIsConfirmModel(false)
+    }
+
+    const handleToConfirmDelete = () => {
+        handleDelete(versionSelected.assetVersionID)
+        closeConfirmationModal()
+    }
+
 
     const htmlOtherAsset = () => {
         let htmlContent = '';
@@ -210,8 +223,8 @@ const Page = () => {
                                     data-id="101"
                                     className="stroke-gray-300 hover:stroke-green-300 transition-colors duration-200"
                                 >
-                                    <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M30.0625 4.06433C30.709 3.41787 31.5858 3.05469 32.5 3.05469C33.4142 3.05469 34.291 3.41787 34.9375 4.06433C35.584 4.7108 35.9471 5.58759 35.9471 6.50183C35.9471 7.41607 35.584 8.29287 34.9375 8.93933L19.5 24.3768L13 26.0018L14.625 19.5018L30.0625 4.06433Z" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M17.875 6.5H6.5C5.63805 6.5 4.8114 6.84241 4.2019 7.4519C3.59241 8.0614 3.25 8.88805 3.25 9.75V32.5C3.25 33.362 3.59241 34.1886 4.2019 34.7981C4.8114 35.4076 5.63805 35.75 6.5 35.75H29.25C30.112 35.75 30.9386 35.4076 31.5481 34.7981C32.1576 34.1886 32.5 33.362 32.5 32.5V21.125" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M30.0625 4.06433C30.709 3.41787 31.5858 3.05469 32.5 3.05469C33.4142 3.05469 34.291 3.41787 34.9375 4.06433C35.584 4.7108 35.9471 5.58759 35.9471 6.50183C35.9471 7.41607 35.584 8.29287 34.9375 8.93933L19.5 24.3768L13 26.0018L14.625 19.5018L30.0625 4.06433Z" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </div>
 
@@ -222,12 +235,12 @@ const Page = () => {
                                     Hide
                                 </span>
                                 <svg
-                                    clip-rule="evenodd"
+                                    clipRule="evenodd"
                                     width="33"
                                     height="33"
-                                    fill-rule="evenodd"
-                                    stroke-linejoin="round"
-                                    stroke-miterlimit="2"
+                                    fillRule="evenodd"
+                                    strokeLinejoin="round"
+                                    strokeMiterlimit="2"
                                     viewBox="0 0 64 64"
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="stroke-gray-300 hover:stroke-green-300 fill-gray-300 hover:fill-green-300 transition-colors duration-200"
@@ -247,10 +260,10 @@ const Page = () => {
                                     <span className="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-300 text-white text-xs rounded py-1 px-2 whitespace-nowrap z-50">
                                         Show
                                     </span>
-                                    <svg clipRule="evenodd" width="35" height="35" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                                    <svg clipRule="evenodd" width="35" height="35" fillRule="evenodd" strokeLinejoin="round" strokeMiterlimit="2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                                         <path d="m-960-256h1280v800h-1280z" fill="none" />
                                         <path d="m13.673 10.345-3.097 3.096 39.853 39.854 3.097-3.097z" fill="#cfcfcf" stroke="#cfcfcf" />
-                                        <path d="m17.119 19.984 2.915 2.915c-3.191 2.717-5.732 6.099-7.374 9.058l-.005.01c4.573 7.646 11.829 14.872 20.987 13.776 2.472-.296 4.778-1.141 6.885-2.35l2.951 2.95c-4.107 2.636-8.815 4.032-13.916 3.342-9.198-1.244-16.719-8.788-21.46-17.648 2.226-4.479 5.271-8.764 9.017-12.053zm6.63-4.32c2.572-1.146 5.355-1.82 8.327-1.868.165-.001 2.124.092 3.012.238.557.092 1.112.207 1.659.350 8.725 2.273 15.189 10.054 19.253 17.653-1.705 3.443-3.938 6.398-6.601 9.277l-2.827-2.827c1.967-2.12 3.622-4.161 4.885-6.45 0 0-1.285-2.361-2.248-3.643-.619-.824-1.27-1.624-1.954-2.395-.54-.608-2.637-2.673-3.136-3.103-3.348-2.879-7.279-5.138-11.994-5.1-1.826.029-3.582.389-5.249.995z" fill="#cfcfcf" stroke="#cfcfcf" fill-rule="nonzero" />
+                                        <path d="m17.119 19.984 2.915 2.915c-3.191 2.717-5.732 6.099-7.374 9.058l-.005.01c4.573 7.646 11.829 14.872 20.987 13.776 2.472-.296 4.778-1.141 6.885-2.35l2.951 2.95c-4.107 2.636-8.815 4.032-13.916 3.342-9.198-1.244-16.719-8.788-21.46-17.648 2.226-4.479 5.271-8.764 9.017-12.053zm6.63-4.32c2.572-1.146 5.355-1.82 8.327-1.868.165-.001 2.124.092 3.012.238.557.092 1.112.207 1.659.350 8.725 2.273 15.189 10.054 19.253 17.653-1.705 3.443-3.938 6.398-6.601 9.277l-2.827-2.827c1.967-2.12 3.622-4.161 4.885-6.45 0 0-1.285-2.361-2.248-3.643-.619-.824-1.27-1.624-1.954-2.395-.54-.608-2.637-2.673-3.136-3.103-3.348-2.879-7.279-5.138-11.994-5.1-1.826.029-3.582.389-5.249.995z" fill="#cfcfcf" stroke="#cfcfcf" fillRule="nonzero" />
                                         <path d="m25.054 27.92 2.399 2.398c-.157.477-.243.987-.243 1.516 0 2.672 2.169 4.841 4.841 4.841.529 0 1.039-.085 1.516-.243l2.399 2.399c-1.158.65-2.494 1.02-3.915 1.02-4.425 0-8.017-3.592-8.017-8.017 0-1.421.371-2.756 1.02-3.914zm6.849-4.101c.049-.001.099-.002.148-.002 4.425 0 8.017 3.593 8.017 8.017 0 .05 0 .099-.001.148z" fill="#cfcfcf" stroke="white" />
                                     </svg>
                                 </div>
@@ -269,22 +282,12 @@ const Page = () => {
                 <div className="flex p-1 px-2">
                     <div className='flex-1'>
                     </div>
-                    {/* <div className='w-full flex items-center justify-between p-[0.6rem]'>
-
-                        <div onClick={() => router.back()} className="relative w-7 h-7 rounded-full bg-[#00A881] cursor-pointer">
-                            <svg className="absolute top-1 left-[0.40rem]" width="17" height="18" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M21 17.918C18.5533 14.9313 16.3807 13.2367 14.482 12.834C12.5833 12.4313 10.7757 12.3705 9.059 12.6515V18L1 9.2725L9.059 1V6.0835C12.2333 6.1085 14.932 7.24733 17.155 9.5C19.3777 11.7527 20.6593 14.5587 21 17.918Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round" />
-                            </svg>
-                        </div>
-
-                        <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
-                    </div> */}
                 </div>
                 {/* Edit section  */}
                 <div className="min-h-[82vh] border-t border-solid">
                     {/* Edit section header  */}
                     <div className='flex justify-between items-center px-14 py-4'>
-                    <div className='py-1 text-base border border-[#00A881] w-[150px] flex items-center justify-center rounded-md m-2 text-[#00A881]'>{versionSelected?.status}</div>
+                        <div className='py-1 text-base border border-[#00A881] w-[150px] flex items-center justify-center rounded-md m-2 text-[#00A881]'>{versionSelected?.status}</div>
                         <div className='flex gap-4'>
                             <div className='relative w-[150px] bg-white shadow-sm rounded'>
                                 <div onClick={() => { setShowSave(!isShowSave) }} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
@@ -323,21 +326,34 @@ const Page = () => {
 
                     <div className='flex justify-between pr-16 items-center'>
 
-                        <div className='pt-2 pl-14 flex items-end'>
+                        <div className='pt-2 pl-14 flex items-center gap-1'>
                             {versionList.map((item, index) => {
                                 return (
-                                    <button
-                                        key={item.assetID + index}
-                                        onClick={() => { setVersionSelected(item) }}
-                                        className={`${versionSelected.assetVersionID === item.assetVersionID ? "text-[#333333] bg-[#e4e4e4]" : "text-black bg-[#fff]"} inline-block h-[42px] text-center text-lg font-normal  rounded-tl-[5px] rounded-tr-[5px] px-[30px] py-2`}>
-                                        {item.versionName}
-                                    </button>)
+                                    <div key={item.assetID + index} onClick={() => setVersionSelected(item)} className={`group flex items-center justify-between px-4 py-[10px] rounded-t-md cursor-pointer transition-all min-w-36 ${versionSelected.assetVersionID === item.assetVersionID ? "bg-[#e4e4e4] text-black" : "hover:bg-gray-100"}`}>
+                                        <span className='font-medium'>
+                                            {item.versionName}
+                                        </span>
+                                        <div>
+                                            {versionSelected.assetVersionID === item.assetVersionID &&
+                                                <MdOutlineDelete
+                                                    size={22}
+                                                    onClick={() => openConfirmationModal()}
+                                                    className=''
+                                                />
+                                            }
+                                        </div>
+                                        {/* key={item.assetID + index}
+                                        className="inline-block h-[42px] text-center text-base font-normal cursor-pointer "> */}
+                                    </div>
+                                )
                             })}
 
-                            <div onClick={() => handleSave(1)} className='cursor-pointer w-full h-[42px]  rounded-tl-[5px] rounded-tr-[5px] flex items-center justify-center gap-1'>
-                                {/* <FaPlus color='#01a982' size={12}/> */}
-                                <p className='text-[#01a982] font-medium text-lg'>Add New Version</p>
-                            </div>
+                            {versionList.length < 7 && (
+                                <div onClick={() => handleSave(1)} className='pl-2 cursor-pointer w-full h-[42px]  rounded-tl-[5px] rounded-tr-[5px] flex items-center justify-center gap-1'>
+                                    <FaPlus color='#01a982' size={12} />
+                                    <p className='text-[#01a982] font-medium text-lg'>Add New Version</p>
+                                </div>
+                            )}
 
 
                         </div>
@@ -411,11 +427,11 @@ const Page = () => {
 
                                 <div className="h-auto overflow-y-auto p-4 space-y-6 ">
                                     {
-                                        comments.map((item ,index) => {
+                                        comments.map((item, index) => {
                                             // Trim whitespace from type field
                                             const isCommentType = item.type?.trim() === "Comment";
                                             const isFileType = item.type?.trim() === "File";
-                                            
+
                                             return (
                                                 <div key={index}>
                                                     <div className='flex justify-between'>
@@ -438,14 +454,14 @@ const Page = () => {
                                                                     try {
                                                                         const fileUrl = item.comment.trim();
                                                                         const fileName = decodeURIComponent(fileUrl.split('/').pop() || 'download');
-                                                                        
+
                                                                         // Create a temporary anchor element
                                                                         const link = document.createElement('a');
                                                                         link.href = fileUrl;
                                                                         link.target = '_blank'; // Open in new tab
                                                                         link.download = fileName;
                                                                         link.rel = 'noopener noreferrer';
-                                                                        
+
                                                                         // Trigger download
                                                                         document.body.appendChild(link);
                                                                         link.click();
@@ -468,6 +484,12 @@ const Page = () => {
                             </div>
                         )}
                     </div>
+                    <ConfirmationModal
+                        message='Are you sure you want to delete this version?'
+                        isOpen={isConfirmModel}
+                        isConfirm={handleToConfirmDelete}
+                        isCancel={closeConfirmationModal}
+                    />
                 </div>
                 {isShowSubmitVer ? <SubmitVersionModel
                     isShowSubmitVer={isShowSubmitVer}
