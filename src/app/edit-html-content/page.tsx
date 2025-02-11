@@ -8,16 +8,15 @@ import { useRouter } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
-import { UserIcon } from "@/assets/icons/AppIcons"
-import Link from 'next/link'
 import SubmitVersionModel from './components/SubmitVersionModel';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { BiMessageAltError } from "react-icons/bi";
 import FeedBackCard from '@/components/cards/FeedBackCard';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 import { FaPlus } from "react-icons/fa";
 import { formatDate } from '@/utils/formatDate';
+import { MdOutlineDelete } from "react-icons/md";
+import ConfirmationModal from '@/components/global/ConfirmationModal';
 
 
 const Page = () => {
@@ -26,6 +25,7 @@ const Page = () => {
 
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
     const [assetType, setAssetType] = useState<string>("")
+    const [isConfirmModel, setIsConfirmModel] = useState<boolean>(false)
 
     useOverflowHidden()
     const {
@@ -51,7 +51,8 @@ const Page = () => {
         onSubmit,
         setSectionEdit,
         handleHideBlock,
-        showErrorMessage
+        showErrorMessage,
+        handleDelete
     } = useEditHTMLContent()
 
 
@@ -79,7 +80,19 @@ const Page = () => {
         setAssetType(assetType as string);
     }, [])
 
-    console.log("versionSelected", versionSelected);
+    const openConfirmationModal = () => {
+        setIsConfirmModel(true)
+    }
+
+    const closeConfirmationModal = () => {
+        setIsConfirmModel(false)
+    }
+
+    const handleToConfirmDelete = () => {
+        handleDelete(versionSelected.assetVersionID)
+        closeConfirmationModal()
+    }
+
 
     const htmlOtherAsset = () => {
         let htmlContent = '';
@@ -269,22 +282,12 @@ const Page = () => {
                 <div className="flex p-1 px-2">
                     <div className='flex-1'>
                     </div>
-                    {/* <div className='w-full flex items-center justify-between p-[0.6rem]'>
-
-                        <div onClick={() => router.back()} className="relative w-7 h-7 rounded-full bg-[#00A881] cursor-pointer">
-                            <svg className="absolute top-1 left-[0.40rem]" width="17" height="18" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M21 17.918C18.5533 14.9313 16.3807 13.2367 14.482 12.834C12.5833 12.4313 10.7757 12.3705 9.059 12.6515V18L1 9.2725L9.059 1V6.0835C12.2333 6.1085 14.932 7.24733 17.155 9.5C19.3777 11.7527 20.6593 14.5587 21 17.918Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round" />
-                            </svg>
-                        </div>
-
-                        <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
-                    </div> */}
                 </div>
                 {/* Edit section  */}
                 <div className="min-h-[82vh] border-t border-solid">
                     {/* Edit section header  */}
                     <div className='flex justify-between items-center px-14 py-4'>
-                    <div className='py-1 text-base border border-[#00A881] w-[150px] flex items-center justify-center rounded-md m-2 text-[#00A881]'>{versionSelected?.status}</div>
+                        <div className='py-1 text-base border border-[#00A881] w-[150px] flex items-center justify-center rounded-md m-2 text-[#00A881]'>{versionSelected?.status}</div>
                         <div className='flex gap-4'>
                             <div className='relative w-[150px] bg-white shadow-sm rounded'>
                                 <div onClick={() => { setShowSave(!isShowSave) }} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
@@ -323,21 +326,34 @@ const Page = () => {
 
                     <div className='flex justify-between pr-16 items-center'>
 
-                        <div className='pt-2 pl-14 flex items-end'>
+                        <div className='pt-2 pl-14 flex items-center gap-1'>
                             {versionList.map((item, index) => {
                                 return (
-                                    <button
-                                        key={item.assetID + index}
-                                        onClick={() => { setVersionSelected(item) }}
-                                        className={`${versionSelected.assetVersionID === item.assetVersionID ? "text-[#333333] bg-[#e4e4e4]" : "text-black bg-[#fff]"} inline-block h-[42px] text-center text-lg font-normal  rounded-tl-[5px] rounded-tr-[5px] px-[30px] py-2`}>
-                                        {item.versionName}
-                                    </button>)
+                                    <div key={item.assetID + index} onClick={() => setVersionSelected(item)} className={`group flex items-center justify-between px-4 py-[10px] rounded-t-md cursor-pointer transition-all min-w-36 ${versionSelected.assetVersionID === item.assetVersionID ? "bg-[#e4e4e4] text-black" : "hover:bg-gray-100"}`}>
+                                        <span className='font-medium'>
+                                            {item.versionName}
+                                        </span>
+                                        <div>
+                                            {versionSelected.assetVersionID === item.assetVersionID &&
+                                                <MdOutlineDelete
+                                                    size={22}
+                                                    onClick={() => openConfirmationModal()}
+                                                    className=''
+                                                />
+                                            }
+                                        </div>
+                                        {/* key={item.assetID + index}
+                                        className="inline-block h-[42px] text-center text-base font-normal cursor-pointer "> */}
+                                    </div>
+                                )
                             })}
 
-                            <div onClick={() => handleSave(1)} className='cursor-pointer w-full h-[42px]  rounded-tl-[5px] rounded-tr-[5px] flex items-center justify-center gap-1'>
-                                {/* <FaPlus color='#01a982' size={12}/> */}
-                                <p className='text-[#01a982] font-medium text-lg'>Add New Version</p>
-                            </div>
+                            {versionList.length < 7 && (
+                                <div onClick={() => handleSave(1)} className='pl-2 cursor-pointer w-full h-[42px]  rounded-tl-[5px] rounded-tr-[5px] flex items-center justify-center gap-1'>
+                                    <FaPlus color='#01a982' size={12} />
+                                    <p className='text-[#01a982] font-medium text-lg'>Add New Version</p>
+                                </div>
+                            )}
 
 
                         </div>
@@ -411,11 +427,11 @@ const Page = () => {
 
                                 <div className="h-auto overflow-y-auto p-4 space-y-6 ">
                                     {
-                                        comments.map((item ,index) => {
+                                        comments.map((item, index) => {
                                             // Trim whitespace from type field
                                             const isCommentType = item.type?.trim() === "Comment";
                                             const isFileType = item.type?.trim() === "File";
-                                            
+
                                             return (
                                                 <div key={index}>
                                                     <div className='flex justify-between'>
@@ -438,14 +454,14 @@ const Page = () => {
                                                                     try {
                                                                         const fileUrl = item.comment.trim();
                                                                         const fileName = decodeURIComponent(fileUrl.split('/').pop() || 'download');
-                                                                        
+
                                                                         // Create a temporary anchor element
                                                                         const link = document.createElement('a');
                                                                         link.href = fileUrl;
                                                                         link.target = '_blank'; // Open in new tab
                                                                         link.download = fileName;
                                                                         link.rel = 'noopener noreferrer';
-                                                                        
+
                                                                         // Trigger download
                                                                         document.body.appendChild(link);
                                                                         link.click();
@@ -468,6 +484,12 @@ const Page = () => {
                             </div>
                         )}
                     </div>
+                    <ConfirmationModal
+                        message='Are you sure you want to delete this version?'
+                        isOpen={isConfirmModel}
+                        isConfirm={handleToConfirmDelete}
+                        isCancel={closeConfirmationModal}
+                    />
                 </div>
                 {isShowSubmitVer ? <SubmitVersionModel
                     isShowSubmitVer={isShowSubmitVer}
