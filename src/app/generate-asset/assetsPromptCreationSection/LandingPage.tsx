@@ -273,7 +273,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                             if (params.template.templatesBlocks && refSection.current.length < params.template?.templatesBlocks.filter((item) => !item.isStatic).length) {
                                 refSection.current = [...refSection.current as SectionProps[], {
                                     templateBlockID: item.templateBlockID || "",
-                                    aiPrompt: item.aiPrompt || ""
+                                    aiPrompt: ""
                                 }]
                             }
 
