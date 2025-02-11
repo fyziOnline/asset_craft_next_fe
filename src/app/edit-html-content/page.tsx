@@ -77,6 +77,8 @@ const Page = () => {
         setAssetType(assetType as string);
     }, [])
 
+    console.log("versionSelected", versionSelected);
+
     const htmlOtherAsset = () => {
         let htmlContent = '';
         versionSelected.assetVersionBlocks.forEach((item) => {
@@ -279,7 +281,8 @@ const Page = () => {
                 {/* Edit section  */}
                 <div className="min-h-[82vh] border-t border-solid">
                     {/* Edit section header  */}
-                    <div className='flex justify-end px-14 py-4'>
+                    <div className='flex justify-between items-center px-14 py-4'>
+                    <div className='py-1 text-base border border-[#00A881] w-[150px] flex items-center justify-center rounded-md m-2 text-[#00A881]'>{versionSelected?.status}</div>
                         <div className='flex gap-4'>
                             <div className='relative w-[150px] bg-white shadow-sm rounded'>
                                 <div onClick={() => { setShowSave(!isShowSave) }} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
@@ -350,8 +353,8 @@ const Page = () => {
                     {/* Edit section main  */}
                     <div className="flex h-[92vh] relative mx-14">
                         {/* Main Content Section */}
-                        <div className="flex flex-col bg-[#e4e4e4] flex-grow pb-10  px-[6rem] overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
-                            <div >
+                        <div className="flex flex-col bg-[#e4e4e4] flex-grow pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
+                            <div className='px-[6rem]'>
                                 <div id="container">
                                     <div className="h-[20px]" />
                                     {renderHTMLSelect}
