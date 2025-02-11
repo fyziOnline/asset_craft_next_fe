@@ -165,8 +165,6 @@ export const useEditHTMLContent = () => {
     };
 
     const handleAddVersion = async () => {
-        console.log('typed version name===', refVersion.current);
-
         try {
             if (refVersion.current !== "") {
                 setShowErrorMessage(false)
@@ -296,7 +294,28 @@ export const useEditHTMLContent = () => {
         } finally {
             setShowLoading(false)
         }
+
     }
+
+    const handleDelete = async (assetVersionID: string) => {
+        try {
+            const res = await ApiService.delete<any>(`${urls.asset_verdion_delete}?assetVersionID=${assetVersionID}`)
+
+            if(res.isSuccess) {
+                setVersionList(prevList => prevList.filter(item => item.assetVersionID !== assetVersionID));
+            }
+
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        }
+
+    }
+
 
     return {
         sectionEdit,
@@ -321,6 +340,8 @@ export const useEditHTMLContent = () => {
         onSubmit,
         setSectionEdit,
         handleHideBlock,
-        showErrorMessage
+        showErrorMessage,
+        handleDelete
     };
-};
+
+}
