@@ -50,7 +50,16 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         fileName : "",
         comment : "" 
     })
-    
+
+    type Comment = {
+        comment: string;
+        createdOn: string;
+        createdBy: string;
+        type: string;
+    }
+
+    const [comments,setComments] = useState<Comment[]>([])
+
     useEffect(() => {
         if (assetData.assetVersionID) {
             init_hook()
@@ -58,7 +67,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
     }, [assetData.assetVersionID])
 
     const init_hook = async () => {
-        if (assetData.versionStatus === "On Review") {
+        if (assetData.versionStatus === "On Review" || assetData.versionStatus === "In Progress") {
             await getApprovalDetails()
         }
     }
@@ -111,6 +120,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
                 throw new ApiError('Approval details fetch failed', 400, res_approvalDetails.errorOnFailure);
             }
             setApprovalDetails(res_approvalDetails.assetApproval)
+            setComments(res_approvalDetails.comments)
         } catch (error) {
             const apiError = ApiService.handleError(error)
             setIsReAssignSuccessFull(false)
@@ -232,6 +242,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         handleRemoveFile,
         getApprovalDetails,
         reAssignAsset,
-        approveAsset
+        approveAsset,
+        comments
     }
 }

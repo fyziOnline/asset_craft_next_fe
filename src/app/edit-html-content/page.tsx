@@ -17,6 +17,7 @@ import { BiMessageAltError } from "react-icons/bi";
 import FeedBackCard from '@/components/cards/FeedBackCard';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 import { FaPlus } from "react-icons/fa";
+import { formatDate } from '@/utils/formatDate';
 
 
 const Page = () => {
@@ -55,7 +56,8 @@ const Page = () => {
 
 
     const {
-        approvalDetails
+        approvalDetails,
+        comments
     } = useAssetApproval(
         {
             assetVersionID: versionSelected?.assetVersionID || "",
@@ -338,7 +340,7 @@ const Page = () => {
                         </div>
 
                         {/* message logo  please provide ! to show icon for isFeedbackOpen && in feedbackcard.tsx*/}
-                        {(approvalDetails.comments?.length > 0 || approvalDetails.fileUrl?.length > 0) && <div className="">
+                        {(comments?.length > 0) && <div className="">
                             <FeedBackCard
                                 isFeedbackOpen={isFeedbackOpen}
                                 setIsFeedbackOpen={setIsFeedbackOpen} // Pass state to the feedback card
@@ -405,36 +407,64 @@ const Page = () => {
                                 {/* Feedback Content */}
 
                                 <div className="h-auto overflow-y-auto p-4 space-y-6 ">
-                                    {/* comment 1 */}
-                                    <div>
-                                        <p className="text-sm text-gray-500 mb-2">
-                                            {approvalDetails.modifiedOn
-                                                ? `${new Date(approvalDetails.modifiedOn).toISOString().split("T")[0]} - ${new Date(approvalDetails.modifiedOn).toLocaleTimeString("en-US", {
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                })}`
-                                                : "N/A"}
-                                        </p>
-                                        {/* <p className="text-sm text-gray-500 mb-2">{approvalDetails.modifiedOn}, {approvalDetails.modifiedBy}</p> */}
-                                        <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
-                                            <div className='overflow-y-auto max-h-40'>
-                                                <p className="text-gray-700 text-sm">
-                                                    {approvalDetails.comments}
-                                                </p>
-                                            </div>
-                                            <button
-                                                className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md"
-                                                onClick={handleDownload}
-                                            >
-                                                Download
-                                            </button>
-                                        </div>
-                                    </div>
+                                    {
+                                        comments.map((item ,index) => {
+                                            // Trim whitespace from type field
+                                            const isCommentType = item.type?.trim() === "Comment";
+                                            const isFileType = item.type?.trim() === "File";
+                                            
+                                            return (
+                                                <div key={index}>
+                                                    <div className='flex justify-between'>
+                                                        <p className="text-sm text-gray-500 mb-2">
+                                                            {formatDate(item.createdOn)}
+                                                        </p>
+                                                        <span className='text-sm text-gray-500 mb-2'>{item.createdBy}</span>
+                                                    </div>
+
+                                                    <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
+                                                        <div className='overflow-y-auto max-h-40'>
+                                                            <p className="text-gray-700 text-sm">
+                                                                {isCommentType ? item.comment : ''}
+                                                            </p>
+                                                        </div>
+                                                        {isFileType && (
+                                                            <button
+                                                                className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md"
+                                                                onClick={() => {
+                                                                    try {
+                                                                        const fileUrl = item.comment.trim();
+                                                                        const fileName = decodeURIComponent(fileUrl.split('/').pop() || 'download');
+                                                                        
+                                                                        // Create a temporary anchor element
+                                                                        const link = document.createElement('a');
+                                                                        link.href = fileUrl;
+                                                                        link.target = '_blank'; // Open in new tab
+                                                                        link.download = fileName;
+                                                                        link.rel = 'noopener noreferrer';
+                                                                        
+                                                                        // Trigger download
+                                                                        document.body.appendChild(link);
+                                                                        link.click();
+                                                                        document.body.removeChild(link);
+                                                                    } catch (error) {
+                                                                        console.error('Download failed:', error);
+                                                                        // Optionally show an error message to the user
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Download
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
                                 </div>
                             </div>
                         )}
                     </div>
-
                 </div>
                 {isShowSubmitVer ? <SubmitVersionModel
                     isShowSubmitVer={isShowSubmitVer}
