@@ -17,7 +17,7 @@ import ShadowDomContainer from '../edit-html-content/components/ShadowDomContain
 import FeedBackCard from '@/components/cards/FeedBackCard';
 import { PeopleIcon } from '@/assets/icons/AppIcons';
 import PopupCard from '@/components/global/Popup/PopupCard';
-
+import { AiOutlineCheckCircle } from "react-icons/ai";
 
 const Page: FC = () => {
     const { contextData } = useAppData();
@@ -25,6 +25,9 @@ const Page: FC = () => {
     const [showUploadPopup, setShowUploadPopup] = useState(false);
 
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
+
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
 
     const handleShowPopUp = () => {
         setShowUploadPopup((prev) => !prev)
@@ -71,7 +74,17 @@ const Page: FC = () => {
 
     const handleReAssignToEditor = async () => {
         if (versionSelected?.assetVersionID && versionSelected?.assetID) {
-            await reAssignAsset();
+            try {
+                await reAssignAsset(); // Wait for the reassignment process to complete
+
+                setShowUploadPopup(false); // Hide popup
+                setShowSuccessMessage(true); // Show success message
+
+                // Auto-hide success message after 3 seconds
+                setTimeout(() => setShowSuccessMessage(false), 2000);
+            } catch (error) {
+                console.error("Reassignment failed:", error);
+            }
         } else {
             console.error("Invalid versionSelected data");
         }
@@ -419,7 +432,7 @@ const Page: FC = () => {
                 >
                     <p className="text-lg font-semibold text-fileupload-text mb-4">Attach your file</p>
                     <DragAndDrop onFileSelect={handleUploadFile} onRemoveSelectedFile={handleRemoveFile} showButtons={false} />
-                    
+
                     <p className="text-lg font-semibold text-fileupload-text mb-4">Enter your comments here</p>
                     <textarea
                         placeholder="Type your comments"
@@ -428,6 +441,15 @@ const Page: FC = () => {
                     />
                 </PopupCard>
             }
+            {/* Success Message */}
+            {showSuccessMessage && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-[100]">
+                    <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg p-5 rounded-lg z-[400] flex flex-col items-center">
+                        <AiOutlineCheckCircle size={40} className="text-[#00A881] mb-2" />
+                        <p className="text-lg">Your feedback has been submitted</p>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
