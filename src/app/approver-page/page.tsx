@@ -17,6 +17,7 @@ import ShadowDomContainer from '../edit-html-content/components/ShadowDomContain
 import FeedBackCard from '@/components/cards/FeedBackCard';
 import { PeopleIcon } from '@/assets/icons/AppIcons';
 import PopupCard from '@/components/global/Popup/PopupCard';
+import { formatDate } from '@/utils/formatDate';
 
 
 const Page: FC = () => {
@@ -61,6 +62,7 @@ const Page: FC = () => {
         reAssignLoading,
         eventInputComment,
         isReAssignSuccessFull,
+        comments
     } = useAssetApproval(
         {
             assetVersionID: versionSelected?.assetVersionID || "",
@@ -292,7 +294,7 @@ const Page: FC = () => {
 
                         {/* FeedBack logo */}
 
-                        {(approvalDetails.comments?.length > 0 || approvalDetails.fileUrl?.length > 0) &&
+                        {(comments?.length > 0) &&
                             <div className='flex justify-end pr-16 items-center py-2'>
                                 <FeedBackCard
                                     isFeedbackOpen={isFeedbackOpen}
@@ -351,35 +353,40 @@ const Page: FC = () => {
                                         </button>
                                     </div>
 
-                                    {/* Feedback Content */}
-
                                     <div className="h-auto overflow-y-auto p-4 space-y-6  ">
-                                        {/* comment 1 */}
-                                        <div>
-                                            <p className="text-sm text-gray-500 mb-2">
-                                                {approvalDetails.modifiedOn
-                                                    ? `${new Date(approvalDetails.modifiedOn).toISOString().split("T")[0]} - ${new Date(approvalDetails.modifiedOn).toLocaleTimeString("en-US", {
-                                                        hour: "2-digit",
-                                                        minute: "2-digit",
-                                                    })}`
-                                                    : "N/A"}
-                                            </p>
+                                    {
+                                            comments.map((item, index) => {
+                                                return (
+                                                    <div>
+                                                        <div className='flex justify-between'>
+                                                            <p className="text-sm text-gray-500 mb-2">
+                                                                {
+                                                                    formatDate(item.createdOn)
+                                                                }
+                                                            </p>
 
-                                            {/* <p className="text-sm text-gray-500 mb-2">{approvalDetails.modifiedOn}, {approvalDetails.modifiedBy}</p> */}
-                                            <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
-                                                <div className='overflow-y-auto max-h-40'>
-                                                    <p className="text-gray-700 text-sm">
-                                                        {approvalDetails.comments}
-                                                    </p>
-                                                </div>
-                                                <button
-                                                    className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md"
-                                                    onClick={handleDownload}
-                                                >
-                                                    Download
-                                                </button>
-                                            </div>
-                                        </div>
+                                                            <span className='text-sm text-gray-500 mb-2'>{item.createdBy}</span>
+                                                        </div>
+
+                                                        {/* <p className="text-sm text-gray-500 mb-2">{approvalDetails.modifiedOn}, {approvalDetails.modifiedBy}</p> */}
+                                                        <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
+                                                            <div className='overflow-y-auto max-h-40'>
+                                                                <p className="text-gray-700 text-sm">
+                                                                    {item.comment}
+                                                                </p>
+                                                            </div>
+                                                            <button
+                                                                className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md"
+                                                                onClick={handleDownload}
+                                                            >
+                                                                Download
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+
                                     </div>
                                 </div>
                             )}
