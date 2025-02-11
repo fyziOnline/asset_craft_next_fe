@@ -50,15 +50,24 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         fileName : "",
         comment : "" 
     })
-    
-    useEffect(() => {
+
+    type Comment = {
+        comment: string;
+        createdOn: string;
+        createdBy: string;
+        type: string;
+    }
+
+    const [comments,setComments] = useState<Comment[]>([])
+
+    useEffect(() => {        
         if (assetData.assetVersionID) {
             init_hook()
         }
     }, [assetData.assetVersionID])
 
-    const init_hook = async () => {
-        if (assetData.versionStatus === "On Review") {
+    const init_hook = async () => {        
+        if (assetData.versionStatus === "On Review"  || assetData.versionStatus === "In Progress") {
             await getApprovalDetails()
         }
     }
@@ -107,18 +116,22 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         try {
             // setReAssignLoading(true)
             const res_approvalDetails = await ApiService.get<any>(`${urls.getAssetApprovalDetails}?assetVersionID=${assetData.assetVersionID}`)
-            if (!res_approvalDetails || res_approvalDetails.errorOnFailure.length > 0 ) {
-                throw new ApiError('Approval details fetch failed', 400, res_approvalDetails.errorOnFailure);
-            }
+            // if (!res_approvalDetails || res_approvalDetails.errorOnFailure.length > 0 ) {
+            //     throw new ApiError('Approval details fetch failed', 400, res_approvalDetails.errorOnFailure);
+            // }
             setApprovalDetails(res_approvalDetails.assetApproval)
-        } catch (error) {
+            setComments(res_approvalDetails.comments)
+        } catch (error) {            
             const apiError = ApiService.handleError(error)
             setIsReAssignSuccessFull(false)
-            setError({
-                status: apiError.statusCode,
+            
+            if (apiError.statusCode !== 500) {
+                setError({
+                    status: apiError.statusCode,
                 message: apiError.message,
                 showError: true
             })
+          } 
         } 
     }
     
@@ -232,6 +245,7 @@ export const useAssetApproval = (assetData : AssetApprovalHookArg) => {
         handleRemoveFile,
         getApprovalDetails,
         reAssignAsset,
-        approveAsset
+        approveAsset,
+        comments
     }
 }
