@@ -21,8 +21,17 @@ const Dashboard: FC = () => {
     selectAssetType,
     dashboardAssets,
     pendingApproval,
-    userRole
+    userRole,
+    getPendingApproval,
+    getAssetAllAtDashboard,
+    getAssetTypes
   } = useDashboard()
+
+  useEffect(() => {
+    getAssetTypes()
+    getAssetAllAtDashboard()
+    getPendingApproval()
+  },[])
 
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
   const { setContextData } = useAppData()
