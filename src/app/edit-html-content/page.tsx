@@ -77,6 +77,19 @@ const Page = () => {
         setAssetType(assetType as string);
     }, [])
 
+    const openConfirmationModal = () => {
+        setIsConfirmModel(true)
+    }
+
+    const closeConfirmationModal = () => {
+        setIsConfirmModel(false)
+    }
+
+    const handleToConfirmDelete = () => {
+        handleDelete(versionSelected.assetVersionID)
+        closeConfirmationModal()
+    }
+
     const htmlOtherAsset = () => {
         let htmlContent = '';
         versionSelected.assetVersionBlocks.forEach((item) => {

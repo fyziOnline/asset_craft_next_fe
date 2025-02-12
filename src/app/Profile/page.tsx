@@ -10,6 +10,11 @@ import { useProfile } from '@/hooks/useProfile';
 import { SignOutIcon, UserDetailsIcon } from '@/assets/icons/AppIcons';
 import { CiCamera } from "react-icons/ci";
 import { convertImageToBase64 } from '@/utils/convertToBase64';
+import { CookieManager } from '@/utils/cookieManager';
+import { ApiService } from '@/lib/axios_generic';
+import { urls } from '@/apis/urls';
+import { useAppData } from '@/context/AppContext';
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 
 interface FormValues {
@@ -37,6 +42,9 @@ const page: React.FC = () => {
         timeZone: '',
         isActive: 1,
     });
+    const { setError } = useAppData();
+    const [logoutFromAll, setLogoutFromAll] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
 
     useEffect(() => {
@@ -62,15 +70,30 @@ const page: React.FC = () => {
         }));
     };
 
-    const handleLogout = () => {
-        Cookies.remove(nkey.auth_token)
-        Cookies.remove(nkey.email_login)
-        Cookies.remove(nkey.client_ID)
-        Cookies.remove(nkey.userID)
-        Cookies.remove(nkey.userRole)
+    const handleLogout = async () => {
+        try {
+            setIsLoggingOut(true);
+            
+            const response = await ApiService.post<any>(urls.logout, {
+                revokeAll: logoutFromAll
+            });
 
-        router.push('/')
-    }
+            if (response.isSuccess) {
+                // Clear cookies based on logout type
+                CookieManager.clearAuthCookies(!logoutFromAll);
+                router.push('/');
+            }
+        } catch (error) {
+            const apiError = ApiService.handleError(error);
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            });
+        } finally {
+            setIsLoggingOut(false);
+        }
+    };
 
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -200,26 +223,53 @@ const page: React.FC = () => {
                     </div>
                 </div>
 
-                <div className='flex items-center justify-end gap-2 mt-2 pb-4'>
-                    <Button
-                        buttonText='Update'
-                        customClass='border-2 border-green-300 px-6 py-1'
-                        textColor='text-green-300'
-                        backgroundColor='bg-white'
-                        iconColor='#01A982'
-                        IconComponent={<UserDetailsIcon />}
-                        showIcon={false}
-                        handleClick={() => updateUserDetails(formValues)}
-                    />
+                <div className='flex flex-col gap-4 mt-2 pb-4'>
+                    <div className='flex justify-end'>
+                        <Button
+                            buttonText='Update'
+                            customClass='border-2 border-green-300 px-6 py-1'
+                            textColor='text-green-300'
+                            backgroundColor='bg-white'
+                            iconColor='#01A982'
+                            IconComponent={<UserDetailsIcon />}
+                            showIcon={false}
+                            handleClick={() => updateUserDetails(formValues)}
+                        />
+                    </div>
 
-                    <Button
-                        IconComponent={<SignOutIcon />}
-                        buttonText='Sign Out'
-                        customClass='px-6 py-[5px]'
-                        iconColor='#fff'
-                        handleClick={handleLogout}
-                        showIcon={false}
-                    />
+                    <div className="border-t border-gray-200 my-4"></div>
+
+                    <div className="flex flex-col gap-3">
+                        <div className="flex items-center gap-2">
+                            <label className="flex items-center gap-2 text-sm text-gray-600">
+                                <input
+                                    type="checkbox"
+                                    checked={logoutFromAll}
+                                    onChange={(e) => setLogoutFromAll(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-green-300 rounded border-gray-300 focus:ring-green-300"
+                                />
+                                <span>Logout from all devices</span>
+                                <div className="group relative inline-block">
+                                    <IoMdInformationCircleOutline className="text-gray-400 hover:text-gray-600 cursor-help" size={18} />
+                                    <div className="invisible group-hover:visible absolute left-0 bottom-full mb-2 w-72 bg-gray-800 text-white text-xs rounded p-2 shadow-lg">
+                                        When enabled, this will terminate all active sessions across all devices where you're currently logged in. 
+                                        This is useful if you suspect unauthorized access or want to ensure complete security across all devices.
+                                        Your email will also be removed from the login screen.
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <Button
+                            IconComponent={<SignOutIcon />}
+                            buttonText={isLoggingOut ? 'Signing Out...' : 'Sign Out'}
+                            customClass='w-fit px-6 py-[5px]'
+                            iconColor='#fff'
+                            handleClick={handleLogout}
+                            showIcon={false}
+                            disabled={isLoggingOut}
+                        />
+                    </div>
                 </div>
 
             </div>
