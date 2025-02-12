@@ -78,7 +78,7 @@ export const useLogin = () => {
         }
 
         try {
-            setIsVerifyingOtp(true); // Set OTP verification loading state
+            setIsVerifyingOtp(true);
 
             const resToken = await ApiService.post<any>(urls.finalise, {
                 "twoFactorToken": loginRef.current?.twoFactorToken,
@@ -86,20 +86,24 @@ export const useLogin = () => {
             });
 
             if (resToken.isSuccess) {
-                const decodedToken: any = jwtDecode(resToken.loginToken);
+                const decodedToken: any = jwtDecode(resToken.accessToken);
                 const { UserID, UserRole } = decodedToken;
 
                 Cookies.set(nkey.userID, UserID, { expires: 180 });
                 Cookies.set(nkey.userRole, UserRole, { expires: 180 });
+                Cookies.set(nkey.auth_token, resToken.accessToken, { expires: 180 });
+                Cookies.set(nkey.refresh_token, resToken.refreshToken, { expires: 180 });
+                Cookies.set(nkey.refresh_token_expiry, resToken.refreshTokenExpiryTime, { expires: 180 });
 
-                Cookies.set(nkey.auth_token, resToken.loginToken, { expires: 180 });
                 const resClientID = await ApiService.get<any>(urls.client_select_all, {});
 
                 if (resClientID.isSuccess && resClientID.clients.length > 0) {
                     Cookies.set(nkey.client_ID, resClientID.clients[0].clientID, { expires: 180 });
                     router.push('/dashboard');
                 } else {
-                    Cookies.remove(nkey.auth_token)
+                    Cookies.remove(nkey.auth_token);
+                    Cookies.remove(nkey.refresh_token);
+                    Cookies.remove(nkey.refresh_token_expiry);
                     alert("Failed to get client information!");
                 }
             } else {
