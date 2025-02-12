@@ -67,7 +67,9 @@ const Page = () => {
         }
     )
 
-    const handleDownload = () => {
+    console.log('comments~~', comments);
+
+    const handleDownload = (fileURL: string) => {
         const link = document.createElement('a');
         link.href = approvalDetails.fileUrl,
             link.download = 'filename',
@@ -394,7 +396,7 @@ const Page = () => {
                         {/* Feedback Panel */}
                         {isFeedbackOpen && (
                             <div
-                                className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[25%] md:h-[60%] overflow-y-auto custom-scrollbar feedback-panel ${isFeedbackOpen ? "block" : "hidden "
+                                className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[25%]  feedback-panel ${isFeedbackOpen ? "block" : "hidden "
                                     }`}
                             >
                                 {/* Header */}
@@ -424,61 +426,40 @@ const Page = () => {
 
                                 {/* Feedback Content */}
 
-                                <div className="h-auto overflow-y-auto p-4 space-y-6 ">
-                                    {
-                                        comments.map((item, index) => {
-                                            // Trim whitespace from type field
-                                            const isCommentType = item.type?.trim() === "Comment";
-                                            const isFileType = item.type?.trim() === "File";
-
-                                            return (
-                                                <div key={index}>
-                                                    <div className='flex justify-between'>
-                                                        <p className="text-sm text-gray-500 mb-2">
-                                                            {formatDate(item.createdOn)}
-                                                        </p>
-                                                        <span className='text-sm text-gray-500 mb-2'>{item.createdBy}</span>
+                                <div className="h-auto overflow-y-auto p-1 md:h-[60%] custom-scrollbar border pb-4">
+                                    {comments.map((item, index) => (
+                                        <div key={index} className="bg-white p-2 transition-all duration-200">
+                                            <div className='flex flex-col items-center mb-1 w-full'>
+                                                <div className='flex justify-between items-center w-full pb-1'>
+                                                    <div className="flex items-center">
+                                                        <span className='text-xs font-medium text-gray-500'>{item.createdBy}</span>
                                                     </div>
 
-                                                    <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
-                                                        <div className='overflow-y-auto max-h-40'>
-                                                            <p className="text-gray-700 text-sm">
-                                                                {isCommentType ? item.comment : ''}
-                                                            </p>
-                                                        </div>
-                                                        {isFileType && (
-                                                            <button
-                                                                className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md"
-                                                                onClick={() => {
-                                                                    try {
-                                                                        const fileUrl = item.comment.trim();
-                                                                        const fileName = decodeURIComponent(fileUrl.split('/').pop() || 'download');
-
-                                                                        // Create a temporary anchor element
-                                                                        const link = document.createElement('a');
-                                                                        link.href = fileUrl;
-                                                                        link.target = '_blank'; // Open in new tab
-                                                                        link.download = fileName;
-                                                                        link.rel = 'noopener noreferrer';
-
-                                                                        // Trigger download
-                                                                        document.body.appendChild(link);
-                                                                        link.click();
-                                                                        document.body.removeChild(link);
-                                                                    } catch (error) {
-                                                                        console.error('Download failed:', error);
-                                                                        // Optionally show an error message to the user
-                                                                    }
-                                                                }}
-                                                            >
-                                                                Download
-                                                            </button>
-                                                        )}
+                                                    <div className="text-xs text-gray-500 flex items-center gap-1">
+                                                        {formatDate(item.createdOn)}
                                                     </div>
                                                 </div>
-                                            )
-                                        })
-                                    }
+
+                                                <div className="text-gray-600 text-sm leading-relaxed mb-1 bg-gray-50 shadow-sm p-2 rounded-md w-full">
+                                                    {item.comment}
+
+                                                    {item.fIleURL !== "" && (
+                                                        <div className="mt-1 flex justify-end">
+                                                            <button
+                                                                className="flex items-center gap-2 px-3 py-1 bg-[#00A881] text-white text-sm rounded-md hover:bg-[#008c6a] transition-colors duration-200"
+                                                                onClick={() => handleDownload(item.fIleURL)}
+                                                            >
+                                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                                </svg>
+                                                                Download
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         )}
