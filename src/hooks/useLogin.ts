@@ -6,6 +6,7 @@ import { ApiService } from '@/lib/axios_generic';
 import { nkey } from '@/data/keyStore';
 import { urls } from '@/apis/urls';
 import { useAppData } from '@/context/AppContext';
+import { CookieManager } from '@/utils/cookieManager';
 
 interface ResLoginProps {
     isSuccess: boolean,
@@ -89,21 +90,20 @@ export const useLogin = () => {
                 const decodedToken: any = jwtDecode(resToken.accessToken);
                 const { UserID, UserRole } = decodedToken;
 
-                Cookies.set(nkey.userID, UserID, { expires: 180 });
-                Cookies.set(nkey.userRole, UserRole, { expires: 180 });
-                Cookies.set(nkey.auth_token, resToken.accessToken, { expires: 180 });
-                Cookies.set(nkey.refresh_token, resToken.refreshToken, { expires: 180 });
-                Cookies.set(nkey.refresh_token_expiry, resToken.refreshTokenExpiryTime, { expires: 180 });
+                CookieManager.setUserId(UserID);
+                CookieManager.setUserRole(UserRole);
+                CookieManager.setAuthToken(resToken.accessToken);
+                CookieManager.setRefreshToken(resToken.refreshToken);
+                CookieManager.setRefreshTokenExpiry(resToken.refreshTokenExpiryTime);
+                CookieManager.setUserEmail(emailRef.current);
 
                 const resClientID = await ApiService.get<any>(urls.client_select_all, {});
 
                 if (resClientID.isSuccess && resClientID.clients.length > 0) {
-                    Cookies.set(nkey.client_ID, resClientID.clients[0].clientID, { expires: 180 });
+                    CookieManager.setClientId(resClientID.clients[0].clientID);
                     router.push('/dashboard');
                 } else {
-                    Cookies.remove(nkey.auth_token);
-                    Cookies.remove(nkey.refresh_token);
-                    Cookies.remove(nkey.refresh_token_expiry);
+                    CookieManager.clearAuthCookies(true);
                     alert("Failed to get client information!");
                 }
             } else {

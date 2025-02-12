@@ -2,6 +2,7 @@ export const urls = {
   login: "/user/login",
   finalise: "/user/login/finalise",
   refresh_token: "/user/refresh-token",
+  logout: "/user/logout",
   client_select_all: "/client/select/all",
   clientAssetType_select_all: "/clientAssetType/select/all",
   campaign_getProjectsList: "/campaign/getProjectsList",
