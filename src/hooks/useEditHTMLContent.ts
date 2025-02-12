@@ -178,8 +178,15 @@ export const useEditHTMLContent = () => {
                     const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${resAddNewVersion.assetVersionID}`)
 
                     if (resSelect.isSuccess) {
+
                         const AssetHtml = contextData.AssetHtml
                         const assetVersions = contextData.AssetHtml.assetVersions
+                        const versionExist = assetVersions.some((version) => version.assetVersionID === resSelect.assetVersionID)
+
+                        if (!versionExist) {
+                            setVersionList((prev) => [...prev, resSelect]);
+                        }
+
                         assetVersions.push(resSelect)
                         AssetHtml.assetVersions = assetVersions
                         setVersionSelected(resSelect)
@@ -305,7 +312,14 @@ export const useEditHTMLContent = () => {
             const res = await ApiService.delete<any>(`${urls.asset_verdion_delete}?assetVersionID=${assetVersionID}`)
 
             if(res.isSuccess) {
-                setVersionList(prevList => prevList.filter(item => item.assetVersionID !== assetVersionID));
+                setVersionList(prevList => {
+                    const updatedList = prevList.filter(item => item.assetVersionID !== assetVersionID);
+                    // If the deleted item was selected, update versionSelected to the last item in the list
+                    if (versionSelected?.assetVersionID === assetVersionID) {
+                        setVersionSelected(updatedList.length > 0 ? updatedList[updatedList.length - 1] : contextData.AssetHtml.assetVersions[0]);
+                    }
+                    return updatedList;
+                });
             }
 
         } catch (error) {
@@ -316,7 +330,6 @@ export const useEditHTMLContent = () => {
                 showError: true
             })
         }
-
     }
 
 

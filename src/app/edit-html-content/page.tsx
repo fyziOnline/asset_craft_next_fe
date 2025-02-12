@@ -93,7 +93,6 @@ const Page = () => {
         closeConfirmationModal()
     }
 
-
     const htmlOtherAsset = () => {
         let htmlContent = '';
         versionSelected.assetVersionBlocks.forEach((item) => {
