@@ -52,7 +52,12 @@ const Page = () => {
         setSectionEdit,
         handleHideBlock,
         showErrorMessage,
-        handleDelete
+        handleDelete,
+        editingVersionId,
+        editingName,
+        setEditingVersionId,
+        setEditingName,
+        handleUpdateVersionName
     } = useEditHTMLContent()
 
 
@@ -329,30 +334,103 @@ const Page = () => {
 
                         <div className='pt-2 pl-14 flex items-center gap-1'>
                             {versionList.map((item, index) => {
+                                const isSelected = versionSelected.assetVersionID === item.assetVersionID;
+                                const showDeleteButton = versionList.length > 1; // Show delete button if more than 1 version exists
+                                const isEditing = editingVersionId === item.assetVersionID;
+
                                 return (
-                                    <div key={item.assetID + index} onClick={() => setVersionSelected(item)} className={`group flex items-center justify-between px-4 py-[10px] rounded-t-md cursor-pointer transition-all min-w-36 ${versionSelected.assetVersionID === item.assetVersionID ? "bg-[#e4e4e4] text-black" : "hover:bg-gray-100"}`}>
-                                        <span className='font-medium'>
-                                            {item.versionName}
-                                        </span>
-                                        <div>
-                                            {versionSelected.assetVersionID === item.assetVersionID &&
+                                    <div 
+                                        key={item.assetID + index} 
+                                        onClick={() => setVersionSelected(item)} 
+                                        onDoubleClick={(e) => {
+                                            if (isSelected) {
+                                                e.stopPropagation();
+                                                setEditingVersionId(item.assetVersionID);
+                                                setEditingName(item.versionName);
+                                            }
+                                        }}
+                                        className={`group relative flex items-center justify-between px-4 py-[10px] rounded-t-md cursor-pointer transition-all min-w-36 ${
+                                            isSelected ? "bg-[#e4e4e4] text-black" : "hover:bg-gray-100"
+                                        }`}
+                                    >
+                                        {isEditing ? (
+                                            <input
+                                                type="text"
+                                                value={editingName}
+                                                onChange={(e) => setEditingName(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' && editingName.trim()) {
+                                                        e.preventDefault();
+                                                        handleUpdateVersionName(item.assetVersionID, editingName.trim());
+                                                    } else if (e.key === 'Escape') {
+                                                        setEditingVersionId(null);
+                                                        setEditingName("");
+                                                    }
+                                                }}
+                                                onBlur={() => {
+                                                    setEditingVersionId(null);
+                                                    setEditingName("");
+                                                }}
+                                                className="bg-white border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-[#01a982] w-full"
+                                                autoFocus
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        ) : (
+                                            <>
+                                                <span className={`
+                                                    font-medium 
+                                                    ${isSelected ? 'hover:border-b hover:border-gray-400 cursor-text' : 'cursor-pointer'}
+                                                `}>
+                                                    {item.versionName}
+                                                    {isSelected && (
+                                                        <span className="ml-1 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            ✎
+                                                        </span>
+                                                    )}
+                                                </span>                                                
+                                            </>
+                                        )}
+                                        {showDeleteButton && !isEditing && (
+                                            <div className="ml-2 relative group/delete">
                                                 <MdOutlineDelete
                                                     size={22}
-                                                    onClick={() => openConfirmationModal()}
-                                                    className=''
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        openConfirmationModal();
+                                                    }}
+                                                    className={`
+                                                        ${isSelected 
+                                                            ? 'text-gray-500' 
+                                                            : 'text-gray-500 opacity-0'
+                                                        } 
+                                                        group-hover:opacity-100
+                                                        hover:text-red-500 
+                                                        transition-colors duration-200
+                                                    `}
                                                 />
-                                            }
-                                        </div>
-                                        {/* key={item.assetID + index}
-                                        className="inline-block h-[42px] text-center text-base font-normal cursor-pointer "> */}
+                                                {/* Delete button tooltip */}
+                                                <div className="absolute invisible group-hover/delete:visible opacity-0 group-hover/delete:opacity-100 transition-all duration-200 -top-8 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-10">
+                                                    Delete Version
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 )
                             })}
 
                             {versionList.length < 7 && (
-                                <div onClick={() => handleSave(1)} className='pl-2 cursor-pointer w-full h-[42px]  rounded-tl-[5px] rounded-tr-[5px] flex items-center justify-center gap-1'>
-                                    <FaPlus color='#01a982' size={12} />
-                                    <p className='text-[#01a982] font-medium text-lg'>Add New Version</p>
+                                <div 
+                                    onClick={() => handleSave(1)} 
+                                    className='group relative flex items-center justify-center w-10 h-[42px] rounded-t-md hover:bg-gray-100 cursor-pointer transition-all'
+                                >
+                                    <FaPlus 
+                                        className="text-[#01a982] group-hover:scale-110 transition-transform" 
+                                        size={14} 
+                                    />
+                                    {/* Tooltip */}
+                                    <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 -top-10 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-sm py-1 px-3 rounded whitespace-nowrap">
+                                        Add New Version
+                                    </div>
                                 </div>
                             )}
 

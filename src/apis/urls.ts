@@ -43,6 +43,6 @@ export const urls = {
   updateAssetReassignFinal : "/approval/assetApproval/ReAssign",
   approveAsset : "/approval/assetApproval/approve",
   userImageUpdate : "/userProfile/image/update",
-  updateAssetReAssignFileComments : "/approval/comment/update"
-
+  updateAssetReAssignFileComments : "/approval/comment/update",
+  asset_version_updateField: "/asset/version/updateField"
 };
