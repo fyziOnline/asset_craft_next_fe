@@ -155,13 +155,13 @@ const ProfilePage: React.FC = () => {
                     <h1 className="text-[30px] text-green-100 font-bold leading-normal">
                         Welcome, {userDetails?.name}
                     </h1>
-                    <Button
+                    {/* <Button
                         buttonText='Request Access'
                         customClass='border-2 border-green-300 px-4 py-1'
                         textColor='text-green-300'
                         backgroundColor='bg-white'
                         iconColor='#01A982'
-                    />
+                    /> */}
                 </div>
 
                 <div className="relative bg-green-100 w-full h-[200px] rounded-2xl p-6 mb-8">
