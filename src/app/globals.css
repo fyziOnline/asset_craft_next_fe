@@ -350,4 +350,15 @@
    /* Firefox */
 }
 
+/* .tip_inf {
+  anchor-name: --i-btn;
+}
+
+[popover] {
+  inset: unset;
+  bottom: anchor(--i-btn top);
+  left: anchor(--i-btn center);
+   */
+/* } */
+
 
