@@ -28,7 +28,7 @@ interface FormValues {
 const ProfilePage: React.FC = () => {
     const router = useRouter()
 
-    const { updateUserDetails, changeProfilePhoto } = useProfile()
+    const { updateUserDetails, changeProfilePhoto ,updatingUserDetails} = useProfile()
     const { userDetails, setError } = useAppData();
 
     const [logoutFromAll, setLogoutFromAll] = useState(false);
@@ -227,7 +227,7 @@ const ProfilePage: React.FC = () => {
                 <div className='flex flex-col gap-4 mt-2 pb-4'>
                     <div className='flex justify-end'>
                         <Button
-                            buttonText='Update'
+                            buttonText={updatingUserDetails ? 'Updating...' : 'Update'}
                             customClass='border-2 border-green-300 px-6 py-1'
                             textColor='text-green-300'
                             backgroundColor='bg-white'
