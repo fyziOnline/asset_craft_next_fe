@@ -13,8 +13,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
-            
-      
+       keyframes : {
+        hideToolTip : {
+          '0%' : {opacity:'1',visibility:'visible'},
+          '90%': {opacity :'1',visibility : 'visible'},
+          '100%':{opacity:'0',visibility:'hidden'}
+        }
+       },   
+       animation : {
+        hideTooltip :"hideTooltip 3s forwards"
+       },
       aspectRatio:{
         half : "1 / 2",
         card : "434 / 330",

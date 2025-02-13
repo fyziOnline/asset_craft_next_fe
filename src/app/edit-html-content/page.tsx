@@ -17,6 +17,7 @@ import { FaPlus } from "react-icons/fa";
 import { formatDate } from '@/utils/formatDate';
 import { MdOutlineDelete } from "react-icons/md";
 import ConfirmationModal from '@/components/global/ConfirmationModal';
+import { GlobalEdit } from '@/assets/icons/AppIcons';
 
 
 const Page = () => {
@@ -209,7 +210,7 @@ const Page = () => {
         return (versionSelected.assetVersionBlocks.map((item, idx) => {
             return (
                 <div key={idx} >
-                    {(item.blockData !== "{}" && item.blockData !== "" && item.ignoreBlock === 0) ? <div className={`flex w-[100%] items-center justify-center absolute ml-[295px] mt-4`} >
+                    {(item.blockData !== "{}" && item.blockData !== "" && item.blockName!='_global_1' && item.ignoreBlock === 0) ? <div className={`flex w-[100%] items-center justify-center absolute ml-[295px] mt-4`} >
                         <div className='flex bg-[#f9f9f9b9] rounded-md border-[2px] border-dashed border-gray-300 border-opacity-70 py-1'>
                             <div className='cursor-pointer pl-2 flex justify-center items-center border-r-2 pr-1 group relative'
                                 onClick={() => {
@@ -258,7 +259,25 @@ const Page = () => {
                             </div>
                         </div>
 
-                    </div> : null}
+                    </div> : 
+                        (item.blockName =='_global_1') ?
+                            <div 
+                                className="absolute top-25% right-2 group cursor-pointer"
+                                onClick={() => {
+                                    setSectionEdit(item)
+                                    setIsShowModelEdit(true)
+                                }}
+                            >
+                                <div id="global_edit_button" typeof="button">
+                                    <GlobalEdit />
+                                </div>
+                                {/* Tooltip */}
+                                <div className="z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 group-hover:animate-hideTooltip absolute top-0 -left-10 bg-gray-300 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                                    Global Edit
+                                </div>
+                            </div>
+                        : null
+                    }
                     {item.ignoreBlock === 0 ? <ShadowDomContainer htmlContent={item.blockHTMLGenerated || ""}></ShadowDomContainer> :
                         <div>
                             <div className={`flex w-[100%] justify-center absolute ml-[275px] mt-[3px]`} >
