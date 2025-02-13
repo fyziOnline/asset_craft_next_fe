@@ -387,7 +387,7 @@ const Page = () => {
                                                             ✎
                                                         </span>
                                                     )}
-                                                </span>
+                                                </span>                                                
                                             </>
                                         )}
                                         {showDeleteButton && !isEditing && (
@@ -408,6 +408,10 @@ const Page = () => {
                                                         transition-colors duration-200
                                                     `}
                                                 />
+                                                {/* Delete button tooltip */}
+                                                <div className="absolute invisible group-hover/delete:visible opacity-0 group-hover/delete:opacity-100 transition-all duration-200 -top-8 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-10">
+                                                    Delete Version
+                                                </div>
                                             </div>
                                         )}
                                     </div>
@@ -423,6 +427,10 @@ const Page = () => {
                                         className="text-[#01a982] group-hover:scale-110 transition-transform" 
                                         size={14} 
                                     />
+                                    {/* Tooltip */}
+                                    <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 -top-10 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-sm py-1 px-3 rounded whitespace-nowrap">
+                                        Add New Version
+                                    </div>
                                 </div>
                             )}
 
