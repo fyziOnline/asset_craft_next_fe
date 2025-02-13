@@ -28,6 +28,8 @@ export const useEditHTMLContent = () => {
     const { assetIDTemplateRef, getAssetHTML } = useGenerateTemplate({})
     const refVersion = useRef('')
     const [showErrorMessage, setShowErrorMessage] = useState(false)
+    const [editingVersionId, setEditingVersionId] = useState<string | null>(null);
+    const [editingName, setEditingName] = useState("");
 
     useEffect(() => {
         try {
@@ -332,6 +334,39 @@ export const useEditHTMLContent = () => {
         }
     }
 
+    const handleUpdateVersionName = async (assetVersionID: string, newName: string) => {
+        try {
+            const res = await ApiService.put<any>(`${urls.asset_version_updateField}`, {
+                assetVersionID: assetVersionID,
+                fieldName: "versionname",
+                fieldValue: newName
+            });
+
+            if (res.isSuccess) {
+                setVersionList(prevList => 
+                    prevList.map(version => 
+                        version.assetVersionID === assetVersionID 
+                            ? { ...version, versionName: newName }
+                            : version
+                    )
+                );
+
+                if (versionSelected.assetVersionID === assetVersionID) {
+                    setVersionSelected(prev => ({ ...prev, versionName: newName }));
+                }
+            }
+        } catch (error) {
+            const apiError = ApiService.handleError(error);
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            });
+        } finally {
+            setEditingVersionId(null);
+            setEditingName("");
+        }
+    };
 
     return {
         sectionEdit,
@@ -357,7 +392,12 @@ export const useEditHTMLContent = () => {
         setSectionEdit,
         handleHideBlock,
         showErrorMessage,
-        handleDelete
+        handleDelete,
+        editingVersionId,
+        editingName,
+        setEditingVersionId,
+        setEditingName,
+        handleUpdateVersionName,
     };
 
 }
