@@ -121,7 +121,7 @@ const config: Config = {
     },
   },
   plugins: [
-    require('@tailwindcss/line-clamp'), require("tailwindcss-animate"),
+    require("tailwindcss-animate"),
     function ({ addComponents } : PluginAPI) {
       addComponents({
         '.custom-range': {
