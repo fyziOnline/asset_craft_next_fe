@@ -7,15 +7,15 @@ import { useAppData } from '@/context/AppContext';
 export const useProfile = () => {
     const { setShowLoading } = useLoading()
     const { getUserDetails } = useHeader()
-    const { setError } = useAppData()
+    const { setError, setUserDetails } = useAppData()
 
     const updateUserDetails = async (data: any) => {
         setShowLoading(true)
         try {
-            const response = await ApiService.put<any>(urls.updateuserDetails , data)
+            const response = await ApiService.put<any>(urls.updateuserDetails, data)
 
             if (response.isSuccess) {
-                await getUserDetails()
+                setUserDetails(response.userProfile)
             }
         } catch (error) {
             const apiError = ApiService.handleError(error)
@@ -33,12 +33,12 @@ export const useProfile = () => {
     const changeProfilePhoto = async (data: any) => {
         setShowLoading(true)
         try {
-            const response = await ApiService.put<any>(urls.userImageUpdate ,data)
+            const response = await ApiService.put<any>(urls.userImageUpdate, data)
 
             if (response.isSuccess) {
                 await getUserDetails()
             }
-            
+
         } catch (error) {
             const apiError = ApiService.handleError(error)
             setError({

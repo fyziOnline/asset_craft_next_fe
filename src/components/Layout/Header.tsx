@@ -14,8 +14,10 @@ const Header: FC = () => {
   const { userDetails, contextData, setContextData } = useAppData()
 
   useEffect(() => {
-    getUserDetails()
-  },[])
+    if (!userDetails?.userID) {
+      getUserDetails();
+    }
+  }, [userDetails?.userID]);
 
   const searchParams = useSearchParams()
   const projectName = searchParams.get('projectName')
