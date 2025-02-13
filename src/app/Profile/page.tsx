@@ -1,10 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react'
-import LayoutWrapper from '@/layout/LayoutWrapper'
-import Button from '@/components/global/Button'
-import Cookies from 'js-cookie';
-import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/hooks/useProfile';
 import { SignOutIcon, UserDetailsIcon } from '@/assets/icons/AppIcons';
@@ -15,7 +11,8 @@ import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
 import { useAppData } from '@/context/AppContext';
 import { IoMdInformationCircleOutline } from "react-icons/io";
-
+import LayoutWrapper from '@/layout/LayoutWrapper'
+import Button from '@/components/global/Button'
 
 interface FormValues {
     name: string;
@@ -28,10 +25,16 @@ interface FormValues {
     isActive: number;
 }
 
-
-const page: React.FC = () => {
+const ProfilePage: React.FC = () => {
     const router = useRouter()
-    const { userDetails, updateUserDetails, updateUserProfile } = useProfile()
+
+    const { updateUserDetails, changeProfilePhoto } = useProfile()
+    const { userDetails, setError } = useAppData();
+
+    const [logoutFromAll, setLogoutFromAll] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [isHovered, setIsHovered] = useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [formValues, setFormValues] = useState<FormValues>({
         name: '',
         email: '',
@@ -42,14 +45,11 @@ const page: React.FC = () => {
         timeZone: '',
         isActive: 1,
     });
-    const { setError } = useAppData();
-    const [logoutFromAll, setLogoutFromAll] = useState(false);
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
 
     useEffect(() => {
         if (userDetails) {
-            setFormValues({
+            const newFormValues = {
                 name: userDetails.name || '',
                 email: userDetails.email,
                 userId: userDetails.userID,
@@ -58,7 +58,9 @@ const page: React.FC = () => {
                 company: userDetails.company || '',
                 timeZone: userDetails.timeZone || '',
                 isActive: userDetails.isActive,
-            });
+            };
+
+            setFormValues(newFormValues);
         }
     }, [userDetails]);
 
@@ -70,10 +72,11 @@ const page: React.FC = () => {
         }));
     };
 
+
     const handleLogout = async () => {
         try {
             setIsLoggingOut(true);
-            
+
             const response = await ApiService.post<any>(urls.logout, {
                 revokeAll: logoutFromAll
             });
@@ -95,8 +98,6 @@ const page: React.FC = () => {
         }
     };
 
-    const [isHovered, setIsHovered] = useState<boolean>(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileSelect = () => {
         fileInputRef.current?.click();
@@ -114,7 +115,7 @@ const page: React.FC = () => {
                 imageAsBase64String: base64Image
             }
 
-            await updateUserProfile(data);
+            await changeProfilePhoto(data);
         }
 
     };
@@ -252,7 +253,7 @@ const page: React.FC = () => {
                                 <div className="group relative inline-block">
                                     <IoMdInformationCircleOutline className="text-gray-400 hover:text-gray-600 cursor-help" size={18} />
                                     <div className="invisible group-hover:visible absolute left-0 bottom-full mb-2 w-72 bg-gray-800 text-white text-xs rounded p-2 shadow-lg">
-                                        When enabled, this will terminate all active sessions across all devices where you're currently logged in. 
+                                        When enabled, this will terminate all active sessions across all devices where you're currently logged in.
                                         This is useful if you suspect unauthorized access or want to ensure complete security across all devices.
                                         Your email will also be removed from the login screen.
                                     </div>
@@ -277,4 +278,4 @@ const page: React.FC = () => {
     )
 }
 
-export default page
+export default ProfilePage

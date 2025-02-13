@@ -90,7 +90,7 @@ export interface AssetVersionProps {
     layoutHTMLGenerated: string,
     htmlFileURL: string,
     zipFileURL: string,
-    status ?: string,
+    status?: string,
     assetVersionBlocks: [
         {
             assetVersionBlockID: string,

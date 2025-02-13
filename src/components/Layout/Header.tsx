@@ -1,23 +1,23 @@
+import { FC, useEffect } from "react";
 import { UserIcon } from "@/assets/icons/AppIcons"
-import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useDashboard } from "@/hooks/useDashboard";
 import { useAppData } from "@/context/AppContext";
-import Title from "../global/Title";
 import { BackIcon } from "@/assets/icons/AppIcons";
-import { useEffect } from "react";
+import Link from 'next/link'
+import Title from "../global/Title";
+import useHeader from "@/hooks/useHeader";
 
-const Header: React.FC = () => {
-  const { userDetails, getUserDetails } = useDashboard()
+const Header: FC = () => {
+  const router = useRouter()
+  const pathname = usePathname()
+  const { getUserDetails } = useHeader()
+  const { userDetails, contextData, setContextData } = useAppData()
 
   useEffect(() => {
-    getUserDetails()
-  },[])
-
-  const pathname = usePathname()
-
-  const router = useRouter()
-  const { contextData, setContextData } = useAppData()
+    if (!userDetails?.userID) {
+      getUserDetails();
+    }
+  }, [userDetails?.userID]);
 
   const searchParams = useSearchParams()
   const projectName = searchParams.get('projectName')
@@ -64,7 +64,6 @@ const Header: React.FC = () => {
           <div className="w-full flex items-center justify-between">
             <div className="flex items-center gap-5">
               <h1 className="text-2xl font-bold">Dashboard</h1>
-              {/* <SearchBox customClass="bg-[#F6F6F6]" /> */}
             </div>
             <h3 className="text-xl font-bold text-[#00A881] pr-3">Welcome, <span>{userDetails?.name}</span></h3>
           </div>

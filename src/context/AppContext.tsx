@@ -1,64 +1,52 @@
 "use client"
-
 import { createContext, useState, useContext, ReactNode, FC } from "react";
-import { AssetHtmlProps, ProjectDetails } from "@/types/templates";
-
-export interface AppData {
-    assetTemplateShow: boolean;
-    assetGenerateTemplate: string;
-    assetGenerateStatus: number;
-    layoutType: 'main' | 'home';
-    ProjectDetails: ProjectDetails
-    AssetHtml: AssetHtmlProps;
-    stepGenerate: number; //step 0 or 1
-    isRegenerateHTML: boolean
-}
-
-export interface ErrorData {
-    status: number;
-    message: string;
-    showError: boolean;
-}
-
-interface AppDataContextType {
-    contextData: AppData;
-    setContextData: (data: Partial<AppData>) => void;
-    error: ErrorData;
-    setError: (data: ErrorData) => void;
-}
-
-export const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
-
+import { AppData, AppDataContextType, ErrorData } from "@/types/appContext";
+import { UserDetailsProps } from "@/types/asset";
+import { AssetHtmlProps } from "@/types/templates";
 interface AppDataProviderProps {
     children: ReactNode;
 }
 
-const APP_DATA: AppData = {
+const INITIAL_APP_DATA: AppData = {
     assetTemplateShow: false,
     assetGenerateTemplate: "LANDINGPAGE",
     assetGenerateStatus: 1,
     stepGenerate: 0,
     layoutType: 'main',
+    AssetHtml: {} as AssetHtmlProps,
+    isRegenerateHTML: false,
     ProjectDetails: {
         project_name: "",
         campaign_name: "",
         asset_name: "",
-        campaignID: "" 
+        campaignID: ""
     },
-    AssetHtml: {} as AssetHtmlProps,
-    isRegenerateHTML: false,
 };
 
-const ERROR_APP: ErrorData = {
+const INITIAL_ERROR: ErrorData = {
     status: 0,
     message: "",
     showError: false,
 }
 
-// Create a provider component
+const INITIAL_USER_DETAILS: UserDetailsProps = {
+    userID: "",
+    name: "",
+    email: "",
+    userRole: "",
+    country: "",
+    company: "",
+    timeZone: "",
+    isActive: 0,
+    fileUrl: ""
+}
+
+export const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
+
 export const AppDataProvider: FC<AppDataProviderProps> = ({ children }) => {
-    const [contextData, setContextData] = useState<AppData>(APP_DATA);
-    const [error, setError] = useState<ErrorData>(ERROR_APP)
+    const [contextData, setContextData] = useState<AppData>(INITIAL_APP_DATA);
+    const [userDetails, setUserDetails] = useState<UserDetailsProps>(INITIAL_USER_DETAILS);
+    const [error, setError] = useState<ErrorData>(INITIAL_ERROR)
 
     // Update context data, ensuring all fields are available
     const updateContextData = (update: Partial<AppData>) => {
@@ -68,12 +56,20 @@ export const AppDataProvider: FC<AppDataProviderProps> = ({ children }) => {
         }));
     };
 
-    const updateErrorData = (update: ErrorData) => {
-        setError(update);
-    };
+    const updateErrorData = (update: ErrorData) => setError(update);
+    const updateUserDetails = (update: UserDetailsProps) => setUserDetails(update);
 
     return (
-        <AppDataContext.Provider value={{ contextData, setContextData: updateContextData, error, setError: updateErrorData }}>
+        <AppDataContext.Provider
+            value={{
+                contextData,
+                setContextData: updateContextData,
+                error,
+                setError: updateErrorData,
+                userDetails,
+                setUserDetails: updateUserDetails
+            }}
+        >
             {children}
         </AppDataContext.Provider>
     );

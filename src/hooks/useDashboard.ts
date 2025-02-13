@@ -1,22 +1,25 @@
 import moment from 'moment';
 import Cookies from 'js-cookie';
-import { urls } from '@/apis/urls';
+import { ChangeEvent, useRef, useState } from 'react';
+import { AllAssetsTypeProps, AssetDetails, AssetsProps, CampaignsProps, ClientAssetTypeProps } from '@/types/asset';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
-import { ApiService } from '@/lib/axios_generic';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
-import { ListTypePage } from '@/data/dataGlobal';
+import { nkey } from '@/data/keyStore';
+import { urls } from '@/apis/urls';
 import { debounce } from 'lodash';
-import { DropDownOptions } from '@/components/global/DropDown';
 import { useAppData } from '@/context/AppContext';
-import { AllAssetsTypeProps, AssetDetails, AssetsProps, CampaignsProps, ClientAssetTypeProps, UserDetailsProps } from '@/types/asset';
+import { ApiService } from '@/lib/axios_generic';
+import { ListTypePage } from '@/data/dataGlobal';
+import { DropDownOptions } from '@/components/global/DropDown';
 
 export const useDashboard = () => {
-    const [clientAssetTypes, setClientAssetTypes] = useState<ClientAssetTypeProps[]>([])
-    const { setShowLoading } = useLoading()
-    const { setContextData, setError } = useAppData();
     const router = useRouter();
+    const campaignIDRef = useRef("")
+    const isCampaignSelect = useRef(false)
+    const { setShowLoading } = useLoading()
+    const { setContextData, setError, userDetails } = useAppData();
+
+    const [clientAssetTypes, setClientAssetTypes] = useState<ClientAssetTypeProps[]>([])
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
     const [isProductNameValid, setIsProductNameValid] = useState<boolean>(true)
@@ -27,8 +30,7 @@ export const useDashboard = () => {
     const [listCampaigns, setListCampaigns] = useState<CampaignsProps[]>([]);
     const [listAssets, setListAssets] = useState<AssetsProps[]>([]);
     const [pendingApproval, setPendingApproval] = useState<any[]>([])
-    const campaignIDRef = useRef("")
-    const isCampaignSelect = useRef(false)
+    const [dashboardAssets, setDashboardAssets] = useState<AllAssetsTypeProps[]>([])
 
     const [assetDetails, setAssetDetails] = useState<AssetDetails>({
         project_name: '',
@@ -36,18 +38,7 @@ export const useDashboard = () => {
         asset_name: ''
     })
 
-    const [dashboardAssets, setDashboardAssets] = useState<AllAssetsTypeProps[]>([])
-    const [userDetails, setUserDetails] = useState<UserDetailsProps | null>(null);
-
-    const userRole = Cookies.get(nkey.userRole)
-
-    // useEffect(() => {
-    //     getListProjects()
-    //     getAssetTypes()
-    //     getUserDetails()
-    //     getAssetAllAtDashboard()
-    //     getPendingApproval()
-    // }, [])
+    const userRole = userDetails.userRole
 
     const getListProjects = async () => {
         try {
@@ -265,34 +256,6 @@ export const useDashboard = () => {
         }
     }
 
-    const getUserDetails = async () => {
-        try {
-            const userID = Cookies.get(nkey.userID)
-
-            if (!userID) {
-                Cookies.remove(nkey.auth_token);
-                Cookies.remove(nkey.email_login);
-                Cookies.remove(nkey.client_ID);
-                Cookies.remove(nkey.userID);
-                Cookies.remove(nkey.userRole);
-                return false;
-            }
-
-            const response = await ApiService.get<any>(`${urls.getuserDetails}?userProfileId=${userID}`)
-            if (response.isSuccess) {
-                setUserDetails(response.userProfile)
-            }
-        } catch (error) {
-            const apiError = ApiService.handleError(error)
-            setError({
-                status: apiError.statusCode,
-                message: apiError.message,
-                showError: true
-            })
-            return false
-        }
-    }
-
     const getAssetAllAtDashboard = async () => {
         setShowLoading(true)
         try {
@@ -319,7 +282,7 @@ export const useDashboard = () => {
 
         try {
             const response = await ApiService.post<any>(`${urls.getAssetsToApprove}`, {
-                assignedTo: Cookies.get('userRole') === 'Approver' ? 1 : 0
+                assignedTo: userRole === 'Approver' ? 1 : 0
             })
 
             if (response.isSuccess) {
@@ -359,12 +322,10 @@ export const useDashboard = () => {
         dashboardAssets,
         projectName: assetDetails.project_name,
         handleChangeAssetDetails,
-        userDetails,
         pendingApproval,
         userRole,
         getListProjects,
         getAssetTypes,
-        getUserDetails,
         getAssetAllAtDashboard,
         getPendingApproval,
     };
