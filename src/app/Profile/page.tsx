@@ -126,13 +126,13 @@ const page: React.FC = () => {
                     <h1 className="text-[30px] text-green-100 font-bold leading-normal">
                         Welcome, {userDetails?.name}
                     </h1>
-                    <Button
+                    {/* <Button
                         buttonText='Request Access'
                         customClass='border-2 border-green-300 px-4 py-1'
                         textColor='text-green-300'
                         backgroundColor='bg-white'
                         iconColor='#01A982'
-                    />
+                    /> */}
                 </div>
 
                 <div className="relative bg-green-100 w-full h-[200px] rounded-2xl p-6 mb-8">
@@ -246,7 +246,7 @@ const page: React.FC = () => {
                                     type="checkbox"
                                     checked={logoutFromAll}
                                     onChange={(e) => setLogoutFromAll(e.target.checked)}
-                                    className="form-checkbox h-4 w-4 text-green-300 rounded border-gray-300 focus:ring-green-300"
+                                    className="form-checkbox h-4 w-4 text-green-300 rounded border-gray-300 focus:ring-green-300 cursor-pointer"
                                 />
                                 <span>Logout from all devices</span>
                                 <div className="group relative inline-block">
