@@ -19,6 +19,11 @@ import { MdOutlineDelete } from "react-icons/md";
 import ConfirmationModal from '@/components/global/ConfirmationModal';
 import { GlobalEdit } from '@/assets/icons/AppIcons';
 
+// Add a new interface for the version to delete
+interface VersionToDelete {
+    id: string;
+    name: string;
+}
 
 const Page = () => {
     const { contextData } = useAppData();
@@ -27,6 +32,7 @@ const Page = () => {
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
     const [assetType, setAssetType] = useState<string>("")
     const [isConfirmModel, setIsConfirmModel] = useState<boolean>(false)
+    const [versionToDelete, setVersionToDelete] = useState<VersionToDelete | null>(null);
 
     useOverflowHidden()
     const {
@@ -88,17 +94,21 @@ const Page = () => {
         setAssetType(assetType as string);
     }, [])
 
-    const openConfirmationModal = () => {
-        setIsConfirmModel(true)
+    const openConfirmationModal = (assetVersionID: string, versionName: string) => {
+        setVersionToDelete({ id: assetVersionID, name: versionName });
+        setIsConfirmModel(true);
     }
 
     const closeConfirmationModal = () => {
-        setIsConfirmModel(false)
+        setVersionToDelete(null);
+        setIsConfirmModel(false);
     }
 
     const handleToConfirmDelete = () => {
-        handleDelete(versionSelected.assetVersionID)
-        closeConfirmationModal()
+        if (versionToDelete) {
+            handleDelete(versionToDelete.id);
+        }
+        closeConfirmationModal();
     }
 
     const htmlOtherAsset = () => {
@@ -415,7 +425,7 @@ const Page = () => {
                                                     size={22}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        openConfirmationModal();
+                                                        openConfirmationModal(item.assetVersionID, item.versionName);
                                                     }}
                                                     className={`
                                                         ${isSelected 
@@ -562,7 +572,7 @@ const Page = () => {
                         )}
                     </div>
                     <ConfirmationModal
-                        message='Are you sure you want to delete this version?'
+                        message={`Are you sure you want to delete version "${versionToDelete?.name}"?`}
                         isOpen={isConfirmModel}
                         isConfirm={handleToConfirmDelete}
                         isCancel={closeConfirmationModal}
