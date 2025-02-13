@@ -72,7 +72,11 @@ export interface UserDetailsProps {
     name: string;
     email: string;
     userRole: string;
+    country: string;
+    company: string;
+    timeZone: string;
     isActive: number;
+    fileUrl: string;
 }
 
 

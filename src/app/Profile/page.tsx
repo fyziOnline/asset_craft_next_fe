@@ -1,10 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react'
-import LayoutWrapper from '@/layout/LayoutWrapper'
-import Button from '@/components/global/Button'
-import Cookies from 'js-cookie';
-import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/hooks/useProfile';
 import { SignOutIcon, UserDetailsIcon } from '@/assets/icons/AppIcons';
@@ -15,7 +11,8 @@ import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
 import { useAppData } from '@/context/AppContext';
 import { IoMdInformationCircleOutline } from "react-icons/io";
-
+import LayoutWrapper from '@/layout/LayoutWrapper'
+import Button from '@/components/global/Button'
 
 interface FormValues {
     name: string;
@@ -31,7 +28,12 @@ interface FormValues {
 
 const page: React.FC = () => {
     const router = useRouter()
-    const { userDetails, updateUserDetails, updateUserProfile } = useProfile()
+    
+    const { updateUserDetails, changeProfilePhoto } = useProfile()
+    const { userDetails, setError } = useAppData();
+
+    const [logoutFromAll, setLogoutFromAll] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [formValues, setFormValues] = useState<FormValues>({
         name: '',
         email: '',
@@ -42,11 +44,7 @@ const page: React.FC = () => {
         timeZone: '',
         isActive: 1,
     });
-    const { setError } = useAppData();
-    const [logoutFromAll, setLogoutFromAll] = useState(false);
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-
+    
     useEffect(() => {
         if (userDetails) {
             setFormValues({
@@ -114,7 +112,7 @@ const page: React.FC = () => {
                 imageAsBase64String: base64Image
             }
 
-            await updateUserProfile(data);
+            await changeProfilePhoto(data);
         }
 
     };

@@ -72,8 +72,6 @@ const Page = () => {
         }
     )
 
-    console.log('comments~~', comments);
-
     const handleDownload = (fileURL: string) => {
         const link = document.createElement('a');
         link.href = approvalDetails.fileUrl,

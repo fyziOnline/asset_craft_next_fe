@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useLayoutEffect } from "react";
+import { FC, useEffect } from "react";
 import { UserIcon } from "@/assets/icons/AppIcons";
 import { useLogin } from "@/hooks/useLogin";
 import Button from "@/components/global/Button";
@@ -50,7 +50,7 @@ const Home: FC = () => {
     checkIsUserAuthorized
   } = useLogin();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (checkIsUserAuthorized()) {
       router.push('/dashboard');
     }
