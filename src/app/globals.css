@@ -331,7 +331,7 @@
 @media screen and (max-width: 900px) {
   .feedback-panel {
     position: fixed; /* Keeps the panel fixed in place */
-    top: 40%;        /* Positions the panel in the middle vertically */
+    top: 19%;        /* Positions the panel in the middle vertically */
     right: 0%;      /* Positions the panel in the middle horizontally */
     transform: translate(0, -50%); /* Adjusts for proper centering */
     width: 35vw !important;     /* Sets width to 20% of the viewport width */
@@ -343,9 +343,11 @@
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 760px) {
   .feedback-panel {
-    top: 75%;
+    top: 41%;
+    overflow-y: scroll;
+    right: 8%;
   }
 }
 
