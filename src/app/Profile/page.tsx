@@ -26,7 +26,7 @@ interface FormValues {
 }
 
 
-const page: React.FC = () => {
+const ProfilePage: React.FC = () => {
     const router = useRouter()
     
     const { updateUserDetails, changeProfilePhoto } = useProfile()
@@ -44,10 +44,13 @@ const page: React.FC = () => {
         timeZone: '',
         isActive: 1,
     });
-    
+    const [isFormChanged, setIsFormChanged] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const initialFormRef = useRef<FormValues | null>(null);
+
     useEffect(() => {
         if (userDetails) {
-            setFormValues({
+            const newFormValues = {
                 name: userDetails.name || '',
                 email: userDetails.email,
                 userId: userDetails.userID,
@@ -56,16 +59,43 @@ const page: React.FC = () => {
                 company: userDetails.company || '',
                 timeZone: userDetails.timeZone || '',
                 isActive: userDetails.isActive,
-            });
+            };
+            
+            setFormValues(newFormValues);
+            initialFormRef.current = newFormValues;
+            setIsFormChanged(false);
         }
     }, [userDetails]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormValues((prevValues) => ({
-            ...prevValues,
-            [name]: value,
-        }));
+        setFormValues(prevValues => {
+            const newValues = {
+                ...prevValues,
+                [name]: value,
+            };
+            
+            // Check if any value is different from initial values
+            const hasChanges = Object.keys(newValues).some(key => {
+                const typedKey = key as keyof FormValues;
+                return newValues[typedKey] !== initialFormRef.current?.[typedKey];
+            });
+            
+            setIsFormChanged(hasChanges);
+            return newValues;
+        });
+    };
+
+    const handleUpdateProfile = async () => {
+        if (!isFormChanged) return;
+        
+        setIsUpdating(true);
+        try {
+            await updateUserDetails(formValues);
+            setIsFormChanged(false);
+        } finally {
+            setIsUpdating(false);
+        }
     };
 
     const handleLogout = async () => {
@@ -224,14 +254,15 @@ const page: React.FC = () => {
                 <div className='flex flex-col gap-4 mt-2 pb-4'>
                     <div className='flex justify-end'>
                         <Button
-                            buttonText='Update'
-                            customClass='border-2 border-green-300 px-6 py-1'
+                            buttonText={isUpdating ? 'Updating...' : 'Update'}
+                            customClass={`border-2 border-green-300 px-6 py-1 ${!isFormChanged ? 'opacity-50 cursor-not-allowed' : ''}`}
                             textColor='text-green-300'
                             backgroundColor='bg-white'
                             iconColor='#01A982'
                             IconComponent={<UserDetailsIcon />}
                             showIcon={false}
-                            handleClick={() => updateUserDetails(formValues)}
+                            handleClick={handleUpdateProfile}
+                            disabled={!isFormChanged || isUpdating}
                         />
                     </div>
 
@@ -275,4 +306,4 @@ const page: React.FC = () => {
     )
 }
 
-export default page
+export default ProfilePage
