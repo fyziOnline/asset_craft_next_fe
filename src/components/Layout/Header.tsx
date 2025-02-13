@@ -90,7 +90,7 @@ const Header: FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <h1 className="text-sm md:text-xl tracking-wide">{userDetails?.name}</h1>
+            <h1 className="text-xl font-bold text-[#00A881] tracking-wide">{userDetails?.name}</h1>
             <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
           </div>
         </div>

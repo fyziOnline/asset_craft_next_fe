@@ -7,16 +7,17 @@ interface DashboardCardProps {
   totalAssets: number;
   underReview: number;
   inProgress: number;
+  customClass?: string;
 }
 
-const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDate, totalAssets, underReview, inProgress }) => {  
+const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDate, totalAssets, underReview, inProgress, customClass }) => {  
   const router = useRouter()
   const navigateToAssetPage = () => {
     router.push(`/asset?type=${projectName}`)
   }
   return (
     <div 
-      className="w-auto group cursor-pointer bg-[#F6F6F6] hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] p-4 hover:border-none"
+      className={`w-auto group cursor-pointer bg-[#F6F6F6] hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] p-4 hover:border-none ${customClass}`}
       onClick={navigateToAssetPage}  
       >
       <h2 className="text-lg text-[#073634] leading-none font-bold mb-2 group-hover:text-white">{projectName}</h2>

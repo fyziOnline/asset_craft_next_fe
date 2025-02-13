@@ -28,7 +28,7 @@ interface FormValues {
 const ProfilePage: React.FC = () => {
     const router = useRouter()
 
-    const { updateUserDetails, changeProfilePhoto } = useProfile()
+    const { updateUserDetails, changeProfilePhoto ,updatingUserDetails} = useProfile()
     const { userDetails, setError } = useAppData();
 
     const [logoutFromAll, setLogoutFromAll] = useState(false);
@@ -127,13 +127,13 @@ const ProfilePage: React.FC = () => {
                     <h1 className="text-[30px] text-green-100 font-bold leading-normal">
                         Welcome, {userDetails?.name}
                     </h1>
-                    <Button
+                    {/* <Button
                         buttonText='Request Access'
                         customClass='border-2 border-green-300 px-4 py-1'
                         textColor='text-green-300'
                         backgroundColor='bg-white'
                         iconColor='#01A982'
-                    />
+                    /> */}
                 </div>
 
                 <div className="relative bg-green-100 w-full h-[200px] rounded-2xl p-6 mb-8">
@@ -227,7 +227,7 @@ const ProfilePage: React.FC = () => {
                 <div className='flex flex-col gap-4 mt-2 pb-4'>
                     <div className='flex justify-end'>
                         <Button
-                            buttonText='Update'
+                            buttonText={updatingUserDetails ? 'Updating...' : 'Update'}
                             customClass='border-2 border-green-300 px-6 py-1'
                             textColor='text-green-300'
                             backgroundColor='bg-white'
@@ -247,7 +247,7 @@ const ProfilePage: React.FC = () => {
                                     type="checkbox"
                                     checked={logoutFromAll}
                                     onChange={(e) => setLogoutFromAll(e.target.checked)}
-                                    className="form-checkbox h-4 w-4 text-green-300 rounded border-gray-300 focus:ring-green-300"
+                                    className="form-checkbox h-4 w-4 text-green-300 rounded border-gray-300 focus:ring-green-300 cursor-pointer"
                                 />
                                 <span>Logout from all devices</span>
                                 <div className="group relative inline-block">

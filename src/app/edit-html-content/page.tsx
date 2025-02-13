@@ -320,7 +320,11 @@ const Page = () => {
                 <div className="min-h-[82vh] border-t border-solid">
                     {/* Edit section header  */}
                     <div className='flex justify-between items-center px-14 py-4'>
-                        <div className='py-1 text-base border border-[#00A881] w-[150px] flex items-center justify-center rounded-md m-2 text-[#00A881]'>{versionSelected?.status}</div>
+                        <div className='flex-1'>
+                            {
+                                versionSelected?.status && <div className='py-1 text-base border border-[#00A881] w-[150px] flex items-center justify-center rounded-md m-2 text-[#00A881]'>{versionSelected?.status}</div>
+                            }
+                        </div>
                         <div className='flex gap-4'>
                             <div className='relative w-[150px] bg-white shadow-sm rounded'>
                                 <div onClick={() => { setShowSave(!isShowSave) }} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
@@ -366,9 +370,9 @@ const Page = () => {
                                 const isEditing = editingVersionId === item.assetVersionID;
 
                                 return (
-                                    <div 
-                                        key={item.assetID + index} 
-                                        onClick={() => setVersionSelected(item)} 
+                                    <div
+                                        key={item.assetID + index}
+                                        onClick={() => setVersionSelected(item)}
                                         onDoubleClick={(e) => {
                                             if (isSelected) {
                                                 e.stopPropagation();
@@ -376,9 +380,8 @@ const Page = () => {
                                                 setEditingName(item.versionName);
                                             }
                                         }}
-                                        className={`group relative flex items-center justify-between px-4 py-[10px] rounded-t-md cursor-pointer transition-all min-w-36 ${
-                                            isSelected ? "bg-[#e4e4e4] text-black" : "hover:bg-gray-100"
-                                        }`}
+                                        className={`group relative flex items-center justify-between px-4 py-[10px] rounded-t-md cursor-pointer transition-all min-w-36 ${isSelected ? "bg-[#e4e4e4] text-black" : "hover:bg-gray-100"
+                                            }`}
                                     >
                                         {isEditing ? (
                                             <input
@@ -414,7 +417,7 @@ const Page = () => {
                                                             ✎
                                                         </span>
                                                     )}
-                                                </span>                                                
+                                                </span>
                                             </>
                                         )}
                                         {showDeleteButton && !isEditing && (
@@ -426,8 +429,8 @@ const Page = () => {
                                                         openConfirmationModal(item.assetVersionID, item.versionName);
                                                     }}
                                                     className={`
-                                                        ${isSelected 
-                                                            ? 'text-gray-500' 
+                                                        ${isSelected
+                                                            ? 'text-gray-500'
                                                             : 'text-gray-500 opacity-0'
                                                         } 
                                                         group-hover:opacity-100
@@ -446,14 +449,17 @@ const Page = () => {
                             })}
 
                             {versionList.length < 7 && (
-                                <div 
-                                    onClick={() => handleSave(1)} 
-                                    className='group relative flex items-center justify-center w-10 h-[42px] rounded-t-md hover:bg-gray-100 cursor-pointer transition-all'
+                                <div
+                                    onClick={() => handleSave(1)}
+                                    className='group relative flex items-center justify-center w-10 h-[42px] rounded-t-md hover:bg-gray-100 cursor-pointer transition-all -bottom-[1px]'
                                 >
-                                    <FaPlus 
-                                        className="text-[#01a982] group-hover:scale-110 transition-transform" 
-                                        size={14} 
-                                    />
+                                    {
+                                        versionList.length > 0 &&
+                                        <FaPlus
+                                            className="text-[#01a982] group-hover:scale-110 transition-transform"
+                                            size={14}
+                                        />
+                                    }
                                     {/* Tooltip */}
                                     <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 -top-10 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-sm py-1 px-3 rounded whitespace-nowrap">
                                         Add New Version
@@ -501,7 +507,7 @@ const Page = () => {
                         {/* Feedback Panel */}
                         {isFeedbackOpen && (
                             <div
-                                className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[25%]  feedback-panel ${isFeedbackOpen ? "block" : "hidden "
+                                className={`fixed md:relative top-0 right-0 bg-white md:w-[25%]  feedback-panel ${isFeedbackOpen ? "block" : "hidden "
                                     }`}
                             >
                                 {/* Header */}
