@@ -1,10 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react'
-import LayoutWrapper from '@/layout/LayoutWrapper'
-import Button from '@/components/global/Button'
-import Cookies from 'js-cookie';
-import { nkey } from '@/data/keyStore';
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/hooks/useProfile';
 import { SignOutIcon, UserDetailsIcon } from '@/assets/icons/AppIcons';
@@ -15,7 +11,8 @@ import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
 import { useAppData } from '@/context/AppContext';
 import { IoMdInformationCircleOutline } from "react-icons/io";
-
+import LayoutWrapper from '@/layout/LayoutWrapper'
+import Button from '@/components/global/Button'
 
 interface FormValues {
     name: string;
@@ -28,13 +25,16 @@ interface FormValues {
     isActive: number;
 }
 
-
 const ProfilePage: React.FC = () => {
     const router = useRouter()
-    const { userDetails, updateUserDetails, updateUserProfile } = useProfile()
-    const { setError } = useAppData();
+
+    const { updateUserDetails, changeProfilePhoto } = useProfile()
+    const { userDetails, setError } = useAppData();
+
     const [logoutFromAll, setLogoutFromAll] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [isHovered, setIsHovered] = useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [formValues, setFormValues] = useState<FormValues>({
         name: '',
         email: '',
@@ -45,9 +45,7 @@ const ProfilePage: React.FC = () => {
         timeZone: '',
         isActive: 1,
     });
-    const [isFormChanged, setIsFormChanged] = useState(false);
-    const [isUpdating, setIsUpdating] = useState(false);
-    const initialFormRef = useRef<FormValues | null>(null);
+
 
     useEffect(() => {
         if (userDetails) {
@@ -61,48 +59,24 @@ const ProfilePage: React.FC = () => {
                 timeZone: userDetails.timeZone || '',
                 isActive: userDetails.isActive,
             };
-            
+
             setFormValues(newFormValues);
-            initialFormRef.current = newFormValues;
-            setIsFormChanged(false);
         }
     }, [userDetails]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormValues(prevValues => {
-            const newValues = {
-                ...prevValues,
-                [name]: value,
-            };
-            
-            // Check if any value is different from initial values
-            const hasChanges = Object.keys(newValues).some(key => {
-                const typedKey = key as keyof FormValues;
-                return newValues[typedKey] !== initialFormRef.current?.[typedKey];
-            });
-            
-            setIsFormChanged(hasChanges);
-            return newValues;
-        });
+        setFormValues((prevValues) => ({
+            ...prevValues,
+            [name]: value,
+        }));
     };
 
-    const handleUpdateProfile = async () => {
-        if (!isFormChanged) return;
-        
-        setIsUpdating(true);
-        try {
-            await updateUserDetails(formValues);
-            setIsFormChanged(false);
-        } finally {
-            setIsUpdating(false);
-        }
-    };
 
     const handleLogout = async () => {
         try {
             setIsLoggingOut(true);
-            
+
             const response = await ApiService.post<any>(urls.logout, {
                 revokeAll: logoutFromAll
             });
@@ -124,8 +98,6 @@ const ProfilePage: React.FC = () => {
         }
     };
 
-    const [isHovered, setIsHovered] = useState<boolean>(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileSelect = () => {
         fileInputRef.current?.click();
@@ -143,7 +115,7 @@ const ProfilePage: React.FC = () => {
                 imageAsBase64String: base64Image
             }
 
-            await updateUserProfile(data);
+            await changeProfilePhoto(data);
         }
 
     };
@@ -255,15 +227,14 @@ const ProfilePage: React.FC = () => {
                 <div className='flex flex-col gap-4 mt-2 pb-4'>
                     <div className='flex justify-end'>
                         <Button
-                            buttonText={isUpdating ? 'Updating...' : 'Update'}
-                            customClass={`border-2 border-green-300 px-6 py-1 ${!isFormChanged ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            buttonText='Update'
+                            customClass='border-2 border-green-300 px-6 py-1'
                             textColor='text-green-300'
                             backgroundColor='bg-white'
                             iconColor='#01A982'
                             IconComponent={<UserDetailsIcon />}
                             showIcon={false}
-                            handleClick={handleUpdateProfile}
-                            disabled={!isFormChanged || isUpdating}
+                            handleClick={() => updateUserDetails(formValues)}
                         />
                     </div>
 
@@ -282,7 +253,7 @@ const ProfilePage: React.FC = () => {
                                 <div className="group relative inline-block">
                                     <IoMdInformationCircleOutline className="text-gray-400 hover:text-gray-600 cursor-help" size={18} />
                                     <div className="invisible group-hover:visible absolute left-0 bottom-full mb-2 w-72 bg-gray-800 text-white text-xs rounded p-2 shadow-lg">
-                                        When enabled, this will terminate all active sessions across all devices where you're currently logged in. 
+                                        When enabled, this will terminate all active sessions across all devices where you're currently logged in.
                                         This is useful if you suspect unauthorized access or want to ensure complete security across all devices.
                                         Your email will also be removed from the login screen.
                                     </div>
