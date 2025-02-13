@@ -53,7 +53,12 @@ const Page = () => {
         setSectionEdit,
         handleHideBlock,
         showErrorMessage,
-        handleDelete
+        handleDelete,
+        editingVersionId,
+        editingName,
+        setEditingVersionId,
+        setEditingName,
+        handleUpdateVersionName
     } = useEditHTMLContent()
 
 
@@ -68,7 +73,9 @@ const Page = () => {
         }
     )
 
-    const handleDownload = () => {
+    console.log('comments~~', comments);
+
+    const handleDownload = (fileURL: string) => {
         const link = document.createElement('a');
         link.href = approvalDetails.fileUrl,
             link.download = 'filename',
@@ -346,30 +353,103 @@ const Page = () => {
 
                         <div className='pt-2 pl-14 flex items-center gap-1'>
                             {versionList.map((item, index) => {
+                                const isSelected = versionSelected.assetVersionID === item.assetVersionID;
+                                const showDeleteButton = versionList.length > 1; // Show delete button if more than 1 version exists
+                                const isEditing = editingVersionId === item.assetVersionID;
+
                                 return (
-                                    <div key={item.assetID + index} onClick={() => setVersionSelected(item)} className={`group flex items-center justify-between px-4 py-[10px] rounded-t-md cursor-pointer transition-all min-w-36 ${versionSelected.assetVersionID === item.assetVersionID ? "bg-[#e4e4e4] text-black" : "hover:bg-gray-100"}`}>
-                                        <span className='font-medium'>
-                                            {item.versionName}
-                                        </span>
-                                        <div>
-                                            {versionSelected.assetVersionID === item.assetVersionID &&
+                                    <div 
+                                        key={item.assetID + index} 
+                                        onClick={() => setVersionSelected(item)} 
+                                        onDoubleClick={(e) => {
+                                            if (isSelected) {
+                                                e.stopPropagation();
+                                                setEditingVersionId(item.assetVersionID);
+                                                setEditingName(item.versionName);
+                                            }
+                                        }}
+                                        className={`group relative flex items-center justify-between px-4 py-[10px] rounded-t-md cursor-pointer transition-all min-w-36 ${
+                                            isSelected ? "bg-[#e4e4e4] text-black" : "hover:bg-gray-100"
+                                        }`}
+                                    >
+                                        {isEditing ? (
+                                            <input
+                                                type="text"
+                                                value={editingName}
+                                                onChange={(e) => setEditingName(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' && editingName.trim()) {
+                                                        e.preventDefault();
+                                                        handleUpdateVersionName(item.assetVersionID, editingName.trim());
+                                                    } else if (e.key === 'Escape') {
+                                                        setEditingVersionId(null);
+                                                        setEditingName("");
+                                                    }
+                                                }}
+                                                onBlur={() => {
+                                                    setEditingVersionId(null);
+                                                    setEditingName("");
+                                                }}
+                                                className="bg-white border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-[#01a982] w-full"
+                                                autoFocus
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        ) : (
+                                            <>
+                                                <span className={`
+                                                    font-medium 
+                                                    ${isSelected ? 'hover:border-b hover:border-gray-400 cursor-text' : 'cursor-pointer'}
+                                                `}>
+                                                    {item.versionName}
+                                                    {isSelected && (
+                                                        <span className="ml-1 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            ✎
+                                                        </span>
+                                                    )}
+                                                </span>                                                
+                                            </>
+                                        )}
+                                        {showDeleteButton && !isEditing && (
+                                            <div className="ml-2 relative group/delete">
                                                 <MdOutlineDelete
                                                     size={22}
-                                                    onClick={() => openConfirmationModal()}
-                                                    className=''
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        openConfirmationModal();
+                                                    }}
+                                                    className={`
+                                                        ${isSelected 
+                                                            ? 'text-gray-500' 
+                                                            : 'text-gray-500 opacity-0'
+                                                        } 
+                                                        group-hover:opacity-100
+                                                        hover:text-red-500 
+                                                        transition-colors duration-200
+                                                    `}
                                                 />
-                                            }
-                                        </div>
-                                        {/* key={item.assetID + index}
-                                        className="inline-block h-[42px] text-center text-base font-normal cursor-pointer "> */}
+                                                {/* Delete button tooltip */}
+                                                <div className="absolute invisible group-hover/delete:visible opacity-0 group-hover/delete:opacity-100 transition-all duration-200 -top-8 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-10">
+                                                    Delete Version
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 )
                             })}
 
                             {versionList.length < 7 && (
-                                <div onClick={() => handleSave(1)} className='pl-2 cursor-pointer w-full h-[42px]  rounded-tl-[5px] rounded-tr-[5px] flex items-center justify-center gap-1'>
-                                    <FaPlus color='#01a982' size={12} />
-                                    <p className='text-[#01a982] font-medium text-lg'>Add New Version</p>
+                                <div 
+                                    onClick={() => handleSave(1)} 
+                                    className='group relative flex items-center justify-center w-10 h-[42px] rounded-t-md hover:bg-gray-100 cursor-pointer transition-all'
+                                >
+                                    <FaPlus 
+                                        className="text-[#01a982] group-hover:scale-110 transition-transform" 
+                                        size={14} 
+                                    />
+                                    {/* Tooltip */}
+                                    <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 -top-10 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-sm py-1 px-3 rounded whitespace-nowrap">
+                                        Add New Version
+                                    </div>
                                 </div>
                             )}
 
@@ -413,7 +493,7 @@ const Page = () => {
                         {/* Feedback Panel */}
                         {isFeedbackOpen && (
                             <div
-                                className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[25%] md:h-[60%] overflow-y-auto custom-scrollbar feedback-panel ${isFeedbackOpen ? "block" : "hidden "
+                                className={`fixed md:relative top-0 right-0 bg-white border-[2px] border-[#E4E4E4] md:w-[25%]  feedback-panel ${isFeedbackOpen ? "block" : "hidden "
                                     }`}
                             >
                                 {/* Header */}
@@ -443,61 +523,40 @@ const Page = () => {
 
                                 {/* Feedback Content */}
 
-                                <div className="h-auto overflow-y-auto p-4 space-y-6 ">
-                                    {
-                                        comments.map((item, index) => {
-                                            // Trim whitespace from type field
-                                            const isCommentType = item.type?.trim() === "Comment";
-                                            const isFileType = item.type?.trim() === "File";
-
-                                            return (
-                                                <div key={index}>
-                                                    <div className='flex justify-between'>
-                                                        <p className="text-sm text-gray-500 mb-2">
-                                                            {formatDate(item.createdOn)}
-                                                        </p>
-                                                        <span className='text-sm text-gray-500 mb-2'>{item.createdBy}</span>
+                                <div className="h-auto overflow-y-auto p-1 md:h-[60%] custom-scrollbar border pb-4">
+                                    {comments.map((item, index) => (
+                                        <div key={index} className="bg-white p-2 transition-all duration-200">
+                                            <div className='flex flex-col items-center mb-1 w-full'>
+                                                <div className='flex justify-between items-center w-full pb-1'>
+                                                    <div className="flex items-center">
+                                                        <span className='text-xs font-medium text-gray-500'>{item.createdBy}</span>
                                                     </div>
 
-                                                    <div className="bg-gray-100 p-4 rounded-md border border-gray-200 space-y-2">
-                                                        <div className='overflow-y-auto max-h-40'>
-                                                            <p className="text-gray-700 text-sm">
-                                                                {isCommentType ? item.comment : ''}
-                                                            </p>
-                                                        </div>
-                                                        {isFileType && (
-                                                            <button
-                                                                className="px-3 py-1 bg-[#00A881] text-white text-sm rounded-md"
-                                                                onClick={() => {
-                                                                    try {
-                                                                        const fileUrl = item.comment.trim();
-                                                                        const fileName = decodeURIComponent(fileUrl.split('/').pop() || 'download');
-
-                                                                        // Create a temporary anchor element
-                                                                        const link = document.createElement('a');
-                                                                        link.href = fileUrl;
-                                                                        link.target = '_blank'; // Open in new tab
-                                                                        link.download = fileName;
-                                                                        link.rel = 'noopener noreferrer';
-
-                                                                        // Trigger download
-                                                                        document.body.appendChild(link);
-                                                                        link.click();
-                                                                        document.body.removeChild(link);
-                                                                    } catch (error) {
-                                                                        console.error('Download failed:', error);
-                                                                        // Optionally show an error message to the user
-                                                                    }
-                                                                }}
-                                                            >
-                                                                Download
-                                                            </button>
-                                                        )}
+                                                    <div className="text-xs text-gray-500 flex items-center gap-1">
+                                                        {formatDate(item.createdOn)}
                                                     </div>
                                                 </div>
-                                            )
-                                        })
-                                    }
+
+                                                <div className="text-gray-600 text-sm leading-relaxed mb-1 bg-gray-50 shadow-sm p-2 rounded-md w-full">
+                                                    {item.comment}
+
+                                                    {item.fIleURL !== "" && (
+                                                        <div className="mt-1 flex justify-end">
+                                                            <button
+                                                                className="flex items-center gap-2 px-3 py-1 bg-[#00A881] text-white text-sm rounded-md hover:bg-[#008c6a] transition-colors duration-200"
+                                                                onClick={() => handleDownload(item.fIleURL)}
+                                                            >
+                                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                                </svg>
+                                                                Download
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         )}
