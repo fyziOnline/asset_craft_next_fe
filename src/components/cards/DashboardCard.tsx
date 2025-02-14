@@ -30,15 +30,15 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDa
         </div>
       </div>
 
-      <div className="grid card_res gap-1 mt-3 items-start">
+      <div className="grid card_res gap-1 mt-1 items-start">
         {/* sec 1 */}
-        <div className="grid grid-rows-2 gap-2 ">
+        <div className="grid grid-rows-2 gap-1 ">
           <p className="text-3xl font-bold group-hover:text-white h-10 text-center">{underReview}</p>
           <p className="text-3xl font-bold group-hover:text-white h-10 text-center">{inProgress}</p>
           <p className="text-3xl font-bold group-hover:text-white h-10 text-center">{completedAssets}</p>
         </div>
         {/* sec 2 */}
-        <div className="grid grid-rows-2 gap-2  items-center w-fit">
+        <div className="grid grid-rows-2 gap-1  items-center w-fit">
           <p className="text-base text-[#00A881] leading-none text-start pl-3 group-hover:text-white h-10 flex items-center justify-center">Under Review</p>
           <p className="text-base text-[#B0890E] leading-none text-start pl-3 group-hover:text-white h-10 flex items-center justify-center">In Progress</p>
           <p className="text-base text-[#00A881] leading-none text-start pl-3 group-hover:text-white h-10 flex items-center justify-center">Completed</p>

@@ -31,7 +31,7 @@ const Dashboard: FC = () => {
     getAssetTypes()
     getAssetAllAtDashboard()
     getPendingApproval()
-  },[])
+  }, [])
 
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
   const { setContextData } = useAppData()

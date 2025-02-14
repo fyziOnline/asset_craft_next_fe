@@ -75,19 +75,15 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:Asse
 
     // Calculate the totals for all projects
     const totalAssets = dashboardAssets.length;
-    console.log('totalAssets',totalAssets);
     
     
     const inProgressCount = dashboardAssets.filter(asset => asset.status === "In Progress").length;
-    console.log('inProgressCount',inProgressCount);
     
     const onReviewCount = dashboardAssets.filter(asset => asset.status === "On Review").length;
-    console.log('onReviewCount',onReviewCount);
 
     const pendingApproval = dashboardAssets.filter(asset => asset.status === "On Review")
 
     const completedAssetsCount = dashboardAssets.filter(asset => asset.status === "Completed").length
-    console.log('completedAssetsCount',completedAssetsCount);
 
     // Calculate for each project type
     const projectTypes = ["Email", "LinkedIn", "Landing Page", "Call Script"];
