@@ -1,0 +1,25 @@
+import React from 'react';
+import { GlobalEdit } from '@/assets/icons/AppIcons';
+
+interface GlobalEditButtonProps {
+    onClick: () => void;
+}
+
+const GlobalEditButton: React.FC<GlobalEditButtonProps> = ({ onClick }) => {
+    return (
+        <div 
+            className="absolute top-25% right-2 group cursor-pointer z-[999]"
+            onClick={onClick}
+        >
+            <div id="global_edit_button" typeof="button">
+                <GlobalEdit />
+            </div>
+            {/* Tooltip */}
+            <div className="z-[1000] invisible group-hover:visible opacity-0 group-hover:opacity-100 group-hover:animate-hideTooltip absolute top-0 -left-10 bg-gray-300 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                Global Edit
+            </div>
+        </div>
+    );
+};
+
+export default GlobalEditButton; 
