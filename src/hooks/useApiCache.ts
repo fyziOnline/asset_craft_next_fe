@@ -27,7 +27,6 @@ export const useApiCache = <T>(
         const now = Date.now();
 
         if (!force && cached && now - cached.timestamp < CACHE_DURATION) {
-            console.log('Cache hit for', key);
             setData(cached.data);
             return;
         }

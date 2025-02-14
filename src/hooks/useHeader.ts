@@ -7,9 +7,7 @@ import { nkey } from "@/data/keyStore"
 const useHeader = () => {
     const { setError, setUserDetails } = useAppData()
 
-    const getUserDetails = async () => {
-        console.log("im calling again");
-        
+    const getUserDetails = async () => {        
         const userID = Cookies.get(nkey.userID)
         try {
             const response = await ApiService.get<any>(`${urls.getuserDetails}?userProfileId=${userID}`)

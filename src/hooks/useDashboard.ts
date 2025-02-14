@@ -38,7 +38,8 @@ export const useDashboard = () => {
         asset_name: ''
     })
 
-    const userRole = userDetails.userRole
+    // const userRole = userDetails.userRole
+    const userRole = Cookies.get(nkey.userRole)
 
     const getListProjects = async () => {
         try {
@@ -279,14 +280,15 @@ export const useDashboard = () => {
 
     const getPendingApproval = async () => {
         setShowLoading(true)
-
         try {
-            const response = await ApiService.post<any>(`${urls.getAssetsToApprove}`, {
-                assignedTo: userRole === 'Approver' ? 1 : 0
-            })
+            if (userRole) {                
+                const response = await ApiService.post<any>(`${urls.getAssetsToApprove}`, {
+                    assignedTo: userRole === 'Approver' ? 1 : 0
+                })
 
-            if (response.isSuccess) {
-                setPendingApproval(response.assets)
+                if (response.isSuccess) {
+                    setPendingApproval(response.assets)
+                }
             }
         } catch (error) {
             const apiError = ApiService.handleError(error)
