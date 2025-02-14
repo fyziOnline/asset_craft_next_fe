@@ -214,8 +214,6 @@ export const useEditHTMLContent = () => {
 
                         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
                         pdf.save(`${contextData.AssetHtml.assetName} - ${versionSelected.versionName}.pdf`)
-
-                        console.log('PDF Generated')
                     } catch (err) {
                       console.error('Error generating PDF:', err)
                     } finally {
