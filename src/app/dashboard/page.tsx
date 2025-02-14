@@ -57,6 +57,7 @@ const Dashboard: FC = () => {
             totalAssets={data.totalAssets}
             underReview={data.underReview}
             inProgress={data.inProgress}
+            completedAssets={data.completedAssets}
             customClass="transition-transform duration-300 hover:scale-105 hover:shadow-lg"
           />
         ))}
