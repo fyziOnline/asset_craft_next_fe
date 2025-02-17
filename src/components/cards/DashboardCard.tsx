@@ -23,7 +23,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDa
     >
       <div className='flex items-center justify-between mb-2'>
         <h2 className="text-lg text-[#073634] leading-none font-bold group-hover:text-white">{projectName}</h2>
-        <p className={`text-base font-medium text-[#818F8E] group-hover:text-white ${projectName === 'All Projects' ? '' : "hidden"}`}> Last 90 days</p>
+        <p className={`text-base leading-none font-medium text-[#818F8E] group-hover:text-white ${projectName === 'All Projects' ? '' : "hidden"}`}> Last 90 days</p>
       </div>
 
       <div className={`${allProjectDate ? "flex items-baseline gap-1" : ""} border-b pb-3`}>
