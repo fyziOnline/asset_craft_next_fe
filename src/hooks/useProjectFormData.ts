@@ -175,8 +175,12 @@ export const useProjectFormData = () => {
                 setExistingCampaignDetails(res)
             }
         } catch (error) {
-            console.error('API Error: ',error)
-            alert(ApiService.handleError(error))
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
         }
     }
 
