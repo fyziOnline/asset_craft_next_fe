@@ -45,6 +45,7 @@ interface DashboardData {
     totalAssets: number;
     underReview: number;
     inProgress: number;
+    completedAssets :number;
 }
 
 // Helper function to filter and count assets based on type and status
@@ -65,19 +66,24 @@ const getCurrentDateFormatted = (): string => {
 // The main function that processes the dashboard assets
 const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:AssetType="email"): { updatedDashboardData: DashboardData[], assetsDisplayTable: any[], pendingApproval: any[], assetData : any[] } => {
     const dashboardData: DashboardData[] = [
-        { projectName: "All Projects", allProjectDate: `as of ${getCurrentDateFormatted()}`, totalAssets: 0, underReview: 0, inProgress: 0 },
-        { projectName: "Email", totalAssets: 0, underReview: 0, inProgress: 0 },
-        { projectName: "LinkedIn", totalAssets: 0, underReview: 0, inProgress: 0 },
-        { projectName: "Landing Page", totalAssets: 0, underReview: 0, inProgress: 0 },
-        { projectName: "Call Script", totalAssets: 0, underReview: 0, inProgress: 0 },
+        { projectName: "All Projects", allProjectDate: `as of ${getCurrentDateFormatted()}`, totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
+        { projectName: "Email", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
+        { projectName: "LinkedIn", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
+        { projectName: "Landing Page", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
+        { projectName: "Call Script", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
     ];
 
     // Calculate the totals for all projects
     const totalAssets = dashboardAssets.length;
+    
+    
     const inProgressCount = dashboardAssets.filter(asset => asset.status === "In Progress").length;
+    
     const onReviewCount = dashboardAssets.filter(asset => asset.status === "On Review").length;
 
     const pendingApproval = dashboardAssets.filter(asset => asset.status === "On Review")
+
+    const completedAssetsCount = dashboardAssets.filter(asset => asset.status === "Completed").length
 
     // Calculate for each project type
     const projectTypes = ["Email", "LinkedIn", "Landing Page", "Call Script"];
@@ -88,17 +94,20 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:Asse
                 underReview: onReviewCount,
                 inProgress: inProgressCount,
                 totalAssets: totalAssets,
+                completedAssets: completedAssetsCount
             };
         }
 
         if (projectTypes.includes(data.projectName)) {
             const { total, statusCount } = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, "In Progress");
             const onReviewStatusCount = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, "On Review").statusCount;
+            const completedAssetsCount = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, "Completed").statusCount;
             return {
                 ...data,
                 underReview: onReviewStatusCount,
                 inProgress: statusCount,
                 totalAssets: total,
+                completedAssets: completedAssetsCount
             };
         }
 
