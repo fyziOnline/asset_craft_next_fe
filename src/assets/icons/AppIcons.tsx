@@ -153,9 +153,9 @@ export const GlobalEdit:FC<icon> = ({
 }) => {
   return (
       // <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox={`0 0 ${width} ${height}`} fill="none">
-      <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox={`0 0 66 71`} fill="none">
+      <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox={`0 0 66 71`} fill="#00A881">
         <g filter="url(#filter0_d_1086_2791)">
-        <circle cx="33.4167" cy="33.5833" r="28.4167" fill="#00A881"/>
+        <circle cx="33.4167" cy="33.5833" r="28.4167" fill=""/>
         </g>
         <path fill-rule="evenodd" clip-rule="evenodd" d="M31.8848 27.3621C31.8848 26.7456 32.3845 26.2459 33.001 26.2459C37.6454 26.2459 42.2887 26.9945 46.7476 28.4758C47.3327 28.6701 47.6494 29.3019 47.4552 29.887C47.2608 30.472 46.629 30.7887 46.044 30.5944C41.8112 29.1883 37.4055 28.4783 33.001 28.4783C32.3845 28.4783 31.8848 27.9786 31.8848 27.3621Z" fill="white"/>
         <path fill-rule="evenodd" clip-rule="evenodd" d="M27.9286 27.6405C28.0215 28.2499 27.6027 28.8193 26.9933 28.9122C24.6109 29.2753 22.262 29.8266 19.9598 30.594C19.3749 30.789 18.7428 30.4729 18.5478 29.8881C18.3529 29.3032 18.6689 28.6711 19.2538 28.4761C21.6844 27.6659 24.1576 27.0862 26.6569 26.7052C27.2663 26.6123 27.8357 27.031 27.9286 27.6405Z" fill="white"/>

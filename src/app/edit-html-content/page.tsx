@@ -18,6 +18,9 @@ import { formatDate } from '@/utils/formatDate';
 import { MdOutlineDelete } from "react-icons/md";
 import ConfirmationModal from '@/components/global/ConfirmationModal';
 import { GlobalEdit } from '@/assets/icons/AppIcons';
+import VersionManager from './components/VersionManager';
+import EditHeader from './components/EditHeader';
+import GlobalEditButton from './components/GlobalEditButton';
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -112,12 +115,21 @@ const Page = () => {
     const htmlOtherAsset = () => {
         let htmlContent = '';
         versionSelected.assetVersionBlocks.forEach((item) => {
-            if ((item.blockData !== "{}" && item.blockData !== "" && item.blockHTMLGenerated)) {
+            if (item.blockName === '_global_1') {
+                htmlContent += `
+                    <div style="position:relative;">
+                        <div style="position:absolute; top:0; right:8px; z-index:20;">
+                            <div id="handle-button" data-block-id="${item.assetVersionBlockID}" data-type-div="edit">
+                                ${item.blockHTMLGenerated || ""}
+                            </div>
+                        </div>
+                    </div>\n`;
+            } else if ((item.blockData !== "{}" && item.blockData !== "" && item.blockHTMLGenerated)) {
                 htmlContent += (item.ignoreBlock === 0 ? `
                     <div style="position:relative;">
-                        <div style="right: ${assetType === "Landing Page" ? "-70px" : assetType === "LinkedIn" ? "-120px" : "-140px"};  z-index:20; position:absolute; display:flex; align-items:center; gap: 2px; background-color: #f9f9f9; border: 2px dashed #ccc; border-radius: 5px; padding:4px 8px;">
+                        <div style="right: ${assetType === "Landing Page" ? "-140px" : assetType === "LinkedIn" ? "-120px" : "-140px"};  z-index:20; position:absolute; display:flex; align-items:center; gap: 2px; background-color: #f9f9f9; border: 2px dashed #ccc; border-radius: 5px; padding:4px 8px;">
                              <div id="handle-button" data-block-id="${item.assetVersionBlockID}" data-type-div="edit"
-                                style="display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; cursor: pointer; border-right: ${assetType === "Landing Page" ? "none" : "2px solid #ccc"}; padding-right: 5px; position: relative;"
+                                style="display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; cursor: pointer; border-right: 2px solid #ccc; padding-right: 5px; position: relative;"
                                 onmouseover="this.querySelectorAll('svg path').forEach(p => p.setAttribute('stroke', '#01a982')); this.querySelector('.tooltip').style.visibility = 'visible'; this.querySelector('.tooltip').style.opacity = '1';"
                                 onmouseout="this.querySelectorAll('svg path').forEach(p => p.setAttribute('stroke', '#b8b8b8')); this.querySelector('.tooltip').style.visibility = 'hidden'; this.querySelector('.tooltip').style.opacity = '0';">
                                 <span class="tooltip" style="visibility: hidden; opacity: 0; position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background-color: #b8b8b8; color: white; font-size: 12px; padding: 4px 8px; border-radius: 4px; white-space: nowrap; transition: opacity 0.2s;">
@@ -132,7 +144,7 @@ const Page = () => {
                             </div>
     
                             <div id="handle-button" data-block-id="${item.assetVersionBlockID}" data-type-div="hidden-block"
-                                style="display: ${assetType === "Landing Page" ? "none" : "flex"}; align-items: center; justify-content: center; width: 35px; height: 35px; cursor: pointer; position: relative;"
+                                style="display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; cursor: pointer; position: relative;"
                                 data-ignore-block="${item.ignoreBlock}"
                                 onmouseover="this.querySelectorAll('svg path').forEach(p => { p.setAttribute('stroke', '#01a982'); p.setAttribute('fill', '#01a982'); }); this.querySelector('.tooltip').style.visibility = 'visible'; this.querySelector('.tooltip').style.opacity = '1';"
                                 onmouseout="this.querySelectorAll('svg path').forEach(p => { p.setAttribute('stroke', '#b8b8b8'); p.setAttribute('fill', '#b8b8b8'); }); this.querySelector('.tooltip').style.visibility = 'hidden'; this.querySelector('.tooltip').style.opacity = '0';">
@@ -208,10 +220,26 @@ const Page = () => {
         // render other layout 
         const listLayout = ["landing", "linkedin", "callscript"]
         const hasMatchLayoutName = listLayout.some(substring => contextData.AssetHtml?.layoutName?.toLowerCase().includes(substring.toLowerCase()));
+        
+        const globalBlock = versionSelected.assetVersionBlocks.find(item => item.blockName === '_global_1' && item.blockData !== "{}" && item.blockData !== "");
+        
         if (hasMatchLayoutName) {
-            return <div className='flex justify-center'>
-                <ShadowDomContainer onClick={handleClickEdit} htmlContent={htmlOtherAsset()}></ShadowDomContainer>
-            </div>
+            return (
+                <div className='flex justify-center relative isolate'>
+                    {globalBlock && (
+                        <GlobalEditButton 
+                            onClick={() => {
+                                setSectionEdit(globalBlock);
+                                setIsShowModelEdit(true);
+                            }}
+                        />
+                    )}
+                    <ShadowDomContainer 
+                        onClick={handleClickEdit} 
+                        htmlContent={htmlOtherAsset()}
+                    />
+                </div>
+            );
         }
 
         // render email layout
@@ -268,22 +296,13 @@ const Page = () => {
                         </div>
 
                     </div> : 
-                        (item.blockName =='_global_1') ?
-                            <div 
-                                className="absolute top-25% right-2 group cursor-pointer"
+                        (item.blockName =='_global_1' && item.blockData !== "{}" && item.blockData !== "") ?
+                            <GlobalEditButton 
                                 onClick={() => {
-                                    setSectionEdit(item)
-                                    setIsShowModelEdit(true)
+                                    setSectionEdit(item);
+                                    setIsShowModelEdit(true);
                                 }}
-                            >
-                                <div id="global_edit_button" typeof="button">
-                                    <GlobalEdit />
-                                </div>
-                                {/* Tooltip */}
-                                <div className="z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 group-hover:animate-hideTooltip absolute top-0 -left-10 bg-gray-300 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
-                                    Global Edit
-                                </div>
-                            </div>
+                            />
                         : null
                     }
                     {item.ignoreBlock === 0 ? <ShadowDomContainer htmlContent={item.blockHTMLGenerated || ""}></ShadowDomContainer> :
@@ -313,176 +332,43 @@ const Page = () => {
         <Suspense>
             <div className='overflow-hidden'>
                 <div className="flex p-1 px-2">
-                    <div className='flex-1'>
-                    </div>
+                    <div className='flex-1'></div>
                 </div>
-                {/* Edit section  */}
+                
                 <div className="min-h-[82vh] border-t border-solid">
-                    {/* Edit section header  */}
-                    <div className='flex justify-between items-center px-14 py-4'>
-                        <div className='flex-1'>
-                            {
-                                versionSelected?.status && <div className='py-1 text-base border border-[#00A881] w-[150px] flex items-center justify-center rounded-md m-2 text-[#00A881]'>{versionSelected?.status}</div>
-                            }
-                        </div>
-                        <div className='flex gap-4'>
-                            <div className='relative w-[150px] bg-white shadow-sm rounded'>
-                                <div onClick={() => { setShowSave(!isShowSave) }} className='flex items-center justify-between px-4 py-2 cursor-pointer'>
-                                    <p className='text-base px-2'>Download</p>
-                                    <span className={`cursor-pointer transition-transform ${isShowSave ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
-                                </div>
-                                {isShowSave &&
-                                    <div className="absolute z-[100] w-full bg-white shadow-sm flex flex-col rounded-b-md px-2 py-1">
-                                        {/* <button onClick={() => handleSave(1)} className="h-[40px] flex items-center px-4 hover:bg-[#00A8811A] hover:text-white rounded">
-                                            <span className="text-black text-base font-normal">New Version</span>
-                                        </button> */}
-                                        <button onClick={() => handleSave(2)} className="h-[40px] flex items-center justify-between px-4 hover:bg-[#00A8811A] hover:text-white rounded">
-                                            <div className="text-black text-base font-normal">HTML File</div>
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 17.3625C11.8 17.3625 11.6125 17.3315 11.4375 17.2695C11.2625 17.2075 11.1 17.101 10.95 16.95L5.55 11.55C5.25 11.25 5.106 10.9 5.118 10.5C5.13 10.1 5.274 9.75 5.55 9.45C5.85 9.15 6.2065 8.994 6.61949 8.982C7.03249 8.97 7.38849 9.1135 7.68749 9.4125L10.5 12.225V1.5C10.5 1.075 10.644 0.719005 10.932 0.432005C11.22 0.145005 11.576 0.00100517 12 5.17241e-06C12.424 -0.000994827 12.7805 0.143005 13.0695 0.432005C13.3585 0.721005 13.502 1.077 13.5 1.5V12.225L16.3125 9.4125C16.6125 9.1125 16.969 8.9685 17.382 8.9805C17.795 8.9925 18.151 9.149 18.45 9.45C18.725 9.75 18.869 10.1 18.882 10.5C18.895 10.9 18.751 11.25 18.45 11.55L13.05 16.95C12.9 17.1 12.7375 17.2065 12.5625 17.2695C12.3875 17.3325 12.2 17.3635 12 17.3625ZM3 24C2.175 24 1.469 23.7065 0.881999 23.1195C0.294999 22.5325 0.000999999 21.826 0 21V18C0 17.575 0.144 17.219 0.432 16.932C0.72 16.645 1.076 16.501 1.5 16.5C1.924 16.499 2.2805 16.643 2.5695 16.932C2.8585 17.221 3.002 17.577 3 18V21H21V18C21 17.575 21.144 17.219 21.432 16.932C21.72 16.645 22.076 16.501 22.5 16.5C22.924 16.499 23.2805 16.643 23.5695 16.932C23.8585 17.221 24.002 17.577 24 18V21C24 21.825 23.7065 22.5315 23.1195 23.1195C22.5325 23.7075 21.826 24.001 21 24H3Z" fill="#00A881" />
-                                            </svg>
-                                        </button>
-                                        <button onClick={() => handleSave(3)} className="h-[40px] flex items-center justify-between px-4 hover:bg-[#00A8811A] hover:text-white rounded">
-                                            <div className="text-black text-base font-normal">Zip File</div>
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 17.3625C11.8 17.3625 11.6125 17.3315 11.4375 17.2695C11.2625 17.2075 11.1 17.101 10.95 16.95L5.55 11.55C5.25 11.25 5.106 10.9 5.118 10.5C5.13 10.1 5.274 9.75 5.55 9.45C5.85 9.15 6.2065 8.994 6.61949 8.982C7.03249 8.97 7.38849 9.1135 7.68749 9.4125L10.5 12.225V1.5C10.5 1.075 10.644 0.719005 10.932 0.432005C11.22 0.145005 11.576 0.00100517 12 5.17241e-06C12.424 -0.000994827 12.7805 0.143005 13.0695 0.432005C13.3585 0.721005 13.502 1.077 13.5 1.5V12.225L16.3125 9.4125C16.6125 9.1125 16.969 8.9685 17.382 8.9805C17.795 8.9925 18.151 9.149 18.45 9.45C18.725 9.75 18.869 10.1 18.882 10.5C18.895 10.9 18.751 11.25 18.45 11.55L13.05 16.95C12.9 17.1 12.7375 17.2065 12.5625 17.2695C12.3875 17.3325 12.2 17.3635 12 17.3625ZM3 24C2.175 24 1.469 23.7065 0.881999 23.1195C0.294999 22.5325 0.000999999 21.826 0 21V18C0 17.575 0.144 17.219 0.432 16.932C0.72 16.645 1.076 16.501 1.5 16.5C1.924 16.499 2.2805 16.643 2.5695 16.932C2.8585 17.221 3.002 17.577 3 18V21H21V18C21 17.575 21.144 17.219 21.432 16.932C21.72 16.645 22.076 16.501 22.5 16.5C22.924 16.499 23.2805 16.643 23.5695 16.932C23.8585 17.221 24.002 17.577 24 18V21C24 21.825 23.7065 22.5315 23.1195 23.1195C22.5325 23.7075 21.826 24.001 21 24H3Z" fill="#00A881" />
-                                            </svg>
-                                        </button>
-                                        <button onClick={() => handleSave(4)} className="h-[40px] flex items-center justify-between px-4 hover:bg-[#00A8811A] hover:text-white rounded">
-                                            <div className="text-black text-base font-normal">PDF File</div>
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 17.3625C11.8 17.3625 11.6125 17.3315 11.4375 17.2695C11.2625 17.2075 11.1 17.101 10.95 16.95L5.55 11.55C5.25 11.25 5.106 10.9 5.118 10.5C5.13 10.1 5.274 9.75 5.55 9.45C5.85 9.15 6.2065 8.994 6.61949 8.982C7.03249 8.97 7.38849 9.1135 7.68749 9.4125L10.5 12.225V1.5C10.5 1.075 10.644 0.719005 10.932 0.432005C11.22 0.145005 11.576 0.00100517 12 5.17241e-06C12.424 -0.000994827 12.7805 0.143005 13.0695 0.432005C13.3585 0.721005 13.502 1.077 13.5 1.5V12.225L16.3125 9.4125C16.6125 9.1125 16.969 8.9685 17.382 8.9805C17.795 8.9925 18.151 9.149 18.45 9.45C18.725 9.75 18.869 10.1 18.882 10.5C18.895 10.9 18.751 11.25 18.45 11.55L13.05 16.95C12.9 17.1 12.7375 17.2065 12.5625 17.2695C12.3875 17.3325 12.2 17.3635 12 17.3625ZM3 24C2.175 24 1.469 23.7065 0.881999 23.1195C0.294999 22.5325 0.000999999 21.826 0 21V18C0 17.575 0.144 17.219 0.432 16.932C0.72 16.645 1.076 16.501 1.5 16.5C1.924 16.499 2.2805 16.643 2.5695 16.932C2.8585 17.221 3.002 17.577 3 18V21H21V18C21 17.575 21.144 17.219 21.432 16.932C21.72 16.645 22.076 16.501 22.5 16.5C22.924 16.499 23.2805 16.643 23.5695 16.932C23.8585 17.221 24.002 17.577 24 18V21C24 21.825 23.7065 22.5315 23.1195 23.1195C22.5325 23.7075 21.826 24.001 21 24H3Z" fill="#00A881" />
-                                            </svg>
-                                        </button>
-                                    </div>}
-                            </div>
-                            <div className='h-full w-[1.5px] bg-sectionGrey'></div>
-                            <Button buttonText='Submit' handleClick={() => setIsShowSubmitVer(true)} showIcon={false} customClass='px-10 py-1' />
-                        </div>
-                    </div>
+                    <EditHeader 
+                        versionSelected={versionSelected}
+                        isShowSave={isShowSave}
+                        setShowSave={setShowSave}
+                        handleSave={handleSave}
+                        setIsShowSubmitVer={setIsShowSubmitVer}
+                    />
 
                     <div className='flex justify-between pr-16 items-center'>
+                        <VersionManager 
+                            versionList={versionList}
+                            versionSelected={versionSelected}
+                            setVersionSelected={setVersionSelected}
+                            handleSave={handleSave}
+                            editingVersionId={editingVersionId}
+                            editingName={editingName}
+                            setEditingVersionId={setEditingVersionId}
+                            setEditingName={setEditingName}
+                            handleUpdateVersionName={handleUpdateVersionName}
+                            openConfirmationModal={openConfirmationModal}
+                        />
 
-                        <div className='pt-2 pl-14 flex items-center gap-1'>
-                            {versionList.map((item, index) => {
-                                const isSelected = versionSelected.assetVersionID === item.assetVersionID;
-                                const showDeleteButton = versionList.length > 1; // Show delete button if more than 1 version exists
-                                const isEditing = editingVersionId === item.assetVersionID;
-
-                                return (
-                                    <div
-                                        key={item.assetID + index}
-                                        onClick={() => setVersionSelected(item)}
-                                        onDoubleClick={(e) => {
-                                            if (isSelected) {
-                                                e.stopPropagation();
-                                                setEditingVersionId(item.assetVersionID);
-                                                setEditingName(item.versionName);
-                                            }
-                                        }}
-                                        className={`group relative flex items-center justify-between px-4 py-[10px] rounded-t-md cursor-pointer transition-all min-w-36 ${isSelected ? "bg-[#e4e4e4] text-black" : "hover:bg-gray-100"
-                                            }`}
-                                    >
-                                        {isEditing ? (
-                                            <input
-                                                type="text"
-                                                value={editingName}
-                                                onChange={(e) => setEditingName(e.target.value)}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter' && editingName.trim()) {
-                                                        e.preventDefault();
-                                                        handleUpdateVersionName(item.assetVersionID, editingName.trim());
-                                                    } else if (e.key === 'Escape') {
-                                                        setEditingVersionId(null);
-                                                        setEditingName("");
-                                                    }
-                                                }}
-                                                onBlur={() => {
-                                                    setEditingVersionId(null);
-                                                    setEditingName("");
-                                                }}
-                                                className="bg-white border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-[#01a982] w-full"
-                                                autoFocus
-                                                onClick={(e) => e.stopPropagation()}
-                                            />
-                                        ) : (
-                                            <>
-                                                <span className={`
-                                                    font-medium 
-                                                    ${isSelected ? 'hover:border-b hover:border-gray-400 cursor-text' : 'cursor-pointer'}
-                                                `}>
-                                                    {item.versionName}
-                                                    {isSelected && (
-                                                        <span className="ml-1 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                            ✎
-                                                        </span>
-                                                    )}
-                                                </span>
-                                            </>
-                                        )}
-                                        {showDeleteButton && !isEditing && (
-                                            <div className="ml-2 relative group/delete">
-                                                <MdOutlineDelete
-                                                    size={22}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        openConfirmationModal(item.assetVersionID, item.versionName);
-                                                    }}
-                                                    className={`
-                                                        ${isSelected
-                                                            ? 'text-gray-500'
-                                                            : 'text-gray-500 opacity-0'
-                                                        } 
-                                                        group-hover:opacity-100
-                                                        hover:text-red-500 
-                                                        transition-colors duration-200
-                                                    `}
-                                                />
-                                                {/* Delete button tooltip */}
-                                                <div className="absolute invisible group-hover/delete:visible opacity-0 group-hover/delete:opacity-100 transition-all duration-200 -top-8 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-10">
-                                                    Delete Version
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                )
-                            })}
-
-                            {versionList.length < 7 && (
-                                <div
-                                    onClick={() => handleSave(1)}
-                                    className='group relative flex items-center justify-center w-10 h-[42px] rounded-t-md hover:bg-gray-100 cursor-pointer transition-all -bottom-[1px]'
-                                >
-                                    {
-                                        versionList.length > 0 &&
-                                        <FaPlus
-                                            className="text-[#01a982] group-hover:scale-110 transition-transform"
-                                            size={14}
-                                        />
-                                    }
-                                    {/* Tooltip */}
-                                    <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 -top-10 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-sm py-1 px-3 rounded whitespace-nowrap">
-                                        Add New Version
-                                    </div>
-                                </div>
-                            )}
-
-
-                        </div>
-
-                        {/* message logo  please provide ! to show icon for isFeedbackOpen && in feedbackcard.tsx*/}
-                        {(comments?.length > 0) && <div className="">
-                            <FeedBackCard
-                                isFeedbackOpen={isFeedbackOpen}
-                                setIsFeedbackOpen={setIsFeedbackOpen} // Pass state to the feedback card
-                            />
-                        </div>}
-
+                        {(comments?.length > 0) && (
+                            <div className="">
+                                <FeedBackCard
+                                    isFeedbackOpen={isFeedbackOpen}
+                                    setIsFeedbackOpen={setIsFeedbackOpen}
+                                />
+                            </div>
+                        )}
                     </div>
 
-                    {/* Edit section main  */}
                     <div className="flex h-[92vh] relative mx-14">
-                        {/* Main Content Section */}
                         <div className="flex flex-col bg-[#e4e4e4] flex-grow pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
                             <div className='px-[6rem]'>
                                 <div id="container">
@@ -504,13 +390,11 @@ const Page = () => {
 
                         </div>
 
-                        {/* Feedback Panel */}
                         {isFeedbackOpen && (
                             <div
                                 className={`fixed md:relative top-0 right-0 bg-white md:w-[25%]  feedback-panel ${isFeedbackOpen ? "block" : "hidden "
                                     }`}
                             >
-                                {/* Header */}
                                 <div className="bg-[#00A881] text-white p-4 flex justify-between items-center gap-4 sticky top-0 ">
 
 
@@ -524,7 +408,7 @@ const Page = () => {
                                     </div>
 
                                     <button
-                                        onClick={() => setIsFeedbackOpen(false)} // Minimize feedback panel
+                                        onClick={() => setIsFeedbackOpen(false)}
                                         className="text-white hover:text-gray-300"
                                     >
                                         <svg width="18" height="5" viewBox="0 0 26 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -534,8 +418,6 @@ const Page = () => {
 
                                     </button>
                                 </div>
-
-                                {/* Feedback Content */}
 
                                 <div className="h-auto overflow-y-auto p-1 md:h-[60%] custom-scrollbar border pb-4">
                                     {comments.map((item, index) => (
