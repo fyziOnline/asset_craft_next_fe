@@ -63,7 +63,7 @@ const Dashboard: FC = () => {
         ))}
       </div>
 
-      <div className="pl-8 pt-5 flex w-full mb-32 flex-wrap flex-col lg:flex-row">
+      <div className="pl-8 pt-6 flex w-full mb-32 flex-wrap flex-col lg:flex-row">
         <div className="lg:w-[70%] w-[95%] border-[#D9D9D9] ">
           <div className="lg:w-full border-b border-[#D9D9D9] ">
             <p className="text-lg font-bold tracking-wide">
