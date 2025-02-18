@@ -159,7 +159,7 @@ const Home: FC = () => {
       <section>
         <div className="flex w-full h-auto">
           <div className="w-1/2">
-            <img className='w-[100%] h-[100%] bg-no-repeat bg-center object-fill' src="/images/loginpagegirl.png" alt="" />
+            <img className='w-[100%] h-[100%] bg-no-repeat bg-center object-fill' src="/images/loginPageGirl.png" alt="" />
           </div>
           <div className="w-1/2 bg-[#00A881] text-white px-16 pb-14 flex flex-col items-start justify-center">
             <h1 className="text-xl pt-12 tracking-wide">BUILD MARKETING ASSETS USING AI</h1>
