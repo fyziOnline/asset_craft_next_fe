@@ -57,7 +57,7 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full flex flex-col justify-center min-h-[60vh] bg-no-repeat bg-cover bg-center">
+      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full flex flex-col justify-center min-h-[60vh] bg-no-repeat bg-cover bg-[50%_70%]">
         <div className="flex flex-col lg:flex-row relative items-center justify-between px-32 gap-9">
           <section className="text-white w-[30rem] md:w-[32rem]">
             <h1 className="text-[4rem] leading-[7rem] font-medium font-metric text-green-100 tracking-wide">
