@@ -58,9 +58,9 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[60vh] bg-no-repeat bg-cover bg-center">
+      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[50vh] 2xl:min-h-[60vh] bg-no-repeat bg-cover bg-center">
         <HomeHeader />
-        <div className="flex flex-col lg:flex-row relative items-center justify-between px-32 gap-9 lg:py-6 xl:py-0">
+        <div className="flex flex-col lg:flex-row relative items-center justify-between px-32 gap-9 lg:py-6">
           <section className="text-white md:w-[32rem]">
             <h1 className="text-[4rem] leading-[7rem] font-medium font-metric text-green-100 tracking-wide">
               BrandLab<sup className="text-[2.75rem] text-white">ai</sup>
@@ -159,8 +159,8 @@ const Home: FC = () => {
       )}
 
       <section>
-        <div className="flex flex-col lg:flex-row w-full h-full">
-          <div className="w-full lg:w-[50%] flex-shrink-0">
+        <div className="flex flex-col md:flex-row w-full h-full">
+          <div className="w-full md:w-[50%] flex-shrink-0">
             <img className='w-full h-full bg-no-repeat bg-center object-cover object-left' src="/images/loginPageGirl.png" alt="" />
           </div>
           <div className="w-full lg:w-[50%] bg-[#00A881] text-white px-8 lg:px-16 pb-8 lg:pb-14 flex flex-col items-start justify-center">
