@@ -154,11 +154,11 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const generateAssetHTML = async () => {
     try {
       const resGenerateUsingAI = await generateHTMLWithAI();
-      // if (resGenerateUsingAI.isSuccess) {
+      if (resGenerateUsingAI.isSuccess) {
       return { isSuccess: true };
-      // } else {
-      //   return returnError("An error occurred please try again later.");
-      // }
+      } else {
+        return returnError("An error occurred please try again later.");
+      }
     } catch (error) {
       return returnError("An error occurred please try again later.");
     }
