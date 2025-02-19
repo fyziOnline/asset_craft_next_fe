@@ -159,8 +159,8 @@ const Home: FC = () => {
       )}
 
       <section>
-        <div className="flex flex-col lg:flex-row w-full h-full">
-          <div className="w-full lg:w-[50%] flex-shrink-0">
+        <div className="flex flex-col md:flex-row w-full h-full">
+          <div className="w-full md:w-[50%] flex-shrink-0">
             <img className='w-full h-full bg-no-repeat bg-center object-cover object-left' src="/images/loginPageGirl.png" alt="" />
           </div>
           <div className="w-full lg:w-[50%] bg-[#00A881] text-white px-8 lg:px-16 pb-8 lg:pb-14 flex flex-col items-start justify-center">
