@@ -58,9 +58,9 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[45vh] xl:min-h-[60vh] bg-no-repeat bg-cover bg-center">
+      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[50vh] 2xl:min-h-[60vh] bg-no-repeat bg-cover bg-center">
         <HomeHeader />
-        <div className="flex flex-col lg:flex-row relative items-center justify-between px-32 gap-9 lg:py-6 xl:py-0">
+        <div className="flex flex-col lg:flex-row relative items-center justify-between px-32 gap-9 lg:py-6">
           <section className="text-white md:w-[32rem]">
             <h1 className="text-[4rem] leading-[7rem] font-medium font-metric text-green-100 tracking-wide">
               BrandLab<sup className="text-[2.75rem] text-white">ai</sup>
@@ -166,7 +166,7 @@ const Home: FC = () => {
           <div className="w-full lg:w-[50%] bg-[#00A881] text-white px-8 lg:px-16 pb-8 lg:pb-14 flex flex-col items-start justify-center">
             <h1 className="text-xl pt-12 tracking-wide">BUILD MARKETING ASSETS USING AI</h1>
             <p className="text-3xl w-full xl:max-w-[65%]  pt-4">How can you transform and scale your marketing operations effortlessly?</p>
-            <p className="pt-4  font-metricLight text-lg leading-6 tracking-wide">HPE BrandLab redefines marketing planning and campaign production, enabling you to execute operations faster, more efficiently, and at a lower cost. With your own Gen AI marketing concierge, you can streamline workflows, enhance creativity, and scale digital marketing like never before. Experience a smarter, more agile way to manage and supercharge your marketing efforts.</p>
+            <p className="pt-4  font-metricLight text-lg leading-6 tracking-wide">HPE BrandLab ai redefines marketing planning and campaign production, enabling you to execute operations faster, more efficiently, and at a lower cost. With your own Gen AI marketing concierge, you can streamline workflows, enhance creativity, and scale digital marketing like never before. Experience a smarter, more agile way to manage and supercharge your marketing efforts.</p>
             <Button
               buttonText="Experience Now"
               showIcon={false}
@@ -180,9 +180,9 @@ const Home: FC = () => {
       </section>
 
       <section>
-        <div className="flex w-full flex-col lg:flex-row gap-4 items-center h-full lg:h-[430px] bg-white px-8 lg:px-32 py-6">
+        <div className="flex w-full flex-col lg:flex-row gap-4 items-center h-full xl:h-[430px] bg-white px-8 lg:px-32 py-6">
           <div className="w-full lg:w-1/2">
-            <h1 className="text-[#00A881] text-xl leading-5  tracking-wide">HOW HPE BRANDLAB WORKS</h1>
+            <h1 className="text-[#00A881] text-xl leading-5  tracking-wide">HOW HPE BRANDLAB AI WORKS</h1>
 
             <p className="pt-4 text-3xl font-normal w-full xl:max-w-[60%]">Enabling Marketers With DIY Assets Creation driven through Gen AI</p>
 
