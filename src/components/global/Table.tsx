@@ -143,11 +143,11 @@ const Table: React.FC<TableProps> = ({ listItems,
           return (
             <div
               onClick={() => { 
-                // handleClick(data) 
+                handleClick(data) 
                 setActiveIndex(index === activeIndex ? null : index);
               }}
               key={index}
-              className={`grid p-6 cursor-pointer rounded-lg border transition-all duration-300 ease-in-out ${activeIndex === index ? 'bg-[#F4F4F9] shadow-md' : index % 2 !== 0 ? 'bg-white' : 'bg-[#F9F9F9]'}`}
+              className={`grid p-6 cursor-pointer rounded-lg border transition-all duration-300 ease-in-out ${activeIndex === index ? 'shadow' : ""} ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F9F9F9]'}`}
               style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems, alignItems: "center" }}
             >
               {visibleHeadings.map((heading, idx) => (
