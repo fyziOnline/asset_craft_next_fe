@@ -58,7 +58,7 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[60vh] bg-no-repeat bg-cover bg-center">
+      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[45vh] xl:min-h-[60vh] bg-no-repeat bg-cover bg-center">
         <HomeHeader />
         <div className="flex flex-col lg:flex-row relative items-center justify-between px-32 gap-9 lg:py-6 xl:py-0">
           <section className="text-white md:w-[32rem]">
@@ -68,7 +68,7 @@ const Home: FC = () => {
             <p className="text-wrap text-2xl tracking-wide">Simplifying Marketing Content with AI-Driven Tech</p>
           </section>
 
-          <div className=" text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-8 pt-12 pb-8 padbot10 flex flex-col items-center backdrop-blur-lg">
+          <div className=" text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-4 md:px-8 pt-12 pb-8 padbot10 flex flex-col items-center backdrop-blur-lg">
 
             {/* <div className="absolute top-[35%] left-[25%]">
               <div className="color-wheel ">
@@ -159,8 +159,8 @@ const Home: FC = () => {
       )}
 
       <section>
-        <div className="flex flex-col lg:flex-row w-full h-full">
-          <div className="w-full lg:w-[50%] flex-shrink-0">
+        <div className="flex flex-col md:flex-row w-full h-full">
+          <div className="w-full md:w-[50%] flex-shrink-0">
             <img className='w-full h-full bg-no-repeat bg-center object-cover object-left' src="/images/loginPageGirl.png" alt="" />
           </div>
           <div className="w-full lg:w-[50%] bg-[#00A881] text-white px-8 lg:px-16 pb-8 lg:pb-14 flex flex-col items-start justify-center">
@@ -180,13 +180,13 @@ const Home: FC = () => {
       </section>
 
       <section>
-        <div className="flex w-full flex-col lg:flex-row gap-4 items-center h-full lg:h-[500px] bg-white px-8 lg:px-32 py-6">
+        <div className="flex w-full flex-col lg:flex-row gap-4 items-center h-full lg:h-[430px] bg-white px-8 lg:px-32 py-6">
           <div className="w-full lg:w-1/2">
             <h1 className="text-[#00A881] text-xl leading-5  tracking-wide">HOW HPE BRANDLAB WORKS</h1>
 
             <p className="pt-4 text-3xl font-normal w-full xl:max-w-[60%]">Enabling Marketers With DIY Assets Creation driven through Gen AI</p>
 
-            <p className="pt-6 text-wrap font-metricLight text-lg leading-6 tracking-wide">HPE BrandLab redefines marketing planning and campaign production, enabling you to execute operations faster, more efficiently, and at a lower cost. With your own Gen AI marketing concierge, you can streamline workflows, enhance creativity, and scale digital marketing like never before. Experience a smarter, more agile way to manage and supercharge your marketing efforts.</p>
+            <p className="pt-6 text-wrap font-metricLight text-lg leading-6 tracking-wide">HPE BrandLab ai redefines marketing planning and campaign production, enabling you to execute operations faster, more efficiently, and at a lower cost. With your own Gen AI marketing concierge, you can streamline workflows, enhance creativity, and scale digital marketing like never before. Experience a smarter, more agile way to manage and supercharge your marketing efforts.</p>
 
             <Button
               buttonText="Start Now"
@@ -216,7 +216,7 @@ const Home: FC = () => {
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white">
           <h1 className="text-sm lg:text-3xl text-center font-bold tracking-wide">ELEVATE TO THE NEXT LEVEL</h1>
-          <p className="text-sm lg:text-2xl text-center tracking-wide my-1">Experience the power of HPE Brand Lab!</p>
+          <p className="text-sm lg:text-2xl text-center tracking-wide my-1 relative">Experience the power of HPE BrandLab<span className="absolute -top-1 text-sm">ai</span></p>
           <h1 className="text-sm lg:text-3xl text-center font-bold tracking-wide">JUMPSTART YOUR CAMPAIGNS</h1>
         </div>
       </section>
