@@ -15,56 +15,85 @@ interface ResLoginProps {
 
 export const useLogin = () => {
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState(false);
-    const [isOtpVisible, setIsOtpVisible] = useState(false);
-    const [emailLoginDefault, setEmailLoginDefault] = useState("");
-    const emailRef = useRef("");
+
     const loginRef = useRef<ResLoginProps>();
     const otpRef = useRef("");
+
     const { setError } = useAppData()
-    const [isResending, setIsResending] = useState(false);
+
+    const [email, setEmail] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [isOtpVisible, setIsOtpVisible] = useState(false);
     const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+    const [otpTimer, setOtpTimer] = useState(60)
+    const [isResending, setIsResending] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>("")
 
     useEffect(() => {
         const email_login = Cookies.get(nkey.email_login);
-        emailRef.current = email_login as string
-        setEmailLoginDefault(email_login as string)
-    }, [])
+        if (email_login) {
+            setEmail(email_login);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isResending) {
+            const timer = setTimeout(() => {
+                setOtpTimer(current => {
+                    if (current <= 1) {
+                        setIsResending(false);
+                        return 60;
+                    }
+                    return current - 1;
+                });
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [isResending, otpTimer]);
+
+    const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value);
+        setErrorMessage("")
+    };
 
     const handleResendOtp = async () => {
-        setIsResending(true);
         await handleLogin(true);
-        setIsResending(false);
     };
 
     const handleLogin = async (skipLoading = false) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         try {
-            if (emailRef.current.trim().length === 0 || !emailRegex.test(emailRef.current)) {
-                return;
+            if (email.length === 0) {
+                setErrorMessage("Email is required")
+                return
             }
+
+            if (!emailRegex.test(email)) {
+                setErrorMessage("Please enter a valid email address");
+                return
+            }
+
+            setErrorMessage("");
 
             if (!skipLoading) {
                 setIsLoading(true);
             }
 
-
             const resLogin = await ApiService.post<any>(urls.login, {
-                "email": emailRef.current
+                "email": email
             });
 
             if (resLogin.isSuccess) {
-                Cookies.set(nkey.email_login, emailRef.current, { expires: 180 });
+                Cookies.set(nkey.email_login, email, { expires: 180 });
                 loginRef.current = resLogin
                 setIsOtpVisible(true);
+                setIsResending(true);
+                setOtpTimer(60)
             }
         } catch (error) {
             const apiError = ApiService.handleError(error)
-            setError({
-                status: apiError.statusCode,
-                message: apiError.message,
-                showError: true
-            })
+            setErrorMessage(apiError.message || "An error occurred while logging in");
+            console.error("Error:", apiError)
         } finally {
             if (!skipLoading) {
                 setIsLoading(false);
@@ -95,7 +124,7 @@ export const useLogin = () => {
                 CookieManager.setAuthToken(resToken.accessToken);
                 CookieManager.setRefreshToken(resToken.refreshToken);
                 CookieManager.setRefreshTokenExpiry(resToken.refreshTokenExpiryTime);
-                CookieManager.setUserEmail(emailRef.current);
+                CookieManager.setUserEmail(email);
 
                 const resClientID = await ApiService.get<any>(urls.client_select_all, {});
 
@@ -121,10 +150,6 @@ export const useLogin = () => {
         }
     }
 
-    const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-        emailRef.current = e.target.value;
-    }
-
     const onChangeOtp = (e: ChangeEvent<HTMLInputElement>) => {
         otpRef.current = e.target.value;
     }
@@ -140,7 +165,7 @@ export const useLogin = () => {
     }
 
     return {
-        emailLoginDefault,
+        email,
         isLoading,
         isVerifyingOtp,
         isResending,
@@ -151,6 +176,8 @@ export const useLogin = () => {
         onChangeOtp,
         handleResendOtp,
         handleCancelOtp,
-        checkIsUserAuthorized
+        checkIsUserAuthorized,
+        otpTimer,
+        errorMessage
     };
 };
