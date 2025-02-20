@@ -47,11 +47,11 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label }) =>
   const filteredMedia = useMemo(() => {
     return library.filter(item => {
       // const matchesType = typeFilter === 'all' || item.type === typeFilter
-      const matchesOrientation = orientationFilter === 'all' || item.versions.find(item => item.orientation.toLowerCase() === orientationFilter.toLocaleLowerCase())
+      const matchesOrientation = orientationFilter.toLocaleLowerCase() === 'all' || item.versions.find(item => item.orientation.toLowerCase() === orientationFilter.toLocaleLowerCase())
       // return matchesType && matchesOrientation
       return matchesOrientation
     })
-  }, [typeFilter, orientationFilter])
+  }, [library, typeFilter, orientationFilter])
 
   return (
     <div className="flex flex-col gap-4">
