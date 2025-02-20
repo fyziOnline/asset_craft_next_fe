@@ -3,9 +3,9 @@
 import { FC, useEffect } from "react";
 import { LoginPageIcon1, LoginPageIcon2, LoginPageIcon3, LoginPageIcon4, UserIcon } from "@/assets/icons/AppIcons";
 import { useLogin } from "@/hooks/useLogin";
-import Button from "@/components/global/Button";
 import { useRouter } from "next/navigation";
 import { IoMdClose } from "react-icons/io";
+import Button from "@/components/global/Button";
 import HomeHeader from "@/components/Layout/HomeHeader";
 
 type TaglineObj = {
@@ -40,14 +40,15 @@ const Home: FC = () => {
     isResending,
     isOtpVisible,
     isVerifyingOtp,
-    emailLoginDefault,
     handleLogin,
     onChangeEmail,
     handleOtpSubmit,
     handleResendOtp,
     onChangeOtp,
     handleCancelOtp,
-    checkIsUserAuthorized
+    checkIsUserAuthorized,
+    otpTimer,
+    errorMessage
   } = useLogin();
 
   useEffect(() => {
@@ -70,43 +71,19 @@ const Home: FC = () => {
 
           <div className=" text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-4 md:px-8 pt-12 pb-8 padbot10 flex flex-col items-center backdrop-blur-lg">
 
-            {/* <div className="absolute top-[35%] left-[25%]">
-              <div className="color-wheel ">
-                <div className="eclipse-1"></div>
-                <div className="eclipse-2"></div>
-                <div className="eclipse-3"></div>
-              </div>
-            </div> */}
-
             <UserIcon className="mb-[2rem] scale-125" color="white" />
             <input
-              defaultValue={emailLoginDefault}
               onChange={onChangeEmail}
-              className="home-box-element text-lg p-[0.85rem] mb-[1.5rem] placeholder:text-white w-[34ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider focus:placeholder:text-gray-300"
+              className="home-box-element text-lg p-[0.85rem] placeholder:text-white w-[34ch] outline-none  bg-transparent border border-white text-white rounded-full text-center tracking-wider focus:placeholder:text-gray-300"
               placeholder="Enter your email id"
               type="text"
             />
 
-            <button disabled={isLoading} onClick={() => handleLogin(true)} className={`mb-[1.5rem] text-sm home-box-element px-[1rem] py-[0.85rem] w-[34ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
+            <p className="text-red-500 text-sm pt-2">{errorMessage}</p>
 
-
+            <button disabled={isLoading} onClick={() => handleLogin(true)} className={`my-[1rem] text-sm home-box-element px-[1rem] py-[0.85rem] w-[34ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
           </div>
         </div>
-        {/* <div className="text-grey-200 text-sm border-b-2 border-b-[rgba(255,255,255,0.10)] mt-[2%] mb-[2%] margin2rem">
-        </div> */}
-
-        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-[2%]">
-          {TaglineContents.map(tagline => {
-            return (
-              <section key={tagline.title} className="text-white">
-                <h2 className="mb-3 text-lg font-semibold tracking-wide">{tagline.title}</h2>
-                <p className="text-grey-200 text-base tracking-wide">{tagline.content}</p>
-              </section>
-            )
-          })}
-        </div> */}
-
-
       </div>
 
       {isOtpVisible && (
@@ -136,7 +113,10 @@ const Home: FC = () => {
                 }`}
             >
               {isResending ? (
+              <>
                 <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></span>
+                <span>{otpTimer}s</span>
+              </>
               ) : (
                 "Resend OTP"
               )}
