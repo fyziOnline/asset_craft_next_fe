@@ -13,6 +13,8 @@ import { useLoading } from '@/components/global/Loading/LoadingContext';
 import CloseIcon from '@mui/icons-material/Close';
 import { CustomTextArea, CustomTextTester } from './CustomTextArea';
 import { linkedIn_noImage_Uischema, linkedIn_Uischema } from './schema';
+import { ImagePickerTester } from './Controller/test/ImageController';
+import { ImagePickerController } from './Controller/ImagePickerController';
 
 const customTheme = createTheme({
     palette: {
@@ -80,6 +82,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
     const refAiPromptCurrent = useRef(assetBlock.aiPrompt)
     const { setShowLoading } = useLoading()
 
+    
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => {
@@ -273,13 +276,16 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                 </div>
                             </div> : null}
                             <JsonForms
-                                schema={JSON.parse(assetBlock.schema as string)}
+                                schema = {JSON.parse(assetBlock.schema as string)}
                                 data={blockData}
                                 renderers={[
                                     ...materialRenderers,
-                                    { tester: CustomTextTester, renderer: CustomTextArea }
+                                    { tester: CustomTextTester, renderer: CustomTextArea },
+                                    {tester : ImagePickerTester, renderer : ImagePickerController }
                                 ]}
-                                uischema={contextData.AssetHtml.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined}
+                                uischema={contextData.AssetHtml.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined }
+                                // uischema={undefined}
+                                // uischema={customUiSchema()}
                                 cells={materialCells}
                                 onChange={onHandleEditData}
                             />

@@ -45,3 +45,6 @@ next-env.d.ts
 
 #vscode
 .vscode
+
+#test_data_file
+MockData_dir

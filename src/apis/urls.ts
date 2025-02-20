@@ -45,5 +45,6 @@ export const urls = {
   approveAsset : "/approval/assetApproval/approve",
   userImageUpdate : "/userProfile/image/update",
   updateAssetReAssignFileComments : "/approval/comment/update",
-  asset_version_updateField: "/asset/version/updateField"
+  asset_version_updateField: "/asset/version/updateField",
+  get_visual_media_library:"/VisualLibrary"
 };

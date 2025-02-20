@@ -18,10 +18,25 @@ const config: Config = {
           '0%' : {opacity:'1',visibility:'visible'},
           '90%': {opacity :'1',visibility : 'visible'},
           '100%':{opacity:'0',visibility:'hidden'}
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         }
        },   
        animation : {
-        hideTooltip :"hideTooltip 3s forwards"
+        hideTooltip :"hideTooltip 3s forwards",
+        fadeIn: 'fadeIn 0.3s ease-out',
+        slideUp: 'slideUp 0.3s ease-out',
+        fadeInUp: 'fadeInUp 0.5s ease-out'
        },
       aspectRatio:{
         half : "1 / 2",
