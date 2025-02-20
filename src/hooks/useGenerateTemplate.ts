@@ -78,42 +78,63 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
   const generateHTMLWithAI = async () => {
     try {
-      const promises = assetSelect.current.assetVersions.map(
-        async (assetVersion) => {
-          try {
-            const resGenerateUsingAI = await ApiService.get<any>(
-              `${urls.asset_getAssetDataUsingAI}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
-            );
+      const resGenerateUsingAI = await ApiService.post<any>(`${urls.aseet_generateMultipleVersionUsingAI}`, {
+        assetID: assetSelect.current.assetID
+      })
 
-            if (resGenerateUsingAI.isSuccess) {
-              const resGenerate = await ApiService.get<any>(
-                `${urls.asset_generate}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
-              );
-
-              return resGenerate;
-            }
-            return { isSuccess: false };
-          } catch (innerError) {
-            const apiError = ApiService.handleError(innerError)
-            console.error("API Error for item:", apiError);
-            // setError({
-            //   status: apiError.statusCode,
-            //   message: apiError.message,
-            //   showError: true
-            // })
-            return { isSuccess: false };
-          }
-        }
-      );
-
-      const results = await Promise.all(promises);
-      const allSuccess = results.every((res) => res.isSuccess);
-      return allSuccess;
+      if (resGenerateUsingAI) {
+        resGenerateUsingAI.assetVersions.map(async (assetVersion: any) => {
+          const resGenerate = await ApiService.get<any>(
+            `${urls.asset_generate}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
+          );
+          return resGenerate
+        })
+      }
+      return { isSuccess: false };
     } catch (error) {
-      console.error("Unexpected error in generateHTMLWithAI:", error);
-      return false;
+      console.error("asset generate error:", error)
+      return { isSuccess: false };
     }
-  };
+  }
+
+  // const generateHTMLWithAI = async () => {
+  //   try {
+  //     const promises = assetSelect.current.assetVersions.map(
+  //       async (assetVersion) => {
+  //         try {
+  //           const resGenerateUsingAI = await ApiService.get<any>(
+  //             `${urls.asset_getAssetDataUsingAI}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
+  //           );
+
+  //           if (resGenerateUsingAI.isSuccess) {
+  //             const resGenerate = await ApiService.get<any>(
+  //               `${urls.asset_generate}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
+  //             );
+
+  //             return resGenerate;
+  //           }
+  //           return { isSuccess: false };
+  //         } catch (innerError) {
+  //           const apiError = ApiService.handleError(innerError)
+  //           console.error("API Error for item:", apiError);
+  //           // setError({
+  //           //   status: apiError.statusCode,
+  //           //   message: apiError.message,
+  //           //   showError: true
+  //           // })
+  //           return { isSuccess: false };
+  //         }
+  //       }
+  //     );
+
+  //     const results = await Promise.all(promises);
+  //     const allSuccess = results.every((res) => res.isSuccess);
+  //     return allSuccess;
+  //   } catch (error) {
+  //     console.error("Unexpected error in generateHTMLWithAI:", error);
+  //     return false;
+  //   }
+  // };
 
   const getAssetHTML = async () => {
     try {
@@ -133,9 +154,8 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const generateAssetHTML = async () => {
     try {
       const resGenerateUsingAI = await generateHTMLWithAI();
-      if (resGenerateUsingAI) {
-        // return await getAssetHTML();
-        return { isSuccess: true };
+      if (resGenerateUsingAI.isSuccess) {
+      return { isSuccess: true };
       } else {
         return returnError("An error occurred please try again later.");
       }
@@ -144,17 +164,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     }
   };
 
-  //   Check if the campaign exist and return true or false
-  // const aiPromptCampaignExist = async (id: string = "") => {
-  //   try {
-  //     const resAIPromptCampaign = await ApiService.get<any>(
-  //       `${urls.aiPrompt_Campaign_select}?CampaignID=${id ?? campaignID}`
-  //     );
-  //     return resAIPromptCampaign.isSuccess;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // };
 
   const aiPromptCampaignInsert = async (
     FormData: FormDataProps,

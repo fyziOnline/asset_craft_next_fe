@@ -14,6 +14,7 @@ export const urls = {
   asset_addWithTemplate: "/asset/addWithTemplate",
   asset_select: "/asset/select",
   asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
+  aseet_generateMultipleVersionUsingAI: "/asset/generateAssetDataForMultipleVersionUsingAI",
   asset_generate: "/asset/generate",
   assetVersionBlock_update: "/AssetVersionBlock/update",
   assetVersionBlock_updateIgnoreStatus: "/AssetVersionBlock/updateIgnoreStatus",
