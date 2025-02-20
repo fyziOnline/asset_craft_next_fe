@@ -1,0 +1,35 @@
+
+interface Version {
+    colorSpace: string;
+    fileID: number;
+    fileSizeKB: number;
+    fileURL: string;
+    frameRate: string | null;
+    height: number;
+    isVector: boolean;
+    orientation: string;
+    resolutionDPI: number;
+    transparent: boolean;
+    versionID: string;
+    versionLabel: string;
+    videoDuration: string | null;
+    visualID: string;
+    width: number;
+  }
+  
+  export interface MediaItem {
+    assetType: string;
+    category: string | null;
+    clientID: string;
+    description: string | null;
+    fileID: number;
+    fileURL: string;
+    tags: string | null;
+    title: string;
+    versions: Version[];
+    visualID: string;
+  }
+
+export type MediaType = 'image' | 'video';
+export type Orientation = 'portrait' | 'landscape' | 'square';
+  

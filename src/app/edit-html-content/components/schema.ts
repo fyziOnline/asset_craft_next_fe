@@ -31,11 +31,24 @@ const sectionsControl: ControlElement = {
     }
 }
 
+const builControlSection = () => {
+    return sectionsControl
+}
+
+// const image_urlControl: ControlElement = {
+//     type: "Control",
+//     scope: "#/properties/image_url",
+//     options: {
+//         renderer: "ImagePickerController"
+//     }
+// }
 const image_urlControl: ControlElement = {
     type: "Control",
     scope: "#/properties/image_url",
-    options: {
-        renderer: "CustomTextArea"
+    options : {
+        renderer : "ImagePickerController",
+        "allowedTypes": ["Image"],
+        "allowedOrientations": ["Square"]
     }
 }
 
@@ -46,6 +59,13 @@ export const linkedIn_Uischema: VerticalLayout = {
         image_urlControl
     ]
 }
+// export const linkedIn_Uischema: VerticalLayout = {
+//     type: "VerticalLayout",
+//     elements: [
+//         sectionsControl,
+//         image_urlControl
+//     ]
+// }
 
 export const linkedIn_noImage_Uischema: VerticalLayout = {
     type: "VerticalLayout",
