@@ -58,17 +58,17 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[60vh] bg-no-repeat bg-cover bg-center">
-      <HomeHeader />
-        <div className="flex flex-col lg:flex-row relative items-center justify-between px-32 gap-9">
-          <section className="text-white w-[30rem] md:w-[32rem]">
+      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[50vh] 2xl:min-h-[60vh] bg-no-repeat bg-cover bg-center">
+        <HomeHeader />
+        <div className="flex flex-col lg:flex-row relative items-center justify-between px-32 gap-9 lg:py-6">
+          <section className="text-white md:w-[32rem]">
             <h1 className="text-[4rem] leading-[7rem] font-medium font-metric text-green-100 tracking-wide">
               BrandLab<sup className="text-[2.75rem] text-white">ai</sup>
             </h1>
             <p className="text-wrap text-2xl tracking-wide">Simplifying Marketing Content with AI-Driven Tech</p>
           </section>
 
-          <div className=" text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-8 pt-12 pb-8 padbot10 flex flex-col items-center backdrop-blur-lg">
+          <div className=" text-white border-[1px] bg-[rgba(255,255,255,0.11)] border-white rounded-[10%] w-fit px-4 md:px-8 pt-12 pb-8 padbot10 flex flex-col items-center backdrop-blur-lg">
 
             {/* <div className="absolute top-[35%] left-[25%]">
               <div className="color-wheel ">
@@ -159,17 +159,14 @@ const Home: FC = () => {
       )}
 
       <section>
-        <div className="flex w-full h-auto">
-          <div className="w-1/2">
-            <img className='w-[100%] h-[100%] bg-no-repeat bg-center object-fill' src="/images/loginPageGirl.png" alt="" />
+        <div className="flex flex-col md:flex-row w-full h-full">
+          <div className="w-full md:w-[50%] flex-shrink-0">
+            <img className='w-full h-full bg-no-repeat bg-center object-cover object-left' src="/images/loginPageGirl.png" alt="" />
           </div>
-          <div className="w-1/2 bg-[#00A881] text-white px-16 pb-14 flex flex-col items-start justify-center">
+          <div className="w-full lg:w-[50%] bg-[#00A881] text-white px-8 lg:px-16 pb-8 lg:pb-14 flex flex-col items-start justify-center">
             <h1 className="text-xl pt-12 tracking-wide">BUILD MARKETING ASSETS USING AI</h1>
-
-            <p className="text-3xl max-w-[65%] pt-4">How can you transform and scale your marketing operations effortlessly?</p>
-
-            <p className="pt-4  font-metricLight text-lg leading-6 tracking-wide">HPE BrandLab redefines marketing planning and campaign production, enabling you to execute operations faster, more efficiently, and at a lower cost. With your own Gen AI marketing concierge, you can streamline workflows, enhance creativity, and scale digital marketing like never before. Experience a smarter, more agile way to manage and supercharge your marketing efforts.</p>
-
+            <p className="text-3xl w-full xl:max-w-[65%]  pt-4">How can you transform and scale your marketing operations effortlessly?</p>
+            <p className="pt-4  font-metricLight text-lg leading-6 tracking-wide">HPE BrandLab ai redefines marketing planning and campaign production, enabling you to execute operations faster, more efficiently, and at a lower cost. With your own Gen AI marketing concierge, you can streamline workflows, enhance creativity, and scale digital marketing like never before. Experience a smarter, more agile way to manage and supercharge your marketing efforts.</p>
             <Button
               buttonText="Experience Now"
               showIcon={false}
@@ -183,13 +180,13 @@ const Home: FC = () => {
       </section>
 
       <section>
-        <div className="flex w-full items-center h-[500px] bg-white px-32">
-          <div className="w-1/2">
-            <h1 className="text-[#00A881] text-xl leading-5  tracking-wide">HOW HPE BRANDLAB WORKS</h1>
+        <div className="flex w-full flex-col lg:flex-row gap-4 items-center h-full xl:h-[430px] bg-white px-8 lg:px-32 py-6">
+          <div className="w-full lg:w-1/2">
+            <h1 className="text-[#00A881] text-xl leading-5  tracking-wide">HOW HPE BRANDLAB AI WORKS</h1>
 
-            <p className="pt-4 text-3xl font-normal w-[60%]">Enabling Marketers With DIY Assets Creation driven through Gen AI</p>
+            <p className="pt-4 text-3xl font-normal w-full xl:max-w-[60%]">Enabling Marketers With DIY Assets Creation driven through Gen AI</p>
 
-            <p className="pt-6 text-wrap font-metricLight text-lg leading-6 tracking-wide">HPE BrandLab redefines marketing planning and campaign production, enabling you to execute operations faster, more efficiently, and at a lower cost. With your own Gen AI marketing concierge, you can streamline workflows, enhance creativity, and scale digital marketing like never before. Experience a smarter, more agile way to manage and supercharge your marketing efforts.</p>
+            <p className="pt-6 text-wrap font-metricLight text-lg leading-6 tracking-wide">HPE BrandLab ai redefines marketing planning and campaign production, enabling you to execute operations faster, more efficiently, and at a lower cost. With your own Gen AI marketing concierge, you can streamline workflows, enhance creativity, and scale digital marketing like never before. Experience a smarter, more agile way to manage and supercharge your marketing efforts.</p>
 
             <Button
               buttonText="Start Now"
@@ -198,10 +195,10 @@ const Home: FC = () => {
               handleClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             />
           </div>
-          <div className="w-1/2 flex items-center justify-end">
-            <div className="grid grid-cols-2 gap-8">
+          <div className="w-full lg:w-1/2 flex items-center justify-center pt-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 place-items-center w-full">
               {TaglineContents.map((data, index) => (
-                <div key={index} className="w-[240px] h-full p-4 px-8 bg-white custom_shadowLoginpage flex flex-col gap-2 items-center">
+                <div key={index} className=" h-full p-4 px-8 w-full max-w-[100%] lg:max-w-[240px] bg-white custom_shadowLoginpage flex flex-col gap-2 items-center">
                   <div className="mb-2">{data.IconComponent}</div>
                   <p className="text-center text-base leading-5">{data.title}</p>
                 </div>
@@ -218,9 +215,9 @@ const Home: FC = () => {
         </div>
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white">
-          <h1 className="text-3xl font-bold tracking-wide">ELEVATE TO THE NEXT LEVEL</h1>
-          <p className="text-2xl tracking-wide my-1">Experience the power of HPE Brand Lab!</p>
-          <h1 className="text-3xl font-bold tracking-wide">JUMPSTART YOUR CAMPAIGNS</h1>
+          <h1 className="text-sm lg:text-3xl text-center font-bold tracking-wide">ELEVATE TO THE NEXT LEVEL</h1>
+          <p className="text-sm lg:text-2xl text-center tracking-wide my-1 relative">Experience the power of HPE BrandLab<span className="absolute -top-1 text-sm">ai</span></p>
+          <h1 className="text-sm lg:text-3xl text-center font-bold tracking-wide">JUMPSTART YOUR CAMPAIGNS</h1>
         </div>
       </section>
     </div>
