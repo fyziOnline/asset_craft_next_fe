@@ -1,20 +1,41 @@
 stages:
   - deploy
+
 deploy_staging:
   stage: deploy
   before_script:
     - command -v ssh-agent >/dev/null || ( apk add --update openssh )
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_PRIVATE_KEY_STAGING" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-keyscan $VM_IPADDRESS >> ~/.ssh/known_hosts
+    - ssh-keyscan $VM_IPADDRESS_STAGING >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $SSH_USER@$VM_IPADDRESS "cd /var/www/AssetCraft-AI/brandcentral-ai-app/.script; echo 'entered into the script directory';chmod a+x service.sh;./service.sh;"
-    - echo 'Staging Code Pipeline Execution completed successfully'
+    - ssh -o StrictHostKeyChecking=no $SSH_USER_STAGING@$VM_IPADDRESS_STAGING "cd /var/www/AssetCraft-AI/brandcentral-ai-app/.script; echo 'entered into the script directory';chmod a+x service.sh;./service.sh;"
+    - echo 'Staging Deployment completed successfully'
   environment:
     name: staging
     url: https://brandlabai.strat-staging.com
   only:
+    - development
+
+deploy_production:
+  stage: deploy
+  before_script:
+    - command -v ssh-agent >/dev/null || ( apk add --update openssh )
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY_PROD" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $VM_IPADDRESS_PROD >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh -o StrictHostKeyChecking=no $SSH_USER_PROD@$VM_IPADDRESS_PROD "cd /var/www/AssetCraft-AI/brandcentral-ai-app/.script; echo 'entered into the script directory';chmod a+x service.sh;./service.sh;"
+    - echo 'Production Deployment completed successfully'
+  environment:
+    name: production
+    url: https://brandlabai.com
+  only:
     - main
+  when: manual

@@ -1,7 +1,7 @@
 # Stage 1: Build
 FROM node:20-alpine AS builder
 
-ARG ENV=staging
+ARG ENV=production
 LABEL environment=$ENV
 
 WORKDIR /app
@@ -12,7 +12,6 @@ RUN yarn install
 # Copy next.config.js explicitly into the build stage
 COPY next.config.ts . 
 
-RUN ls -l /app
 COPY . .
 
 #if .env not found then copy .env.example to .env
@@ -23,7 +22,7 @@ RUN yarn build
 # Stage 2: Production
 FROM node:20-alpine
 
-ARG ENV=staging
+ARG ENV=production
 LABEL environment=$ENV
 
 WORKDIR /app
@@ -37,6 +36,6 @@ COPY --from=builder /app/.next .next
 COPY --from=builder /app/public public
 RUN yarn next -v
 
-EXPOSE 3002
+EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["yarn", "start"] 

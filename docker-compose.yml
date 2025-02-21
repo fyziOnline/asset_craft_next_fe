@@ -1,6 +1,10 @@
 services:
   brandcentralaiapp:
-    build: .
+    build: 
+      context: .
+      args:
+        - ENV=staging
+    image: brandcentralai:staging
     ports:
       - "3002:3002"
     env_file:
