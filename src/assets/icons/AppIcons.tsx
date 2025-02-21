@@ -167,7 +167,7 @@ export const GlobalEdit: FC<icon> = ({
       <path fillRule="evenodd" clipRule="evenodd" d="M42.6752 39.2499C43.2692 39.0848 43.8845 39.4327 44.0494 40.0266C44.3911 41.2567 45.3466 42.2121 46.5767 42.5538C47.1706 42.7188 47.5185 43.3341 47.3534 43.9281C47.1885 44.5221 46.5732 44.8699 45.9792 44.7048C43.9946 44.1536 42.4497 42.6087 41.8984 40.624C41.7334 40.0301 42.0812 39.4148 42.6752 39.2499Z" fill="white" />
       <defs>
         <filter id="filter0_d_1086_2791" x="0.866666" y="5.16666" width="65.1007" height="65.1" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
           <feOffset dy="4.13333" />
           <feGaussianBlur stdDeviation="2.06667" />

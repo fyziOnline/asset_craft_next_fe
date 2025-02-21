@@ -22,18 +22,20 @@ const CompletedAssets: FC = () => {
     campaignName: data.campaignName,
     projectName: data.project,
     createdOn: formatDate(data.createdOn),
-    approvedBy: data.approvedBy || "N/A",
+    approvedBy: data.approvedBy || "",
     approvedOn: formatDate(data.approvedOn),
     currentStatus: data.status,
+    assetID: data.assetID,
   }));
 
 
   const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Approved By", "Approved On", "Current Status"]
-  const arrowshowItems = ["Project Name", "Created On", "Approved On"]
-  const hiddenFields = ["dataItem"]
+  const arrowshowItems = ["Created On", "Approved On"]
+  const hiddenFields = ["assetID"]
 
   const handleClick = (item: any) => {
-    router.push(`/edit-html-content?project_name=${item.projectName}&campaign_name=${item.campaignName}&asset_name=${item.assetName}`)
+    router.push(`/edit-html-content?assetID=${item.assetID}`)
+    router.push(`/edit-html-content?assetID=${item.assetID}&campaignName=${item.campaignName}&projectName=${item.projectName}&assetTypeIcon=${item.assetTypeIcon}`)
   }
 
   return (
