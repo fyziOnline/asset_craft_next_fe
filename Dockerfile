@@ -16,14 +16,14 @@ RUN ls -l /app
 COPY . .
 
 #if .env not found then copy .env.example to .env
-RUN test -f .env || cp .env.example .env
+RUN test -f .env.$ENV || cp .env.example .env.$ENV
 
 RUN yarn build
 
 # Stage 2: Production
 FROM node:20-alpine
 
-ARG ENV=staging
+ARG ENV=production
 LABEL environment=$ENV
 
 WORKDIR /app

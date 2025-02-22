@@ -15,7 +15,7 @@ COPY next.config.ts .
 COPY . .
 
 #if .env not found then copy .env.example to .env
-RUN test -f .env || cp .env.example .env
+RUN test -f .env.$ENV || cp .env.example .env.$ENV
 
 RUN yarn build
 
@@ -38,4 +38,4 @@ RUN yarn next -v
 
 EXPOSE 3000
 
-CMD ["yarn", "start"] 
+CMD ["yarn", "start"]

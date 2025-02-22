@@ -6,9 +6,10 @@ services:
       args:
         - ENV=production
     image: brandcentralai:production
+    # This image is used for the production environment
     ports:
       - "3000:3000"
     env_file:
-      - .env    
+      - .env.prod    
     command: npm start
-    restart: always 
+    restart: always

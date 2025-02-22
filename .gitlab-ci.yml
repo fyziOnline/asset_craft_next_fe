@@ -35,7 +35,7 @@ deploy_production:
     - echo 'Production Deployment completed successfully'
   environment:
     name: production
-    url: https://brandlabai.com
+    url: https://brandlabai.stratagile.com
   only:
     - main
   when: manual
