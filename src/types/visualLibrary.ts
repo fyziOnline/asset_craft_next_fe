@@ -31,5 +31,5 @@ interface Version {
   }
 
 export type MediaType = 'image' | 'video';
-export type Orientation = 'portrait' | 'landscape' | 'square';
+export type Orientation = 'all' | 'portrait' | 'landscape' | 'square';
   
