@@ -86,9 +86,9 @@ const EmailPage = ({ params }: EmailPageProps) => {
         }
         if (step === 3) {
             if (
-                refFormData.current?.topic?.length &&
-                refFormData.current.type?.length &&
-                refFormData.current.keyPoints?.length
+                // refFormData.current?.topic?.length &&
+                refFormData.current?.type?.length &&
+                refFormData.current?.keyPoints?.length
             ) {
                 setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
             } else {
@@ -238,7 +238,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     }}
                 >
                     <div className='max-w-[90%]'>
-                        <ChildrenTitle showStar={true} customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
+                        <ChildrenTitle showStar={false} customClass='mt-5' title='Specify the topic, occasion, event or context for your post.' />
                         <TextField handleChange={(e) => {
                             handleInputText(e, "topic")
                             doesFormCompleted(3)

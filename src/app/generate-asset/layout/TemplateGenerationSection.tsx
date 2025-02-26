@@ -101,13 +101,13 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             {/* Please provide the necessary information to generate AI content */}
                         </p>
                     </div>
-                    <div className='px-[10%] overflow-y-scroll scrollbar-hide h-[82vh]'>
+                    <div className="px-[10%] overflow-y-scroll h-[82vh] thin-scrollbar">
                         {renderAssetGenerateContent()}
                     </div>
                 </div>
                 <div className="flex">
                     {contextData.assetGenerateStatus === 1 &&
-                        <div>
+                        <div className='ml-1'> 
                             <div onClick={toggleSidebar} className='flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] relative bg-[#00b188] rounded-[10px_0px_0px_10px] mt-[20px] cursor-pointer'>
                                 <img src="/vector_right_arrow.svg" className={`relative w-[10.5px] h-[18.5px] mt-[-0.25px] mb-[-0.25px] mr-[-0.75px] transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`} alt="vector" />
                             </div>
