@@ -136,8 +136,8 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
         left: 0;
         width: 100%;
         height: 100%;
-        border: 2px dashed #ff5555;
-        opacity: 0.8;
+        border: 3px dashed #ff5555;
+        opacity: 0.9; /* Increased opacity for better visibility */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -147,24 +147,33 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
       }
       
       .hidden-indicator-message {
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(0, 0, 0, 0.85); /* Darker background */
         color: white;
-        padding: 8px 12px;
+        padding: 10px 15px; /* Larger padding */
         border-radius: 4px;
         font-size: 14px;
         font-weight: bold;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow */
         text-align: center;
         max-width: 80%;
         line-height: 1.3;
+        border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle white border */
       }
       
       /* Special treatment for blocks that are hidden */
       [data-block-id].hidden-block {
         position: relative;
-        opacity: 0.6;
+        opacity: 0.4; /* Decreased opacity further */
         min-height: 60px;
-        border: 2px dashed #ff4400;
+        border: 3px dashed #ff4400; /* Thicker border */
+        background-color: rgba(255, 68, 0, 0.05); /* Very light orange tint */
+        background-image: repeating-linear-gradient(
+          45deg,
+          rgba(255, 68, 0, 0.1),
+          rgba(255, 68, 0, 0.1) 10px,
+          rgba(255, 68, 0, 0.05) 10px,
+          rgba(255, 68, 0, 0.05) 20px
+        ); /* Diagonal striped pattern */
       }
     `;
     shadowRoot.appendChild(style);
