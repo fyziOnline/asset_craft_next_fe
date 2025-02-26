@@ -6,7 +6,7 @@ import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import EditContentModel from './components/EditContentModel';
 import { useRouter } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
-import { AssetBlockProps } from '@/types/templates';
+import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
 import { useAppData } from '@/context/AppContext';
 import SubmitVersionModel from './components/SubmitVersionModel';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
@@ -172,10 +172,13 @@ const Page = () => {
                     return block;
                 });
                 
-                setVersionSelected(prev => prev ? {
-                    ...prev,
-                    assetVersionBlocks: updatedBlocks
-                } : prev);
+                setVersionSelected(prev => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        assetVersionBlocks: updatedBlocks
+                    } as AssetVersionProps
+                })
             }
         } catch (error) {
             console.error("Error toggling block visibility:", error);
