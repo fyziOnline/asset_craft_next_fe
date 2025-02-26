@@ -2,7 +2,7 @@ import { FC, useState, useMemo, useEffect } from 'react';
 import { ScanSearch, Search } from 'lucide-react';
 import Button from '@/components/global/Button';
 import { useEditAssetSection } from '@/hooks/useEditAssetSection';
-import { MediaItem, MediaType, Orientation } from '@/types/visualLibrary';
+import { MediaItem, MediaType, Orientation, Version } from '@/types/visualLibrary';
 import DialogueMain from './components/DialogueMain';
 // import { useAppData } from '@/context/AppContext';
 
@@ -20,6 +20,8 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
   const [orientationFilter, setOrientationFilter] = useState<Orientation>('all')
   const [library,setLibrary] = useState<MediaItem[]>([])
   const [openSelectedMediaPreview,setOpenSelectedMediaPreview] = useState<boolean>(false) 
+  const [selectedImageVersion,setSelectedImageVersion] = useState<Version | null>(null)
+
 
   const {getVisualLibrary} = useEditAssetSection()
 
@@ -38,16 +40,18 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
   
   const handleClose = () => {
     setOpen(false)
+    setOpenSelectedMediaPreview(false)
     setSelectedImage(null)
   }
 
   const handleSelect = (image: MediaItem) => {
     setSelectedImage(image)
+    setSelectedImageVersion(image.versions.find(v => v.versionLabel === 'Original') || image.versions[0] || null )
   }
 
   const handleConfirm = () => {
     if (selectedImage) {
-      onChange(selectedImage.versions.find(item=>item.versionLabel==="Original")?.fileURL ||"")
+      onChange(selectedImageVersion?.fileURL ||"")
       handleClose()
     }
   }
@@ -118,36 +122,39 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
               setOpenSelectedMediaPreview={setOpenSelectedMediaPreview}
               openSelectedMediaPreview={openSelectedMediaPreview}
               allowedOrientations={allowedOrientation}
+              setSelectedImageVersion={setSelectedImageVersion}
+              selectedImageVersion={selectedImageVersion}
             />
 
             {/* footer of custom renderer dialogue box  */}
             <div className="p-4 border-t flex justify-between">
-              <button
+              {openSelectedMediaPreview && <button
                 onClick={()=>setOpenSelectedMediaPreview(false)}
                 className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-full transition-colors duration-200"
               >
                 Back
-              </button>
+              </button>}
               {/* dialogue footer right section  */}
-              <div className='flex justify-end gap-2'>
-                <button
-                  onClick={handleClose}
-                  className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-full transition-colors duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleConfirm}
-                  disabled={!selectedImage}
-                  className={`px-4 py-2 text-sm rounded-full transition-all duration-200 ${
-                    selectedImage
-                      ? 'text-white bg-custom-gradient-green'
-                      : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  }`}
-                >
-                  Select
-                </button>
-              </div>
+                <div className='w-full flex justify-end gap-2'>
+                  <button
+                    onClick={handleClose}
+                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleConfirm}
+                    disabled={!selectedImage}
+                    className={`px-4 py-2 text-sm rounded-full transition-all duration-200 ${
+                      selectedImage
+                        ? 'text-white bg-custom-gradient-green'
+                        : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                    }`}
+                  >
+                    Select
+                  </button>
+                </div>
+
             </div>
           </div>
         </div>

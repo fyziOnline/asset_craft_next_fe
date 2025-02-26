@@ -9,14 +9,19 @@ export interface DropDownOptions {
 interface FilterDropdownProps {
     customClass?: string;
     optionLists: DropDownOptions[];
+    selectedValueClass ?: string
+    topLevelClass ?: string
+    optionsListClass ?: string
     placeholder?: string
     selectedValue?: (value: string) => void
+    defaultSelectedOption ?:string
+    defaultSelectedLabel ?:string
 }
 
-const FilterDropdown: FC<FilterDropdownProps> = ({ customClass, optionLists, placeholder = 'Select', selectedValue }) => {
+const FilterDropdown: FC<FilterDropdownProps> = ({ customClass, topLevelClass,selectedValueClass,optionsListClass, optionLists, placeholder = 'Select', selectedValue, defaultSelectedOption = "",defaultSelectedLabel="" }) => {
     const [showOptionList, setShowOptionList] = useState(false)
-    const [selectedOption, setSelectedOption] = useState('')
-    const [selectedLabel, setSelectedLabel] = useState('')
+    const [selectedOption, setSelectedOption] = useState(defaultSelectedOption)
+    const [selectedLabel, setSelectedLabel] = useState(defaultSelectedLabel)
 
     const dropdownRef = useRef<HTMLDivElement | null>(null)
 
@@ -44,13 +49,13 @@ const FilterDropdown: FC<FilterDropdownProps> = ({ customClass, optionLists, pla
     }, [])
 
     return (
-        <div ref={dropdownRef} className='relative'>
+        <div ref={dropdownRef} className={`relative ${topLevelClass}`}>
             <div onClick={handleDropDownList} className={`flex items-center justify-between gap-2 rounded-full w-[200px] border border-[rgba(217,217,217,0.93)] px-3 py-1 cursor-pointer ${customClass}`} >
-                <p className={`text-base tracking-wide ${!selectedOption ? "text-[#666666]" : ""}`}>{selectedLabel || placeholder}</p>
+                <p className={`text-base tracking-wide ${!selectedOption ? "text-[#666666]" : ""} ${selectedValueClass}`}>{selectedLabel || placeholder}</p>
                 <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown color='#00A881' size={25} /></span>
             </div>
             {showOptionList &&
-                <div className='z-40 bg-[#F6F6F6] border border-[rgba(217,217,217,0.93)] py-2 mt-2 absolute h-auto w-[200px] flex flex-col shadow-dropdown-shadow rounded-2xl transition-all duration-300 ease-in-out' >
+                <div className={`z-40 bg-[#F6F6F6] border border-[rgba(217,217,217,0.93)] py-2 mt-2 absolute h-auto w-[200px] flex flex-col shadow-dropdown-shadow rounded-2xl transition-all duration-300 ease-in-out ${optionsListClass}`} >
                     {optionLists.map((options, index) => (
                         <div key={index} onClick={() => handleSelectList(options)} className='h-4 px-3 py-4 flex items-center text-base cursor-pointer'>{options.label}</div>
                     ))}
