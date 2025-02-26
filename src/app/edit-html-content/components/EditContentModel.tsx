@@ -192,6 +192,13 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                         setContextData({ AssetHtml: assetHtml as AssetHtmlProps });
                         setIsShowModelEdit(false);
                     }
+
+                    if(assetVersion.status === "On Review") {
+                        const resVersionStatusUpdate = await ApiService.put<any>(`${urls.assetversion_status_change}?assetVersionID=${assetVersion.assetVersionID}`);
+                        console.log("Version status updated successfully." , resVersionStatusUpdate , "asset Version id" , assetVersion.assetVersionID);
+                    }
+
+                    
                 }
             } else {
                 alert("Save data failed, please try again later.");

@@ -14,7 +14,7 @@ export const urls = {
   asset_addWithTemplate: "/asset/addWithTemplate",
   asset_select: "/asset/select",
   asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
-  aseet_generateMultipleVersionUsingAI: "/asset/generateAssetDataForMultipleVersionUsingAI",
+  asset_generateMultipleVersionUsingAI: "/asset/generateAssetDataForMultipleVersionUsingAI",
   asset_generate: "/asset/generate",
   assetVersionBlock_update: "/AssetVersionBlock/update",
   assetVersionBlock_updateIgnoreStatus: "/AssetVersionBlock/updateIgnoreStatus",
@@ -46,5 +46,6 @@ export const urls = {
   userImageUpdate : "/userProfile/image/update",
   updateAssetReAssignFileComments : "/approval/comment/update",
   asset_version_updateField: "/asset/version/updateField",
-  get_visual_media_library:"/VisualLibrary"
+  get_visual_media_library:"/VisualLibrary",
+  assetversion_status_change: "/approval/assetApproval/ChangeStatus"
 };

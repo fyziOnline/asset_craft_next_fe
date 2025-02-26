@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 import { FormDataProps, SectionProps } from "./useInputFormDataGenerate";
 import { nkey } from "@/data/keyStore";
 import moment from "moment";
-import { useAppData } from "@/context/AppContext";
 
 interface GenerateTemplateProp {
   params?: {
@@ -26,7 +25,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const assetIDTemplateRef = useRef("");
   const assetSelect = useRef<AssetHtmlProps>({} as AssetHtmlProps);
   const isCampaignSelect = useRef(false)
-  const { setError } = useAppData()
 
   const returnError = (message: string) => {
     return {
@@ -56,11 +54,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
             } catch (innerError) {
               const apiError = ApiService.handleError(innerError)
               console.error("API Error for item:", item, apiError);
-              // setError({
-              //   status: apiError.statusCode,
-              //   message: apiError.message,
-              //   showError: true
-              // })
               return { isSuccess: false };
             }
           });
@@ -78,63 +71,31 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
   const generateHTMLWithAI = async () => {
     try {
-      const resGenerateUsingAI = await ApiService.post<any>(`${urls.aseet_generateMultipleVersionUsingAI}`, {
+      const resGenerateUsingAI = await ApiService.post<any>(`${urls.asset_generateMultipleVersionUsingAI}`, {
         assetID: assetSelect.current.assetID
       })
 
-      if (resGenerateUsingAI) {
-        resGenerateUsingAI.assetVersions.map(async (assetVersion: any) => {
-          const resGenerate = await ApiService.get<any>(
-            `${urls.asset_generate}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
-          );
-          return resGenerate
-        })
+      if (resGenerateUsingAI.isSuccess) {
+        const generatePromises = resGenerateUsingAI.assetVersions.map(
+          async (assetVersion: any) => {
+            const resGenerate = await ApiService.get<any>(
+              `${urls.asset_generate}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
+            );
+            return resGenerate;
+          }
+        );
+
+        await Promise.all(generatePromises);
+        return { isSuccess: true };
+      } else {
+        return { isSuccess: false };
       }
-      return { isSuccess: false };
     } catch (error) {
       console.error("asset generate error:", error)
       return { isSuccess: false };
     }
   }
 
-  // const generateHTMLWithAI = async () => {
-  //   try {
-  //     const promises = assetSelect.current.assetVersions.map(
-  //       async (assetVersion) => {
-  //         try {
-  //           const resGenerateUsingAI = await ApiService.get<any>(
-  //             `${urls.asset_getAssetDataUsingAI}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
-  //           );
-
-  //           if (resGenerateUsingAI.isSuccess) {
-  //             const resGenerate = await ApiService.get<any>(
-  //               `${urls.asset_generate}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
-  //             );
-
-  //             return resGenerate;
-  //           }
-  //           return { isSuccess: false };
-  //         } catch (innerError) {
-  //           const apiError = ApiService.handleError(innerError)
-  //           console.error("API Error for item:", apiError);
-  //           // setError({
-  //           //   status: apiError.statusCode,
-  //           //   message: apiError.message,
-  //           //   showError: true
-  //           // })
-  //           return { isSuccess: false };
-  //         }
-  //       }
-  //     );
-
-  //     const results = await Promise.all(promises);
-  //     const allSuccess = results.every((res) => res.isSuccess);
-  //     return allSuccess;
-  //   } catch (error) {
-  //     console.error("Unexpected error in generateHTMLWithAI:", error);
-  //     return false;
-  //   }
-  // };
 
   const getAssetHTML = async () => {
     try {
@@ -154,8 +115,9 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   const generateAssetHTML = async () => {
     try {
       const resGenerateUsingAI = await generateHTMLWithAI();
+
       if (resGenerateUsingAI.isSuccess) {
-      return { isSuccess: true };
+        return { isSuccess: true };
       } else {
         return returnError("An error occurred please try again later.");
       }
@@ -302,16 +264,21 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     campaign_id.length === 0 ?
       isCampaignSelect.current = false : isCampaignSelect.current = true
     try {
+      // Handle HTML regeneration path
       if (isRegenerateHTML) {
-        return await reGenerateHTML(FormData, Sections, campaign_id);
+        const result = await reGenerateHTML(FormData, Sections, campaign_id);
+        return result;
       }
+
       if (campaign_id.length === 0) {
         const resAddCampaign = await addCampaign(ProjectDetails)
         campaign_id = resAddCampaign.campaignID
+
         if (!resAddCampaign.status) {
           return returnError("Add Campaign failed, please try again later.")
         }
       }
+
       const resAddWithTemplate = await ApiService.post<any>(
         urls.asset_addWithTemplate,
         {
@@ -325,11 +292,13 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
       if (resAddWithTemplate.isSuccess) {
         assetIDTemplateRef.current = resAddWithTemplate.assetID;
+
         const resAssetSelect = await getAssetHTML();
 
         if (resAssetSelect.isSuccess) {
           assetSelect.current = resAssetSelect as AssetHtmlProps;
-          // return
+
+          // Update sections
           const allSuccess = await updateSections(Sections);
 
           if (allSuccess) {
@@ -352,7 +321,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
                 campaign_id
               );
 
-
               if (resCampaignInsert.isSuccess) {
                 let resGenerate = await aiPromptGenerateForAsset();
                 if (resGenerate.isSuccess) {
@@ -369,11 +337,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       }
     } catch (error) {
       const apiError = ApiService.handleError(error)
-      // setError({
-      //     status: apiError.statusCode,
-      //     message: apiError.message,
-      //     showError: true
-      // })
       return returnError(apiError.message);
     }
   };
@@ -415,11 +378,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       }
     } catch (error) {
       const apiError = ApiService.handleError(error)
-      // setError({
-      //   status: apiError.statusCode,
-      //   message: apiError.message,
-      //   showError: true
-      // })
       return returnError(apiError.message);
     }
   };
