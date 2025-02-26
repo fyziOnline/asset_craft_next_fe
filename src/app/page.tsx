@@ -59,7 +59,7 @@ const Home: FC = () => {
 
   return (
     <div>
-      <div style={{ backgroundImage: "url('/images/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[50vh] 2xl:min-h-[60vh] bg-no-repeat bg-cover bg-center">
+      <div style={{ backgroundImage: "url('https://stratagile-emailcraft.s3.ap-southeast-1.amazonaws.com/loginpagebg.png')" }} className="h-full py-6 justify-center min-h-[50vh] 2xl:min-h-[60vh] bg-no-repeat bg-cover bg-center">
         <HomeHeader />
         <div className="flex flex-col lg:flex-row relative items-center justify-between px-32 gap-9 lg:py-6">
           <section className="text-white md:w-[32rem]">
@@ -141,7 +141,7 @@ const Home: FC = () => {
       <section>
         <div className="flex flex-col md:flex-row w-full h-full">
           <div className="w-full md:w-[50%] flex-shrink-0">
-            <img className='w-full h-full bg-no-repeat bg-center object-cover object-left' src="/images/loginPageGirl.png" alt="" />
+            <img className='w-full h-full bg-no-repeat bg-center object-cover object-left' src="https://stratagile-emailcraft.s3.ap-southeast-1.amazonaws.com/loginPageGirl.png" alt="" />
           </div>
           <div className="w-full lg:w-[50%] bg-[#00A881] text-white px-8 lg:px-16 pb-8 lg:pb-14 flex flex-col items-start justify-center">
             <h1 className="text-xl pt-12 tracking-wide">BUILD MARKETING ASSETS USING AI</h1>
@@ -191,7 +191,7 @@ const Home: FC = () => {
 
       <section className="relative w-full">
         <div className="flex w-full h-[150px] bg-no-repeat bg-cover bg-center">
-          <img className="w-full h-full" src="/images/loginBottom.png" alt="" />
+          <img className="w-full h-full" src="https://stratagile-emailcraft.s3.ap-southeast-1.amazonaws.com/loginBottom.png" alt="" />
         </div>
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white">

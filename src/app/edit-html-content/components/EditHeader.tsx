@@ -2,9 +2,11 @@ import React from 'react';
 import Button from '@/components/global/Button';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { AssetVersionProps } from '@/types/templates';
+import StatusLegend from './StatusLegend';
 
 interface EditHeaderProps {
     versionSelected: AssetVersionProps;
+    versionList: AssetVersionProps[];
     isShowSave: boolean;
     setShowSave: (show: boolean) => void;
     handleSave: (type: number) => void;
@@ -13,6 +15,7 @@ interface EditHeaderProps {
 
 const EditHeader: React.FC<EditHeaderProps> = ({
     versionSelected,
+    versionList,
     isShowSave,
     setShowSave,
     handleSave,
@@ -21,11 +24,7 @@ const EditHeader: React.FC<EditHeaderProps> = ({
     return (
         <div className='flex justify-between items-center px-14 py-4'>
             <div className='flex-1'>
-                {versionSelected?.status && 
-                    <div className='py-1 text-base border border-[#00A881] w-[150px] flex items-center justify-center rounded-md m-2 text-[#00A881]'>
-                        {versionSelected?.status}
-                    </div>
-                }
+                <StatusLegend versionList={versionList} />
             </div>
             <div className='flex gap-4'>
                 <div className='relative w-[150px] bg-white shadow-sm rounded'>
