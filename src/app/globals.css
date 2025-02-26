@@ -372,3 +372,21 @@
 .custom_shadowLoginpage{
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; 
 }
+
+/* Thin Scrollbar */
+.thin-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: #a8a8a8; 
+  border-radius: 10px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8a9; 
+}

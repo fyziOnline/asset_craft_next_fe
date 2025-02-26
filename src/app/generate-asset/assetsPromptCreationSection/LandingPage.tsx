@@ -87,8 +87,8 @@ const LandingPage = ({ params }: LandingPageProps) => {
         }
         if (step === 3) {
             if (
-                refFormData.current?.topic?.length &&
-                refFormData.current.keyPoints?.length
+                refFormData.current?.topic?.length
+                // refFormData.current?.keyPoints?.length
             ) {
                 setCheckedList((prev) => (prev.includes(2) ? prev : [...prev, 2]))
             } else {

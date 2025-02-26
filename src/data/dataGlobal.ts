@@ -6,7 +6,7 @@ export const ListTypePage = {
 }
 
 export const ListTargetAudience = [
-    { label: 'General Public', value: 'General Public' },
+    { label: 'All Target Segments', value: 'All Target Segments' },
     { label: 'Existing Customers', value: 'Existing Customers' },
     { label: 'Prospective Customers', value: 'Prospective Customers' }
 ]
@@ -34,4 +34,11 @@ export const saveOptions = [
     {label : 'HTML File',value:'HTML File'},
     {label : 'Zip File',value:'Zip File'},
     {label : 'PDF File',value:'PDF File'}
+]
+
+export const ListTone = [
+    { label: 'Empathetic (for grievance/support)', value: 'Empathetic (for grievance/support)' },
+    { label: 'Professional and Technical', value: 'Professional and Technical' },
+    { label: 'Conversational and Collaborative', value: 'Conversational and Collaborative' },
+    { label: 'Persuasive and Sales-Oriented', value: 'Persuasive and Sales-Oriented' }
 ]

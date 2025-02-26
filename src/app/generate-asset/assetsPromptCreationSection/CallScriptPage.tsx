@@ -12,23 +12,11 @@ import SectionAssetDetails from '@/components/assetGeneration/SectionAssetDetail
 import { AssetHtmlProps, CampaignSelectResponse, Template } from '@/types/templates';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import DragAndDrop from '@/components/global/DragAndDrop';
-import { listofcampains } from '@/data/dataGlobal';
+import { listofcampains, ListTargetAudience, ListTone } from '@/data/dataGlobal';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { useRouter } from 'next/navigation';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 
-const ListTargetAudience = [
-    { label: 'General Public', value: 'General Public' },
-    { label: 'Existing Customers', value: 'Existing Customers' },
-    { label: 'Prospective Customers', value: 'Prospective Customers' }
-]
-
-const ListTone = [
-    { label: 'Empathetic (for grievance/support)', value: 'Empathetic (for grievance/support)' },
-    { label: 'Professional and Technical', value: 'Professional and Technical' },
-    { label: 'Conversational and Collaborative', value: 'Conversational and Collaborative' },
-    { label: 'Persuasive and Sales-Oriented', value: 'Persuasive and Sales-Oriented' }
-]
 interface CallScriptPageProps {
     params: {
         template: Template
