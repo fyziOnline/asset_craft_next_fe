@@ -14,12 +14,14 @@ interface FilterDropdownProps {
     optionsListClass ?: string
     placeholder?: string
     selectedValue?: (value: string) => void
+    defaultSelectedOption ?:string
+    defaultSelectedLabel ?:string
 }
 
-const FilterDropdown: FC<FilterDropdownProps> = ({ customClass, topLevelClass,selectedValueClass,optionsListClass, optionLists, placeholder = 'Select', selectedValue }) => {
+const FilterDropdown: FC<FilterDropdownProps> = ({ customClass, topLevelClass,selectedValueClass,optionsListClass, optionLists, placeholder = 'Select', selectedValue, defaultSelectedOption = "",defaultSelectedLabel="" }) => {
     const [showOptionList, setShowOptionList] = useState(false)
-    const [selectedOption, setSelectedOption] = useState('')
-    const [selectedLabel, setSelectedLabel] = useState('')
+    const [selectedOption, setSelectedOption] = useState(defaultSelectedOption)
+    const [selectedLabel, setSelectedLabel] = useState(defaultSelectedLabel)
 
     const dropdownRef = useRef<HTMLDivElement | null>(null)
 

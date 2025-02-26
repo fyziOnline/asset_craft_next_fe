@@ -2,7 +2,7 @@ import { FC, useState, useMemo, useEffect } from 'react';
 import { ScanSearch, Search } from 'lucide-react';
 import Button from '@/components/global/Button';
 import { useEditAssetSection } from '@/hooks/useEditAssetSection';
-import { MediaItem, MediaType, Orientation } from '@/types/visualLibrary';
+import { MediaItem, MediaType, Orientation, Version } from '@/types/visualLibrary';
 import DialogueMain from './components/DialogueMain';
 // import { useAppData } from '@/context/AppContext';
 
@@ -20,6 +20,8 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
   const [orientationFilter, setOrientationFilter] = useState<Orientation>('all')
   const [library,setLibrary] = useState<MediaItem[]>([])
   const [openSelectedMediaPreview,setOpenSelectedMediaPreview] = useState<boolean>(false) 
+  const [selectedImageVersion,setSelectedImageVersion] = useState<Version | null>(null)
+
 
   const {getVisualLibrary} = useEditAssetSection()
 
@@ -44,11 +46,12 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
 
   const handleSelect = (image: MediaItem) => {
     setSelectedImage(image)
+    setSelectedImageVersion(image.versions.find(v => v.versionLabel === 'Original') || image.versions[0] || null )
   }
 
   const handleConfirm = () => {
     if (selectedImage) {
-      onChange(selectedImage.versions.find(item=>item.versionLabel==="Original")?.fileURL ||"")
+      onChange(selectedImageVersion?.fileURL ||"")
       handleClose()
     }
   }
@@ -119,6 +122,8 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
               setOpenSelectedMediaPreview={setOpenSelectedMediaPreview}
               openSelectedMediaPreview={openSelectedMediaPreview}
               allowedOrientations={allowedOrientation}
+              setSelectedImageVersion={setSelectedImageVersion}
+              selectedImageVersion={selectedImageVersion}
             />
 
             {/* footer of custom renderer dialogue box  */}
