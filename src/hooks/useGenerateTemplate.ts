@@ -75,7 +75,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         assetID: assetSelect.current.assetID
       })
 
-      if (resGenerateUsingAI && resGenerateUsingAI.assetVersions) {
+      if (resGenerateUsingAI.isSuccess) {
         const generatePromises = resGenerateUsingAI.assetVersions.map(
           async (assetVersion: any) => {
             const resGenerate = await ApiService.get<any>(
