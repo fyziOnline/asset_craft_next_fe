@@ -234,7 +234,7 @@ const Page = () => {
         );
         
             return (
-            <div className='flex flex-col justify-center relative isolate'>
+            <div className='flex items-center flex-col justify-center relative isolate'>
                     {globalBlock && (
                         <GlobalEditButton 
                             onClick={() => {
@@ -299,7 +299,7 @@ const Page = () => {
 
                     <div className="flex h-[92vh] relative mx-14">
                         <div className="flex flex-col bg-[#e4e4e4] flex-grow pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative">
-                            <div className='px-[6rem]'>
+                            <div className='px-[6rem] overflow-y-scroll thin-scrollbar'>
                                 <div id="container">
                                     <div className="h-[20px]" />
                                     {renderHTMLSelect}

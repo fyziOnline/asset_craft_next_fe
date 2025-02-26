@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useMemo, useState } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { AssetBlockProps } from "@/types/templates";
 import BlockControls from "./BlockControls";
+import { useSearchParams } from "next/navigation";
 
 interface EnhancedShadowDomContainerProps {
   htmlContent: string;
@@ -23,8 +24,11 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const shadowRootRef = useRef<ShadowRoot | null>(null);
-  const controlsDivRef = useRef<HTMLDivElement | null>(null);
-  const [unmatchedBlockIds, setUnmatchedBlockIds] = useState<string[]>([]);
+
+  const searchParams = useSearchParams();
+
+    const assetTypeIcon = searchParams.get("assetTypeIcon");
+    console.log('assetTypeIcon',assetTypeIcon);
   
   // Filter blocks that should be editable
   const editableBlocks = useMemo(() => {
@@ -65,7 +69,7 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
       .edit-button-container {
         position: absolute;
         top: 5px;
-        right: -75px; /* Increase spacing from content */
+        right: -110px; /* Increase spacing from content */
         background-color: rgba(200, 200, 200, 0.9); /* Changed to grey background */
         border: 1px solid #666;
         border-radius: 6px;
@@ -233,6 +237,16 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
         const editBtnContainer = document.createElement('div');
         editBtnContainer.className = 'edit-button-container';
         editBtnContainer.dataset.forBlock = blockId;
+
+        const styleMap = {
+          "Landing Page": "-95px",
+          "LinkedIn": "-120px",
+          "Call Script": "-150px",
+          "Email": "-120px"
+      };
+      
+      // Apply the correct style or default to -110px
+      editBtnContainer.style.right = styleMap[assetTypeIcon as keyof typeof styleMap] || "-110px";
         
         // If the block is hidden, add a visual indicator
         if (block.ignoreBlock === 1) {
@@ -438,8 +452,6 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
       .filter(block => !foundBlockIds.has(block.assetVersionBlockID))
       .map(block => block.assetVersionBlockID);
     
-    setUnmatchedBlockIds(unmatchedIds);
-    
     // Trigger callback if provided
     if (onUnmatchedBlocks && unmatchedIds.length > 0) {
       onUnmatchedBlocks(unmatchedIds);
@@ -448,12 +460,12 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
     return () => {
       // Cleanup
     };
-  }, [htmlContent, cssContent, blocks, editableBlocks, onEditBlock, onToggleBlockVisibility, onUnmatchedBlocks]);
+  }, [htmlContent, cssContent, blocks]);
 
   return (
     <div 
       ref={containerRef} 
-      className="enhanced-shadow-container"
+      className="enhanced-shadow-container contents"
       style={{ position: 'relative', width: '100%' }}
     />
   );
