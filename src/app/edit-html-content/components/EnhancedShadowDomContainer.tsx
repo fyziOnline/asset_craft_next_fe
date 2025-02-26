@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo, useState } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { AssetBlockProps } from "@/types/templates";
 import BlockControls from "./BlockControls";
@@ -24,8 +24,6 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const shadowRootRef = useRef<ShadowRoot | null>(null);
-  const controlsDivRef = useRef<HTMLDivElement | null>(null);
-  const [unmatchedBlockIds, setUnmatchedBlockIds] = useState<string[]>([]);
 
   const searchParams = useSearchParams();
 
@@ -248,7 +246,7 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
       };
       
       // Apply the correct style or default to -110px
-      editBtnContainer.style.right = styleMap[assetTypeIcon] || "-110px";
+      editBtnContainer.style.right = styleMap[assetTypeIcon as keyof typeof styleMap] || "-110px";
         
         // If the block is hidden, add a visual indicator
         if (block.ignoreBlock === 1) {
@@ -454,8 +452,6 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
       .filter(block => !foundBlockIds.has(block.assetVersionBlockID))
       .map(block => block.assetVersionBlockID);
     
-    setUnmatchedBlockIds(unmatchedIds);
-    
     // Trigger callback if provided
     if (onUnmatchedBlocks && unmatchedIds.length > 0) {
       onUnmatchedBlocks(unmatchedIds);
@@ -464,7 +460,7 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
     return () => {
       // Cleanup
     };
-  }, [htmlContent, cssContent, blocks, editableBlocks, onEditBlock, onToggleBlockVisibility, onUnmatchedBlocks]);
+  }, [htmlContent, cssContent, blocks]);
 
   return (
     <div 

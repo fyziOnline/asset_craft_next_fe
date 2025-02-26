@@ -25,6 +25,7 @@ const StatusLegend: React.FC<StatusLegendProps> = ({ versionList }) => {
 
     return (
         <div className="flex items-center space-x-4 p-2">
+            <div className='text-base tracking-wide'>Legend :</div>
             {uniqueStatuses.map((status) => (
                 <div key={status} className="flex items-center">
                     <div 
