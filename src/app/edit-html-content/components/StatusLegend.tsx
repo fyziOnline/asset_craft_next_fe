@@ -1,0 +1,41 @@
+import React from 'react';
+import { AssetVersionProps } from '@/types/templates';
+
+// Define status color mapping
+export const statusColors: Record<string, string> = {
+    "In Progress": "#2196F3", // Blue
+    "On Review": "#FF9800", // Orange
+    "Completed": "#4CAF50", // Green
+};
+
+interface StatusLegendProps {
+    versionList: AssetVersionProps[];
+}
+
+const StatusLegend: React.FC<StatusLegendProps> = ({ versionList }) => {
+    // Get unique statuses from the version list
+    const uniqueStatuses = Array.from(
+        new Set(versionList.map(version => version.status).filter(Boolean))
+    ) as string[];
+
+    // If no statuses are available, don't render the component
+    if (uniqueStatuses.length === 0) {
+        return null;
+    }
+
+    return (
+        <div className="flex items-center space-x-4 p-2 border border-gray-200 rounded-md bg-white shadow-sm">
+            {uniqueStatuses.map((status) => (
+                <div key={status} className="flex items-center">
+                    <div 
+                        className="w-3 h-3 rounded-full mr-2" 
+                        style={{ backgroundColor: statusColors[status] || "#9E9E9E" }}
+                    />
+                    <span className="text-sm text-gray-700">{status}</span>
+                </div>
+            ))}
+        </div>
+    );
+};
+
+export default StatusLegend; 

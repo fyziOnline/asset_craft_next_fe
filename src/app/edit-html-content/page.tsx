@@ -263,6 +263,7 @@ const Page = () => {
                 <div className="min-h-[82vh] border-t border-solid">
                     <EditHeader 
                         versionSelected={versionSelected}
+                        versionList={versionList}
                         isShowSave={isShowSave}
                         setShowSave={setShowSave}
                         handleSave={handleSave}
