@@ -7,7 +7,7 @@ import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation"
 import { useDashboard } from "@/hooks/useDashboard"
 
-const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Approver", "Created On", "Current Status"]
+const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 const headerHavingSortingToggle = ["Project Name", "Created On"]
 const hiddenFields = ["assetID"]
 
@@ -27,7 +27,6 @@ const AssetInProgress: FC = () => {
     assetName: data.assetName,
     campaignName: data.campaignName,
     projectName: data.project,
-    assignedTo: data.approvedBy || "",
     createdOn: formatDate(data.createdOn),
     currentStatus: data.status,
     assetID: data.assetID,
@@ -45,7 +44,7 @@ const AssetInProgress: FC = () => {
         campaign_data={assetsDisplayTable}
         tableHeadings={tableHeading}
         headersHavingToggle={headerHavingSortingToggle}
-        columnWidthsTable={["repeat(7, 1fr)"]}
+        columnWidthsTable={["repeat(6, 1fr)"]}
         handleClick={handleClick}
         page=""
       />

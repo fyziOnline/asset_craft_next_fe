@@ -47,13 +47,13 @@ const AssetCard:FC<AssetCardProp> = ({ data, handleClick = () => {} }) => {
       className='group p-[5%] border-2 cursor-pointer  rounded-3xl hover:bg-green-100'
       onMouseEnter={onHover} 
       onMouseLeave={onLeave}
-      onClick={() => handleClick(data)} // Implement handleClick
+      onClick={() => handleClick(data)} 
     >
       <div className='flex items-start justify-between mb-[2%]'>
         <AssetIndicator hoverStatus={isHovered} asset_type={data.assetTypeIcon}/>
         <StatusLabel status_value={status}/>
       </div>
-        <CardContent header={data.projectName} cardClass=' mb-[4%]' content={data.campaignName} /> 
+        <CardContent header={data.assetName} cardClass=' mb-[4%]' content={data.campaignName} subcontent={data.projectName} /> 
         <div className='flex justify-between items-center'>
           <UpdateIndicator date={data.createdOn}/>
         </div>
