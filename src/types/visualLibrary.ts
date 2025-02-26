@@ -1,5 +1,5 @@
 
-interface Version {
+export interface Version {
     colorSpace: string;
     fileID: number;
     fileSizeKB: number;

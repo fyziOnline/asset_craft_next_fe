@@ -145,6 +145,7 @@ const config: Config = {
   },
   plugins: [
     require("tailwindcss-animate"),
+    require("tailwind-scrollbar"),
     function ({ addComponents } : PluginAPI) {
       addComponents({
         '.custom-range': {
