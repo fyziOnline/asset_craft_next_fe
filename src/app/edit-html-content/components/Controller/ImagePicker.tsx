@@ -3,23 +3,31 @@ import { ScanSearch, Search } from 'lucide-react';
 import Button from '@/components/global/Button';
 import { useEditAssetSection } from '@/hooks/useEditAssetSection';
 import { MediaItem, MediaType, Orientation } from '@/types/visualLibrary';
+import DialogueMain from './components/DialogueMain';
 // import { useAppData } from '@/context/AppContext';
 
 interface ImagePickerProps {
   value: string;
   onChange: (url: string) => void;
   label?: string;
+  uischema ?: any
 }
 
-export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label }) => {
+export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uischema }) => {
   const [open, setOpen] = useState(false)
   const [selectedImage, setSelectedImage] = useState<MediaItem | null>(null)
   const [typeFilter, setTypeFilter] = useState<MediaType | 'all'>('all')
-  const [orientationFilter, setOrientationFilter] = useState<Orientation | 'all'>('all')
+  const [orientationFilter, setOrientationFilter] = useState<Orientation>('all')
   const [library,setLibrary] = useState<MediaItem[]>([])
+  const [openSelectedMediaPreview,setOpenSelectedMediaPreview] = useState<boolean>(false) 
 
   const {getVisualLibrary} = useEditAssetSection()
 
+  // const allowedOrientation:Orientation[] = uischema?.options?.allowedOrientations || ['all', 'landscape', 'portrait', 'square']
+  const allowedOrientation: Orientation[] = [
+    ...new Set(['all', ...(uischema?.options?.allowedOrientations || ['landscape', 'portrait', 'square'])])
+  ]
+  
   // const { contextData, setContextData } = useAppData();
 
   const handleOpen = async () => {
@@ -46,12 +54,19 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label }) =>
 
   const filteredMedia = useMemo(() => {
     return library.filter(item => {
-      // const matchesType = typeFilter === 'all' || item.type === typeFilter
-      const matchesOrientation = orientationFilter.toLocaleLowerCase() === 'all' || item.versions.find(item => item.orientation.toLowerCase() === orientationFilter.toLocaleLowerCase())
-      // return matchesType && matchesOrientation
-      return matchesOrientation
+      if (orientationFilter === 'all') {
+        return item.versions.some(version =>
+          allowedOrientation
+            .map(o => o.toLowerCase()) 
+            .includes(version.orientation.toLowerCase()) 
+        );
+      } else {
+        return item.versions.some(version => 
+          version.orientation.toLowerCase() === orientationFilter.toLowerCase()
+        )
+      }
     })
-  }, [library, typeFilter, orientationFilter])
+  }, [library, typeFilter, orientationFilter, allowedOrientation]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -88,81 +103,51 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label }) =>
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fadeIn">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col animate-slideUp">
-            <div className="p-4 border-b">
-              <h2 className="text-xl font-semibold">Select Image</h2>
-            </div>
-            
-            <div className="p-4 flex-1 overflow-auto">
-              <div className="mb-4">
-                <div className="flex gap-2">
-                  {(['all', 'landscape', 'portrait', 'square'] as const).map((orientation) => (
-                    <button
-                      key={orientation}
-                      onClick={() => setOrientationFilter(orientation)}
-                      className={`px-4 py-2 text-sm rounded-full transition-all duration-200 ${
-                        orientationFilter === orientation
-                          ? 'bg-[#00A881] text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {orientation.charAt(0).toUpperCase() + orientation.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredMedia.map((media, index) => (
-                  <div
-                    key={media.fileID}
-                    onClick={() => handleSelect(media)}
-                    className={`cursor-pointer rounded-lg overflow-hidden border transition-all opacity-0 animate-fadeInUp ${
-                      selectedImage?.fileURL === media.fileURL
-                        ? 'border-green-100 ring-2 ring-green-100'
-                        : 'border-gray-100 hover:custom-gradient-green'
-                    }`}
-                    style={{
-                      animationDelay: `${index * 50}ms`,
-                      animationFillMode: 'forwards'
-                    }}
-                  >
-                    <div className="aspect-video">
-                      <img
-                        src={media.versions.find(item => item.versionLabel === "thumbnail")?.fileURL}
-                        alt={media.title}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                      />
-                    </div>
-                    <div className="p-3">
-                      <h3 className="font-semibold">{media.title}</h3>
-                      <p className="text-sm text-gray-600 mt-1">{media.description}</p>
-                      <span className="text-xs text-gray-500 mt-2 block">
-                        {media.versions.find(item => item.versionLabel === "thumbnail")?.orientation}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            {/* header of custom renderer dialogue box  */}
+            <div className={`${!openSelectedMediaPreview ? 'p-4 border-b' : 'p-2'}`}>
+            {!openSelectedMediaPreview && <h2 className="text-xl font-semibold">Select Image</h2> }
             </div>
 
-            <div className="p-4 border-t flex justify-end gap-2">
+            {/* body of custom renderer dialogue box  */}
+            <DialogueMain 
+              setOrientationFilter= {setOrientationFilter}
+              handleSelect={handleSelect}
+              orientationFilter={orientationFilter}
+              filteredMedia={filteredMedia}
+              selectedImage={selectedImage}
+              setOpenSelectedMediaPreview={setOpenSelectedMediaPreview}
+              openSelectedMediaPreview={openSelectedMediaPreview}
+              allowedOrientations={allowedOrientation}
+            />
+
+            {/* footer of custom renderer dialogue box  */}
+            <div className="p-4 border-t flex justify-between">
               <button
-                onClick={handleClose}
+                onClick={()=>setOpenSelectedMediaPreview(false)}
                 className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-full transition-colors duration-200"
               >
-                Cancel
+                Back
               </button>
-              <button
-                onClick={handleConfirm}
-                disabled={!selectedImage}
-                className={`px-4 py-2 text-sm rounded-full transition-all duration-200 ${
-                  selectedImage
-                    ? 'text-white bg-custom-gradient-green'
-                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                }`}
-              >
-                Select
-              </button>
+              {/* dialogue footer right section  */}
+              <div className='flex justify-end gap-2'>
+                <button
+                  onClick={handleClose}
+                  className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirm}
+                  disabled={!selectedImage}
+                  className={`px-4 py-2 text-sm rounded-full transition-all duration-200 ${
+                    selectedImage
+                      ? 'text-white bg-custom-gradient-green'
+                      : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  Select
+                </button>
+              </div>
             </div>
           </div>
         </div>

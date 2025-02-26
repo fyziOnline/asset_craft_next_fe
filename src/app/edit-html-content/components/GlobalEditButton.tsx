@@ -8,7 +8,7 @@ interface GlobalEditButtonProps {
 const GlobalEditButton: React.FC<GlobalEditButtonProps> = ({ onClick }) => {
     return (
         <div 
-            className="absolute top-25% right-2 group cursor-pointer z-[999]"
+            className="absolute top-25% right-2 group cursor-pointer z-[99]"
             onClick={onClick}
         >
             <div id="global_edit_button" typeof="button">
