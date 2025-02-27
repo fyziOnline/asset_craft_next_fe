@@ -6,6 +6,7 @@ import { useAppData } from "@/context/AppContext"
 import { convertFileToBase64 } from "@/lib/utils"
 import { debounce } from "lodash"
 import { useRouter } from "next/navigation"
+import { STATUS } from "@/constants"
 
 class ApiError extends Error {
     status?: number;
@@ -68,7 +69,7 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
     }, [assetData.assetVersionID])
 
     const init_hook = async () => {
-        if (assetData.versionStatus === "On Review" || assetData.versionStatus === "In Progress") {
+        if (assetData.versionStatus === STATUS.ON_REVIEW || assetData.versionStatus === STATUS.IN_PROGRESS) {
             await getApprovalDetails()
         }
     }
