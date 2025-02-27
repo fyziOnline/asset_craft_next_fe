@@ -8,7 +8,7 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 interface SubmitVersionModelProps {
     isShowSubmitVer: boolean,
     setIsShowSubmitVer: (value: boolean) => void,
-    handleSubmitVersion: (optionsSelected: Option) => void,
+    handleSubmitVersion: (optionsSelected: Option, isComments: string) => Promise<void>;
     listApprovers: ApproverProps[]
 }
 
@@ -17,8 +17,7 @@ const SubmitVersionModel = ({ isShowSubmitVer, setIsShowSubmitVer, handleSubmitV
     const [optionsList, setOptionsList] = useState<Option[]>([])
     const [optionsSelected, setOptionsSelected] = useState<Option>({} as Option)
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-
-    const [showUploadPopup, setShowUploadPopup] = useState(false);
+    const [isComments, setIsComments] = useState<string>("")
 
     useEffect(() => {
         const list: Option[] = []
@@ -55,8 +54,8 @@ const SubmitVersionModel = ({ isShowSubmitVer, setIsShowSubmitVer, handleSubmitV
     }, [setIsShowSubmitVer]);
 
     const handleNextClick = () => {
-        if (optionsSelected.value) {
-            handleSubmitVersion(optionsSelected);
+        if (optionsSelected.value) {            
+            handleSubmitVersion(optionsSelected, isComments);
             setShowSuccessPopup(true);
 
             setTimeout(() => {
@@ -84,7 +83,7 @@ const SubmitVersionModel = ({ isShowSubmitVer, setIsShowSubmitVer, handleSubmitV
             )}
 
             {!showSuccessPopup && (
-                <div ref={modalRef} className="w-[900px] relative bg-white rounded-3xl">
+                <div ref={modalRef} className="w-[600px] relative bg-white rounded-3xl">
                     <div className="flex items-center px-[50px] pt-[25px] p-6">
                         <h1 className="text-xl font-bold">Select the approver</h1>
                         <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold font-['Inter'] leading-[17.11px]">
@@ -95,8 +94,8 @@ const SubmitVersionModel = ({ isShowSubmitVer, setIsShowSubmitVer, handleSubmitV
                         </button>
                     </div>
                     <div className="w-full h-px bg-[#ebeff2]" />
-                    <div className='flex justify-center items-center mx-[50px] mt-[15px] pb-[35px] p-6'>
-                        <div className='flex items-center'>
+                    <div className='flex justify-center flex-col mx-[50px] mt-[15px] mb-5'>
+                        <div className='flex items-center pb-4'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="17" viewBox="0 0 21 17" fill="none">
                                 <path d="M14.7037 16.1797V14.513C14.7037 13.629 14.3428 12.7811 13.7003 12.156C13.0578 11.5309 12.1864 11.1797 11.2778 11.1797H4.42593C3.51731 11.1797 2.64592 11.5309 2.00343 12.156C1.36094 12.7811 1 13.629 1 14.513V16.1797" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 <path d="M7.85171 7.84635C9.74379 7.84635 11.2776 6.35397 11.2776 4.51302C11.2776 2.67207 9.74379 1.17969 7.85171 1.17969C5.95962 1.17969 4.42578 2.67207 4.42578 4.51302C4.42578 6.35397 5.95962 7.84635 7.85171 7.84635Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -104,6 +103,15 @@ const SubmitVersionModel = ({ isShowSubmitVer, setIsShowSubmitVer, handleSubmitV
                             <div className="mx-2 text-fileupload-text text-lg font-semibold tracking-wide ">Assign Approver</div>
                         </div>
                         <Search onSelect={setOptionsSelected} optionsList={optionsList} customOuterClass="w-[400px]" placeHolder=''></Search>
+                    </div>
+
+                    <div className='flex justify-center flex-col mx-[50px]'>
+                        <p className="text-lg font-semibold text-fileupload-text mb-4">Enter your comments here</p>
+                        <textarea
+                            placeholder="Type your comments"
+                            onChange={(e) => setIsComments(e.target.value)}
+                            className="w-full h-32 p-3 border rounded-xl resize-none mb-4 focus:outline-none "
+                        />
                     </div>
                     <div className="flex items-center px-[55px] pt-[20px] mb-6 ">
                         <div className="flex-1 w-[207px] h-[21px] text-black text-xl font-semibold font-['Inter'] leading-[17.11px]">

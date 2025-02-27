@@ -15,6 +15,7 @@ import { CustomTextArea, CustomTextTester } from './CustomTextArea';
 import { linkedIn_noImage_Uischema, linkedIn_Uischema } from './schema';
 import { ImagePickerTester } from './Controller/test/ImageController';
 import { ImagePickerController } from './Controller/ImagePickerController';
+import { STATUS } from '@/constants';
 
 const customTheme = createTheme({
     palette: {
@@ -193,9 +194,8 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                         setIsShowModelEdit(false);
                     }
 
-                    if(assetVersion.status === "On Review") {
+                    if(assetVersion.status === STATUS.ON_REVIEW) {
                         const resVersionStatusUpdate = await ApiService.put<any>(`${urls.assetversion_status_change}?assetVersionID=${assetVersion.assetVersionID}`);
-                        console.log("Version status updated successfully." , resVersionStatusUpdate , "asset Version id" , assetVersion.assetVersionID);
                     }
 
                     

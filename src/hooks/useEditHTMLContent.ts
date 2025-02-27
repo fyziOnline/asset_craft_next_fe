@@ -307,13 +307,14 @@ export const useEditHTMLContent = () => {
         }
     }
 
-    const onSubmit = async (itemSelected: Option) => {
+    const onSubmit = async (itemSelected: Option , isComments : string) => {
         try {
             //setShowLoading(true)
             const resSubmit = await ApiService.post<any>(urls.approval_assetApproval_SubmitForApproval, {
                 "assetID": versionSelected.assetID,
                 "assetVersionID": versionSelected.assetVersionID,
-                "approverID": itemSelected.value
+                "approverID": itemSelected.value,
+                "comments": isComments
             })
 
             if (resSubmit.isSuccess) {

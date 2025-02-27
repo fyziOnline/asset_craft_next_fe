@@ -31,7 +31,6 @@ const DialogueMain:FC<DialogueMainProps> = ({
     allowedOrientations
 }) => {
   const resolutionOptionsList = selectedImage?.versions.map(version => {
-    console.log(version);
     
     return {
       label: `${version.versionLabel} : ${version.width} x ${version.height}`,

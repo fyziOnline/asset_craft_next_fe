@@ -5,6 +5,7 @@ import AssetsPageLayout from '@/layout/specific_layout/AssetsPageLayout'
 import { formatDate } from '@/utils/formatDate'
 import { useRouter } from 'next/navigation'
 import { useDashboard } from '@/hooks/useDashboard'
+import { STATUS } from '@/constants'
 
 const AssetOnReviw: FC = () => {
     const router = useRouter()
@@ -14,7 +15,7 @@ const AssetOnReviw: FC = () => {
         getAssetAllAtDashboard()
     },[])
 
-    const filteredAssets = dashboardAssets.filter((data) => data.status === "On Review")
+    const filteredAssets = dashboardAssets.filter((data) => data.status === STATUS.ON_REVIEW)
 
     const assetsDisplayTable = filteredAssets.map((data) => ({
         assetTypeIcon: data.assetTypeName,
