@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers, materialCells, } from '@jsonforms/material-renderers';
 import { AssetBlockProps, AssetHtmlProps, AssetVersionProps } from '@/types/templates';
@@ -16,6 +16,7 @@ import { linkedIn_noImage_Uischema, linkedIn_Uischema } from './schema';
 import { ImagePickerTester } from './Controller/test/ImageController';
 import { ImagePickerController } from './Controller/ImagePickerController';
 import { STATUS } from '@/constants';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const customTheme = createTheme({
     palette: {
@@ -68,7 +69,7 @@ const customTheme = createTheme({
 interface EditContentModelProps {
     setVersionList?: (value: AssetVersionProps[]) => void,
     setVersionSelected?: (value: AssetVersionProps) => void,
-    setIsShowModelEdit: any,
+    setIsShowModelEdit: React.Dispatch<React.SetStateAction<boolean>>,
     assetBlock: AssetBlockProps,
     assetVersion: AssetVersionProps
 }
@@ -78,11 +79,67 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
     const [isEditPrompt, setIsEditPrompt] = useState(false);
-    const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(assetBlock)
-    const [blockData, setBlockData] = useState(JSON.parse(assetBlock.blockData as string))
-    const refAiPromptCurrent = useRef(assetBlock.aiPrompt)
-    const { setShowLoading } = useLoading()
-
+    const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(assetBlock);
+    const [blockData, setBlockData] = useState(JSON.parse(assetBlock.blockData as string));
+    const refAiPromptCurrent = useRef(assetBlock.aiPrompt);
+    const { setShowLoading } = useLoading();
+    
+    // New states for preview refresh functionality
+    const [previewHtml, setPreviewHtml] = useState<string>(assetBlock.blockHTMLGenerated || '');
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+    const [isUpdatingPreview, setIsUpdatingPreview] = useState(false);
+    const lastSavedDataRef = useRef(assetBlock.blockData);
+    const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+    
+    // Function to refresh preview HTML
+    const refreshPreview = useCallback(async () => {
+        if (!hasChanges) return;
+        
+        try {
+            setIsRefreshing(true);
+            setIsUpdatingPreview(true);
+            
+            const response = await ApiService.post<any>(urls.assetVersionBlock_renderBlockHTML, {
+                assetVersionBlockID: assetBlockSelected.assetVersionBlockID,
+                blockData: assetBlockSelected.blockData
+            });
+            
+            if (response.isSuccess) {
+                setPreviewHtml(response.blockHTMLGenerated || '');
+                lastSavedDataRef.current = assetBlockSelected.blockData;
+                setHasChanges(false);
+            } else {
+                console.error('Failed to refresh preview:', response.errorOnFailure);
+            }
+        } catch (error) {
+            console.error('API Error when refreshing preview:', ApiService.handleError(error));
+        } finally {
+            setIsRefreshing(false);
+            setIsUpdatingPreview(false);
+        }
+    }, [assetBlockSelected.assetVersionBlockID, assetBlockSelected.blockData, hasChanges]);
+    
+    // Setup debounced auto-refresh
+    useEffect(() => {
+        // Cleanup previous timer on each data change
+        if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
+        }
+        
+        // Only trigger if there are changes
+        if (hasChanges) {
+            debounceTimerRef.current = setTimeout(() => {
+                refreshPreview();
+            }, 3000); // 3 second debounce
+        }
+        
+        return () => {
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+        };
+    }, [hasChanges, refreshPreview]);
     
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -96,16 +153,16 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
     }
 
     const handleInputAIPrompt = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        let newAssetBlockDataVersions = {
+        const newAssetBlockDataVersions = {
             ...assetBlockSelected,
             aiPrompt: e.target.value
         }
-        setAssetBlockSelected(newAssetBlockDataVersions)
+        setAssetBlockSelected(newAssetBlockDataVersions);
     }
 
     const onHandleEditData = ({ data, errors }: any) => {
         try {
-            let newAssetBlockDataVersions = assetBlockSelected
+            const newAssetBlockDataVersions = assetBlockSelected;
             if (newAssetBlockDataVersions) {
                 newAssetBlockDataVersions.blockData = JSON.stringify(data);
             }
@@ -115,10 +172,13 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                 assetBlockDataVersions: newAssetBlockDataVersions
             }
 
-            setBlockData(data)
-            setAssetBlockSelected(newAssetBlockSelected)
+            setBlockData(data);
+            setAssetBlockSelected(newAssetBlockSelected);
+            
+            // Mark that changes have occurred
+            setHasChanges(true);
         } catch (ex) {
-
+            // Handle error
         }
     }
 
@@ -171,6 +231,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
         try {
             setShowLoading(true)
             setIsLoading(true);
+            setIsUpdatingPreview(true);
 
             const resUpdate = await ApiService.put<any>(urls.assetVersionBlock_update, {
                 "assetVersionBlockID": assetBlockSelected.assetVersionBlockID,
@@ -209,6 +270,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
         } finally {
             setIsLoading(false);
             setShowLoading(false)
+            setIsUpdatingPreview(false);
         }
     };
 
@@ -217,10 +279,34 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
             <div onClick={handleClick} className="fixed z-[100] left-0 right-0 top-0 bottom-0 bg-black bg-opacity-55 flex items-center justify-center">
                 <div className='w-[90vw] bg-white rounded-md relative flex flex-col'>
                     <div className='flex flex-row flex-1'>
-                        {assetBlock.blockHTMLGenerated ? <div className='p-1 max-w-[50vw] h-[86vh] overflow-y-scroll scrollbar-hide relative border-r border-solid border-[#D9D9D9]'>
-                            <ShadowDomContainer htmlContent={assetVersion.layoutHTMLGenerated.replace("prefers-color-scheme:dark", "prefers-color-hide-dark").replace("[(blocks)]", assetBlock.blockHTMLGenerated || "")}></ShadowDomContainer>
-                            {/* <iframe className='w-[40vw] h-[100%]' srcDoc={assetVersion.layoutHTMLGenerated.replace("[(blocks)]", assetBlock.blockHTMLGenerated || "")} /> */}
-                        </div> : null}
+                        {(assetBlock.blockHTMLGenerated || previewHtml) ? (
+                            <div className='p-1 max-w-[50vw] h-[86vh] overflow-y-scroll scrollbar-hide relative border-r border-solid border-[#D9D9D9]'>
+                                <div className="absolute top-2 right-2 z-10 hidden">
+                                    <button 
+                                        onClick={refreshPreview}
+                                        disabled={!hasChanges || isRefreshing}
+                                        className={`flex items-center p-2 rounded-full ${hasChanges ? 'bg-[#01A982] text-white' : 'bg-gray-200 text-gray-500'} ${isRefreshing ? 'opacity-70' : ''}`}
+                                        title="Refresh preview"
+                                    >
+                                        <RefreshIcon className={isRefreshing ? 'animate-spin' : ''} />
+                                    </button>
+                                </div>
+                                <ShadowDomContainer 
+                                    htmlContent={assetVersion.layoutHTMLGenerated
+                                        .replace("prefers-color-scheme:dark", "prefers-color-hide-dark")
+                                        .replace("[(blocks)]", previewHtml || assetBlock.blockHTMLGenerated || "")}
+                                />
+                                {isUpdatingPreview && (
+                                    <div className="absolute bottom-2 left-0 right-0 flex justify-center">
+                                        <div className="flex space-x-1 items-center">
+                                            <div className="w-2 h-2 bg-[#01A982] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                            <div className="w-2 h-2 bg-[#01A982] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                            <div className="w-2 h-2 bg-[#01A982] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ) : null}
                         <div className='flex-1 h-[86vh] overflow-y-scroll scrollbar-hide px-5 py-2'>
                             <div className='mt-7' />
                             {!assetBlock.isStatic ? <div className='pb-3'>
@@ -257,7 +343,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                         <div className='flex'>
                                             <Button
                                                 handleClick={() => {
-                                                    let newAssetBlockDataVersions = {
+                                                    const newAssetBlockDataVersions = {
                                                         ...assetBlockSelected,
                                                         aiPrompt: refAiPromptCurrent.current
                                                     }
@@ -282,20 +368,27 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                         </div>}
                                 </div>
                             </div> : null}
-                            <JsonForms
-                                schema = {JSON.parse(assetBlock.schema as string)}
-                                data={blockData}
-                                renderers={[
-                                    ...materialRenderers,
-                                    { tester: CustomTextTester, renderer: CustomTextArea },
-                                    {tester : ImagePickerTester, renderer : ImagePickerController }
-                                ]}
-                                uischema={contextData.AssetHtml.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined }
-                                // uischema={undefined}
-                                // uischema={customUiSchema()}
-                                cells={materialCells}
-                                onChange={onHandleEditData}
-                            />
+                            
+                            {/* Form section */}
+                            <div className="relative">
+                                {hasChanges && (
+                                    <div className="absolute right-0 top-0 text-xs text-gray-500 italic hidden">
+                                        Preview will update automatically in 3 seconds
+                                    </div>
+                                )}
+                                <JsonForms
+                                    schema = {JSON.parse(assetBlock.schema as string)}
+                                    data={blockData}
+                                    renderers={[
+                                        ...materialRenderers,
+                                        { tester: CustomTextTester, renderer: CustomTextArea },
+                                        {tester : ImagePickerTester, renderer : ImagePickerController }
+                                    ]}
+                                    uischema={contextData.AssetHtml.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined }
+                                    cells={materialCells}
+                                    onChange={onHandleEditData}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-end'>
