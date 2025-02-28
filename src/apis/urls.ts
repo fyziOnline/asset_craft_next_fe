@@ -18,6 +18,7 @@ export const urls = {
   asset_generate: "/asset/generate",
   assetVersionBlock_update: "/AssetVersionBlock/update",
   assetVersionBlock_updateIgnoreStatus: "/AssetVersionBlock/updateIgnoreStatus",
+  assetVersionBlock_renderBlockHTML: "/AssetVersionBlock/renderBlockHTML",
   aiPrompt_Asset_select: "/aiPrompt/Asset/select",
   aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
   aiPrompt_Asset_update: "/aiPrompt/Asset/update",
