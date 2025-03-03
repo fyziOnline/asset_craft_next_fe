@@ -2,7 +2,7 @@ import { FC, ReactNode, useEffect, useRef } from "react"
 
 type PopupProps = {
   children: ReactNode
-  handleClickOutside: () => void
+  handleClickOutside?: () => void
   isPopupVisible : boolean
   className?: string
   stopPropagation?: boolean
@@ -13,7 +13,7 @@ type PopupProps = {
  
 const Popup: FC<PopupProps> = ({
   children,
-  handleClickOutside,
+  handleClickOutside = () => {},
   className = "",
   isPopupVisible = false,
   stopPropagation = true

@@ -106,7 +106,7 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
 
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col animate-slideUp">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] min-h-[400px] flex flex-col animate-slideUp">
             {/* header of custom renderer dialogue box  */}
             <div className={`${!openSelectedMediaPreview ? 'p-4 border-b' : 'p-2'}`}>
             {!openSelectedMediaPreview && <h2 className="text-xl font-semibold">Select Image</h2> }
