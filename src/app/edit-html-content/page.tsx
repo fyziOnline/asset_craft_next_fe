@@ -123,21 +123,21 @@ const Page = () => {
         }
 
         let blocksHTML = '';
-        
+
         // Process each block
         versionSelected.assetVersionBlocks.forEach((block) => {
             // Process both visible and hidden blocks, but mark hidden ones
             const processedBlockHTML = processBlockHTML(
-                block.blockHTMLGenerated || '', 
-                block.blockName, 
+                block.blockHTMLGenerated || '',
+                block.blockName,
                 block.assetVersionBlockID,
                 block.ignoreBlock // Pass the ignoreBlock value to mark hidden blocks
             );
-            
+
             // Add the block HTML to the output
             blocksHTML += processedBlockHTML + '\n';
         });
-        
+
         // Combine layout with blocks
         return formatContentWithBlocks(versionSelected.layoutHTMLGenerated || '', blocksHTML);
     };
@@ -159,10 +159,10 @@ const Page = () => {
             // Convert the current status to the opposite (0 to 1, 1 to 0)
             const newStatus = currentIgnoreStatus === 0 ? 1 : 0;
             console.log(`Toggling block ${blockId} from ${currentIgnoreStatus} to ${newStatus}`);
-            
+
             // Call the handler from the hook
             handleHideBlock(blockId, currentIgnoreStatus);
-            
+
             // Update local state to provide immediate UI feedback
             if (versionSelected?.assetVersionBlocks) {
                 const updatedBlocks = versionSelected.assetVersionBlocks.map(block => {
@@ -171,7 +171,7 @@ const Page = () => {
                     }
                     return block;
                 });
-                
+
                 setVersionSelected(prev => {
                     if (!prev) return prev;
                     return {
@@ -212,7 +212,7 @@ const Page = () => {
         }
 
         return (
-            <FallbackBlockControls 
+            <FallbackBlockControls
                 blocks={versionSelected?.assetVersionBlocks || []}
                 onEditBlock={handleEditBlock}
                 onToggleBlockVisibility={handleBlockVisibilityToggle}
@@ -227,33 +227,41 @@ const Page = () => {
         }
 
         // Filter for global block
-        const globalBlock = versionSelected.assetVersionBlocks.find(item => 
-            item.blockName === '_global_1' && 
-            item.blockData !== "{}" && 
+        const globalBlock = versionSelected.assetVersionBlocks.find(item =>
+            item.blockName === '_global_1' &&
+            item.blockData !== "{}" &&
             item.blockData !== ""
         );
-        
-            return (
-            <div className='flex items-center flex-col justify-center relative isolate'>
+
+        return (
+            <div className="flex flex-col md:flex-row items-center md:items-start justify-center relative isolate w-full">
+
+
+                <div className="flex-grow relative w-full max-w-6xl mx-auto px-4 md:px-8">
+                    <EnhancedShadowDomContainer
+                        htmlContent={htmlContent}
+                        blocks={versionSelected.assetVersionBlocks}
+                        onEditBlock={handleEditBlock}
+                        onToggleBlockVisibility={handleBlockVisibilityToggle}
+                        onUnmatchedBlocks={handleUnmatchedBlocks}
+                    />
+
                     {globalBlock && (
-                        <GlobalEditButton 
-                            onClick={() => {
-                                setSectionEdit(globalBlock);
-                                setIsShowModelEdit(true);
-                            }}
-                        />
+                        <div className="absolute top-0 left-0">
+                            <GlobalEditButton
+                                onClick={() => {
+                                    setSectionEdit(globalBlock);
+                                    setIsShowModelEdit(true);
+                                }}
+                            />
+                        </div>
                     )}
-                <EnhancedShadowDomContainer 
-                    htmlContent={htmlContent}
-                    blocks={versionSelected.assetVersionBlocks}
-                    onEditBlock={handleEditBlock}
-                    onToggleBlockVisibility={handleBlockVisibilityToggle}
-                    onUnmatchedBlocks={handleUnmatchedBlocks}
-                />
-                
-                {renderFallbackControls}
+
                 </div>
-            );
+
+                {renderFallbackControls}
+            </div>
+        );
     }, [versionSelected, htmlContent, unmatchedBlocks, renderFallbackControls]);
 
     return (
@@ -262,9 +270,9 @@ const Page = () => {
                 <div className="flex p-1 px-2">
                     <div className='flex-1'></div>
                 </div>
-                
+
                 <div className="min-h-[82vh] border-t border-solid">
-                    <EditHeader 
+                    <EditHeader
                         versionSelected={versionSelected}
                         versionList={versionList}
                         isShowSave={isShowSave}
@@ -274,7 +282,7 @@ const Page = () => {
                     />
 
                     <div className='flex justify-between pr-16 items-center'>
-                        <VersionManager 
+                        <VersionManager
                             versionList={versionList}
                             versionSelected={versionSelected}
                             setVersionSelected={setVersionSelected}
