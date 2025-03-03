@@ -2,7 +2,7 @@ import { FC, useState, useMemo, useEffect } from 'react';
 import { ScanSearch, Search } from 'lucide-react';
 import Button from '@/components/global/Button';
 import { useEditAssetSection } from '@/hooks/useEditAssetSection';
-import { MediaItem, MediaType, Orientation, Version } from '@/types/visualLibrary';
+import { Dimension, MediaItem, MediaType, Orientation, Version } from '@/types/visualLibrary';
 import DialogueMain from './components/DialogueMain';
 // import { useAppData } from '@/context/AppContext';
 
@@ -23,7 +23,11 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
   const [selectedImageVersion,setSelectedImageVersion] = useState<Version | null>(null)
 
 
-  const {getVisualLibrary} = useEditAssetSection()
+  const {
+    getVisualLibrary,
+    createMediaAssetVersion,
+    getSingleVisualMediaAsset
+  } = useEditAssetSection()
 
   // const allowedOrientation:Orientation[] = uischema?.options?.allowedOrientations || ['all', 'landscape', 'portrait', 'square']
   const allowedOrientation: Orientation[] = [
@@ -35,7 +39,25 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
   const handleOpen = async () => {
     const library: MediaItem[] = await getVisualLibrary({category:""})
     setLibrary(library)
-    setOpen(true)
+    !open && setOpen(true)
+  }
+
+  const handleResizeMedia = async (dimension : Dimension, visualID:string) => {
+    const response_createMediaAssetVersion = await createMediaAssetVersion(dimension,visualID)
+    if (!response_createMediaAssetVersion?.isSuccess) {
+      console.error('unable to resize image now, please try again');
+      return 
+    }
+    let response_getSingleVisualMediaAsset = await getSingleVisualMediaAsset(visualID)
+    if (!response_getSingleVisualMediaAsset?.isSuccess) {
+      console.error('Unable to refetch the updated media now, Please reselect image');
+      return
+    }
+    delete response_getSingleVisualMediaAsset.isSuccess
+    delete response_getSingleVisualMediaAsset.errorOnFailure
+    await handleSelect(response_getSingleVisualMediaAsset)
+    await handleOpen()
+    
   }
   
   const handleClose = () => {
@@ -44,7 +66,7 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
     setSelectedImage(null)
   }
 
-  const handleSelect = (image: MediaItem) => {
+  const handleSelect = async (image: MediaItem) => {
     setSelectedImage(image)
     setSelectedImageVersion(image.versions.find(v => v.versionLabel === 'Original') || image.versions[0] || null )
   }
@@ -119,6 +141,7 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
               orientationFilter={orientationFilter}
               filteredMedia={filteredMedia}
               selectedImage={selectedImage}
+              onApplyCustomDimension={handleResizeMedia}
               setOpenSelectedMediaPreview={setOpenSelectedMediaPreview}
               openSelectedMediaPreview={openSelectedMediaPreview}
               allowedOrientations={allowedOrientation}

@@ -30,6 +30,20 @@ export interface Version {
     visualID: string;
   }
 
+  export type Dimension = {
+      width: string;
+      height: string;
+  }
+  export type GetVisualLibraryQuery = {
+    category ?: string
+    searchTerm ?: string 
+    pageNumber ?: number 
+    pageSize ?: number
+  }
+
+
 export type MediaType = 'image' | 'video';
 export type Orientation = 'all' | 'portrait' | 'landscape' | 'square';
+
+
   

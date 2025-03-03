@@ -1,6 +1,6 @@
 import FilterDropdown from '@/components/global/FilterDropdown';
 import Popup from '@/components/global/Popup/Popup';
-import { MediaItem, Orientation, Version } from '@/types/visualLibrary'
+import { Dimension, MediaItem, Orientation, Version } from '@/types/visualLibrary'
 import { Scaling, SquareArrowOutUpRight } from 'lucide-react';
 import Image from 'next/image';
 import { FC, memo, useState } from 'react'
@@ -10,6 +10,7 @@ type DialogueMainProps = {
     setOpenSelectedMediaPreview: (state:boolean) => void
     handleSelect: (item: MediaItem) => void
     setSelectedImageVersion : (item:Version|null) => void
+    onApplyCustomDimension : (dimension:Dimension,visualID:string) => void
     selectedImageVersion : Version | null
     openSelectedMediaPreview : boolean
     orientationFilter : string
@@ -23,6 +24,7 @@ const DialogueMain:FC<DialogueMainProps> = ({
     handleSelect,
     setOpenSelectedMediaPreview,
     setSelectedImageVersion,
+    onApplyCustomDimension,
     selectedImageVersion,
     openSelectedMediaPreview,
     orientationFilter,
@@ -31,8 +33,6 @@ const DialogueMain:FC<DialogueMainProps> = ({
     allowedOrientations
 }) => {
   const resolutionOptionsList = selectedImage?.versions.map(version => {
-    console.log(version);
-    
     return {
       label: `${version.versionLabel} : ${version.width} x ${version.height}`,
       value: version.versionID
@@ -43,6 +43,7 @@ const DialogueMain:FC<DialogueMainProps> = ({
   const [originalRendered,setOriginalRendered] = useState<boolean>(false)
   // const [selectedImageVersion,setSelectedImageVersion] = useState<Version | null>(originalVersion || selectedImage?.versions[0] || null)
   const [showResizePopup,setResizePopup] = useState<boolean>(false)
+  const [dimensions, setDimensions] = useState({ width: '', height: '' })
 
   // useEffect(() => {
   //   if (selectedImage && selectedImage.versions && selectedImage.versions.length > 0) {
@@ -167,14 +168,14 @@ const DialogueMain:FC<DialogueMainProps> = ({
                       }}
                   />
                   <div className='relative flex items-center'>
-                    {/* <div 
+                    <div 
                       className='flex cursor-pointer items-center p-2 rounded-lg hover:bg-gray-100 hover:rounded-2xl'
                       onClick={updateResizePopupPresence}
                     >
                       <Scaling 
                         color='#01a982'
                       />
-                    </div> */}
+                    </div>
                     <Popup
                       handleClickOutside={updateResizePopupPresence}
                       isPopupVisible ={showResizePopup}
@@ -182,6 +183,7 @@ const DialogueMain:FC<DialogueMainProps> = ({
                     >
                       <form onSubmit={(e) => {
                         e.preventDefault();
+                        onApplyCustomDimension(dimensions,selectedImage?.visualID || "")
                       }}>
                         <div className='flex gap-2'>
                           <div>
@@ -192,6 +194,7 @@ const DialogueMain:FC<DialogueMainProps> = ({
                               name="custom_width" 
                               className="w-fit px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                               placeholder="Enter width"
+                              onBlur={(e)=>setDimensions(pre=>({...pre,width:e.target.value}))}
                             />
                           </div>
                           <div>
@@ -202,6 +205,7 @@ const DialogueMain:FC<DialogueMainProps> = ({
                               name="custom_height" 
                               className="w-fit px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                               placeholder="Enter height"
+                              onBlur={(e)=>setDimensions(pre=>({...pre,height:e.target.value}))}
                             />
                           </div>
                         </div>
