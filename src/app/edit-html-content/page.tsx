@@ -159,7 +159,7 @@ const Page = () => {
             // Convert the current status to the opposite (0 to 1, 1 to 0)
             const newStatus = currentIgnoreStatus === 0 ? 1 : 0;
             console.log(`Toggling block ${blockId} from ${currentIgnoreStatus} to ${newStatus}`);
-
+            
             // Call the handler from the hook
             handleHideBlock(blockId, currentIgnoreStatus);
 
