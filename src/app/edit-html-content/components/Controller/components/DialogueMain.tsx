@@ -41,7 +41,8 @@ const DialogueMain: FC<DialogueMainProps> = ({
     selectedImage,
     allowedOrientations
 }) => {
-    const selectedImageDimensions = selectedImage?.versions.find(item => item.versionLabel === "Original");
+const selectedImageDimensions = selectedImage?.versions.find(item => item.versionLabel === "Original");
+  
     
     const [dimensions, setDimensions] = useState<Dimensions>({ 
         width: selectedImageDimensions?.width || 150, 

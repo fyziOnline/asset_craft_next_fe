@@ -28,7 +28,6 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
   const searchParams = useSearchParams();
 
     const assetTypeIcon = searchParams.get("assetTypeIcon");
-    console.log('assetTypeIcon',assetTypeIcon);
   
   // Filter blocks that should be editable
   const editableBlocks = useMemo(() => {
