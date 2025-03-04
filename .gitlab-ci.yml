@@ -39,3 +39,5 @@ deploy_production:
   only:
     - main
   when: manual
+  tags:
+    - genai,shared
