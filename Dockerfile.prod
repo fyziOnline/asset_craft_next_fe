@@ -14,9 +14,6 @@ COPY next.config.ts .
 
 COPY . .
 
-#if .env not found then copy .env.example to .env
-RUN test -f .env.$ENV || cp .env.example .env.$ENV
-
 RUN yarn build
 
 # Stage 2: Production
