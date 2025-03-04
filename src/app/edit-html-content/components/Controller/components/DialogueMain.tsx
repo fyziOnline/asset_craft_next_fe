@@ -1,16 +1,19 @@
+import { CloseIcon } from '@/assets/icons/AssetIcons';
 import FilterDropdown from '@/components/global/FilterDropdown';
 import Popup from '@/components/global/Popup/Popup';
-import { MediaItem, Orientation, Version } from '@/types/visualLibrary';
+import { Dimension, MediaItem, Orientation, Version } from '@/types/visualLibrary';
+import { findAspectRatio } from '@/utils/miscellaneous';
 import { Scaling, SquareArrowOutUpRight } from 'lucide-react';
 import Image from 'next/image';
 import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { IoMdClose } from "react-icons/io";
+// import { IoMdClose } from "react-icons/io";
 
 type DialogueMainProps = {
     setOrientationFilter: (orientation: Orientation) => void;
     setOpenSelectedMediaPreview: (state: boolean) => void;
     handleSelect: (item: MediaItem) => void;
     setSelectedImageVersion: (item: Version | null) => void;
+    onApplyCustomDimension : (dimension:Dimension,visualID:string) => void
     selectedImageVersion: Version | null;
     openSelectedMediaPreview: boolean;
     orientationFilter: string;
@@ -34,6 +37,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
     handleSelect,
     setOpenSelectedMediaPreview,
     setSelectedImageVersion,
+    onApplyCustomDimension,
     selectedImageVersion,
     openSelectedMediaPreview,
     orientationFilter,
@@ -41,13 +45,21 @@ const DialogueMain: FC<DialogueMainProps> = ({
     selectedImage,
     allowedOrientations
 }) => {
-const selectedImageDimensions = selectedImage?.versions.find(item => item.versionLabel === "Original");
-  
+    const selectedImageDimensions = selectedImage?.versions.find(item => item.versionLabel === "Original");
     
     const [dimensions, setDimensions] = useState<Dimensions>({ 
         width: selectedImageDimensions?.width || 150, 
         height: selectedImageDimensions?.height || 80 
     });
+
+    const [aspectRationSelectedVersion,setAspectRationSelectedVersion] = useState<{w_part:number,h_part:number}> 
+        (selectedImageVersion?.width === selectedImageVersion?.height 
+            ? {w_part:1,h_part:1} 
+            : findAspectRatio(selectedImageVersion?.width,selectedImageVersion?.height)
+        )
+    
+    const [canEditWidth,setCanEditWidth] = useState<boolean>(true)
+    const [canEditHeight,setCanEditHeight] = useState<boolean>(true)
     
     const [inputWidth, setInputWidth] = useState<string>(
         selectedImageDimensions?.width?.toString() || '150'
@@ -98,21 +110,38 @@ const selectedImageDimensions = selectedImage?.versions.find(item => item.versio
     }, [dimensions, containerSize]);
 
     const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const value = parseInt(e.target.value)
+        const height = value * (aspectRationSelectedVersion.h_part/aspectRationSelectedVersion.w_part)
         setInputWidth(e.target.value);
+        setInputHeight(height.toString())
+        
     };
 
     const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        setInputHeight(e.target.value);
+        const value = parseInt(e.target.value)
+        const width = value * (aspectRationSelectedVersion.w_part/aspectRationSelectedVersion.h_part)
+        setInputHeight(e.target.value)
+        setInputWidth(width.toString())
     };
 
-    const handleResize = (): void => {
-        const newWidth = parseInt(inputWidth) || 0;
-        const newHeight = parseInt(inputHeight) || 0;
-        setDimensions({
-            width: Math.max(newWidth, 10),
-            height: Math.max(newHeight, 10)
-        });
-    };
+    useEffect(()=>{
+      const newWidth = parseInt(inputWidth) || 0;
+      const newHeight = parseInt(inputHeight) || 0;
+      setDimensions({
+          width: Math.max(newWidth, 10),
+          height: Math.max(newHeight, 10)
+      });
+    },[inputHeight,inputWidth])
+
+    // const handleResize = (): void => {
+    //     const newWidth = parseInt(inputWidth) || 0;
+    //     const newHeight = parseInt(inputHeight) || 0;
+    //     setDimensions({
+    //         width: Math.max(newWidth, 10),
+    //         height: Math.max(newHeight, 10)
+    //     });
+        
+    // };
 
     const resolutionOptionsList: DropdownOption[] | undefined = selectedImage?.versions.map(version => {
         return {
@@ -233,6 +262,7 @@ const selectedImageDimensions = selectedImage?.versions.find(item => item.versio
                             optionsListClass='w-full rounded-none'
                             defaultSelectedLabel={`${selectedImageVersion?.versionLabel} : ${selectedImageVersion?.width} x ${selectedImageVersion?.height}`}
                             defaultSelectedOption={`${selectedImageVersion?.versionID}`}
+                            allowDrop = {!showResizePopup}
                             selectedValue={(value: string) => {
                                 const newVersion = selectedImage?.versions.find(v => v.versionID === value) || null;
                                 setSelectedImageVersion(newVersion);
@@ -245,6 +275,7 @@ const selectedImageDimensions = selectedImage?.versions.find(item => item.versio
                                     });
                                     setInputWidth(newVersion.width.toString());
                                     setInputHeight(newVersion.height.toString());
+                                    setAspectRationSelectedVersion( newVersion.width === newVersion.height ? {w_part:1,h_part:1} : findAspectRatio(newVersion.width,newVersion.height))
                                 }
                             }}
                         />
@@ -257,44 +288,70 @@ const selectedImageDimensions = selectedImage?.versions.find(item => item.versio
                             </div>
                             <Popup
                                 isPopupVisible={showResizePopup}
-                                className='absolute right-[48px] w-[386px] top-[40px] p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm transition-all duration-300'
+                                className='absolute z-40 right-[48px] w-[386px] top-[40px] p-2 bg-gray-50 shadow-dropdown-shadow rounded-lg border border-gray-200  transition-all duration-300'
                             >
-                                <div className="bg-gray-50 rounded-lg">
-                                    <div className='flex justify-end mb-2'>
-                                        <IoMdClose onClick={updateResizePopupPresence} className='cursor-pointer' size={20} />
-                                    </div>
+                                <form 
+                                  className="bg-gray-50 rounded-lg"
+                                  onSubmit={(e)=>{
+                                    e.preventDefault()
+                                    onApplyCustomDimension({width:inputWidth,height:inputHeight},selectedImage?.visualID || "")
+                                    setResizePopup(false)
+                                  }}
+                                >
+                                    {/* <div className='flex justify-end mb-2'> */}
+                                        {/* <IoMdClose onClick={updateResizePopupPresence} className='cursor-pointer' size={20} /> */}
+                                    {/* </div> */}
+                                        
+                                    <button 
+                                      className='absolute top-1 right-1'
+                                      onClick={updateResizePopupPresence}
+                                    >
+                                      <CloseIcon 
+                                        color='grey'
+                                        width= {15}
+                                        height= {15}
+                                      />
+                                    </button>
                                     <div className="flex items-center">
-                                        <div className="flex flex-col gap-2 mr-4">
+                                        <div className="flex flex-col gap-1 mr-4">
                                             <input
-                                                type="text"
+                                                type="number"
                                                 placeholder="Width"
+                                                disabled = {!canEditWidth}
                                                 value={inputWidth}
                                                 onChange={handleWidthChange}
-                                                className="px-2 py-1 border rounded outline-none"
+                                                onFocus={()=>setCanEditHeight(false)}
+                                                onBlur={()=>setCanEditHeight(true)}
+                                                className="px-2  border rounded outline-none"
                                             />
                                             <div className="flex justify-center">
-                                                {/* <span>X</span> */}
                                             </div>
                                             <input
-                                                type="text"
+                                                type="number"
                                                 placeholder="Height"
+                                                disabled = {!canEditHeight}
                                                 value={inputHeight}
                                                 onChange={handleHeightChange}
-                                                className="px-2 py-1 border rounded outline-none"
+                                                onFocus={()=>setCanEditWidth(false)}
+                                                onBlur={()=>setCanEditWidth(true)}
+                                                className="px-2  border rounded outline-none"
                                             />
+                                            <p className='text-xs text-center text-grey-200'>
+                                              aspect ration of the this image is fixed to {aspectRationSelectedVersion.w_part} : {aspectRationSelectedVersion.h_part}
+                                            </p>
 
-                                            <div className="mt-2 flex justify-end">
+                                            <div className="mt-2 flex justify-center">
                                                 <button
-                                                    onClick={handleResize}
-                                                    className="px-4 py-1 bg-green-300 text-white rounded text-sm"
+                                                    type='submit'
+                                                    className="py-1 px-2 bg-green-300 text-white rounded text-sm"
                                                 >
-                                                    Preview
+                                                    Create New Version
                                                 </button>
                                             </div>
                                         </div>
                                         <div
                                             ref={containerRef}
-                                            className="w-full h-36 flex justify-center items-center overflow-hidden"
+                                            className="w-full h-36 p-[0.6rem] flex justify-center items-center overflow-hidden"
                                         >
                                             <div
                                                 style={{
@@ -311,25 +368,28 @@ const selectedImageDimensions = selectedImage?.versions.find(item => item.versio
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </Popup>
                         </div>
                     </div>
                     <p className='text-grey-300 mt-2 text-sm'>Size: {selectedImageVersion?.fileSizeKB} KB</p>
-                    <div className='mt-3 flex gap-2 flex-wrap'>
-                        {selectedImageVersion && (
-                            <h4 className='text-green'>Orientation: <span className='bg-blue-50 text-blue-700 py-[0.5px] px-2 rounded-full'>{selectedImageVersion.orientation}</span></h4>
-                        )}
+                    <div className='relative'>
+                      {/* <div className='absolute bg-grey-800 min-h-[100%] opacity-35 top-0 bottom-0 right-0 left-0'></div> */}
+                      <div className='mt-3 flex gap-2 flex-wrap'>
+                          {selectedImageVersion && (
+                              <h4 className='text-green'>Orientation: <span className='bg-blue-50 text-blue-700 py-[0.5px] px-2 rounded-full'>{selectedImageVersion.orientation}</span></h4>
+                          )}
+                      </div>
+                      <div className='mt-3 flex gap-2 flex-wrap'>
+                          {selectedImage?.tags && <h4>Tags:</h4>}
+                          {selectedImage?.tags &&
+                              selectedImage?.tags.split(',').map((str: string) => (
+                                  <div key={str} className='bg-blue-50 text-blue-700 py-[0.5px] px-2 rounded-full'>{str}</div>
+                              ))
+                          }
+                      </div>
+                      <p className='mt-3'>{selectedImage?.description}</p>
                     </div>
-                    <div className='mt-3 flex gap-2 flex-wrap'>
-                        {selectedImage?.tags && <h4>Tags:</h4>}
-                        {selectedImage?.tags &&
-                            selectedImage?.tags.split(',').map((str: string) => (
-                                <div key={str} className='bg-blue-50 text-blue-700 py-[0.5px] px-2 rounded-full'>{str}</div>
-                            ))
-                        }
-                    </div>
-                    <p className='mt-3'>{selectedImage?.description}</p>
                 </div>
             </div>
         );
