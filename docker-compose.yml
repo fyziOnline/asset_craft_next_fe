@@ -1,8 +1,13 @@
 services:
   brandcentralaiapp:
-    build: .
+    build: 
+      context: .
+      args:
+        - ENV=staging
+    image: brandcentralai:staging
+    # This image is used for the staging environment
     ports:
       - "3002:3002"
     env_file:
-      - .env    
+      - .env.staging    
     command: npm start
