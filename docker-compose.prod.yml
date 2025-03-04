@@ -10,6 +10,6 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - .env.prod    
+      - .env    
     command: npm start
     restart: always
