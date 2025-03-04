@@ -16,7 +16,7 @@ RUN ls -l /app
 COPY . .
 
 #if .env not found then copy .env.example to .env
-RUN test -f .env.$ENV || cp .env.example .env.$ENV
+#RUN test -f .env.$ENV || cp .env.example .env.$ENV
 
 RUN yarn build
 
