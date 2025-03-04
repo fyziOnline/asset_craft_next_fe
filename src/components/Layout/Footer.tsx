@@ -18,13 +18,18 @@ interface FooterProps {
 }
 
 // Get get environment variable from .env file to display the git version id
-const gitLabel = process.env.NEXT_PUBLIC_GIT_VERSION_ID ? `${process.env.NEXT_PUBLIC_GIT_VERSION_ID}` : 'c71cb53-250221:034204'
+const gitLabel = process.env.SHOW_GIT_VERSION === 'true' 
+  ? `${process.env.ENVIRONMENT || ''} ${process.env.NEXT_PUBLIC_GIT_VERSION_ID || ''}`.trim()
+  : ''
 
 const Footer: React.FC<FooterProps> = ({footerPosition = 'fixed'}) => {
   return (
     <footer className={`${footerPosition} right-0 left-0 bottom-0 z-50 bg-off-white-primary px-16 py-3 padbot15 padfooter`}>
       <div className="md:flex justify-between items-center">
-        <p className="text-xs text-center">© Copyright 2025 Hewlett Packard Enterprise Development LP <span className="text-xs text-gray-400">{gitLabel}</span></p>
+        <p className="text-xs text-center">
+          © Copyright 2025 Hewlett Packard Enterprise
+          {gitLabel && <span className="text-xs text-gray-400 ml-1">{gitLabel}</span>}
+        </p>
         <div className="flex gap-[7px] justify-center">
           {footerLinks.map((link, index) => (
             <div key={link.id} >
