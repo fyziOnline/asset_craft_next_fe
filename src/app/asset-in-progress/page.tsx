@@ -6,6 +6,7 @@ import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
 import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation"
 import { useDashboard } from "@/hooks/useDashboard"
+import { STATUS } from "@/constants"
 
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 const headerHavingSortingToggle = ["Project Name", "Created On"]
@@ -20,7 +21,7 @@ const AssetInProgress: FC = () => {
     getAssetAllAtDashboard()
   },[])
 
-  const filteredAssets = dashboardAssets.filter((data) => data.status === "In Progress")
+  const filteredAssets = dashboardAssets.filter((data) => data.status === STATUS.IN_PROGRESS)
 
   const assetsDisplayTable = filteredAssets.map((data) => ({
     assetTypeIcon: data.assetTypeName,

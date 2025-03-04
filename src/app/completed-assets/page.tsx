@@ -4,6 +4,7 @@ import { useDashboard } from "@/hooks/useDashboard"
 import { formatDate } from "@/utils/formatDate"
 import { useRouter } from "next/navigation";
 import AssetsPageLayout from "@/layout/specific_layout/AssetsPageLayout"
+import { STATUS } from "@/constants";
 
 
 const CompletedAssets: FC = () => {
@@ -14,7 +15,7 @@ const CompletedAssets: FC = () => {
     getAssetAllAtDashboard()
   },[])
 
-  const completedAssets = dashboardAssets.filter(asset => asset.status === "Completed")
+  const completedAssets = dashboardAssets.filter(asset => asset.status === STATUS.COMPLETED)
 
   const assetsDisplayTable = completedAssets.map((data) => ({
     assetTypeIcon: data.assetTypeName,

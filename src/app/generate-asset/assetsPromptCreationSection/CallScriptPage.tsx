@@ -172,7 +172,6 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                         <ChildrenTitle customClass='mt-5' title='Additional Campaign Assets'></ChildrenTitle>
                         <TextField handleChange={(e) => {
                             handleInputText(e, "webUrl")
-                            // doesFormCompleted(4)
                         }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
                             placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                         <DragAndDrop onFileSelect={(file) => {
@@ -180,7 +179,6 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                                 ...refFormData.current,
                                 fileSelected: file
                             }
-                            // doesFormCompleted(4)
                         }} />
 
                     </div>
@@ -251,7 +249,6 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                                     <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
                                     <TextField handleChange={(e) => {
                                         handleInputSection(e, index)
-                                        //  doesFormCompleted(5)
                                     }} customClass='h-16' placeholder={item.aiPrompt || ''} />
                                 </div>
                             )

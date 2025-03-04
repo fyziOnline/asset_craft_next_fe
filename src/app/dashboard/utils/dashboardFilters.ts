@@ -1,3 +1,4 @@
+import { STATUS } from "@/constants";
 import { AssetData, AssetType } from "@/types/asset";
 import { formatDate } from "@/utils/formatDate";
 
@@ -77,13 +78,13 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:Asse
     const totalAssets = dashboardAssets.length;
     
     
-    const inProgressCount = dashboardAssets.filter(asset => asset.status === "In Progress").length;
+    const inProgressCount = dashboardAssets.filter(asset => asset.status === STATUS.IN_PROGRESS).length;
     
-    const onReviewCount = dashboardAssets.filter(asset => asset.status === "On Review").length;
+    const onReviewCount = dashboardAssets.filter(asset => asset.status === STATUS.ON_REVIEW).length;
 
-    const pendingApproval = dashboardAssets.filter(asset => asset.status === "On Review")
+    const pendingApproval = dashboardAssets.filter(asset => asset.status === STATUS.ON_REVIEW)
 
-    const completedAssetsCount = dashboardAssets.filter(asset => asset.status === "Completed").length
+    const completedAssetsCount = dashboardAssets.filter(asset => asset.status === STATUS.COMPLETED).length
 
     // Calculate for each project type
     const projectTypes = ["Email", "LinkedIn", "Landing Page", "Call Script"];
@@ -99,9 +100,9 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:Asse
         }
 
         if (projectTypes.includes(data.projectName)) {
-            const { total, statusCount } = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, "In Progress");
-            const onReviewStatusCount = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, "On Review").statusCount;
-            const completedAssetsCount = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, "Completed").statusCount;
+            const { total, statusCount } = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, STATUS.IN_PROGRESS);
+            const onReviewStatusCount = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, STATUS.ON_REVIEW).statusCount;
+            const completedAssetsCount = countAssetsByTypeAndStatus(dashboardAssets, data.projectName, STATUS.COMPLETED).statusCount;
             return {
                 ...data,
                 underReview: onReviewStatusCount,
