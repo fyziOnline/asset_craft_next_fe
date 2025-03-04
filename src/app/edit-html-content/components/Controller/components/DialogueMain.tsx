@@ -51,14 +51,15 @@ const DialogueMain: FC<DialogueMainProps> = ({
         width: selectedImageDimensions?.width || 150, 
         height: selectedImageDimensions?.height || 80 
     });
-    console.log('====================================');
-    console.log(selectedImageVersion);
-    console.log('====================================');
+
     const [aspectRationSelectedVersion,setAspectRationSelectedVersion] = useState<{w_part:number,h_part:number}> 
         (selectedImageVersion?.width === selectedImageVersion?.height 
             ? {w_part:1,h_part:1} 
             : findAspectRatio(selectedImageVersion?.width,selectedImageVersion?.height)
         )
+    
+    const [canEditWidth,setCanEditWidth] = useState<boolean>(true)
+    const [canEditHeight,setCanEditHeight] = useState<boolean>(true)
     
     const [inputWidth, setInputWidth] = useState<string>(
         selectedImageDimensions?.width?.toString() || '150'
@@ -261,6 +262,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                             optionsListClass='w-full rounded-none'
                             defaultSelectedLabel={`${selectedImageVersion?.versionLabel} : ${selectedImageVersion?.width} x ${selectedImageVersion?.height}`}
                             defaultSelectedOption={`${selectedImageVersion?.versionID}`}
+                            allowDrop = {!showResizePopup}
                             selectedValue={(value: string) => {
                                 const newVersion = selectedImage?.versions.find(v => v.versionID === value) || null;
                                 setSelectedImageVersion(newVersion);
@@ -290,8 +292,10 @@ const DialogueMain: FC<DialogueMainProps> = ({
                             >
                                 <form 
                                   className="bg-gray-50 rounded-lg"
-                                  onSubmit={()=>{
-                                    console.log('submitting');
+                                  onSubmit={(e)=>{
+                                    e.preventDefault()
+                                    onApplyCustomDimension({width:inputWidth,height:inputHeight},selectedImage?.visualID || "")
+                                    setResizePopup(false)
                                   }}
                                 >
                                     {/* <div className='flex justify-end mb-2'> */}
@@ -311,19 +315,25 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                     <div className="flex items-center">
                                         <div className="flex flex-col gap-1 mr-4">
                                             <input
-                                                type="text"
+                                                type="number"
                                                 placeholder="Width"
+                                                disabled = {!canEditWidth}
                                                 value={inputWidth}
                                                 onChange={handleWidthChange}
+                                                onFocus={()=>setCanEditHeight(false)}
+                                                onBlur={()=>setCanEditHeight(true)}
                                                 className="px-2  border rounded outline-none"
                                             />
                                             <div className="flex justify-center">
                                             </div>
                                             <input
-                                                type="text"
+                                                type="number"
                                                 placeholder="Height"
+                                                disabled = {!canEditHeight}
                                                 value={inputHeight}
                                                 onChange={handleHeightChange}
+                                                onFocus={()=>setCanEditWidth(false)}
+                                                onBlur={()=>setCanEditWidth(true)}
                                                 className="px-2  border rounded outline-none"
                                             />
                                             <p className='text-xs text-center text-grey-200'>
