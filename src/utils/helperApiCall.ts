@@ -1,16 +1,9 @@
-export type GetVisualLibraryQuery = {
-    category ?: String
-    searchTerm ?: String 
-    pageNumber ?: Number 
-    pageSize ?: Number
-}
-
-export const buildQueryString = (params: GetVisualLibraryQuery): string => {
+export const buildQueryString = <T extends Record<string, string|number>>(params: T): string => {
     const queryParams: string[] = []
   
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
-        const value = params[key as keyof GetVisualLibraryQuery];
+        const value = params[key];
   
         if (value !== undefined && value !== null && value !== '') {
           queryParams.push(`${key}=${encodeURIComponent(value.toString())}`)
