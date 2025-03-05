@@ -4,6 +4,7 @@ import Button from '@/components/global/Button';
 import { useEditAssetSection } from '@/hooks/useEditAssetSection';
 import { Dimension, MediaItem, MediaType, Orientation, Version } from '@/types/visualLibrary';
 import DialogueMain from './components/DialogueMain';
+import ImageEditWindow from './components/image-crop-window/ImageCropWindow';
 // import { useAppData } from '@/context/AppContext';
 
 interface ImagePickerProps {
@@ -21,7 +22,7 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
   const [library,setLibrary] = useState<MediaItem[]>([])
   const [openSelectedMediaPreview,setOpenSelectedMediaPreview] = useState<boolean>(false) 
   const [selectedImageVersion,setSelectedImageVersion] = useState<Version | null>(null)
-
+  const [imageEditWindow,setImageEditWindow] = useState<boolean>(false)
 
   const {
     getVisualLibrary,
@@ -126,7 +127,7 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
         )}
       </div>
 
-      {open && (
+      {open &&  !imageEditWindow && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fadeIn">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] min-h-[400px] flex flex-col animate-slideUp">
             {/* header of custom renderer dialogue box  */}
@@ -142,6 +143,7 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
               filteredMedia={filteredMedia}
               selectedImage={selectedImage}
               onApplyCustomDimension={handleResizeMedia}
+              setImageEditWindow={setImageEditWindow}
               setOpenSelectedMediaPreview={setOpenSelectedMediaPreview}
               openSelectedMediaPreview={openSelectedMediaPreview}
               allowedOrientations={allowedOrientation}
@@ -182,6 +184,11 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
           </div>
         </div>
       )}
+        {imageEditWindow && (<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fadeIn">
+            <ImageEditWindow 
+              setImageEditWindow={setImageEditWindow}
+            />
+        </div>)}
     </div>
   );
 };
