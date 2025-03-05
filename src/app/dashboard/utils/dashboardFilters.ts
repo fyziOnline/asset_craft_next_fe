@@ -1,5 +1,5 @@
 import { STATUS } from "@/constants";
-import { AssetData, AssetType } from "@/types/asset";
+import { AssetData, AssetType, ClientAssetTypeProps } from "@/types/asset";
 import { formatDate } from "@/utils/formatDate";
 
 // Define the type for each asset in the dashboard
@@ -65,15 +65,26 @@ const getCurrentDateFormatted = (): string => {
 };
 
 // The main function that processes the dashboard assets
-const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:AssetType="email"): { updatedDashboardData: DashboardData[], assetsDisplayTable: any[], pendingApproval: any[], assetData : any[] } => {
+const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:AssetType="email",clientAssetTypes:ClientAssetTypeProps[]): { updatedDashboardData: DashboardData[], assetsDisplayTable: any[], pendingApproval: any[], assetData : any[] } => {
     const dashboardData: DashboardData[] = [
-        { projectName: "All Projects", allProjectDate: `as of ${getCurrentDateFormatted()}`, totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
-        { projectName: "Email", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
-        { projectName: "LinkedIn", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
-        { projectName: "Landing Page", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
-        { projectName: "Call Script", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
+        { projectName: "", allProjectDate: `as of ${getCurrentDateFormatted()}`, totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
+        { projectName: "", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
+        { projectName: "", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
+        { projectName: "", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
+        { projectName: "", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
     ];
 
+    // console.log("clientAssetTypes",clientAssetTypes);
+
+    const sortedDashBoardData = dashboardData.map((data, index) => ({
+        ...data,
+        projectName: clientAssetTypes[index]?.assetTypeName === "All in One"
+            ? "All Projects"
+            : clientAssetTypes[index]?.assetTypeName || ""
+    }));
+
+    // console.log("sortedDashBoardData",sortedDashBoardData);
+    
     // Calculate the totals for all projects
     const totalAssets = dashboardAssets.length;
     
@@ -88,7 +99,7 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:Asse
 
     // Calculate for each project type
     const projectTypes = ["Email", "LinkedIn", "Landing Page", "Call Script"];
-    const updatedDashboardData = dashboardData.map((data) => {
+    const updatedDashboardData = sortedDashBoardData.map((data) => {
         if (data.projectName === "All Projects") {
             return {
                 ...data,
