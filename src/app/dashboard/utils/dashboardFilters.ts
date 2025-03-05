@@ -74,8 +74,6 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:Asse
         { projectName: "", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
     ];
 
-    // console.log("clientAssetTypes",clientAssetTypes);
-
     const sortedDashBoardData = dashboardData.map((data, index) => ({
         ...data,
         projectName: clientAssetTypes[index]?.assetTypeName === "All in One"
@@ -83,7 +81,6 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[],assetType:Asse
             : clientAssetTypes[index]?.assetTypeName || ""
     }));
 
-    // console.log("sortedDashBoardData",sortedDashBoardData);
     
     // Calculate the totals for all projects
     const totalAssets = dashboardAssets.length;
