@@ -33,7 +33,7 @@ const Dashboard: FC = () => {
     getPendingApproval()
   }, [])
 
-  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets);
+  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets,"",clientAssetTypes);
   const { setContextData } = useAppData()
 
   useEffect(() => {

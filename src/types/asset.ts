@@ -112,4 +112,4 @@ export interface AssetData {
     approvedBy ?: string | undefined
 }
 
-export type AssetType = 'email' | 'linkedin' | 'landing page' | 'call script' | null
+export type AssetType = 'email' | 'linkedin' | 'landing page' | 'call script' | ""  | null
