@@ -94,6 +94,12 @@
   .asset-grid-padding {
     @apply px-4 lg:px-16 xl:px-20;
   }
+  .green-btn-rounded {
+    @apply py-1 px-2 bg-green-100 text-white rounded text-sm
+  }
+  .blue-btn-rounded {
+    @apply py-1 px-2 bg-blue-50 text-blue-700 rounded text-sm
+  }
 }
 .bg-custom-gradient-green {
   background: linear-gradient(
@@ -389,4 +395,23 @@
 
 .thin-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8a9; 
+}
+
+
+.animated-gradient-border {
+  background: linear-gradient(-45deg, #10b981, #34d399, #6ee7b7, #059669);
+  background-size: 400% 400%;
+  animation: gradient-animation 3s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

@@ -367,7 +367,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                                 <div className="mt-2 flex justify-center">
                                                     <button
                                                         type='submit'
-                                                        className="py-1 px-2 bg-green-300 text-white rounded text-sm"
+                                                        className="green-btn-rounded"
                                                     >
                                                         Create New Version
                                                     </button>
@@ -400,14 +400,14 @@ const DialogueMain: FC<DialogueMainProps> = ({
                         {/* <div className='absolute bg-grey-800 min-h-[100%] opacity-35 top-0 bottom-0 right-0 left-0'></div> */}
                         <div className='mt-3 flex gap-2 flex-wrap'>
                             {selectedImageVersion && (
-                                <h4 className='text-green'>Orientation: <span className='bg-blue-50 text-blue-700 py-[0.5px] px-2 rounded-full'>{selectedImageVersion.orientation}</span></h4>
+                                <h4 className='text-green'>Orientation: <span className='blue-btn-rounded'>{selectedImageVersion.orientation}</span></h4>
                             )}
                         </div>
                         <div className='mt-3 flex gap-2 flex-wrap'>
                             {selectedImage?.tags && <h4>Tags:</h4>}
                             {selectedImage?.tags &&
                                 selectedImage?.tags.split(',').map((str: string) => (
-                                    <div key={str} className='bg-blue-50 text-blue-700 py-[0.5px] px-2 rounded-full'>{str}</div>
+                                    <div key={str} className='blue-btn-rounded'>{str}</div>
                                 ))
                             }
                         </div>

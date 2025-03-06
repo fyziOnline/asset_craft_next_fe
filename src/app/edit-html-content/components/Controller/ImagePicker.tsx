@@ -184,9 +184,10 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
           </div>
         </div>
       )}
-        {imageEditWindow && (<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fadeIn">
+        {imageEditWindow && (<div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 animate-fadeIn">
             <ImageEditWindow 
               setImageEditWindow={setImageEditWindow}
+              mediaVersion={selectedImageVersion}
             />
         </div>)}
     </div>
