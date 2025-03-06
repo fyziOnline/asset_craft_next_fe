@@ -5,7 +5,7 @@ import LinkedInPage from "@/app/generate-asset/assetsPromptCreationSection/Linke
 import { Template } from "@/types/templates"
 import { ComponentType } from "react"
 
-export type PageType = 'Email' | 'LinkedIn' | 'Landing Page' | 'Call Script'
+export type PageType = 'Email' | 'LinkedIn' | 'Landing Page' | 'Callscript (WIP)'
 
 interface PageParams {
     params: {
@@ -18,7 +18,7 @@ const PAGE_COMPONENT : Record<PageType,ComponentType<PageParams>> = {
     'Email' : EmailPage,
     'LinkedIn' : LinkedInPage,
     'Landing Page' : LandingPage,
-    'Call Script' : CallScriptPage
+    'Callscript (WIP)' : CallScriptPage
 }
 
 export default PAGE_COMPONENT

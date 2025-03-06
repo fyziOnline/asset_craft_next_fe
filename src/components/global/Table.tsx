@@ -82,7 +82,7 @@ const Table: React.FC<TableProps> = ({ listItems,
       "Email": <EmailIcon />,
       "Landing Page": <LandingAssetIcon2 />,
       "LinkedIn": <LinkedinIcon />,
-      "Call Script": <SalesCallIcon />,
+      "Callscript (WIP)": <SalesCallIcon />,
     };
     return value ? icons[value] || null : null;
   };
