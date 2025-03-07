@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const defaultDomains = ["stratagile-emailcraft.s3.ap-southeast-1.amazonaws.com"];
-const envDomains = process.env.ALLOWED_DOMAINS ? process.env.ALLOWED_DOMAINS.split(',') : [];
+const envDomains = process.env.ALLOWED_DOMAINS 
+  ? process.env.ALLOWED_DOMAINS.split(',').map(domain => domain.trim())
+  : [];
 const allDomains = [...new Set([...defaultDomains, ...envDomains])];
 
 const nextConfig: NextConfig = {
@@ -10,7 +12,12 @@ const nextConfig: NextConfig = {
     API_URL: process.env.API_URL
   },
   images: {
-    domains: allDomains
+    remotePatterns: allDomains.map(domain => ({
+      protocol: 'https',
+      hostname: domain,
+      port: '',
+      pathname: '/**',
+    }))
   },
   eslint: {
     ignoreDuringBuilds: true
