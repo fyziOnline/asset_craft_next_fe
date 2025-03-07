@@ -30,7 +30,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [getSelectedStatus, setGetSelectedStatus] = useState<string>('')
   const [getSelectedAssetType, setGetSelectedAssetType] = useState<string>('');
-  const [type, setType] = useState<string>('');
+  const [type, setType] = useState<string>('Email');
   const pathname = usePathname(); // Get current route
 
   const [gridCurrentPage, setGridCurrentPage] = useState<number>(1)
@@ -59,7 +59,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
     { label: 'Email', value: 'Email' },
     { label: 'LinkedIn', value: 'LinkedIn' },
     { label: 'Landing Page', value: 'Landing Page' },
-    { label: 'Call Script', value: 'Call Script' }
+    { label: 'Callscript (WIP)', value: 'Callscript (WIP)' }
   ]
 
   const filterOptionsStatus = [
