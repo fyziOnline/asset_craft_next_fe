@@ -142,12 +142,13 @@ const Table: React.FC<TableProps> = ({ listItems,
           const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
           return (
             <div
-              onClick={() => { 
-                handleClick(data) 
-                setActiveIndex(index === activeIndex ? null : index);
+              onClick={() => {
+                 handleClick(data) 
+                setActiveIndex(index); // Set the active index to shrink the row
+                setTimeout(() => setActiveIndex(null), 500); // Reset after 1 second
               }}
               key={index}
-              className={`grid p-6 cursor-pointer rounded-lg border transition-all duration-300 ease-in-out ${activeIndex === index ? 'shadow' : ""} ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F9F9F9]'}`}
+              className={`grid p-6 cursor-pointer rounded-lg border transition-all duration-300 ease-in-out ${activeIndex === index ? ' scale-[.98] bg-green-50 border-green-100' : 'scale-100'} ${index % 2 !== 0 ? 'bg-white' : 'bg-[#F9F9F9]'}`}
               style={{ gridTemplateColumns: gridColumnStyle, placeItems: tablePlaceitems, alignItems: "center" }}
             >
               {visibleHeadings.map((heading, idx) => (
