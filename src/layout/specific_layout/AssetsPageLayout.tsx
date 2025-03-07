@@ -25,7 +25,7 @@ interface AssetsPageProps {
 }
 
 const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, headersHavingToggle, hiddenFields = [], page, handleClick, columnWidthsTable = [], isIconRequired = true }) => {
-  
+
   const [isList, setIsList] = useState<Boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [getSelectedStatus, setGetSelectedStatus] = useState<string>('')
@@ -118,7 +118,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
                 setGridCurrentPage(1)
               }}
             />            {
-              type !== 'Email' && type !== 'Landing Page' && type !== 'Call Script' && type !== 'LinkedIn' &&
+              type !== 'Email' && type !== 'Landing Page' && type !== 'Callscript (WIP)' && type !== 'LinkedIn' &&
               <FilterDropdown
                 placeholder="Select Asset Type"
                 optionLists={filterOptionsAsset}
