@@ -127,7 +127,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                 if (res?.isSuccess) {
                     router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}`)
                 }
-            
+
                 return
             }
         }
@@ -229,6 +229,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                 handleInputText(e, "topic")
                                 doesFormCompleted(3)
                             }}
+                            rows={4}
                             placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>

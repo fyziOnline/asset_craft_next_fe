@@ -194,6 +194,7 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                     <div className='max-w-[90%]'>
                         <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
                         <TextField
+                            rows={4}
                             placeholder="What is the purpose of the call? What would you like to communicate?"
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'
                             handleChange={(e) => {
@@ -203,6 +204,7 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
 
                         <ChildrenTitle title='Describe the key messages you want to highlight' customClass='mt-5' ></ChildrenTitle>
                         <TextField
+                            rows={4}
                             placeholder="What are the 2-3 key points you want to highlight in this post?"
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'
                             handleChange={(e) => {

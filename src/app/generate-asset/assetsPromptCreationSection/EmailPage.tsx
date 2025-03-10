@@ -97,7 +97,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
         }
         if (step === 4) {
             // if (condition) {
-                
+
             // }
             setCheckedList((prev) => (prev.includes(3) ? prev : [...prev, 3]))
 
@@ -126,7 +126,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setGenerateStep(newStep);
                 setShowLoading(true)
                 const res = await generateHTML(refFormData.current as FormDataProps, refSection.current as SectionProps[], contextData.ProjectDetails, contextData.isRegenerateHTML)
-                
+
                 setShowLoading(false)
 
                 if (res?.isSuccess) {
@@ -243,6 +243,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             handleInputText(e, "topic")
                             doesFormCompleted(3)
                         }}
+                            rows={4}
                             placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>
