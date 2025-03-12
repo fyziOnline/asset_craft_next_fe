@@ -7,7 +7,8 @@ import { findAspectRatio } from '@/utils/miscellaneous';
 import { Tooltip } from '@mui/material';
 import { Crop, Scaling, SquareArrowOutUpRight } from 'lucide-react';
 import Image from 'next/image';
-import React, { FC, memo,useRef, useEffect, useState, Dispatch, SetStateAction } from 'react';
+import React, { FC, memo,useRef, useEffect, useState, Dispatch, SetStateAction, useMemo } from 'react';
+// import { useImageController } from '../context/ImageControllerContext';
 // import { IoMdClose } from "react-icons/io";
 
 type DialogueMainProps = {
@@ -15,8 +16,9 @@ type DialogueMainProps = {
     setOpenSelectedMediaPreview: (state: boolean) => void;
     handleSelect: (item: MediaItem) => void;
     setSelectedImageVersion: (item: Version | null) => void;
-    onApplyCustomDimension : (dimension:Dimension,visualID:string) => void
+    onApplyCustomDimension : (dimension:Dimension) => void
     setImageEditWindow : Dispatch<SetStateAction<boolean>>
+    aspectRatioSelectedVersion : {w_part:number,h_part:number}
     selectedImageVersion: Version | null;
     openSelectedMediaPreview: boolean;
     orientationFilter: string;
@@ -25,10 +27,10 @@ type DialogueMainProps = {
     allowedOrientations: Orientation[];
 };
 
-type Dimensions = {
-    width: number;
-    height: number;
-};
+// type Dimensions = {
+//     width: number;
+//     height: number;
+// };
 
 type DropdownOption = {
     label: string;
@@ -42,6 +44,8 @@ const DialogueMain: FC<DialogueMainProps> = ({
     setSelectedImageVersion,
     onApplyCustomDimension,
     setImageEditWindow,
+    // aspectRationSelectedVersion,
+    aspectRatioSelectedVersion,
     selectedImageVersion,
     openSelectedMediaPreview,
     orientationFilter,
@@ -49,46 +53,61 @@ const DialogueMain: FC<DialogueMainProps> = ({
     selectedImage,
     allowedOrientations
 }) => {
+
     const selectedImageDimensions = selectedImage?.versions.find(item => item.versionLabel === "Original");
-    
-    // const cropButtonRef = useRef(null)
 
-    const [dimensions, setDimensions] = useState<Dimensions>({ 
-        width: selectedImageDimensions?.width || 150, 
-        height: selectedImageDimensions?.height || 80 
-    });
 
-    const [aspectRationSelectedVersion,setAspectRationSelectedVersion] = useState<{w_part:number,h_part:number}> 
-        (selectedImageVersion?.width === selectedImageVersion?.height 
-            ? {w_part:1,h_part:1} 
-            : findAspectRatio(selectedImageVersion?.width,selectedImageVersion?.height)
-        )
+    const [dimensionState,setDimensionState] = useState<{
+        dimension : Dimension
+        inputWidth : string
+        inputHeight : string 
+        canEditWidth : boolean
+        canEditHeight : boolean
+    }>({
+        dimension : { 
+            width: selectedImageDimensions?.width || 150, 
+            height: selectedImageDimensions?.height || 80 
+        },
+        inputWidth : selectedImageDimensions?.width?.toString() || '150',
+        inputHeight : selectedImageDimensions?.height?.toString() || '150',
+        canEditWidth : true,
+        canEditHeight: true
+    })
+    // const [dimensions, setDimensions] = useState<Dimension>({ 
+    //     width: selectedImageDimensions?.width || 150, 
+    //     height: selectedImageDimensions?.height || 80 
+    // });
+
+    // const [canEditWidth,setCanEditWidth] = useState<boolean>(true)
+    // const [canEditHeight,setCanEditHeight] = useState<boolean>(true)
     
-    const [canEditWidth,setCanEditWidth] = useState<boolean>(true)
-    const [canEditHeight,setCanEditHeight] = useState<boolean>(true)
+    // const [inputWidth, setInputWidth] = useState<string>(
+    //     selectedImageDimensions?.width?.toString() || '150'
+    // );
     
-    const [inputWidth, setInputWidth] = useState<string>(
-        selectedImageDimensions?.width?.toString() || '150'
-    );
-    
-    const [inputHeight, setInputHeight] = useState<string>(
-        selectedImageDimensions?.height?.toString() || '80'
-    );
+    // const [inputHeight, setInputHeight] = useState<string>(
+    //     selectedImageDimensions?.height?.toString() || '80'
+    // );
     
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [containerSize, setContainerSize] = useState<Dimensions>({ width: 300, height: 200 });
+    const [containerSize, setContainerSize] = useState<Dimension>({ width: 300, height: 200 });
     const [scale, setScale] = useState<number>(1);
 
-    useEffect(() => {
-        if (selectedImageDimensions?.width && selectedImageDimensions?.height) {
-            setDimensions({
-                width: selectedImageDimensions.width,
-                height: selectedImageDimensions.height
-            });
-            setInputWidth(selectedImageDimensions.width.toString());
-            setInputHeight(selectedImageDimensions.height.toString());
-        }
-    }, [selectedImageDimensions]);
+    // useEffect(() => {
+    //     if (selectedImageDimensions?.width && selectedImageDimensions?.height) {
+    //         const width = selectedImageDimensions
+    //         setDimensionState(pre=>(
+    //             {
+    //                 ...pre,
+    //                 dimension
+    //                 width: selectedImageDimensions.width,
+    //                 height: selectedImageDimensions.height
+    //             }
+    //         ));
+    //         setInputWidth(selectedImageDimensions.width.toString());
+    //         setInputHeight(selectedImageDimensions.height.toString());
+    //     }
+    // }, [selectedImageDimensions]);
 
     useEffect(() => {
         if (containerRef.current) {
@@ -108,36 +127,56 @@ const DialogueMain: FC<DialogueMainProps> = ({
         }
     }, []);
 
-    useEffect(() => {
-        const widthScale = containerSize.width / dimensions.width;
-        const heightScale = containerSize.height / dimensions.height;
-        const newScale = Math.min(widthScale, heightScale, 1);
-        setScale(newScale);
-    }, [dimensions, containerSize]);
+    // useEffect(() => {
+    //     const widthScale = containerSize.width / dimensions.width;
+    //     const heightScale = containerSize.height / dimensions.height;
+    //     const newScale = Math.min(widthScale, heightScale, 1);
+    //     setScale(newScale);
+    // }, [dimensions, containerSize]);
 
-    const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const value = parseInt(e.target.value)
-        const height = value * (aspectRationSelectedVersion.h_part/aspectRationSelectedVersion.w_part)
-        setInputWidth(e.target.value);
-        setInputHeight(height.toString())
-        
+    const handleWidthChange =  (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const value = e.target.value
+        const height = parseInt(value) * (aspectRatioSelectedVersion.h_part/aspectRatioSelectedVersion.w_part)
+        setDimensionState(pre=>({
+            ...pre,
+            inputWidth:value,
+            inputHeight:height.toFixed(0).toString()
+        }))
     };
 
     const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const value = parseInt(e.target.value)
-        const width = value * (aspectRationSelectedVersion.w_part/aspectRationSelectedVersion.h_part)
-        setInputHeight(e.target.value)
-        setInputWidth(width.toString())
+        const value = e.target.value
+        const width = parseInt(value) * (aspectRatioSelectedVersion.w_part/aspectRatioSelectedVersion.h_part)
+        setDimensionState(pre=>({
+            ...pre,
+            inputHeight:value,
+            inputWidth:width.toFixed(0).toString()
+        }))
     };
 
-    useEffect(()=>{
-      const newWidth = parseInt(inputWidth) || 0;
-      const newHeight = parseInt(inputHeight) || 0;
-      setDimensions({
-          width: Math.max(newWidth, 10),
-          height: Math.max(newHeight, 10)
-      });
-    },[inputHeight,inputWidth])
+    const validatingInputDimension = () => {
+        if (
+            parseInt(dimensionState.inputWidth) < dimensionState.dimension.width 
+            || 
+            parseInt(dimensionState.inputHeight) < dimensionState.dimension.height
+        ) {
+          setDimensionState(pre=>({
+            ...pre,
+            inputWidth : dimensionState.dimension.width.toString(),
+            inputHeight : dimensionState.dimension.height.toString()
+          }))  
+        }
+        else return
+    }
+
+    // useEffect(()=>{
+    //   const newWidth = parseInt(inputWidth) || 0;
+    //   const newHeight = parseInt(inputHeight) || 0;
+    //   setDimensions({
+    //       width: Math.max(newWidth, 10),
+    //       height: Math.max(newHeight, 10)
+    //   });
+    // },[inputHeight,inputWidth])
 
     // const handleResize = (): void => {
     //     const newWidth = parseInt(inputWidth) || 0;
@@ -160,6 +199,18 @@ const DialogueMain: FC<DialogueMainProps> = ({
     const [showResizePopup, setResizePopup] = useState<boolean>(false);
 
     const updateResizePopupPresence = (): void => {
+        if (selectedImageDimensions?.width && selectedImageDimensions?.height) {
+            const width = selectedImageDimensions.width
+            const height = selectedImageDimensions.height
+            setDimensionState(pre=>(
+                {
+                    ...pre,
+                    dimension : {width,height},
+                    inputWidth: width.toString(),
+                    inputHeight: height.toString()
+                }
+            ));
+        }
         setResizePopup(prev => !prev);
     };
 
@@ -264,7 +315,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                             onLoad={() => setOriginalRendered(true)}
                             style={{ opacity: originalRendered ? 1 : 0 }}
                         />
-                        <button 
+                        {/* <button 
                         onClick={()=>{setImageEditWindow(true)}}
                         className='absolute top-0 mr-1 mt-1 p-2 right-0 rounded-sm bg-green-50 outline-dashed outline-offset-2 outline-1 outline-green-50 group:'
                         >
@@ -274,7 +325,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                     size={12}
                                 />
                             </Tooltip>
-                        </button>
+                        </button> */}
 
                     </div>
                     {/* options section  */}
@@ -296,24 +347,25 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                     setSelectedImageVersion(newVersion);
                                     
                                     // Update dimensions when version changes
-                                    if (newVersion) {
-                                        setDimensions({
-                                            width: newVersion.width,
-                                            height: newVersion.height
-                                        });
-                                        setInputWidth(newVersion.width.toString());
-                                        setInputHeight(newVersion.height.toString());
-                                        setAspectRationSelectedVersion( newVersion.width === newVersion.height ? {w_part:1,h_part:1} : findAspectRatio(newVersion.width,newVersion.height))
-                                    }
+                                    // if (newVersion) {
+                                    //     setDimensions({
+                                    //         width: newVersion.width,
+                                    //         height: newVersion.height
+                                    //     });
+                                        // setInputWidth(newVersion.width.toString());
+                                        // setInputHeight(newVersion.height.toString());
+                                        // setAspectRatioSelectedVersion( newVersion.width === newVersion.height ? {w_part:1,h_part:1} : findAspectRatio(newVersion.width,newVersion.height))
+                                    // }
                                 }}
                             />
                             <div className='relative flex items-center'>
-                                <div
+                                <button
+                                    type='button'
                                     className='flex cursor-pointer h-[34px] items-center p-2 rounded-lg hover:bg-gray-100 hover:rounded-2xl'
                                     onClick={updateResizePopupPresence}
                                 >
                                     <Scaling color='#01a982' />
-                                </div>
+                                </button>
                                 <Popup
                                     isPopupVisible={showResizePopup}
                                     className='absolute z-40 right-[48px] w-[386px] top-[40px] p-2 bg-gray-50 shadow-dropdown-shadow rounded-lg border border-gray-200  transition-all duration-300'
@@ -322,7 +374,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                     className="bg-gray-50 rounded-lg"
                                     onSubmit={(e)=>{
                                         e.preventDefault()
-                                        onApplyCustomDimension({width:inputWidth,height:inputHeight},selectedImage?.visualID || "")
+                                        onApplyCustomDimension({width:parseInt(dimensionState.inputWidth),height:parseInt(dimensionState.inputHeight)})
                                         setResizePopup(false)
                                     }}
                                     >
@@ -341,11 +393,20 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                                 <input
                                                     type="number"
                                                     placeholder="Width"
-                                                    disabled = {!canEditWidth}
-                                                    value={inputWidth}
+                                                    disabled = {!dimensionState.canEditWidth}
+                                                    value={dimensionState.inputWidth}
                                                     onChange={handleWidthChange}
-                                                    onFocus={()=>setCanEditHeight(false)}
-                                                    onBlur={()=>setCanEditHeight(true)}
+                                                    onFocus={()=>setDimensionState(pre=>({
+                                                        ...pre,
+                                                        canEditHeight:false
+                                                    }))}
+                                                    onBlur={()=>{
+                                                        validatingInputDimension()
+                                                        setDimensionState(pre=>({
+                                                            ...pre,
+                                                            canEditHeight : true
+                                                        }))
+                                                    }}
                                                     className="px-2  border rounded outline-none"
                                                 />
                                                 <div className="flex justify-center">
@@ -353,15 +414,24 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                                 <input
                                                     type="number"
                                                     placeholder="Height"
-                                                    disabled = {!canEditHeight}
-                                                    value={inputHeight}
+                                                    disabled = {!dimensionState.canEditHeight}
+                                                    value={dimensionState.inputHeight}
                                                     onChange={handleHeightChange}
-                                                    onFocus={()=>setCanEditWidth(false)}
-                                                    onBlur={()=>setCanEditWidth(true)}
+                                                    onFocus={()=>setDimensionState(pre=>({
+                                                        ...pre,
+                                                        canEditWidth:false
+                                                    }))}
+                                                    onBlur={()=>{
+                                                        validatingInputDimension()
+                                                        setDimensionState(pre=>({
+                                                            ...pre,
+                                                            canEditWidth : true
+                                                        }))
+                                                    }}
                                                     className="px-2  border rounded outline-none"
                                                 />
                                                 <p className='text-xs text-center text-grey-200'>
-                                                aspect ration of the this image is fixed to {aspectRationSelectedVersion.w_part} : {aspectRationSelectedVersion.h_part}
+                                                aspect ration of the this image is fixed to {aspectRatioSelectedVersion.w_part} : {aspectRatioSelectedVersion.h_part}
                                                 </p>
 
                                                 <div className="mt-2 flex justify-center">
@@ -379,15 +449,18 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                             >
                                                 <div
                                                     style={{
-                                                        width: `${dimensions.width * scale}px`,
-                                                        height: `${dimensions.height * scale}px`,
+                                                        width: `${dimensionState.dimension.width * scale}px`,
+                                                        height: `${dimensionState.dimension.height * scale}px`,
                                                         maxWidth: '100%',
                                                         maxHeight: '100%',
                                                         transformOrigin: 'center'
                                                     }}
                                                     className="border border-dashed border-gray-400 transition-all duration-300 flex items-center justify-center"
                                                 >
-                                                    <span className="text-xs text-gray-500">{dimensions.width} x {dimensions.height}</span>
+                                                    <div>
+                                                        <p className="text-xs text-gray-500 text-center">{dimensionState.dimension.width} x {dimensionState.dimension.height}</p>
+                                                        <p className="text-xs text-gray-500 text-center">( Original image )</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

@@ -6,14 +6,14 @@ interface PresetCropButtonProp {
     buttonText : string
     iconStyle ?: object
     aspectRatio : number
-    key : number
+    b_key : number
 }
 
-const PresetCropButton:FC<PresetCropButtonProp> = ({handleAspectChange,buttonText,iconStyle,aspectRatio,key}) => {
+const PresetCropButton:FC<PresetCropButtonProp> = ({handleAspectChange,buttonText,iconStyle,aspectRatio,b_key}) => {
   return (
     <>
         <button type='button'
-        key={key}
+        key={b_key}
         className='blue-btn-rounded'
         onClick={() => handleAspectChange(aspectRatio)}>   
             <div className="flex items-center gap-2">

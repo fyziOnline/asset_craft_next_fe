@@ -11,28 +11,23 @@ import 'react-image-crop/dist/ReactCrop.css';
 import PresetCropButton from '../miscellaneous/PresetCropButton';
 import { CloseIcon } from '@/assets/icons/AssetIcons';
 import {Crop as CropIcon } from 'lucide-react';
+// import { useImageController } from '../../context/ImageControllerContext';
 
 interface ImageEditWindowProp {
     setImageEditWindow: Dispatch<SetStateAction<boolean>>
-    mediaVersion : Version | null
+    aspectRatioObjType : {w_part : number, h_part : number}
+    mediaVersionOriginal : Version | null
+    thumbnileUrl:string
 }
 
-const ImageEditWindow: FC<ImageEditWindowProp> = ({ setImageEditWindow,mediaVersion }) => {
-    const [imgSrc, setImgSrc] = useState<string>(mediaVersion?.fileURL||"");
+const ImageEditWindow: FC<ImageEditWindowProp> = ({ setImageEditWindow,aspectRatioObjType,mediaVersionOriginal,thumbnileUrl }) => {
+    // const {aspectRatioObjType} = useImageController() 
+
+    const [imgSrc, setImgSrc] = useState<string>(mediaVersionOriginal?.fileURL||"");
     const [crop, setCrop] = useState<Crop | null>(null);
-    const [aspect, setAspect] = useState<number>(16 / 9); // Default aspect ratio
+    const [aspect, setAspect] = useState<number>(aspectRatioObjType.w_part / aspectRatioObjType.h_part); // Default aspect ratio
     const [croppedImageUrl, setCroppedImageUrl] = useState<string>('');
     const imgRef = useRef<HTMLImageElement>(null);
-  
-    // function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
-    //   if (e.target.files && e.target.files.length > 0) {
-    //     const reader = new FileReader();
-    //     reader.addEventListener('load', () =>
-    //       setImgSrc(reader.result?.toString() || '')
-    //     );
-    //     reader.readAsDataURL(e.target.files[0]);
-    //   }
-    // }
   
     function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
       const { width, height } = e.currentTarget;
@@ -81,12 +76,9 @@ const ImageEditWindow: FC<ImageEditWindowProp> = ({ setImageEditWindow,mediaVers
         crop.height
       );
       
-      // Instead of extracting data, use the canvas element directly
       const resultContainer = document.getElementById('cropped-result-container');
       if (resultContainer) {
-        // Clear previous result
         resultContainer.innerHTML = '';
-        // Add the canvas directly
         resultContainer.appendChild(canvas);
       }
     }
@@ -127,12 +119,14 @@ const ImageEditWindow: FC<ImageEditWindowProp> = ({ setImageEditWindow,mediaVers
             height= {20}
         />
         </button>
-        <section className='p-2'>
+        <section className='p-2 w-1/2'>
             {imgSrc && (
             <ReactCrop 
                 crop={crop || undefined} 
                 onChange={c => setCrop(c)} 
                 aspect={aspect}
+                // ruleOfThirds
+              
             >
                 <img 
                 ref={imgRef} 
@@ -143,12 +137,12 @@ const ImageEditWindow: FC<ImageEditWindowProp> = ({ setImageEditWindow,mediaVers
             </ReactCrop>
             )}
         </section>
-        <section className='pr-2'>
+        <section className='pr-2 w-1/2'>
             <h3 className='text-white mt-5'>Choose preset crop options</h3>
             <div className='flex gap-3 flex-wrap mt-3'>
               {PresetCropOptions.map(option=>(
                 <PresetCropButton 
-                  key={option.aspectRatio}
+                  b_key={option.aspectRatio}
                   handleAspectChange={handleAspectChange}
                   buttonText={option.name}
                   aspectRatio={option.aspectRatio}

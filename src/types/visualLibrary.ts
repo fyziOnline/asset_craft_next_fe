@@ -31,8 +31,8 @@ export interface Version {
   }
 
   export type Dimension = {
-      width: string;
-      height: string;
+      width: number;
+      height: number;
   }
   export type GetVisualLibraryQuery = {
     category ?: string
