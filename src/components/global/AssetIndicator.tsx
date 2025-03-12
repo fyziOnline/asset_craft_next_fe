@@ -15,7 +15,7 @@ type IconComponent = ComponentType<IconProps>
 const ASSET_ICONS: Record<string, IconComponent> = {
   'Email': MailIcon,
   'LinkedIn': LinkedinIcon,
-  'Call Script': SalesCallIcon,
+  'Callscript (WIP)': SalesCallIcon,
   "Landing Page": LandingPageIcon
 }
 

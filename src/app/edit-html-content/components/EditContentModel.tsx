@@ -131,7 +131,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
         if (hasChanges) {
             debounceTimerRef.current = setTimeout(() => {
                 refreshPreview();
-            }, 3000); // 3 second debounce
+            }, 2000); // 2 second debounce
         }
         
         return () => {

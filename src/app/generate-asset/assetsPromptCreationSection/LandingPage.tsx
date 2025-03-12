@@ -237,6 +237,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                 handleInputText(e, "topic")
                                 doesFormCompleted(3)
                             }}
+                            rows={4}
                             placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <ChildrenTitle customClass='mt-5' title='Provide additional information that supports the main message.'></ChildrenTitle>

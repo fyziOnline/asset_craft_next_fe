@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import DashboardCard from "@/components/cards/DashboardCard";
 import Button from "@/components/global/Button";
 import Table from "@/components/global/Table";
@@ -33,9 +33,9 @@ const Dashboard: FC = () => {
     getPendingApproval()
   }, [])
 
-  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets,"",clientAssetTypes);
+  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets, "email", clientAssetTypes);
   const { setContextData } = useAppData()
-
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   useEffect(() => {
     setContextData({
       isRegenerateHTML: false,
@@ -118,9 +118,15 @@ const Dashboard: FC = () => {
                   return (
                     <div
                       onClick={() => {
-                        router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`)
+
+                        setActiveIndex(index); // Set the active index to apply the scale effect
+                        setTimeout(() => setActiveIndex(null), 500); // Reset after 500ms
+
+                        router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`) 
                       }}
-                      key={index} className={`rounded-[15px] border p-3 mt-2 cursor-pointer ${index % 2 === 0 ? 'bg-white' : 'bg-[#EFEFEF]'}`}>
+                      key={index} className={`rounded-[15px] border p-3 mt-2 cursor-pointer transition-all duration-300 ease-in-out
+                      ${activeIndex === index ? ' scale-[.98] bg-green-50 border-green-100' : 'scale-100'}
+                      ${index % 2 === 0 ? 'bg-white' : 'bg-[#F9F9F9]'}`}>
                       <div className="flex items-center justify-between">
                         <p className="text-[##2F363F] text-wrap text-lg font-bold">{data.assetName}</p>
                         <p className="text-[#636363] text-sm font-normal">{formatDate(data.createdOn)}</p>
