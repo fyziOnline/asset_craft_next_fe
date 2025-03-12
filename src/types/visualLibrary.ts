@@ -30,9 +30,13 @@ export interface Version {
     visualID: string;
   }
 
-  export type Dimension = {
+  export type Dimension =  {
       width: number;
       height: number;
+  }
+  export type AspectRatioObject = {
+    w_part:number
+    h_part:number 
   }
   export type GetVisualLibraryQuery = {
     category ?: string

@@ -2,12 +2,13 @@ import { CloseIcon } from '@/assets/icons/AssetIcons';
 import FilterDropdown from '@/components/global/FilterDropdown';
 import Popup from '@/components/global/Popup/Popup';
 // import Tooltip from '@/components/global/Tooltip';
-import { Dimension, MediaItem, Orientation, Version } from '@/types/visualLibrary';
+import { AspectRatioObject, Dimension, MediaItem, Orientation, Version } from '@/types/visualLibrary';
 import { findAspectRatio } from '@/utils/miscellaneous';
 import { Tooltip } from '@mui/material';
 import { Crop, Scaling, SquareArrowOutUpRight } from 'lucide-react';
 import Image from 'next/image';
 import React, { FC, memo,useRef, useEffect, useState, Dispatch, SetStateAction, useMemo } from 'react';
+import ResizePreviewer from './miscellaneous/ResizePreviewer';
 // import { useImageController } from '../context/ImageControllerContext';
 // import { IoMdClose } from "react-icons/io";
 
@@ -18,7 +19,7 @@ type DialogueMainProps = {
     setSelectedImageVersion: (item: Version | null) => void;
     onApplyCustomDimension : (dimension:Dimension) => void
     setImageEditWindow : Dispatch<SetStateAction<boolean>>
-    aspectRatioSelectedVersion : {w_part:number,h_part:number}
+    aspectRatioSelectedVersion : AspectRatioObject
     selectedImageVersion: Version | null;
     openSelectedMediaPreview: boolean;
     orientationFilter: string;
@@ -73,41 +74,9 @@ const DialogueMain: FC<DialogueMainProps> = ({
         canEditWidth : true,
         canEditHeight: true
     })
-    // const [dimensions, setDimensions] = useState<Dimension>({ 
-    //     width: selectedImageDimensions?.width || 150, 
-    //     height: selectedImageDimensions?.height || 80 
-    // });
-
-    // const [canEditWidth,setCanEditWidth] = useState<boolean>(true)
-    // const [canEditHeight,setCanEditHeight] = useState<boolean>(true)
-    
-    // const [inputWidth, setInputWidth] = useState<string>(
-    //     selectedImageDimensions?.width?.toString() || '150'
-    // );
-    
-    // const [inputHeight, setInputHeight] = useState<string>(
-    //     selectedImageDimensions?.height?.toString() || '80'
-    // );
     
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [containerSize, setContainerSize] = useState<Dimension>({ width: 300, height: 200 });
-    const [scale, setScale] = useState<number>(1);
-
-    // useEffect(() => {
-    //     if (selectedImageDimensions?.width && selectedImageDimensions?.height) {
-    //         const width = selectedImageDimensions
-    //         setDimensionState(pre=>(
-    //             {
-    //                 ...pre,
-    //                 dimension
-    //                 width: selectedImageDimensions.width,
-    //                 height: selectedImageDimensions.height
-    //             }
-    //         ));
-    //         setInputWidth(selectedImageDimensions.width.toString());
-    //         setInputHeight(selectedImageDimensions.height.toString());
-    //     }
-    // }, [selectedImageDimensions]);
 
     useEffect(() => {
         if (containerRef.current) {
@@ -126,13 +95,6 @@ const DialogueMain: FC<DialogueMainProps> = ({
             return () => window.removeEventListener('resize', updateContainerSize);
         }
     }, []);
-
-    // useEffect(() => {
-    //     const widthScale = containerSize.width / dimensions.width;
-    //     const heightScale = containerSize.height / dimensions.height;
-    //     const newScale = Math.min(widthScale, heightScale, 1);
-    //     setScale(newScale);
-    // }, [dimensions, containerSize]);
 
     const handleWidthChange =  (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value
@@ -169,24 +131,6 @@ const DialogueMain: FC<DialogueMainProps> = ({
         else return
     }
 
-    // useEffect(()=>{
-    //   const newWidth = parseInt(inputWidth) || 0;
-    //   const newHeight = parseInt(inputHeight) || 0;
-    //   setDimensions({
-    //       width: Math.max(newWidth, 10),
-    //       height: Math.max(newHeight, 10)
-    //   });
-    // },[inputHeight,inputWidth])
-
-    // const handleResize = (): void => {
-    //     const newWidth = parseInt(inputWidth) || 0;
-    //     const newHeight = parseInt(inputHeight) || 0;
-    //     setDimensions({
-    //         width: Math.max(newWidth, 10),
-    //         height: Math.max(newHeight, 10)
-    //     });
-        
-    // };
 
     const resolutionOptionsList: DropdownOption[] | undefined = selectedImage?.versions.map(version => {
         return {
@@ -443,7 +387,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div
+                                            {/* <div
                                                 ref={containerRef}
                                                 className="w-full h-36 p-[0.6rem] flex justify-center items-center overflow-hidden"
                                             >
@@ -462,7 +406,13 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                                         <p className="text-xs text-gray-500 text-center">( Original image )</p>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
+                                            <ResizePreviewer 
+                                                aspectratio = {aspectRatioSelectedVersion}
+                                                outerBoxWidth={dimensionState.dimension.width}
+                                                outerBoxHeight={dimensionState.dimension.height}
+                                                innerBoxWidth={parseInt(dimensionState.inputWidth)}
+                                            />
                                         </div>
                                     </form>
                                 </Popup>
