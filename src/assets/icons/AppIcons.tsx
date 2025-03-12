@@ -284,3 +284,13 @@ export const LoginPageIcon4 = () => {
     </svg>
   )
 }
+
+export const CloseScale:FC<icon> = ({color="#01A982"}) => { 
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 3H5C4.46957 3 3.96086 3.21071 3.58579 3.58579C3.21071 3.96086 3 4.46957 3 5V19C3 19.5304 3.21071 20.0391 3.58579 20.4142C3.96086 20.7893 4.46957 21 5 21H19C19.5304 21 20.0391 20.7893 20.4142 20.4142C20.7893 20.0391 21 19.5304 21 19V12" stroke="#01A982" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18 6L12 12" stroke={color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18 12L12 6" stroke={color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  )
+}

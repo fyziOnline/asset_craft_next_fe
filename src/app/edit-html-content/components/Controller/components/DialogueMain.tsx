@@ -9,6 +9,7 @@ import { Crop, Scaling, SquareArrowOutUpRight } from 'lucide-react';
 import Image from 'next/image';
 import React, { FC, memo,useRef, useEffect, useState, Dispatch, SetStateAction, useMemo } from 'react';
 import ResizePreviewer from './miscellaneous/ResizePreviewer';
+import { CloseScale } from '@/assets/icons/AppIcons';
 // import { useImageController } from '../context/ImageControllerContext';
 // import { IoMdClose } from "react-icons/io";
 
@@ -118,9 +119,9 @@ const DialogueMain: FC<DialogueMainProps> = ({
 
     const validatingInputDimension = () => {
         if (
-            parseInt(dimensionState.inputWidth) < dimensionState.dimension.width 
+            parseInt(dimensionState.inputWidth) > dimensionState.dimension.width 
             || 
-            parseInt(dimensionState.inputHeight) < dimensionState.dimension.height
+            parseInt(dimensionState.inputHeight) > dimensionState.dimension.height
         ) {
           setDimensionState(pre=>({
             ...pre,
@@ -308,7 +309,11 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                     className='flex cursor-pointer h-[34px] items-center p-2 rounded-lg hover:bg-gray-100 hover:rounded-2xl'
                                     onClick={updateResizePopupPresence}
                                 >
-                                    <Scaling color='#01a982' />
+                                    {!showResizePopup ? 
+                                        <Scaling color='#01a982' /> :
+                                        <CloseScale />
+                                        
+                                    }
                                 </button>
                                 <Popup
                                     isPopupVisible={showResizePopup}
@@ -322,7 +327,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                         setResizePopup(false)
                                     }}
                                     >
-                                        <button 
+                                        {/* <button 
                                         className='absolute top-1 right-1'
                                         onClick={updateResizePopupPresence}
                                         >
@@ -331,7 +336,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                             width= {15}
                                             height= {15}
                                         />
-                                        </button>
+                                        </button> */}
                                         <div className="flex items-center">
                                             <div className="flex flex-col gap-1 mr-4">
                                                 <input
@@ -410,7 +415,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                             <ResizePreviewer 
                                                 aspectratio = {aspectRatioSelectedVersion}
                                                 outerBoxWidth={dimensionState.dimension.width}
-                                                outerBoxHeight={dimensionState.dimension.height}
+                                                // outerBoxHeight={dimensionState.dimension.height}
                                                 innerBoxWidth={parseInt(dimensionState.inputWidth)}
                                             />
                                         </div>
