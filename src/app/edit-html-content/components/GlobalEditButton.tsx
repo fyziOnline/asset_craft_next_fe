@@ -11,7 +11,6 @@ const GlobalEditButton: React.FC<GlobalEditButtonProps> = ({ onClick }) => {
 
     const assetTypeIcon = searchParams.get('assetTypeIcon')
 
-    console.log(assetTypeIcon);
 
     return (
         <div

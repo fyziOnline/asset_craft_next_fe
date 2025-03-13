@@ -1,11 +1,16 @@
 import { CloseIcon } from '@/assets/icons/AssetIcons';
 import FilterDropdown from '@/components/global/FilterDropdown';
 import Popup from '@/components/global/Popup/Popup';
-import { Dimension, MediaItem, Orientation, Version } from '@/types/visualLibrary';
+// import Tooltip from '@/components/global/Tooltip';
+import { AspectRatioObject, Dimension, MediaItem, Orientation, Version } from '@/types/visualLibrary';
 import { findAspectRatio } from '@/utils/miscellaneous';
-import { Scaling, SquareArrowOutUpRight } from 'lucide-react';
+import { Tooltip } from '@mui/material';
+import { Crop, Scaling, SquareArrowOutUpRight } from 'lucide-react';
 import Image from 'next/image';
-import React, { FC, memo, useEffect, useRef, useState } from 'react';
+import React, { FC, memo,useRef, useEffect, useState, Dispatch, SetStateAction, useMemo } from 'react';
+import ResizePreviewer from './miscellaneous/ResizePreviewer';
+import { CloseScale } from '@/assets/icons/AppIcons';
+// import { useImageController } from '../context/ImageControllerContext';
 // import { IoMdClose } from "react-icons/io";
 
 type DialogueMainProps = {
@@ -13,7 +18,9 @@ type DialogueMainProps = {
     setOpenSelectedMediaPreview: (state: boolean) => void;
     handleSelect: (item: MediaItem) => void;
     setSelectedImageVersion: (item: Version | null) => void;
-    onApplyCustomDimension : (dimension:Dimension,visualID:string) => void
+    onApplyCustomDimension : (dimension:Dimension) => void
+    setImageEditWindow : Dispatch<SetStateAction<boolean>>
+    aspectRatioSelectedVersion : AspectRatioObject
     selectedImageVersion: Version | null;
     openSelectedMediaPreview: boolean;
     orientationFilter: string;
@@ -22,10 +29,10 @@ type DialogueMainProps = {
     allowedOrientations: Orientation[];
 };
 
-type Dimensions = {
-    width: number;
-    height: number;
-};
+// type Dimensions = {
+//     width: number;
+//     height: number;
+// };
 
 type DropdownOption = {
     label: string;
@@ -38,6 +45,9 @@ const DialogueMain: FC<DialogueMainProps> = ({
     setOpenSelectedMediaPreview,
     setSelectedImageVersion,
     onApplyCustomDimension,
+    setImageEditWindow,
+    // aspectRationSelectedVersion,
+    aspectRatioSelectedVersion,
     selectedImageVersion,
     openSelectedMediaPreview,
     orientationFilter,
@@ -45,44 +55,29 @@ const DialogueMain: FC<DialogueMainProps> = ({
     selectedImage,
     allowedOrientations
 }) => {
-    const selectedImageDimensions = selectedImage?.versions.find(item => item.versionLabel === "Original");
-    
-    const [dimensions, setDimensions] = useState<Dimensions>({ 
-        width: selectedImageDimensions?.width || 150, 
-        height: selectedImageDimensions?.height || 80 
-    });
 
-    const [aspectRationSelectedVersion,setAspectRationSelectedVersion] = useState<{w_part:number,h_part:number}> 
-        (selectedImageVersion?.width === selectedImageVersion?.height 
-            ? {w_part:1,h_part:1} 
-            : findAspectRatio(selectedImageVersion?.width,selectedImageVersion?.height)
-        )
-    
-    const [canEditWidth,setCanEditWidth] = useState<boolean>(true)
-    const [canEditHeight,setCanEditHeight] = useState<boolean>(true)
-    
-    const [inputWidth, setInputWidth] = useState<string>(
-        selectedImageDimensions?.width?.toString() || '150'
-    );
-    
-    const [inputHeight, setInputHeight] = useState<string>(
-        selectedImageDimensions?.height?.toString() || '80'
-    );
+    const selectedImageDimensions = selectedImage?.versions.find(item => item.versionLabel === "Original");
+
+
+    const [dimensionState,setDimensionState] = useState<{
+        dimension : Dimension
+        inputWidth : string
+        inputHeight : string 
+        canEditWidth : boolean
+        canEditHeight : boolean
+    }>({
+        dimension : { 
+            width: selectedImageDimensions?.width || 150, 
+            height: selectedImageDimensions?.height || 80 
+        },
+        inputWidth : selectedImageDimensions?.width?.toString() || '150',
+        inputHeight : selectedImageDimensions?.height?.toString() || '150',
+        canEditWidth : true,
+        canEditHeight: true
+    })
     
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [containerSize, setContainerSize] = useState<Dimensions>({ width: 300, height: 200 });
-    const [scale, setScale] = useState<number>(1);
-
-    useEffect(() => {
-        if (selectedImageDimensions?.width && selectedImageDimensions?.height) {
-            setDimensions({
-                width: selectedImageDimensions.width,
-                height: selectedImageDimensions.height
-            });
-            setInputWidth(selectedImageDimensions.width.toString());
-            setInputHeight(selectedImageDimensions.height.toString());
-        }
-    }, [selectedImageDimensions]);
+    const [containerSize, setContainerSize] = useState<Dimension>({ width: 300, height: 200 });
 
     useEffect(() => {
         if (containerRef.current) {
@@ -102,46 +97,41 @@ const DialogueMain: FC<DialogueMainProps> = ({
         }
     }, []);
 
-    useEffect(() => {
-        const widthScale = containerSize.width / dimensions.width;
-        const heightScale = containerSize.height / dimensions.height;
-        const newScale = Math.min(widthScale, heightScale, 1);
-        setScale(newScale);
-    }, [dimensions, containerSize]);
-
-    const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const value = parseInt(e.target.value)
-        const height = value * (aspectRationSelectedVersion.h_part/aspectRationSelectedVersion.w_part)
-        setInputWidth(e.target.value);
-        setInputHeight(height.toString())
-        
+    const handleWidthChange =  (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const value = e.target.value
+        const height = parseInt(value) * (aspectRatioSelectedVersion.h_part/aspectRatioSelectedVersion.w_part)
+        setDimensionState(pre=>({
+            ...pre,
+            inputWidth:value,
+            inputHeight:height.toFixed(0).toString()
+        }))
     };
 
     const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const value = parseInt(e.target.value)
-        const width = value * (aspectRationSelectedVersion.w_part/aspectRationSelectedVersion.h_part)
-        setInputHeight(e.target.value)
-        setInputWidth(width.toString())
+        const value = e.target.value
+        const width = parseInt(value) * (aspectRatioSelectedVersion.w_part/aspectRatioSelectedVersion.h_part)
+        setDimensionState(pre=>({
+            ...pre,
+            inputHeight:value,
+            inputWidth:width.toFixed(0).toString()
+        }))
     };
 
-    useEffect(()=>{
-      const newWidth = parseInt(inputWidth) || 0;
-      const newHeight = parseInt(inputHeight) || 0;
-      setDimensions({
-          width: Math.max(newWidth, 10),
-          height: Math.max(newHeight, 10)
-      });
-    },[inputHeight,inputWidth])
+    const validatingInputDimension = () => {
+        if (
+            parseInt(dimensionState.inputWidth) > dimensionState.dimension.width 
+            || 
+            parseInt(dimensionState.inputHeight) > dimensionState.dimension.height
+        ) {
+          setDimensionState(pre=>({
+            ...pre,
+            inputWidth : dimensionState.dimension.width.toString(),
+            inputHeight : dimensionState.dimension.height.toString()
+          }))  
+        }
+        else return
+    }
 
-    // const handleResize = (): void => {
-    //     const newWidth = parseInt(inputWidth) || 0;
-    //     const newHeight = parseInt(inputHeight) || 0;
-    //     setDimensions({
-    //         width: Math.max(newWidth, 10),
-    //         height: Math.max(newHeight, 10)
-    //     });
-        
-    // };
 
     const resolutionOptionsList: DropdownOption[] | undefined = selectedImage?.versions.map(version => {
         return {
@@ -154,6 +144,18 @@ const DialogueMain: FC<DialogueMainProps> = ({
     const [showResizePopup, setResizePopup] = useState<boolean>(false);
 
     const updateResizePopupPresence = (): void => {
+        if (selectedImageDimensions?.width && selectedImageDimensions?.height) {
+            const width = selectedImageDimensions.width
+            const height = selectedImageDimensions.height
+            setDimensionState(pre=>(
+                {
+                    ...pre,
+                    dimension : {width,height},
+                    inputWidth: width.toString(),
+                    inputHeight: height.toString()
+                }
+            ));
+        }
         setResizePopup(prev => !prev);
     };
 
@@ -226,172 +228,223 @@ const DialogueMain: FC<DialogueMainProps> = ({
     else {
         // for editing and viewing selected image
         return (
-            <div className='flex flex-1 gap-3 overflow-hidden'>
-                {/* image section  */}
-                <div className='w-1/2 overflow-scroll scrollbar-none'>
-                    {!originalRendered && (
+            <>
+                {/* <Tooltip 
+                    tip='Crop image'
+                    anchorRef={cropButtonRef}
+                    // toolTipClass='opacity-0 z-99 group-hover:opacity-100'
+                    toolTipClass='z-99'
+                /> */}
+                <div className='flex flex-1 gap-3 overflow-hidden'>
+                    {/* image section  */}
+                    <div className='w-1/2 relative overflow-scroll scrollbar-none'>
+                        {!originalRendered && (
+                            <>
+                                <img
+                                    src={selectedImage?.versions.find(item => item.versionLabel === "thumbnail")?.fileURL}
+                                    alt={`${selectedImage?.title}_thumbnail`}
+                                    width={selectedImage?.versions.find(item => item.versionLabel === "Original")?.width}
+                                    height={selectedImage?.versions.find(item => item.versionLabel === "Original")?.height}
+                                    className="w-full p-2 object-cover blur-md transition-transform duration-300"
+                                />
+                            </>
+                                
+                        )}
+                        {/* the above will render while the original render to dom, once the original image render 'thumbnail' will be hidden */}
                         <img
-                            src={selectedImage?.versions.find(item => item.versionLabel === "thumbnail")?.fileURL}
-                            alt={`${selectedImage?.title}_thumbnail`}
+                            src={selectedImageVersion?.fileURL}
+                            alt={selectedImage?.title || ""}
                             width={selectedImage?.versions.find(item => item.versionLabel === "Original")?.width}
                             height={selectedImage?.versions.find(item => item.versionLabel === "Original")?.height}
-                            className="w-full p-2 object-cover blur-md transition-transform duration-300"
+                            className="w-full p-2 object-cover transition-transform duration-300"
+                            onLoad={() => setOriginalRendered(true)}
+                            style={{ opacity: originalRendered ? 1 : 0 }}
                         />
-                    )}
-                    {/* the above will render while the original render to dom, once the original image render 'thumbnail' will be hidden */}
-                    <img
-                        src={selectedImageVersion?.fileURL}
-                        alt={selectedImage?.title || ""}
-                        width={selectedImage?.versions.find(item => item.versionLabel === "Original")?.width}
-                        height={selectedImage?.versions.find(item => item.versionLabel === "Original")?.height}
-                        className="w-full p-2 object-cover transition-transform duration-300"
-                        onLoad={() => setOriginalRendered(true)}
-                        style={{ opacity: originalRendered ? 1 : 0 }}
-                    />
-                </div>
-                {/* options section  */}
-                <div className='w-1/2 mx-2'>
-                    <h3 className='font-semibold text-lg pt-1'>{selectedImage?.title}</h3>
-                    <div className='mt-3 flex gap-2 '>
-                        <FilterDropdown
-                            placeholder='chosen value'
-                            optionLists={resolutionOptionsList || []}
-                            topLevelClass='w-full'
-                            customClass='rounded-sm w-full'
-                            selectedValueClass='text-grey-300'
-                            optionsListClass='w-full rounded-none'
-                            defaultSelectedLabel={`${selectedImageVersion?.versionLabel} : ${selectedImageVersion?.width} x ${selectedImageVersion?.height}`}
-                            defaultSelectedOption={`${selectedImageVersion?.versionID}`}
-                            allowDrop = {!showResizePopup}
-                            selectedValue={(value: string) => {
-                                const newVersion = selectedImage?.versions.find(v => v.versionID === value) || null;
-                                setSelectedImageVersion(newVersion);
-                                
-                                // Update dimensions when version changes
-                                if (newVersion) {
-                                    setDimensions({
-                                        width: newVersion.width,
-                                        height: newVersion.height
-                                    });
-                                    setInputWidth(newVersion.width.toString());
-                                    setInputHeight(newVersion.height.toString());
-                                    setAspectRationSelectedVersion( newVersion.width === newVersion.height ? {w_part:1,h_part:1} : findAspectRatio(newVersion.width,newVersion.height))
-                                }
-                            }}
-                        />
-                        <div className='relative flex items-center'>
-                            <div
-                                className='flex cursor-pointer h-[34px] items-center p-2 rounded-lg hover:bg-gray-100 hover:rounded-2xl'
-                                onClick={updateResizePopupPresence}
-                            >
-                                <Scaling color='#01a982' />
-                            </div>
-                            <Popup
-                                isPopupVisible={showResizePopup}
-                                className='absolute z-40 right-[48px] w-[386px] top-[40px] p-2 bg-gray-50 shadow-dropdown-shadow rounded-lg border border-gray-200  transition-all duration-300'
-                            >
-                                <form 
-                                  className="bg-gray-50 rounded-lg"
-                                  onSubmit={(e)=>{
-                                    e.preventDefault()
-                                    onApplyCustomDimension({width:inputWidth,height:inputHeight},selectedImage?.visualID || "")
-                                    setResizePopup(false)
-                                  }}
-                                >
-                                    {/* <div className='flex justify-end mb-2'> */}
-                                        {/* <IoMdClose onClick={updateResizePopupPresence} className='cursor-pointer' size={20} /> */}
-                                    {/* </div> */}
-                                        
-                                    <button 
-                                      className='absolute top-1 right-1'
-                                      onClick={updateResizePopupPresence}
-                                    >
-                                      <CloseIcon 
-                                        color='grey'
-                                        width= {15}
-                                        height= {15}
-                                      />
-                                    </button>
-                                    <div className="flex items-center">
-                                        <div className="flex flex-col gap-1 mr-4">
-                                            <input
-                                                type="number"
-                                                placeholder="Width"
-                                                disabled = {!canEditWidth}
-                                                value={inputWidth}
-                                                onChange={handleWidthChange}
-                                                onFocus={()=>setCanEditHeight(false)}
-                                                onBlur={()=>setCanEditHeight(true)}
-                                                className="px-2  border rounded outline-none"
-                                            />
-                                            <div className="flex justify-center">
-                                            </div>
-                                            <input
-                                                type="number"
-                                                placeholder="Height"
-                                                disabled = {!canEditHeight}
-                                                value={inputHeight}
-                                                onChange={handleHeightChange}
-                                                onFocus={()=>setCanEditWidth(false)}
-                                                onBlur={()=>setCanEditWidth(true)}
-                                                className="px-2  border rounded outline-none"
-                                            />
-                                            <p className='text-xs text-center text-grey-200'>
-                                              aspect ration of the this image is fixed to {aspectRationSelectedVersion.w_part} : {aspectRationSelectedVersion.h_part}
-                                            </p>
+                        {/* <button 
+                        onClick={()=>{setImageEditWindow(true)}}
+                        className='absolute top-0 mr-1 mt-1 p-2 right-0 rounded-sm bg-green-50 outline-dashed outline-offset-2 outline-1 outline-green-50 group:'
+                        >
+                            <Tooltip title="Crop Image">
+                                <Crop 
+                                    className='opacity-75 text-green-100'
+                                    size={12}
+                                />
+                            </Tooltip>
+                        </button> */}
 
-                                            <div className="mt-2 flex justify-center">
-                                                <button
-                                                    type='submit'
-                                                    className="py-1 px-2 bg-green-300 text-white rounded text-sm"
-                                                >
-                                                    Create New Version
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div
-                                            ref={containerRef}
-                                            className="w-full h-36 p-[0.6rem] flex justify-center items-center overflow-hidden"
+                    </div>
+                    {/* options section  */}
+                    <div className='w-1/2 mx-2'>
+                        <h3 className='font-semibold text-lg pt-1'>{selectedImage?.title}</h3>
+                        <div className='mt-3 flex gap-2 '>
+                            <FilterDropdown
+                                placeholder='chosen value'
+                                optionLists={resolutionOptionsList || []}
+                                topLevelClass='w-full'
+                                customClass='rounded-sm w-full'
+                                selectedValueClass='text-grey-300'
+                                optionsListClass='w-full rounded-none'
+                                defaultSelectedLabel={`${selectedImageVersion?.versionLabel} : ${selectedImageVersion?.width} x ${selectedImageVersion?.height}`}
+                                defaultSelectedOption={`${selectedImageVersion?.versionID}`}
+                                allowDrop = {!showResizePopup}
+                                selectedValue={(value: string) => {
+                                    const newVersion = selectedImage?.versions.find(v => v.versionID === value) || null;
+                                    setSelectedImageVersion(newVersion);
+                                    
+                                    // Update dimensions when version changes
+                                    // if (newVersion) {
+                                    //     setDimensions({
+                                    //         width: newVersion.width,
+                                    //         height: newVersion.height
+                                    //     });
+                                        // setInputWidth(newVersion.width.toString());
+                                        // setInputHeight(newVersion.height.toString());
+                                        // setAspectRatioSelectedVersion( newVersion.width === newVersion.height ? {w_part:1,h_part:1} : findAspectRatio(newVersion.width,newVersion.height))
+                                    // }
+                                }}
+                            />
+                            <div className='relative flex items-center'>
+                                <button
+                                    type='button'
+                                    className='flex cursor-pointer h-[34px] items-center p-2 rounded-lg hover:bg-gray-100 hover:rounded-2xl'
+                                    onClick={updateResizePopupPresence}
+                                >
+                                    {!showResizePopup ? 
+                                        <Scaling color='#01a982' /> :
+                                        <CloseScale />
+                                        
+                                    }
+                                </button>
+                                <Popup
+                                    isPopupVisible={showResizePopup}
+                                    className='absolute z-40 right-[48px] w-[386px] top-[40px] p-2 bg-gray-50 shadow-dropdown-shadow rounded-lg border border-gray-200  transition-all duration-300'
+                                >
+                                    <form 
+                                    className="bg-gray-50 rounded-lg"
+                                    onSubmit={(e)=>{
+                                        e.preventDefault()
+                                        onApplyCustomDimension({width:parseInt(dimensionState.inputWidth),height:parseInt(dimensionState.inputHeight)})
+                                        setResizePopup(false)
+                                    }}
+                                    >
+                                        {/* <button 
+                                        className='absolute top-1 right-1'
+                                        onClick={updateResizePopupPresence}
                                         >
-                                            <div
-                                                style={{
-                                                    width: `${dimensions.width * scale}px`,
-                                                    height: `${dimensions.height * scale}px`,
-                                                    maxWidth: '100%',
-                                                    maxHeight: '100%',
-                                                    // transform: `scale(${scale})`,
-                                                    transformOrigin: 'center'
-                                                }}
-                                                className="border border-dashed border-gray-400 transition-all duration-300 flex items-center justify-center"
-                                            >
-                                                <span className="text-xs text-gray-500">{dimensions.width} x {dimensions.height}</span>
+                                        <CloseIcon 
+                                            color='grey'
+                                            width= {15}
+                                            height= {15}
+                                        />
+                                        </button> */}
+                                        <div className="flex items-center">
+                                            <div className="flex flex-col gap-1 mr-4">
+                                                <input
+                                                    type="number"
+                                                    placeholder="Width"
+                                                    disabled = {!dimensionState.canEditWidth}
+                                                    value={dimensionState.inputWidth}
+                                                    onChange={handleWidthChange}
+                                                    onFocus={()=>setDimensionState(pre=>({
+                                                        ...pre,
+                                                        canEditHeight:false
+                                                    }))}
+                                                    onBlur={()=>{
+                                                        validatingInputDimension()
+                                                        setDimensionState(pre=>({
+                                                            ...pre,
+                                                            canEditHeight : true
+                                                        }))
+                                                    }}
+                                                    className="px-2  border rounded outline-none"
+                                                />
+                                                <div className="flex justify-center">
+                                                </div>
+                                                <input
+                                                    type="number"
+                                                    placeholder="Height"
+                                                    disabled = {!dimensionState.canEditHeight}
+                                                    value={dimensionState.inputHeight}
+                                                    onChange={handleHeightChange}
+                                                    onFocus={()=>setDimensionState(pre=>({
+                                                        ...pre,
+                                                        canEditWidth:false
+                                                    }))}
+                                                    onBlur={()=>{
+                                                        validatingInputDimension()
+                                                        setDimensionState(pre=>({
+                                                            ...pre,
+                                                            canEditWidth : true
+                                                        }))
+                                                    }}
+                                                    className="px-2  border rounded outline-none"
+                                                />
+                                                <p className='text-xs text-center text-grey-200'>
+                                                aspect ration of the this image is fixed to {aspectRatioSelectedVersion.w_part} : {aspectRatioSelectedVersion.h_part}
+                                                </p>
+
+                                                <div className="mt-2 flex justify-center">
+                                                    <button
+                                                        type='submit'
+                                                        className="green-btn-rounded"
+                                                    >
+                                                        Create New Version
+                                                    </button>
+                                                </div>
                                             </div>
+                                            {/* <div
+                                                ref={containerRef}
+                                                className="w-full h-36 p-[0.6rem] flex justify-center items-center overflow-hidden"
+                                            >
+                                                <div
+                                                    style={{
+                                                        width: `${dimensionState.dimension.width * scale}px`,
+                                                        height: `${dimensionState.dimension.height * scale}px`,
+                                                        maxWidth: '100%',
+                                                        maxHeight: '100%',
+                                                        transformOrigin: 'center'
+                                                    }}
+                                                    className="border border-dashed border-gray-400 transition-all duration-300 flex items-center justify-center"
+                                                >
+                                                    <div>
+                                                        <p className="text-xs text-gray-500 text-center">{dimensionState.dimension.width} x {dimensionState.dimension.height}</p>
+                                                        <p className="text-xs text-gray-500 text-center">( Original image )</p>
+                                                    </div>
+                                                </div>
+                                            </div> */}
+                                            <ResizePreviewer 
+                                                aspectratio = {aspectRatioSelectedVersion}
+                                                outerBoxWidth={dimensionState.dimension.width}
+                                                // outerBoxHeight={dimensionState.dimension.height}
+                                                innerBoxWidth={parseInt(dimensionState.inputWidth)}
+                                            />
                                         </div>
-                                    </div>
-                                </form>
-                            </Popup>
+                                    </form>
+                                </Popup>
+                            </div>
+                        </div>
+                        <p className='text-grey-300 mt-2 text-sm'>Size: {selectedImageVersion?.fileSizeKB} KB</p>
+                        <div className='relative'>
+                        {/* <div className='absolute bg-grey-800 min-h-[100%] opacity-35 top-0 bottom-0 right-0 left-0'></div> */}
+                        <div className='mt-3 flex gap-2 flex-wrap'>
+                            {selectedImageVersion && (
+                                <h4 className='text-green'>Orientation: <span className='blue-btn-rounded'>{selectedImageVersion.orientation}</span></h4>
+                            )}
+                        </div>
+                        <div className='mt-3 flex gap-2 flex-wrap'>
+                            {selectedImage?.tags && <h4>Tags:</h4>}
+                            {selectedImage?.tags &&
+                                selectedImage?.tags.split(',').map((str: string) => (
+                                    <div key={str} className='blue-btn-rounded'>{str}</div>
+                                ))
+                            }
+                        </div>
+                        <p className='mt-3'>{selectedImage?.description}</p>
                         </div>
                     </div>
-                    <p className='text-grey-300 mt-2 text-sm'>Size: {selectedImageVersion?.fileSizeKB} KB</p>
-                    <div className='relative'>
-                      {/* <div className='absolute bg-grey-800 min-h-[100%] opacity-35 top-0 bottom-0 right-0 left-0'></div> */}
-                      <div className='mt-3 flex gap-2 flex-wrap'>
-                          {selectedImageVersion && (
-                              <h4 className='text-green'>Orientation: <span className='bg-blue-50 text-blue-700 py-[0.5px] px-2 rounded-full'>{selectedImageVersion.orientation}</span></h4>
-                          )}
-                      </div>
-                      <div className='mt-3 flex gap-2 flex-wrap'>
-                          {selectedImage?.tags && <h4>Tags:</h4>}
-                          {selectedImage?.tags &&
-                              selectedImage?.tags.split(',').map((str: string) => (
-                                  <div key={str} className='bg-blue-50 text-blue-700 py-[0.5px] px-2 rounded-full'>{str}</div>
-                              ))
-                          }
-                      </div>
-                      <p className='mt-3'>{selectedImage?.description}</p>
-                    </div>
                 </div>
-            </div>
+            </>
+
         );
     }
 };

@@ -1,10 +1,16 @@
-import { FC, useState, useMemo, useEffect } from 'react';
+import { FC, useState, useMemo, useEffect, Suspense, lazy } from 'react';
 import { ScanSearch, Search } from 'lucide-react';
 import Button from '@/components/global/Button';
 import { useEditAssetSection } from '@/hooks/useEditAssetSection';
 import { Dimension, MediaItem, MediaType, Orientation, Version } from '@/types/visualLibrary';
-import DialogueMain from './components/DialogueMain';
+// import DialogueMain from './components/DialogueMain';
+// import ImageEditWindow from './components/image-crop-window/ImageCropWindow';
+// import { useImageController } from './context/ImageControllerContext';
+import { findAspectRatio } from '@/utils/miscellaneous';
+import ImageEditWindow from './components/image-crop-window/ImageCropWindow';
 // import { useAppData } from '@/context/AppContext';
+
+const DialogueMain = lazy(()=>import('./components/DialogueMain'))
 
 interface ImagePickerProps {
   value: string;
@@ -12,6 +18,8 @@ interface ImagePickerProps {
   label?: string;
   uischema ?: any
 }
+type aspectRatioObjType = {w_part : number, h_part : number}
+
 
 export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uischema }) => {
   const [open, setOpen] = useState(false)
@@ -21,7 +29,8 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
   const [library,setLibrary] = useState<MediaItem[]>([])
   const [openSelectedMediaPreview,setOpenSelectedMediaPreview] = useState<boolean>(false) 
   const [selectedImageVersion,setSelectedImageVersion] = useState<Version | null>(null)
-
+  const [imageOriginalVersion,setImageOriginalVersion] = useState<Version | null>(null)
+  const [imageEditWindow,setImageEditWindow] = useState<boolean>(false)
 
   const {
     getVisualLibrary,
@@ -29,12 +38,14 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
     getSingleVisualMediaAsset
   } = useEditAssetSection()
 
+  // const {selectedImageVersion,setSelectedImageVersion,setAspectRatioSelectedVersion} = useImageController()
+  const [aspectRatioSelectedVersion,setAspectRatioSelectedVersion] = useState<aspectRatioObjType>({w_part : 0, h_part : 0}) 
+  
   // const allowedOrientation:Orientation[] = uischema?.options?.allowedOrientations || ['all', 'landscape', 'portrait', 'square']
   const allowedOrientation: Orientation[] = [
     ...new Set(['all', ...(uischema?.options?.allowedOrientations || ['landscape', 'portrait', 'square'])])
   ]
   
-  // const { contextData, setContextData } = useAppData();
 
   const handleOpen = async () => {
     const library: MediaItem[] = await getVisualLibrary({category:""})
@@ -42,7 +53,12 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
     !open && setOpen(true)
   }
 
-  const handleResizeMedia = async (dimension : Dimension, visualID:string) => {
+  const handleResizeMedia = async (dimension : Dimension) => {
+    const visualID =imageOriginalVersion?.visualID 
+    if (!visualID) {
+      console.error('Unable to process the image, Try selecting from the library again');
+      return 
+    }
     const response_createMediaAssetVersion = await createMediaAssetVersion(dimension,visualID)
     if (!response_createMediaAssetVersion?.isSuccess) {
       console.error('unable to resize image now, please try again');
@@ -68,7 +84,11 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
 
   const handleSelect = async (image: MediaItem) => {
     setSelectedImage(image)
-    setSelectedImageVersion(image.versions.find(v => v.versionLabel === 'Original') || image.versions[0] || null )
+    const originalImage = image.versions.find(v => v.versionLabel === 'Original') || image.versions[0]
+    setImageOriginalVersion(originalImage)
+    setSelectedImageVersion(originalImage || null )
+    const aspectRatio = findAspectRatio(originalImage.width,originalImage.height)
+    setAspectRatioSelectedVersion(aspectRatio)
   }
 
   const handleConfirm = () => {
@@ -126,7 +146,7 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
         )}
       </div>
 
-      {open && (
+      {open &&  !imageEditWindow && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fadeIn">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] min-h-[400px] flex flex-col animate-slideUp">
             {/* header of custom renderer dialogue box  */}
@@ -135,19 +155,23 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
             </div>
 
             {/* body of custom renderer dialogue box  */}
-            <DialogueMain 
-              setOrientationFilter= {setOrientationFilter}
-              handleSelect={handleSelect}
-              orientationFilter={orientationFilter}
-              filteredMedia={filteredMedia}
-              selectedImage={selectedImage}
-              onApplyCustomDimension={handleResizeMedia}
-              setOpenSelectedMediaPreview={setOpenSelectedMediaPreview}
-              openSelectedMediaPreview={openSelectedMediaPreview}
-              allowedOrientations={allowedOrientation}
-              setSelectedImageVersion={setSelectedImageVersion}
-              selectedImageVersion={selectedImageVersion}
-            />
+            <Suspense fallback={<div className="flex-1 flex items-center justify-center">Loading...</div>}>
+              <DialogueMain 
+                setOrientationFilter={setOrientationFilter}
+                handleSelect={handleSelect}
+                orientationFilter={orientationFilter}
+                filteredMedia={filteredMedia}
+                selectedImage={selectedImage}
+                onApplyCustomDimension={handleResizeMedia}
+                setImageEditWindow={setImageEditWindow}
+                aspectRatioSelectedVersion={aspectRatioSelectedVersion}
+                setOpenSelectedMediaPreview={setOpenSelectedMediaPreview}
+                openSelectedMediaPreview={openSelectedMediaPreview}
+                allowedOrientations={allowedOrientation}
+                setSelectedImageVersion={setSelectedImageVersion}
+                selectedImageVersion={selectedImageVersion}
+              />
+            </Suspense>
 
             {/* footer of custom renderer dialogue box  */}
             <div className="p-4 border-t flex justify-between">
@@ -182,6 +206,14 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
           </div>
         </div>
       )}
+        {imageEditWindow && (<div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 animate-fadeIn">
+            <ImageEditWindow 
+              setImageEditWindow={setImageEditWindow}
+              aspectRatioObjType={aspectRatioSelectedVersion}
+              mediaVersionOriginal={selectedImage?.versions.find(v => v.versionLabel === 'Original') || selectedImage?.versions[0] || null}
+              thumbnileUrl={selectedImage?.versions.find(v=>v.versionLabel==='thumbnail')?.fileURL||""}
+            />
+        </div>)}
     </div>
   );
 };

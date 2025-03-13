@@ -47,7 +47,6 @@ export const useEditAssetSection = () => {
     const getSingleVisualMediaAsset = async (visualID:string) => {
         try {
             const response = await ApiService.get<any>(`${urls.get_visual_media_library}/${visualID}`)
-            console.log('resposnse :',response);
             return response
         } catch (error) {
             const apiError = ApiService.handleError(error)
