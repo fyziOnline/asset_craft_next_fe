@@ -93,14 +93,10 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[], assetType: As
 
     const completedAssetsCount = dashboardAssets.filter(asset => asset.status === STATUS.COMPLETED).length
 
-    // Calculate for each project type
-    console.log('clientAssetTypes', clientAssetTypes);
 
     const projectTypes = clientAssetTypes.filter(item => item.assetTypeName !== "All in One")
         .map(item => item.assetTypeName)
 
-    console.log('projectTypes', projectTypes);
-    // const projectTypes = ["Email", "LinkedIn", "Landing Page", "Callscript (WIP)"];
     const updatedDashboardData = sortedDashBoardData.map((data) => {
         if (data.projectName === "All Projects") {
             return {

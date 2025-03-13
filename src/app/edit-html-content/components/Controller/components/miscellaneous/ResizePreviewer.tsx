@@ -43,8 +43,6 @@ const ResizePreviewer: FC<ResizePreviewerProp> = ({ aspectratio, outerBoxWidth, 
     }
   }, [dimension, innerBoxWidth, outerBoxWidth, aspectratio.w_part, aspectratio.h_part])
 
-  console.log(innerBoxWidth,dimension.width);
-  
 
   return (
     <>
