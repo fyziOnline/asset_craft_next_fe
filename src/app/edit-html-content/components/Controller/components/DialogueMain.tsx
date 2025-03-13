@@ -27,6 +27,8 @@ type DialogueMainProps = {
     filteredMedia: MediaItem[];
     selectedImage: MediaItem | null;
     allowedOrientations: Orientation[];
+    showResizePopup: boolean;
+    setResizePopup: Dispatch<SetStateAction<boolean>>;
 };
 
 // type Dimensions = {
@@ -53,7 +55,9 @@ const DialogueMain: FC<DialogueMainProps> = ({
     orientationFilter,
     filteredMedia,
     selectedImage,
-    allowedOrientations
+    allowedOrientations,
+    showResizePopup,
+    setResizePopup
 }) => {
 
     const selectedImageDimensions = selectedImage?.versions.find(item => item.versionLabel === "Original");
@@ -141,9 +145,9 @@ const DialogueMain: FC<DialogueMainProps> = ({
     });
 
     const [originalRendered, setOriginalRendered] = useState<boolean>(false);
-    const [showResizePopup, setResizePopup] = useState<boolean>(false);
+    // const [showResizePopup, setResizePopup] = useState<boolean>(false);
 
-    const updateResizePopupPresence = (): void => {
+    const updateResizePopupPresence = (): void => {        
         if (selectedImageDimensions?.width && selectedImageDimensions?.height) {
             const width = selectedImageDimensions.width
             const height = selectedImageDimensions.height
@@ -312,7 +316,6 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                     {!showResizePopup ? 
                                         <Scaling color='#01a982' /> :
                                         <CloseScale />
-                                        
                                     }
                                 </button>
                                 <Popup
