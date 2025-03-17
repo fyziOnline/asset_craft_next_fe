@@ -14,36 +14,58 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import LayoutWrapper from '@/layout/LayoutWrapper'
 import Button from '@/components/global/Button'
 
+interface LLMModel {
+    modelID: string;
+    providerID: string;
+    modelName: string;
+    displayName: string;
+    maxTokens: number;
+    isActive: boolean;
+    isDefault: boolean;
+    providerName: string;
+    providerCode: string;
+}
+
+interface LLMModelsResponse {
+    isSuccess: boolean;
+    errorOnFailure: string;
+    models: LLMModel[];
+}
+
 interface FormValues {
     name: string;
     email: string;
-    userId: string;
+    userID: string;
     userRole: string;
     country?: string;
     company?: string;
     timeZone?: string;
     isActive: number;
+    preferredLLMModelID?: string;
 }
 
 const ProfilePage: React.FC = () => {
     const router = useRouter()
 
-    const { updateUserDetails, changeProfilePhoto ,updatingUserDetails} = useProfile()
+    const { updateUserDetails, changeProfilePhoto, updatingUserDetails } = useProfile()
     const { userDetails, setError } = useAppData();
 
     const [logoutFromAll, setLogoutFromAll] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [availableModels, setAvailableModels] = useState<LLMModel[]>([]);
+    const [loadingModels, setLoadingModels] = useState<boolean>(false);
     const [formValues, setFormValues] = useState<FormValues>({
         name: '',
         email: '',
-        userId: '',
+        userID: '',
         userRole: '',
         country: '',
         company: '',
         timeZone: '',
         isActive: 1,
+        preferredLLMModelID: '',
     });
 
 
@@ -52,19 +74,44 @@ const ProfilePage: React.FC = () => {
             const newFormValues = {
                 name: userDetails.name || '',
                 email: userDetails.email,
-                userId: userDetails.userID,
+                userID: userDetails.userID,
                 userRole: userDetails.userRole,
                 country: userDetails.country || '',
                 company: userDetails.company || '',
                 timeZone: userDetails.timeZone || '',
                 isActive: userDetails.isActive,
+                preferredLLMModelID: userDetails.preferredLLMModelID || '',
             };
 
             setFormValues(newFormValues);
         }
     }, [userDetails]);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Fetch available AI models
+    useEffect(() => {
+        const fetchModels = async () => {
+            setLoadingModels(true);
+            try {
+                const response = await ApiService.get<LLMModelsResponse>(urls.get_llm_models);
+                if (response.isSuccess) {
+                    setAvailableModels(response.models);
+                }
+            } catch (error) {
+                const apiError = ApiService.handleError(error);
+                setError({
+                    status: apiError.statusCode,
+                    message: apiError.message,
+                    showError: true
+                });
+            } finally {
+                setLoadingModels(false);
+            }
+        };
+
+        fetchModels();
+    }, [setError]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormValues((prevValues) => ({
             ...prevValues,
@@ -77,7 +124,11 @@ const ProfilePage: React.FC = () => {
         try {
             setIsLoggingOut(true);
 
-            const response = await ApiService.post<any>(urls.logout, {
+            interface LogoutResponse {
+                isSuccess: boolean;
+            }
+
+            const response = await ApiService.post<LogoutResponse>(urls.logout, {
                 revokeAll: logoutFromAll
             });
 
@@ -191,6 +242,22 @@ const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                     <div className='flex flex-col flex-1'>
+                        <label className='text-base font-light text-black' htmlFor="">Email</label>
+                        <div className='bg-grey-100 rounded-md px-4 py-2 mt-3'>
+                            <input
+                                name='email'
+                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-base text-gray-500'
+                                type="text"
+                                placeholder='Your Email'
+                                value={formValues.email}
+                                readOnly
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className='flex flex-wrap gap-x-6 gap-y-4 mt-4'>
+                    <div className='flex flex-col flex-1'>
                         <label className='text-base font-light text-black' htmlFor="">Company</label>
                         <div className='bg-grey-100 rounded-md px-4 py-2 mt-3'>
                             <input
@@ -203,10 +270,6 @@ const ProfilePage: React.FC = () => {
                             />
                         </div>
                     </div>
-
-                </div>
-
-                <div className='flex flex-wrap gap-x-6 gap-y-4 mt-4'>
                     <div className='flex flex-col flex-1'>
                         <label className='text-base font-light text-black' htmlFor="">Country</label>
                         <div className='bg-grey-100  rounded-md px-4 py-2 mt-3'>
@@ -221,6 +284,26 @@ const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                     <div className='flex flex-col flex-1'>
+                        <label className='text-base font-light text-black' htmlFor="">Preferred AI Model</label>
+                        <div className='bg-grey-100 rounded-md px-4 py-2 mt-3'>
+                            <select
+                                name='preferredLLMModelID'
+                                className='bg-transparent w-full h-full font-light border-none outline-none placeholder:font-light placeholder:text-base'
+                                value={formValues.preferredLLMModelID}
+                                onChange={handleInputChange}
+                            >
+                                <option value="">Select an AI Model (Optional)</option>
+                                {availableModels
+                                    .filter(model => model.isActive)
+                                    .map(model => (
+                                        <option key={model.modelID} value={model.modelID}>
+                                            {model.providerName} - {model.displayName}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                        {loadingModels && <p className="text-sm text-gray-500 mt-1">Loading models...</p>}
                     </div>
                 </div>
 
@@ -234,7 +317,16 @@ const ProfilePage: React.FC = () => {
                             iconColor='#01A982'
                             IconComponent={<UserDetailsIcon />}
                             showIcon={false}
-                            handleClick={() => updateUserDetails(formValues)}
+                            handleClick={() => updateUserDetails({
+                                userID: formValues.userID,
+                                name: formValues.name,
+                                userRole: formValues.userRole,
+                                country: formValues.country,
+                                company: formValues.company,
+                                timeZone: formValues.timeZone,
+                                isActive: formValues.isActive,
+                                preferredLLMModelID: formValues.preferredLLMModelID
+                            })}
                         />
                     </div>
 
@@ -253,7 +345,7 @@ const ProfilePage: React.FC = () => {
                                 <div className="group relative inline-block">
                                     <IoMdInformationCircleOutline className="text-gray-400 hover:text-gray-600 cursor-help" size={18} />
                                     <div className="invisible group-hover:visible absolute left-0 bottom-full mb-2 w-72 bg-gray-800 text-white text-xs rounded p-2 shadow-lg">
-                                        When enabled, this will terminate all active sessions across all devices where you're currently logged in.
+                                        When enabled, this will terminate all active sessions across all devices where you&apos;re currently logged in.
                                         This is useful if you suspect unauthorized access or want to ensure complete security across all devices.
                                         Your email will also be removed from the login screen.
                                     </div>

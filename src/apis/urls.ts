@@ -48,5 +48,6 @@ export const urls = {
   updateAssetReAssignFileComments : "/approval/comment/update",
   asset_version_updateField: "/asset/version/updateField",
   get_visual_media_library:"/VisualLibrary",
-  assetversion_status_change: "/approval/assetApproval/ChangeStatus"
+  assetversion_status_change: "/approval/assetApproval/ChangeStatus",
+  get_llm_models: "/api/LLMConfig/models"
 };
