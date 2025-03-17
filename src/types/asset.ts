@@ -77,6 +77,7 @@ export interface UserDetailsProps {
     timeZone: string;
     isActive: number;
     fileUrl: string;
+    preferredLLMModelID?: string;
 }
 
 
