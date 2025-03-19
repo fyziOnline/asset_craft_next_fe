@@ -127,47 +127,14 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   };
 
 
-  const aiPromptCampaignInsert = async (
+  const aiPromptCampaignUpsert = async (
     FormData: FormDataProps,
     fileID: number,
     campaign_id: string
   ) => {
     try {
-      if (isCampaignSelect.current) {
-        return await aiPromptCampaignUpdate(FormData, fileID, campaign_id);
-      } else {
-        const resCampaignInsert = await ApiService.post<any>(
-          urls.aiPrompt_Campaign_insert,
-          {
-            campaignID: campaign_id,
-            product: FormData?.product || "",
-            campaignGoal: FormData?.campaignGoal || "",
-            targetAudience: FormData?.targetAudience || "",
-            outputScale: FormData?.outputScale || 0,
-            fileID: fileID,
-            webUrl: FormData?.webUrl || "",
-          }
-        );
-
-        if (resCampaignInsert.isSuccess) {
-          return resCampaignInsert;
-        }
-      }
-      return { isSuccess: false };
-    } catch (error) {
-      console.error(' campaign error :', error);
-      return { isSuccess: false };
-    }
-  };
-
-  const aiPromptCampaignUpdate = async (
-    FormData: FormDataProps,
-    fileID: number,
-    campaign_id: string
-  ) => {
-    try {
-      const resCampaignInsert = await ApiService.put<any>(
-        urls.aiPrompt_Campaign_update,
+      const response = await ApiService.post<{isSuccess: boolean; promptID?: string}>(
+        urls.aiPrompt_Campaign_insertupdate,
         {
           campaignID: campaign_id,
           product: FormData?.product || "",
@@ -179,10 +146,9 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         }
       );
 
-      return resCampaignInsert;
+      return response;
     } catch (error) {
-      console.error('update campaign error :', error);
-
+      console.error('campaign error:', error);
       return { isSuccess: false };
     }
   };
@@ -260,9 +226,9 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     ProjectDetails: ProjectDetails,
     isRegenerateHTML: boolean
   ) => {
-    let campaign_id = ProjectDetails.campaignID
-    campaign_id.length === 0 ?
-      isCampaignSelect.current = false : isCampaignSelect.current = true
+    let campaign_id = ProjectDetails.campaignID;
+    isCampaignSelect.current = campaign_id.length !== 0;
+    
     try {
       // Handle HTML regeneration path
       if (isRegenerateHTML) {
@@ -314,19 +280,18 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
             if (resAssetInsert.isSuccess) {
               assetPromptIDRef.current = resAssetInsert?.promptID || "";
-              let fileID = await uploadImage(FormData);
-              const resCampaignInsert = await aiPromptCampaignInsert(
+              const fileID = await uploadImage(FormData);
+              const resCampaignInsert = await aiPromptCampaignUpsert(
                 FormData,
                 fileID,
                 campaign_id
               );
 
               if (resCampaignInsert.isSuccess) {
-                let resGenerate = await aiPromptGenerateForAsset();
+                const resGenerate = await aiPromptGenerateForAsset();
                 if (resGenerate.isSuccess) {
                   const res = await generateAssetHTML();
                   return res
-
                 }
               }
             }
@@ -360,14 +325,14 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
           }
         );
         if (resAssetInsert.isSuccess) {
-          let fileID = await uploadImage(FormData);
-          const resCampaignInsert = await aiPromptCampaignUpdate(
+          const fileID = await uploadImage(FormData);
+          const resCampaignInsert = await aiPromptCampaignUpsert(
             FormData,
             fileID,
             campaign_id
           );
           if (resCampaignInsert.isSuccess) {
-            let resGenerate = await aiPromptGenerateForAsset();
+            const resGenerate = await aiPromptGenerateForAsset();
             if (resGenerate.isSuccess) {
               return await generateAssetHTML();
             }
