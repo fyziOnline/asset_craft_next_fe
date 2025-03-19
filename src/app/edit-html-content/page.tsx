@@ -24,6 +24,7 @@ import GlobalEditButton from './components/GlobalEditButton';
 import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer';
 import { addBlockIdentifiers, formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
 import FallbackBlockControls from './components/FallbackBlockControls';
+import { useSearchParams } from 'next/navigation';
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -41,7 +42,9 @@ const Page = () => {
     const [versionToDelete, setVersionToDelete] = useState<VersionToDelete | null>(null);
     const [unmatchedBlocks, setUnmatchedBlocks] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
+    const searchParams = useSearchParams()
 
+    const assetTypeIcon = searchParams.get('assetTypeIcon')
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -98,6 +101,7 @@ const Page = () => {
             link.download = 'filename',
             link.click();
     }
+
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -241,8 +245,9 @@ const Page = () => {
         return (
             <div className="flex flex-col md:flex-row items-center md:items-start justify-center relative isolate w-full">
 
-
-                <div className="flex-grow relative w-full max-w-6xl mx-auto px-4 md:px-8">
+                {/* linkedin center issue fixed */}
+                <div className={`relative w-full max-w-6xl mx-auto px-4 md:px-8 flex-grow 
+                ${assetTypeIcon === 'LinkedIn' ? 'flex items-center justify-center' : ''}`}>
                     <EnhancedShadowDomContainer
                         htmlContent={htmlContent}
                         blocks={versionSelected.assetVersionBlocks}
