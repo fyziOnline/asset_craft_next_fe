@@ -144,6 +144,9 @@ const DialogueMain: FC<DialogueMainProps> = ({
         };
     });
 
+    // console.log('selectedImageVersion', selectedImageVersion);
+    
+
     const [originalRendered, setOriginalRendered] = useState<boolean>(false);
     // const [showResizePopup, setResizePopup] = useState<boolean>(false);
 
@@ -420,9 +423,18 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                                 outerBoxWidth={dimensionState.dimension.width}
                                                 // outerBoxHeight={dimensionState.dimension.height}
                                                 innerBoxWidth={parseInt(dimensionState.inputWidth)}
+                                                dimensionState={dimensionState}
                                             />
                                         </div>
                                     </form>
+
+                                    <div className='flex justify-end'>
+                                        <div className='flex items-center gap-1 mt-0 mb-2'>
+                                            <p className='text-xs'>{selectedImageVersion?.width}</p>
+                                            <span className='text-xs'>x</span>
+                                            <p className='text-xs'>{selectedImageVersion?.height}</p>
+                                        </div>
+                                    </div>
                                 </Popup>
                             </div>
                         </div>
