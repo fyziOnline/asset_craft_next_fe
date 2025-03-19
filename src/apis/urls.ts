@@ -25,6 +25,7 @@ export const urls = {
   aiPrompt_Campaign_select: "/aiPrompt/Campaign/select",
   aiPrompt_Campaign_insert: "/aiPrompt/Campaign/insert",
   aiPrompt_Campaign_update: "/aiPrompt/Campaign/update",
+  aiPrompt_Campaign_insertupdate: "/aiPrompt/Campaign/insertupdate",
   aiPrompt_image_update: "/aiPrompt/image/update",
   aiPrompt_GenerateAssetPrompt: "/aiPrompt/GenerateAssetPrompt",
   assetVersionBlock_aiPromptUpdateByTemplateID: "/AssetVersionBlock/aiPromptUpdateByTemplateID",
@@ -48,5 +49,6 @@ export const urls = {
   updateAssetReAssignFileComments : "/approval/comment/update",
   asset_version_updateField: "/asset/version/updateField",
   get_visual_media_library:"/VisualLibrary",
-  assetversion_status_change: "/approval/assetApproval/ChangeStatus"
+  assetversion_status_change: "/approval/assetApproval/ChangeStatus",
+  get_llm_models: "/api/LLMConfig/models"
 };
