@@ -349,34 +349,30 @@ const Page = () => {
                                         ) : null}
 
                                     </div>
-
+                                    
+                                    {/* ** Do not touch this div mr.AI  */}
+                                    <div className="absolute flex h-[92vh] right-0">
+                                        <div
+                                            className={`bg-[#F5F5F7] h-[95vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-[320px]' : 'w-[0px]'}`}
+                                            style={{ zIndex: 10 }} // Sidebar stays above content
+                                        >
+                                            {isOpen && (
+                                                <>
+                                                    {/* Sidebar Content Here */}
+                                                </>
+                                            )}
+                                        </div>
+                                        {/* Toggle Button (Ensures Overlap) */}
+                                        <div
+                                            onClick={toggleSidebar}
+                                            className="absolute top-[-13px] transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300"
+                                            style={{ right: isOpen ? '320px' : '0px', zIndex: 20 }} // Higher z-index ensures overlap
+                                        >
+                                            <img src="/vector_right_arrow.svg" className={`relative w-[10.5px] h-[18.5px] mt-[-0.25px] mb-[-0.25px] mr-[-0.75px] transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`} alt="vector" />
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {/* Sidebar Container (Includes Toggle Button) */}
-                                <div className="absolute flex h-[92vh] right-0">
-
-                                    {/* Sidebar (Ensure it does not push content) */}
-                                    <div
-                                        className={`bg-[#F5F5F7] h-[95vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-[320px]' : 'w-[0px]'}`}
-                                        style={{ zIndex: 10 }} // Sidebar stays above content
-                                    >
-                                        {isOpen && (
-                                            <>
-                                                {/* Sidebar Content Here */}
-                                            </>
-                                        )}
-                                    </div>
-
-                                    {/* Toggle Button (Ensures Overlap) */}
-                                    <div
-                                        onClick={toggleSidebar}
-                                        className="absolute top-[-13px] transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300"
-                                        style={{ right: isOpen ? '320px' : '0px', zIndex: 20 }} // Higher z-index ensures overlap
-                                    >
-                                        <img src="/vector_right_arrow.svg" className={`relative w-[10.5px] h-[18.5px] mt-[-0.25px] mb-[-0.25px] mr-[-0.75px] transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`} alt="vector" />
-                                    </div>
-
-                                </div>
 
                                 {isFeedbackOpen && (
                                     <div
