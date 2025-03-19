@@ -1,20 +1,14 @@
 import React from 'react';
 import { GlobalEdit } from '@/assets/icons/AppIcons';
-import { useSearchParams } from 'next/navigation';
+
 interface GlobalEditButtonProps {
     onClick: () => void;
+    assetTypeIcon?: string | null;
 }
 
-const GlobalEditButton: React.FC<GlobalEditButtonProps> = ({ onClick }) => {
-
-    const searchParams = useSearchParams()
-
-    const assetTypeIcon = searchParams.get('assetTypeIcon')
-
-
+const GlobalEditButton: React.FC<GlobalEditButtonProps> = ({ onClick, assetTypeIcon }) => {
     return (
         <div
-
         className={`absolute top-4 ${assetTypeIcon === 'Email' ? 'left-[-3rem]' : assetTypeIcon === 'Landing Page' ? 'left-[-3rem]' : ''} transform group cursor-pointer z-[99]`}            onClick={onClick}
         >
             <div id="global_edit_button" typeof="button">

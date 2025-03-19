@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { AssetBlockProps } from "@/types/templates";
 import BlockControls from "./BlockControls";
-import { useSearchParams } from "next/navigation";
 
 interface EnhancedShadowDomContainerProps {
   htmlContent: string;
@@ -10,7 +9,7 @@ interface EnhancedShadowDomContainerProps {
   blocks: AssetBlockProps[];
   onEditBlock: (block: AssetBlockProps) => void;
   onToggleBlockVisibility: (blockId: string, ignoreBlock: number) => void;
-  assetType?: string;
+  assetTypeIcon?: string | null;
   onUnmatchedBlocks?: (blockIds: string[]) => void;
 }
 
@@ -20,15 +19,12 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
   blocks,
   onEditBlock,
   onToggleBlockVisibility,
+  assetTypeIcon,
   onUnmatchedBlocks
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const shadowRootRef = useRef<ShadowRoot | null>(null);
 
-  const searchParams = useSearchParams();
-
-    const assetTypeIcon = searchParams.get("assetTypeIcon");
-  
   // Filter blocks that should be editable
   const editableBlocks = useMemo(() => {
     return blocks.filter(block => 
