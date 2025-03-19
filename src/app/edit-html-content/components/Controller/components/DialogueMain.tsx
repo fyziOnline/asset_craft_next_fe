@@ -27,6 +27,8 @@ type DialogueMainProps = {
     filteredMedia: MediaItem[];
     selectedImage: MediaItem | null;
     allowedOrientations: Orientation[];
+    showResizePopup: boolean;
+    setResizePopup: Dispatch<SetStateAction<boolean>>;
 };
 
 // type Dimensions = {
@@ -53,7 +55,9 @@ const DialogueMain: FC<DialogueMainProps> = ({
     orientationFilter,
     filteredMedia,
     selectedImage,
-    allowedOrientations
+    allowedOrientations,
+    showResizePopup,
+    setResizePopup
 }) => {
 
     const selectedImageDimensions = selectedImage?.versions.find(item => item.versionLabel === "Original");
@@ -140,10 +144,13 @@ const DialogueMain: FC<DialogueMainProps> = ({
         };
     });
 
-    const [originalRendered, setOriginalRendered] = useState<boolean>(false);
-    const [showResizePopup, setResizePopup] = useState<boolean>(false);
+    // console.log('selectedImageVersion', selectedImageVersion);
+    
 
-    const updateResizePopupPresence = (): void => {
+    const [originalRendered, setOriginalRendered] = useState<boolean>(false);
+    // const [showResizePopup, setResizePopup] = useState<boolean>(false);
+
+    const updateResizePopupPresence = (): void => {        
         if (selectedImageDimensions?.width && selectedImageDimensions?.height) {
             const width = selectedImageDimensions.width
             const height = selectedImageDimensions.height
@@ -312,7 +319,6 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                     {!showResizePopup ? 
                                         <Scaling color='#01a982' /> :
                                         <CloseScale />
-                                        
                                     }
                                 </button>
                                 <Popup
@@ -417,9 +423,18 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                                 outerBoxWidth={dimensionState.dimension.width}
                                                 // outerBoxHeight={dimensionState.dimension.height}
                                                 innerBoxWidth={parseInt(dimensionState.inputWidth)}
+                                                dimensionState={dimensionState}
                                             />
                                         </div>
                                     </form>
+
+                                    <div className='flex justify-end'>
+                                        <div className='flex items-center gap-1 mt-0 mb-2'>
+                                            <p className='text-xs'>{selectedImageVersion?.width}</p>
+                                            <span className='text-xs'>x</span>
+                                            <p className='text-xs'>{selectedImageVersion?.height}</p>
+                                        </div>
+                                    </div>
                                 </Popup>
                             </div>
                         </div>

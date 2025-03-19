@@ -31,6 +31,8 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
   const [selectedImageVersion,setSelectedImageVersion] = useState<Version | null>(null)
   const [imageOriginalVersion,setImageOriginalVersion] = useState<Version | null>(null)
   const [imageEditWindow,setImageEditWindow] = useState<boolean>(false)
+  const [showResizePopup, setResizePopup] = useState<boolean>(false);
+  
 
   const {
     getVisualLibrary,
@@ -114,6 +116,11 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
     })
   }, [library, typeFilter, orientationFilter, allowedOrientation]);
 
+  const handleBack = () => {
+    setOpenSelectedMediaPreview(false)
+    setResizePopup(false)
+  }
+
   return (
     <div className="flex flex-col gap-4">
       {label && (
@@ -170,13 +177,15 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label,uisch
                 allowedOrientations={allowedOrientation}
                 setSelectedImageVersion={setSelectedImageVersion}
                 selectedImageVersion={selectedImageVersion}
+                showResizePopup={showResizePopup}
+                setResizePopup={setResizePopup}
               />
             </Suspense>
 
             {/* footer of custom renderer dialogue box  */}
             <div className="p-4 border-t flex justify-between">
               {openSelectedMediaPreview && <button
-                onClick={()=>setOpenSelectedMediaPreview(false)}
+                onClick={handleBack}
                 className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-full transition-colors duration-200"
               >
                 Back
