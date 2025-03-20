@@ -44,8 +44,21 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
         }
     }
 
+    const getTemplateById = async (templateID:string) => {
+        try {
+            const template_res = await ApiService.get<any>(`${urls.template_select}?templateID=${templateID}`)
+            if (template_res.isSuccess) {
+                return template_res
+            } else throw new Error("unable to retrieve data")
+        } catch (error) {
+            console.error('API Error:', ApiService.handleError(error));
+            alert(ApiService.handleError(error));
+        }
+    }
+
     return {
         isLoading,
-        listTemplates
+        listTemplates,
+        getTemplateById
     };
 };

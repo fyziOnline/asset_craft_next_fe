@@ -24,6 +24,7 @@ interface EmailPageProps {
 }
 
 const EmailPage = ({ params }: EmailPageProps) => {
+    
     const router = useRouter();
     const [generateStep, setGenerateStep] = useState(1); //1 - Normal, 2 - (Loading or disable), 3 - Regenerate
     const [checkedList, setCheckedList] = useState<number[]>([]);
