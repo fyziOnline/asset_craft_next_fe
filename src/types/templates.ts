@@ -84,6 +84,7 @@ export interface AssetHtmlProps {
 export interface AssetVersionProps {
     assetVersionID: string,
     assetID: string,
+    templateID?:string
     versionNumber: number,
     versionName: string,
     htmlGenerated: string,

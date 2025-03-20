@@ -1,5 +1,8 @@
-import { AssetVersionProps } from '@/types/templates';
-import { Dispatch, FC, SetStateAction, useCallback, memo } from 'react';
+import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
+import { useGetTemplates } from '@/hooks/useGetTemplates';
+import { ApiService } from '@/lib/axios_generic';
+import { AssetVersionProps, Template } from '@/types/templates';
+import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } from 'react';
 
 interface ToggleAsideSectionProps {
     isOpen: boolean
@@ -14,17 +17,55 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({
     children, 
     versionSelected 
 }) => {
+    console.log('versionSelected :',versionSelected);
+    
     const toggleAside = useCallback(() => {
         setIsOpen(prev => !prev)
     }, [setIsOpen])
+    const [templateDetails,setTemplateDetails] = useState<Template|null>()
+    const [bodyError,setBodyError] = useState<string>("")
 
-    // console.log('version selected :',versionSelected);
+    const {getTemplateById} = useGetTemplates({type_page:""})
+
+    const fetchTemplateData = async() => {
+        try {
+            const res_template = await getTemplateById(versionSelected?.templateID)
+            console.log(res_template);
+            
+            setTemplateDetails(res_template)
+        } catch (error) {
+            alert(ApiService.handleError(error));
+        }
+    }
+
+    const renderAssetGenerateContent = () => {
+        if (!templateDetails?.assetTypeName) {
+            setBodyError('Unable to process asset information')
+            return null
+        }
+        const Component = PAGE_COMPONENT[templateDetails?.assetTypeName as PageType]
+        return Component ? 
+            <>
+            <div className='border border-red'>
+                <Component params={{template:templateDetails}}/> 
+            </div>
+            </> : null
+    };
+
+    useEffect(()=>{
+        console.log(versionSelected);
+        
+        if (versionSelected?.templateID) {
+            fetchTemplateData()
+        } else console.error('Error : Unable to process template detail')
+    },[versionSelected?.templateID])
+
     
     return (
         <div className="relative">
             {isOpen && (
                 <div className="fixed top-0 right-0 h-full w-[320px] bg-white shadow-lg z-10 overflow-y-auto">
-                    {children}
+                    {renderAssetGenerateContent()}
                 </div>
             )}
             

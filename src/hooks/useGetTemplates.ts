@@ -19,7 +19,9 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
     const  { setError } = useAppData()
 
     useEffect(() => {
-        getTemplates()
+        if (type_page?.length) {
+            getTemplates()
+        }
     }, [])
 
     const getTemplates = async () => {
@@ -44,8 +46,11 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
         }
     }
 
-    const getTemplateById = async (templateID:string) => {
+    const getTemplateById = async (templateID:string|undefined) => {
         try {
+            if (!templateID) {
+                throw new Error("Error : Template details missing")
+            }
             const template_res = await ApiService.get<any>(`${urls.template_select}?templateID=${templateID}`)
             if (template_res.isSuccess) {
                 return template_res
