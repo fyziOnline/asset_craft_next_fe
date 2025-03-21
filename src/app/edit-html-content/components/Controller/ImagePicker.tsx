@@ -10,6 +10,7 @@ import { findAspectRatio } from '@/utils/miscellaneous';
 import ImageEditWindow from './components/image-crop-window/ImageCropWindow';
 // import { useAppData } from '@/context/AppContext';
 import SearchBox from "@/components/global/SearchBox";
+import NotFound from '@/assets/icons/NotFound';
 
 const DialogueMain = lazy(() => import('./components/DialogueMain'))
 
@@ -123,9 +124,9 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label, uisc
     });
   }, [library, orientationFilter, allowedOrientation, searchQuery]);
 
-/*   useEffect(() => {
-    console.log("Filtered Media Titles:", filteredMedia.map(item => item.title));
-  }, [filteredMedia]); */
+  /*   useEffect(() => {
+      console.log("Filtered Media Titles:", filteredMedia.map(item => item.title));
+    }, [filteredMedia]); */
 
   const handleBack = () => {
     setOpenSelectedMediaPreview(false)
@@ -175,23 +176,31 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label, uisc
 
             {/* body of custom renderer dialogue box  */}
             <Suspense fallback={<div className="flex-1 flex items-center justify-center">Loading...</div>}>
-              <DialogueMain
-                setOrientationFilter={setOrientationFilter}
-                handleSelect={handleSelect}
-                orientationFilter={orientationFilter}
-                filteredMedia={filteredMedia}
-                selectedImage={selectedImage}
-                onApplyCustomDimension={handleResizeMedia}
-                setImageEditWindow={setImageEditWindow}
-                aspectRatioSelectedVersion={aspectRatioSelectedVersion}
-                setOpenSelectedMediaPreview={setOpenSelectedMediaPreview}
-                openSelectedMediaPreview={openSelectedMediaPreview}
-                allowedOrientations={allowedOrientation}
-                setSelectedImageVersion={setSelectedImageVersion}
-                selectedImageVersion={selectedImageVersion}
-                showResizePopup={showResizePopup}
-                setResizePopup={setResizePopup}
-              />
+
+              {filteredMedia.length > 0 ? (
+                <DialogueMain
+                  setOrientationFilter={setOrientationFilter}
+                  handleSelect={handleSelect}
+                  orientationFilter={orientationFilter}
+                  filteredMedia={filteredMedia}
+                  selectedImage={selectedImage}
+                  onApplyCustomDimension={handleResizeMedia}
+                  setImageEditWindow={setImageEditWindow}
+                  aspectRatioSelectedVersion={aspectRatioSelectedVersion}
+                  setOpenSelectedMediaPreview={setOpenSelectedMediaPreview}
+                  openSelectedMediaPreview={openSelectedMediaPreview}
+                  allowedOrientations={allowedOrientation}
+                  setSelectedImageVersion={setSelectedImageVersion}
+                  selectedImageVersion={selectedImageVersion}
+                  showResizePopup={showResizePopup}
+                  setResizePopup={setResizePopup}
+                />
+              ) : (
+                <div className="flex-1 flex items-center justify-center">
+                  <NotFound />
+                </div>
+              )}
+
             </Suspense>
 
             {/* footer of custom renderer dialogue box  */}
@@ -214,8 +223,8 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label, uisc
                   onClick={handleConfirm}
                   disabled={!selectedImage}
                   className={`px-4 py-2 text-sm rounded-full transition-all duration-200 ${selectedImage
-                      ? 'text-white bg-custom-gradient-green'
-                      : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                    ? 'text-white bg-custom-gradient-green'
+                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                     }`}
                 >
                   Select
