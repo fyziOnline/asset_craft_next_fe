@@ -22,6 +22,13 @@ export const emailType = [
     { label: 'Newsletter', value: 'Newsletter' },
     { label: 'Promotional Email', value: 'Promotional Email' }
 ]
+export const linkedinType = [
+    {label : 'Thought Leadership',value:'Thought Leadership'},
+    {label : 'Solution Focus',value:'Solution Focus'},
+    {label : 'Event & Networking',value:'Event & Networking'},
+    {label : 'Business Update',value:'Business Update'},
+    {label : 'Informational',value:'Business Update'},
+]
 
 export const keyPoints = [
     { label: 'Innovation', value: 'Innovation' },
