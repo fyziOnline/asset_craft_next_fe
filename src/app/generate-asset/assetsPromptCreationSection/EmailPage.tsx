@@ -130,7 +130,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setShowLoading(false)
 
                 if (res?.isSuccess) {
-                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}`)
+                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}&assetTypeIcon=Email`)
                 }
 
                 return
@@ -255,7 +255,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                         type: optionSelected.value
                                     }
                                     doesFormCompleted(3)
-                                }} isShowOther={false} selectPlaceHolder="" optionLists={emailType} />
+                                }} isShowOther={false} selectPlaceHolder="Select Email Type" optionLists={emailType} />
                             </div>
 
                             <div className='w-[260px]'>
