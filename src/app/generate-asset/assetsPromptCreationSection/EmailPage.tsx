@@ -213,7 +213,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                 handleInputText(e, "webUrl")
                                 // doesFormCompleted(4)
                             }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
-                                placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                placeholder="Enter your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                             <DragAndDrop onFileSelect={(file) => {
                                 refFormData.current = {
                                     ...refFormData.current,
@@ -244,7 +244,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             doesFormCompleted(3)
                         }}
                             rows={4}
-                            placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                            placeholder="" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
@@ -255,7 +255,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                         type: optionSelected.value
                                     }
                                     doesFormCompleted(3)
-                                }} isShowOther={false} selectPlaceHolder="Select Post Type" optionLists={emailType} />
+                                }} isShowOther={false} selectPlaceHolder="" optionLists={emailType} />
                             </div>
 
                             <div className='w-[260px]'>
