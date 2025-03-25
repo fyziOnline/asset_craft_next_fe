@@ -303,7 +303,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             }
 
                             return (
-                                <div key={index}>
+                                <div key={item.blockID}>
                                     <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
                                     <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
                                     <TextField handleChange={(e) => {

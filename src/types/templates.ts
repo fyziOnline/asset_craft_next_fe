@@ -1,3 +1,14 @@
+export interface TemplateBlocks {
+    templateBlockID?: string;
+    templateID?: string;
+    blockID?: string;
+    order?: number;
+    aiTitle?: string;
+    aiPrompt?: string | null;
+    aiDescription?: string;
+    isStatic?: boolean
+}
+
 export interface Template {
     assetTypeID?: string,
     assetTypeName?: string,

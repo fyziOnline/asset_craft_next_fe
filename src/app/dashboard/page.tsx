@@ -34,6 +34,7 @@ const Dashboard: FC = () => {
   }, [])
 
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets, "email", clientAssetTypes);
+  
   const { setContextData } = useAppData()
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   useEffect(() => {
@@ -95,7 +96,7 @@ const Dashboard: FC = () => {
             <div>
               {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
                 <Table hiddenFields={["assetID"]} handleClick={(item) => {
-                  router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&assetTypeIcon=${item.assetTypeIcon}`)
+                  router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&campaignID=${item.campaignID}&assetTypeIcon=${item.assetTypeIcon}`)
                 }}
                   listItems={assetsDisplayTable} tableHeadings={tableHeading} />
               ) : (
@@ -121,7 +122,8 @@ const Dashboard: FC = () => {
 
                         setActiveIndex(index); // Set the active index to apply the scale effect
                         setTimeout(() => setActiveIndex(null), 500); // Reset after 500ms
-
+                        console.log('data :',data);
+                        
                         router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`) 
                       }}
                       key={index} className={`rounded-[15px] border p-3 mt-2 cursor-pointer transition-all duration-300 ease-in-out

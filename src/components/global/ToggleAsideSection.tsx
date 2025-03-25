@@ -1,7 +1,7 @@
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useGetTemplates } from '@/hooks/useGetTemplates';
 import { ApiService } from '@/lib/axios_generic';
-import { AssetVersionProps, Template } from '@/types/templates';
+import { AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
 import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } from 'react';
 
 interface ToggleAsideSectionProps {
@@ -17,7 +17,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({
     children, 
     versionSelected 
 }) => {
-    console.log('versionSelected :',versionSelected);
+    // console.log('versionSelected :',versionSelected);
     
     const toggleAside = useCallback(() => {
         setIsOpen(prev => !prev)
@@ -29,8 +29,16 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({
 
     const fetchTemplateData = async() => {
         try {
-            const res_template = await getTemplateById(versionSelected?.templateID)
-            console.log(res_template);
+            let res_template:Template = await getTemplateById(versionSelected?.templateID)
+            // console.log('before modifying :',res_template.templatesBlocks);
+            const updatedTemplateBlocks = res_template.templatesBlocks?.map((item):TemplateBlocks =>(
+                {
+                    ...item,
+                    aiPrompt : versionSelected?.assetVersionBlocks.find(block=>block.blockID===item.blockID)?.aiPrompt
+                }
+            ))
+            res_template = {...res_template,templatesBlocks:updatedTemplateBlocks}
+            // console.log('after modifying :',updatedTemplateBlocks);
             
             setTemplateDetails(res_template)
         } catch (error) {
@@ -46,7 +54,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({
         const Component = PAGE_COMPONENT[templateDetails?.assetTypeName as PageType]
         return Component ? 
             <>
-            <div className='border border-red'>
+            <div>
                 <Component params={{template:templateDetails}}/> 
             </div>
             </> : null
@@ -62,17 +70,25 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({
 
     
     return (
-        <div className="relative">
-            {isOpen && (
-                <div className="fixed top-0 right-0 h-full w-[320px] bg-white shadow-lg z-10 overflow-y-auto">
+        <div className={`absolute flex top-0 h-full right-0 ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
+            <div
+                className={`bg-[#F5F5F7] h-full flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
+                style={{ zIndex: 10 }} // Sidebar stays above content
+            >
+                {isOpen && (
+                    <div className='w-full h-full px-3 pt-3'>
                     {renderAssetGenerateContent()}
-                </div>
-            )}
+                    </div>
+                    // <div className="fixed top-0 right-0 h-full w-[320px] bg-white shadow-lg z-10 overflow-y-auto">
+                        // {renderAssetGenerateContent()}
+                    // </div>
+                )}
+            </div>
             
             <div 
-                onClick={toggleAside}
-                className="absolute top-[-13px] transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300"
-                style={{ right: isOpen ? '320px' : '0px', zIndex: 20 }}
+            onClick={toggleAside}
+            className={`absolute top-[1rem] transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300`}
+            style={{ right: isOpen ? '100%' : '0px', zIndex: 20 }}
             >
                 <svg 
                     width="8" 

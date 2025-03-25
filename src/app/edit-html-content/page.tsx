@@ -37,6 +37,9 @@ interface VersionToDelete {
 const SearchParamsProvider = ({ children }: { children: (props: { assetTypeIcon: string | null }) => React.ReactNode }) => {
     const searchParams = useSearchParams();
     const assetTypeIcon = searchParams.get('assetTypeIcon');
+    const campaign_name = searchParams.get('campaignName')
+    // console.log(campaign_name);
+    
     
     return <>{children({ assetTypeIcon })}</>;
 };
