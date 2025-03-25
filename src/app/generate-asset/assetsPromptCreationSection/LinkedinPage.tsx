@@ -12,7 +12,7 @@ import { AssetHtmlProps, CampaignSelectResponse, Template } from '@/types/templa
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
-import { emailType, keyPoints, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
+import { keyPoints, linkedinType, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 import SectionAssetDetails from '@/components/assetGeneration/SectionAssetDetails';
 import { useRouter } from 'next/navigation';
 
@@ -241,7 +241,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         type: optionSelected.value
                                     }
                                     doesFormCompleted(3)
-                                }} selectPlaceHolder="Select Post Type" optionLists={emailType} />
+                                }} selectPlaceHolder="Select Post Type" optionLists={linkedinType} otherFieldText='Please specify the type of the post' />
                             </div>
 
                             <div className='w-[260px]'>
@@ -252,7 +252,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         keyPoints: optionSelected.value
                                     }
                                     doesFormCompleted(3)
-                                }} selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
+                                }} selectPlaceHolder="Select Key Points" optionLists={keyPoints} otherFieldText='Please specify the new key point' />
                             </div>
                         </div>
 
