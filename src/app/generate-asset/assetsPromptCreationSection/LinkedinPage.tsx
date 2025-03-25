@@ -197,7 +197,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                 // doesFormCompleted(4)
                             }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
 
-                                placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                placeholder="Enter your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                             <DragAndDrop onFileSelect={(file) => {
                                 refFormData.current = {
                                     ...refFormData.current,
@@ -230,7 +230,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                 doesFormCompleted(3)
                             }}
                             rows={4}
-                            placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                            placeholder="" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
@@ -241,7 +241,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         type: optionSelected.value
                                     }
                                     doesFormCompleted(3)
-                                }} selectPlaceHolder="Select Post Type" optionLists={linkedinType} otherFieldText='Please specify the type of the post' />
+                                }} selectPlaceHolder="Select Type" optionLists={linkedinType} otherFieldText='Specify the type' />
                             </div>
 
                             <div className='w-[260px]'>
@@ -252,7 +252,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                         keyPoints: optionSelected.value
                                     }
                                     doesFormCompleted(3)
-                                }} selectPlaceHolder="Select Key Points" optionLists={keyPoints} otherFieldText='Please specify the new key point' />
+                                }} selectPlaceHolder="Select Key Points" optionLists={keyPoints} otherFieldText='Specify key point' />
                             </div>
                         </div>
 

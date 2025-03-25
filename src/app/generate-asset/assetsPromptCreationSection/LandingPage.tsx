@@ -206,7 +206,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                 handleInputText(e, "webUrl")
                                 // doesFormCompleted(4)
                             }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
-                                placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                placeholder="Enter your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                             <DragAndDrop onFileSelect={(file) => {
                                 refFormData.current = {
                                     ...refFormData.current,
@@ -238,7 +238,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                 doesFormCompleted(3)
                             }}
                             rows={4}
-                            placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                            placeholder="Primary message" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <ChildrenTitle customClass='mt-5' title='Provide additional information that supports the main message.'></ChildrenTitle>
                         <TextField
@@ -247,7 +247,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                 doesFormCompleted(3)
                             }}
                             rows={4}
-                            placeholder={`HPE GreenLake helps you manage both public and private cloud environments with full control and flexibility.\nFeature 1\nFeature 2\nFeature 3`}
+                            placeholder={`Enter Key points.\nKey point 1\nKey point 2\nKey point 3`}
                             customAreaClass='whitespace-pre-line overflow-x-hidden overflow-y-auto scrollbar-hide'></TextField>
 
                     </div>
