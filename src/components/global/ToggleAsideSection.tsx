@@ -96,11 +96,11 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({
 
     return (
         <div className={`absolute flex top-0 h-full right-0 ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
-            <div className={`bg-[#F5F5F7] h-[85%] overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
+            <div className={`bg-[#F5F5F7] h-[80%] overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
                 style={{ zIndex: 10 }} // Sidebar stays above content
             >
                 {isOpen && (
-                    <div className='w-full h-full px-3 pt-3'>
+                    <div className='w-full h-full px-5 py-3 overflow-y-auto'>
                         {renderAssetGenerateContent()}
                     </div>
                 )}
@@ -117,7 +117,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({
                     viewBox="0 0 8 12"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                    style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(180deg)' }}
                 >
                     <path
                         d="M1.5 1L6.5 6L1.5 11"
