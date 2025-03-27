@@ -267,7 +267,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                             onLoad={() => setOriginalRendered(true)}
                             style={{ opacity: originalRendered ? 1 : 0 }}
                         />
-                        {/* <button 
+                        <button 
                         onClick={()=>{setImageEditWindow(true)}}
                         className='absolute top-0 mr-1 mt-1 p-2 right-0 rounded-sm bg-green-50 outline-dashed outline-offset-2 outline-1 outline-green-50 group:'
                         >
@@ -277,7 +277,7 @@ const DialogueMain: FC<DialogueMainProps> = ({
                                     size={12}
                                 />
                             </Tooltip>
-                        </button> */}
+                        </button>
 
                     </div>
                     {/* options section  */}

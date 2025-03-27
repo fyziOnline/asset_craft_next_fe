@@ -20,7 +20,7 @@ interface ProjectAssetProp {
 
 const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const total_steps: number = 2
-  const { listTemplates } = useGetTemplates({ type_page: params.type_page })
+  const { listTemplates,getTemplateById } = useGetTemplates({ type_page: params.type_page })
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
   const { contextData, setContextData } = useAppData();
@@ -29,14 +29,21 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
     if (contextData.stepGenerate < total_steps) {
       try {
         setShowLoading(true)
-        const res_Template = await ApiService.get<any>(`${urls.template_select}?templateID=${selectedTemplate.templateID}`)
-
-        if (res_Template.isSuccess) {
-          selectedTemplateRef.current = res_Template as Template
-          setContextData({ assetGenerateStatus: 1, assetTemplateShow: false, stepGenerate: 1 })
+        if (!selectedTemplate.templateID) {
+          console.error('unable to get the template data')
+          return
         }
+        const res_Template = await getTemplateById(selectedTemplate.templateID)
+        selectedTemplateRef.current = res_Template as Template
+          setContextData({ assetGenerateStatus: 1, assetTemplateShow: false, stepGenerate: 1 })
+        // const res_Template = await ApiService.get<any>(`${urls.template_select}?templateID=${selectedTemplate.templateID}`)
+        
+        // if (res_Template.isSuccess) {
+        //   selectedTemplateRef.current = res_Template as Template
+        //   setContextData({ assetGenerateStatus: 1, assetTemplateShow: false, stepGenerate: 1 })
+        // }
       } catch (error) {
-        console.error('API Error:', ApiService.handleError(error));
+        // console.error('API Error:', ApiService.handleError(error));
         alert(ApiService.handleError(error));
       } finally {
         setShowLoading(false)

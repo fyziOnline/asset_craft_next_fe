@@ -71,8 +71,10 @@ export const useEditHTMLContent = () => {
             const res = await getAssetHTML()
             if (res.isSuccess) {
                 const AssetHtml = res as AssetHtmlProps
+                
                 setContextData({ AssetHtml: AssetHtml });
                 setVersionList(AssetHtml.assetVersions || [])
+                
                 setVersionSelected(AssetHtml.assetVersions?.[0])
             } else {
                 alert("An error occurred, please try again later.")

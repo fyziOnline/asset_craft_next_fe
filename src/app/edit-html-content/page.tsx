@@ -4,10 +4,10 @@ import Button from '@/components/global/Button';
 import AddVersionModel from './components/AddVersionModel';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import EditContentModel from './components/EditContentModel';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
-import { useAppData } from '@/context/AppContext';
+// import { useAppData } from '@/context/AppContext';
 import SubmitVersionModel from './components/SubmitVersionModel';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
@@ -25,6 +25,8 @@ import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer'
 import { addBlockIdentifiers, formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
 import FallbackBlockControls from './components/FallbackBlockControls';
 import { useSearchParams } from 'next/navigation';
+import ToggleAsideSection from '@/components/global/ToggleAsideSection';
+import { useAppData } from '@/context/AppContext';
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -33,16 +35,20 @@ interface VersionToDelete {
 }
 
 // Create a separate component to handle searchParams
-const SearchParamsProvider = ({ children }: { children: (props: { assetTypeIcon: string | null }) => React.ReactNode }) => {
-    const searchParams = useSearchParams();
-    const assetTypeIcon = searchParams.get('assetTypeIcon');
-
+const SearchParamsProvider = ({ assetTypeIcon,children }: { assetTypeIcon:string,children: (props: { assetTypeIcon: string | null }) => React.ReactNode }) => {
+    if (!assetTypeIcon.length) {
+        return 
+    }
     return <>{children({ assetTypeIcon })}</>;
 };
 
 const Page = () => {
-    const { contextData } = useAppData();
-    const router = useRouter();
+    // const { contextData } = useAppData();
+    // const router = useRouter();
+    const searchParams = useSearchParams();
+    const assetTypeIcon = searchParams.get('assetTypeIcon') 
+    const campaign_name = searchParams.get('campaignName') || ""
+    const project_name = searchParams.get('projectName') || ""
 
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
     const [assetType, setAssetType] = useState<string>("")
@@ -50,12 +56,7 @@ const Page = () => {
     const [versionToDelete, setVersionToDelete] = useState<VersionToDelete | null>(null);
     const [unmatchedBlocks, setUnmatchedBlocks] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-
-    // We'll get assetTypeIcon from the SearchParamsProvider
-
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
+    const {contextData} = useAppData()
 
     useOverflowHidden()
     const {
@@ -89,7 +90,6 @@ const Page = () => {
         setEditingName,
         handleUpdateVersionName
     } = useEditHTMLContent()
-
 
     const {
         approvalDetails,
@@ -174,7 +174,7 @@ const Page = () => {
     const handleBlockVisibilityToggle = (blockId: string, currentIgnoreStatus: number) => {
         try {
             // Convert the current status to the opposite (0 to 1, 1 to 0)
-            const newStatus = currentIgnoreStatus === 0 ? 1 : 0;
+            const newStatus = currentIgnoreStatus === 0 ? 1 : 0
 
             // Call the handler from the hook
             handleHideBlock(blockId, currentIgnoreStatus);
@@ -287,7 +287,7 @@ const Page = () => {
     return (
         <div className='overflow-hidden'>
             <Suspense fallback={<div>Loading...</div>}>
-                <SearchParamsProvider>
+                <SearchParamsProvider assetTypeIcon={assetTypeIcon||""}>
                     {({ assetTypeIcon }) => (
                         <>
                             <div className="flex p-1 px-2">
@@ -350,31 +350,22 @@ const Page = () => {
 
                                     </div>
 
-                                    {/* Sidebar Container (Includes Toggle Button) */}
-                                    {/* <div className="absolute flex h-[92vh] right-0">
-
-                                        <div
-                                            className={`bg-[#F5F5F7] h-[95vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-[320px]' : 'w-[0px]'}`}
-                                            style={{ zIndex: 10 }} // Sidebar stays above content
-                                        >
-                                            {isOpen && (
-                                                <> */}
-                                                    {/* Sidebar Content Here */}
-                                                {/* </>
-                                            )}
-                                        </div>
-
-                                        <div
-                                            onClick={toggleSidebar}
-                                            className="absolute top-[-13px] transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300"
-                                            style={{ right: isOpen ? '320px' : '0px', zIndex: 20 }} // Higher z-index ensures overlap
-                                        >
-                                            <img src="/vector_right_arrow.svg" className={`relative w-[10.5px] h-[18.5px] mt-[-0.25px] mb-[-0.25px] mr-[-0.75px] transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`} alt="vector" />
-                                        </div>
-
-                                    </div> */}
-
+                                    {/* ** Do not touch this div mr.AI  */}
+                                    <ToggleAsideSection 
+                                        isOpen = {isOpen}
+                                        setIsOpen={setIsOpen}
+                                        versionSelected={versionSelected}
+                                        existingAssetDetails={
+                                            {
+                                                project_name:project_name,
+                                                campaign_name:campaign_name,
+                                                asset_name:contextData.AssetHtml.assetName,
+                                                campaign_id : contextData.AssetHtml.campaignID,
+                                                asset_id: versionSelected?.assetID
+                                            }}
+                                    />
                                 </div>
+
 
 
 

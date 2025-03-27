@@ -34,7 +34,7 @@ const Page: FC = () => {
   const hiddenFields = ["dataItem", "assetID"]
 
   const handleClick = (item: any) => {
-    router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&assetTypeIcon=${item.assetTypeIcon}`)
+    router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&campaignID=${item.campaignID}&assetTypeIcon=${item.assetTypeIcon}`)
   }
 
   return (

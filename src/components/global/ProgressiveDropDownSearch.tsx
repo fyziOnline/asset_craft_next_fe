@@ -1,10 +1,11 @@
-import React, { FC, useState, useEffect, ChangeEvent, KeyboardEvent, useRef } from 'react'
+import React, { FC, useState, useEffect, ChangeEvent, KeyboardEvent, useRef, useMemo } from 'react'
 
 interface ProgressiveDropDownSearchProps {
   customClass?: string
   data?: Array<{ label: string, value: string }>
   placeholder?:string
   messageForNewData?:string
+  preSelectedValue ?: string
   onSelect?: (name: string ) => void
 }
 
@@ -13,6 +14,7 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
   data = [], 
   placeholder,
   messageForNewData,
+  preSelectedValue,
   onSelect
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -22,7 +24,23 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
   const [highlightedIndex,setHighlightedIndex] = useState<number>(-1)
   const [highlightedIndexOnHover,setHighlightedIndexOnHover] = useState<number>(-1)
   const [isMouseOverItem,setIsMouseOverItem] = useState<boolean>(false)
+  const [initialUpdateFlag,setInitialUpdateFlag] = useState<boolean>(true)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+
+  useEffect(()=>{
+    if (!preSelectedValue || !preSelectedValue.length || !initialUpdateFlag) {
+      return 
+    }
+    if (data.length) {
+      setSearchTerm(preSelectedValue)
+      if (!onSelect) {
+        return
+      }
+      onSelect(preSelectedValue)
+      setInitialUpdateFlag(false)
+    }
+  },[data])
 
   useEffect(() => {
     const filtered = data.filter(item =>
