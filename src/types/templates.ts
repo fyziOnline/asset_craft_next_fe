@@ -43,6 +43,16 @@ export interface CampaignSelectResponse {
     isSuccess: boolean
     errorOnFailure: string
 }
+// later stage needed to extend the AIPromptAsset to create CampaignSelectResponse
+export interface AIPromptAsset {
+    assetID: string
+    topic: string
+    type: string
+    keyPoints: string
+    targetAudience: string
+    tone: string
+    outputScale: number
+  }
 
 
 export interface AssetHtmlProps {

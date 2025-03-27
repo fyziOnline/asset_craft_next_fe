@@ -54,16 +54,32 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
             const template_res = await ApiService.get<any>(`${urls.template_select}?templateID=${templateID}`)
             if (template_res.isSuccess) {
                 return template_res
-            } else throw new Error("unable to retrieve data")
+            } else throw new Error("Unable to retrieve data")
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
             alert(ApiService.handleError(error));
         }
     }
 
+    const getAiPromptAssetSelect = async (assetID:string|undefined) => {
+        try {
+            if (!assetID) {
+                throw new Error('Error : Asset details missing')
+            }
+            const aiPromptAssetRes = await ApiService.get<any>(`${urls.aiPrompt_Asset_select}?assetID=${assetID}`)
+            if (aiPromptAssetRes.isSuccess) {
+                return aiPromptAssetRes
+            } else throw new Error("Unable to retrieve data")
+        } catch (error) {
+            console.error('API Error :',ApiService.handleError(error))
+            alert(ApiService.handleError(error))
+        }
+    }
+
     return {
         isLoading,
         listTemplates,
-        getTemplateById
+        getTemplateById,
+        getAiPromptAssetSelect
     };
 };

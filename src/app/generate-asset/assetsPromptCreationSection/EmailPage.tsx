@@ -9,7 +9,7 @@ import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
-import { AssetHtmlProps, CampaignSelectResponse, Template } from '@/types/templates';
+import { AIPromptAsset, AssetHtmlProps, CampaignSelectResponse, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { emailType, keyPoints, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
@@ -19,7 +19,10 @@ import { useRouter } from 'next/navigation';
 interface EmailPageProps {
     params: {
         template: Template
+        assetPrompts?: AIPromptAsset
         project_name?: string
+        campaign_name?:string
+        asset_name?:string
     }
 }
 
@@ -34,6 +37,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
     const { setShowLoading } = useLoading()
     const { contextData, setContextData } = useAppData();
     const [existingCampaignDetails, setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
+    const [existingAssetPrompt, setExistingAssetPrompt] = useState<AIPromptAsset | null>(params.assetPrompts||null)
 
     useEffect(() => {
         refFormData.current = {
@@ -65,6 +69,30 @@ const EmailPage = ({ params }: EmailPageProps) => {
         if (isShowList.includes(1) || checkedList.includes(1)) {
             doesFormCompleted(2)
         }
+    }
+     
+    const appendExistingAssetPromptData = (data:AIPromptAsset|null) => {
+        if (!data) {
+           return 
+        } 
+        refFormData.current ={
+            ...refFormData.current,
+            topic:params.assetPrompts?.topic,
+            type:params.assetPrompts?.type,
+            keyPoints:params.assetPrompts?.keyPoints
+        }
+        doesFormCompleted(3)
+    }
+
+    useEffect(()=>{
+        if (existingAssetPrompt) {
+            appendExistingAssetPromptData(existingAssetPrompt)
+            promptResVisit()
+        }
+    },[existingAssetPrompt])
+
+    const promptResVisit = () => {
+        setCheckedList([0,1,2,3])
     }
 
     const doesFormCompleted = (step: number, status?: boolean) => {
@@ -154,6 +182,12 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     <SectionAssetDetails
                         validatingTheData={doesFormCompleted}
                         returnCampaignDetails={fetchExistingCampaignData}
+                        existingAssetMeta={
+                            {
+                                campaign_name:params.campaign_name || "",
+                                project_name:params.project_name || "",
+                                asset_name:params.asset_name || ""
+                            }}
                     />
                 </Accordion>
             </div>
@@ -244,6 +278,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                             handleInputText(e, "topic")
                             doesFormCompleted(3)
                         }}
+                            defaultValue={existingAssetPrompt ? existingAssetPrompt.topic : ""}
                             rows={4}
                             placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
@@ -256,7 +291,9 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                         type: optionSelected.value
                                     }
                                     doesFormCompleted(3)
-                                }} isShowOther={false} selectPlaceHolder="Select Post Type" optionLists={emailType} />
+                                }} 
+                                preSelectValue={existingAssetPrompt ? existingAssetPrompt.type : ""}
+                                isShowOther={false} selectPlaceHolder="Select Post Type" optionLists={emailType} />
                             </div>
 
                             <div className='w-[260px]'>
@@ -267,7 +304,9 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                         keyPoints: optionSelected.value
                                     }
                                     doesFormCompleted(3)
-                                }} isShowOther={false} selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
+                                }} 
+                                preSelectValue={existingAssetPrompt ? existingAssetPrompt.keyPoints : ""}
+                                isShowOther={false} selectPlaceHolder="Select Key Points" optionLists={keyPoints} />
                             </div>
                         </div>
 
@@ -326,7 +365,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     </div>
                 </Accordion>
             </div>
-            <div className='flex justify-end my-[30px]'>
+            {!existingAssetPrompt?.assetID && <div className='flex justify-end my-[30px]'>
                 <Button
                     buttonText={[1, 2].includes(generateStep) ? 'Generate' : 'Regenerate'}
                     showIcon
@@ -334,7 +373,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     backgroundColor={((checkedList.length === 4 && generateStep != 2) || generateStep === 4) ? "bg-custom-gradient-green" : "bg-[#B1B1B1]"}
                     handleClick={handleGenerate}
                     customClass='static  px-[1.4rem] py-2 group-hover:border-white' />
-            </div>
+            </div>}
         </div>
     );
 };

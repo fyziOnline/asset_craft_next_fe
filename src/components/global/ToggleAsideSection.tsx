@@ -1,7 +1,7 @@
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useGetTemplates } from '@/hooks/useGetTemplates';
 import { ApiService } from '@/lib/axios_generic';
-import { AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
+import { AIPromptAsset, AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
 import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } from 'react';
 
 interface ToggleAsideSectionProps {
@@ -9,28 +9,36 @@ interface ToggleAsideSectionProps {
     setIsOpen: Dispatch<SetStateAction<boolean>>
     children?: React.ReactNode
     versionSelected: AssetVersionProps | null
+    existingAssetDetails ?: {
+        campaign_name:string,
+        project_name:string,
+        asset_name:string,
+        campaign_id : string,
+        asset_id:string
+    }
 }
 
 const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({ 
     isOpen, 
     setIsOpen, 
     children, 
-    versionSelected 
+    versionSelected,
+    existingAssetDetails
 }) => {
-    // console.log('versionSelected :',versionSelected);
     
     const toggleAside = useCallback(() => {
         setIsOpen(prev => !prev)
     }, [setIsOpen])
+    
     const [templateDetails,setTemplateDetails] = useState<Template|null>()
+    const [aiPromptAsset,setAiPromptAsset] = useState<AIPromptAsset|null>()
     const [bodyError,setBodyError] = useState<string>("")
 
-    const {getTemplateById} = useGetTemplates({type_page:""})
+    const {getTemplateById,getAiPromptAssetSelect} = useGetTemplates({type_page:""})
 
     const fetchTemplateData = async() => {
         try {
             let res_template:Template = await getTemplateById(versionSelected?.templateID)
-            // console.log('before modifying :',res_template.templatesBlocks);
             const updatedTemplateBlocks = res_template.templatesBlocks?.map((item):TemplateBlocks =>(
                 {
                     ...item,
@@ -38,16 +46,23 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({
                 }
             ))
             res_template = {...res_template,templatesBlocks:updatedTemplateBlocks}
-            // console.log('after modifying :',updatedTemplateBlocks);
-            
             setTemplateDetails(res_template)
         } catch (error) {
             alert(ApiService.handleError(error));
         }
     }
 
+    const fetchAiPromptAsset = async()=>{
+        try {
+            let aiAssetRes = await getAiPromptAssetSelect(existingAssetDetails?.asset_id)
+            setAiPromptAsset(aiAssetRes.aIPromptAsset)
+        } catch (error) {
+            alert(ApiService.handleError(error))
+        }
+    }
+
     const renderAssetGenerateContent = () => {
-        if (!templateDetails?.assetTypeName) {
+        if (!templateDetails?.assetTypeName || !aiPromptAsset) {
             setBodyError('Unable to process asset information')
             return null
         }
@@ -55,18 +70,29 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(({
         return Component ? 
             <>
             <div>
-                <Component params={{template:templateDetails}}/> 
+                <Component params={
+                    {
+                        template:templateDetails,
+                        assetPrompts:aiPromptAsset,
+                        project_name:existingAssetDetails?.project_name,
+                        campaign_name:existingAssetDetails?.campaign_name,
+                        asset_name:existingAssetDetails?.asset_name
+                }}/> 
             </div>
             </> : null
     };
 
     useEffect(()=>{
-        console.log(versionSelected);
-        
         if (versionSelected?.templateID) {
             fetchTemplateData()
         } else console.error('Error : Unable to process template detail')
     },[versionSelected?.templateID])
+
+    useEffect(()=>{
+        if (existingAssetDetails?.asset_id) {
+            fetchAiPromptAsset()
+        } else console.error('Error : Unable process asset prompt details')
+    },[existingAssetDetails?.asset_id])
 
     
     return (

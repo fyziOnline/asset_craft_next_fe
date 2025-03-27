@@ -26,6 +26,7 @@ import { addBlockIdentifiers, formatContentWithBlocks, processBlockHTML } from '
 import FallbackBlockControls from './components/FallbackBlockControls';
 import { useSearchParams } from 'next/navigation';
 import ToggleAsideSection from '@/components/global/ToggleAsideSection';
+import { useAppData } from '@/context/AppContext';
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -34,19 +35,20 @@ interface VersionToDelete {
 }
 
 // Create a separate component to handle searchParams
-const SearchParamsProvider = ({ children }: { children: (props: { assetTypeIcon: string | null }) => React.ReactNode }) => {
-    const searchParams = useSearchParams();
-    const assetTypeIcon = searchParams.get('assetTypeIcon');
-    const campaign_name = searchParams.get('campaignName')
-    // console.log(campaign_name);
-    
-    
+const SearchParamsProvider = ({ assetTypeIcon,children }: { assetTypeIcon:string,children: (props: { assetTypeIcon: string | null }) => React.ReactNode }) => {
+    if (!assetTypeIcon.length) {
+        return 
+    }
     return <>{children({ assetTypeIcon })}</>;
 };
 
 const Page = () => {
     // const { contextData } = useAppData();
     // const router = useRouter();
+    const searchParams = useSearchParams();
+    const assetTypeIcon = searchParams.get('assetTypeIcon') 
+    const campaign_name = searchParams.get('campaignName') || ""
+    const project_name = searchParams.get('projectName') || ""
 
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
     const [assetType, setAssetType] = useState<string>("")
@@ -54,8 +56,7 @@ const Page = () => {
     const [versionToDelete, setVersionToDelete] = useState<VersionToDelete | null>(null);
     const [unmatchedBlocks, setUnmatchedBlocks] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-    
-    // We'll get assetTypeIcon from the SearchParamsProvider
+    const {contextData} = useAppData()
 
     useOverflowHidden()
     const {
@@ -89,7 +90,6 @@ const Page = () => {
         setEditingName,
         handleUpdateVersionName
     } = useEditHTMLContent()
-
 
     const {
         approvalDetails,
@@ -174,7 +174,7 @@ const Page = () => {
     const handleBlockVisibilityToggle = (blockId: string, currentIgnoreStatus: number) => {
         try {
             // Convert the current status to the opposite (0 to 1, 1 to 0)
-            const newStatus = currentIgnoreStatus === 0 ? 1 : 0;
+            const newStatus = currentIgnoreStatus === 0 ? 1 : 0
 
             // Call the handler from the hook
             handleHideBlock(blockId, currentIgnoreStatus);
@@ -287,7 +287,7 @@ const Page = () => {
     return (
         <div className='overflow-hidden'>
             <Suspense fallback={<div>Loading...</div>}>
-                <SearchParamsProvider>
+                <SearchParamsProvider assetTypeIcon={assetTypeIcon||""}>
                     {({ assetTypeIcon }) => (
                         <>
                             <div className="flex p-1 px-2">
@@ -355,6 +355,14 @@ const Page = () => {
                                         isOpen = {isOpen}
                                         setIsOpen={setIsOpen}
                                         versionSelected={versionSelected}
+                                        existingAssetDetails={
+                                            {
+                                                project_name:project_name,
+                                                campaign_name:campaign_name,
+                                                asset_name:contextData.AssetHtml.assetName,
+                                                campaign_id : contextData.AssetHtml.campaignID,
+                                                asset_id: versionSelected?.assetID
+                                            }}
                                     />
                                 </div>
 
