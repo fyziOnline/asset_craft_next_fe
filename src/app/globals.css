@@ -415,3 +415,29 @@
     background-position: 0% 50%;
   }
 }
+
+
+/* for notfound in image picker */
+
+/* Ensure the container allows absolute positioning */
+.folder-icon {
+  position: relative;
+  z-index: 1;
+}
+
+/* Position the lens exactly in the center of the folder */
+.search-lens {
+  position: absolute;
+  z-index: 2;
+  animation: floatUpDown 2s infinite ease-in-out;
+}
+
+/* Animation for moving the lens */
+@keyframes floatUpDown {
+  0%, 100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-10px);
+  }
+}

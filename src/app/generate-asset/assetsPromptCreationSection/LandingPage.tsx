@@ -153,7 +153,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                 setShowLoading(false)
 
                 if (res?.isSuccess) {
-                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}`)
+                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}&assetTypeIcon=Landing Page`)
                 }
 
                 return
@@ -240,7 +240,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                                 handleInputText(e, "webUrl")
                                 // doesFormCompleted(4)
                             }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
-                                placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                placeholder="Enter your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                             <DragAndDrop onFileSelect={(file) => {
                                 refFormData.current = {
                                     ...refFormData.current,
@@ -273,7 +273,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                             }}
                             defaultValue={existingAssetPrompt ? existingAssetPrompt.topic : ""}
                             rows={4}
-                            placeholder="Are you ready to experience the future of IT with the power of hybrid cloud?" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                            placeholder="Primary message" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <ChildrenTitle customClass='mt-5' title='Provide additional information that supports the main message.'></ChildrenTitle>
                         <TextField

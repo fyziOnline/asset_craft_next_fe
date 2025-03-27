@@ -43,12 +43,14 @@ const VersionManager: React.FC<VersionManagerProps> = ({
                 const showDeleteButton = versionList.length > 1;
                 const isEditing = editingVersionId === item.assetVersionID;
                 const statusColor = item.status ? statusColors[item.status] || "#9E9E9E" : "#9E9E9E";
+                const isStatusCompleted = item.status === "Completed"
 
                 return (
                     <div
                         key={item.assetID + index}
                         onClick={() => setVersionSelected(item)}
                         onDoubleClick={(e) => {
+                            if (isStatusCompleted) return;
                             if (isSelected) {
                                 e.stopPropagation();
                                 setEditingVersionId(item.assetVersionID);
@@ -63,6 +65,7 @@ const VersionManager: React.FC<VersionManagerProps> = ({
                             <input
                                 type="text"
                                 value={editingName}
+                                disabled={isStatusCompleted}
                                 onChange={(e) => setEditingName(e.target.value)}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' && editingName.trim()) {
@@ -92,10 +95,10 @@ const VersionManager: React.FC<VersionManagerProps> = ({
                                     />
                                     <span className={`
                                         font-medium 
-                                        ${isSelected ? 'hover:border-b hover:border-gray-400 cursor-text' : 'cursor-pointer'}
+                                        ${isSelected && !isStatusCompleted ? 'hover:border-b hover:border-gray-400 cursor-text' : 'cursor-pointer'}
                                     `}>
                                         {item.versionName}
-                                        {isSelected && (
+                                        {isSelected && !isStatusCompleted && (
                                             <span className="ml-1 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 ✎
                                             </span>
@@ -105,10 +108,11 @@ const VersionManager: React.FC<VersionManagerProps> = ({
                             </>
                         )}
                         {showDeleteButton && !isEditing && (
-                            <div className="ml-2 relative group/delete">
+                            <div className={`ml-2 relative group/delete ${isStatusCompleted ? 'pointer-events-none opacity-50 cursor-not-allowed' : ''}`}>
                                 <MdOutlineDelete
                                     size={22}
                                     onClick={(e) => {
+                                        if (isStatusCompleted) return;
                                         e.stopPropagation();
                                         openConfirmationModal(item.assetVersionID, item.versionName);
                                     }}

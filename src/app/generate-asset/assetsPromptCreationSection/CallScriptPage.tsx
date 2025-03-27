@@ -64,7 +64,7 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                 setShowLoading(false)
 
                 if (res?.isSuccess) {
-                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}`)
+                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}&assetTypeIcon=Callscript (WIP)`)
                 }
 
                 return
@@ -173,7 +173,7 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                         <TextField handleChange={(e) => {
                             handleInputText(e, "webUrl")
                         }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
-                            placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                            placeholder="Enter your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                         <DragAndDrop onFileSelect={(file) => {
                             refFormData.current = {
                                 ...refFormData.current,
@@ -195,7 +195,7 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                         <ChildrenTitle title='Provide details on the purpose of the call' ></ChildrenTitle>
                         <TextField
                             rows={4}
-                            placeholder="What is the purpose of the call? What would you like to communicate?"
+                            placeholder="State purpose of the call"
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'
                             handleChange={(e) => {
                                 handleInputText(e, "topic")
@@ -205,7 +205,7 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                         <ChildrenTitle title='Describe the key messages you want to highlight' customClass='mt-5' ></ChildrenTitle>
                         <TextField
                             rows={4}
-                            placeholder="What are the 2-3 key points you want to highlight in this post?"
+                            placeholder="Key messages"
                             customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'
                             handleChange={(e) => {
                                 handleInputText(e, "keyPoints")

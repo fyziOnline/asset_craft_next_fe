@@ -161,8 +161,8 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
             </div>
           ))}
           {filteredData.length < 1 && searchTerm.length>0 &&
-            <div className="px-4 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-              <p className='italic'>{`${messageForNewData}"${searchTerm}"`}</p>
+            <div className="group px-4 py-2 text-gray-600 hover:bg-green-50 cursor-pointer">
+              <p className='italic group-hover:text-green-100'>{`${messageForNewData}"${searchTerm}"`}</p>
             </div>
           }
         </div>

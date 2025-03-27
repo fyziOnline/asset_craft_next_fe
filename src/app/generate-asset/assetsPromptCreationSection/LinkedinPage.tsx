@@ -12,7 +12,7 @@ import { AIPromptAsset, AssetHtmlProps, CampaignSelectResponse, Template } from 
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
-import { emailType, keyPoints, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
+import { keyPoints, linkedinType, listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 import SectionAssetDetails from '@/components/assetGeneration/SectionAssetDetails';
 import { useRouter } from 'next/navigation';
 
@@ -152,7 +152,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                 setShowLoading(false)
 
                 if (res?.isSuccess) {
-                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}`)
+                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}&assetTypeIcon=LinkedIn`)
                 }
 
                 return
@@ -230,7 +230,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                 // doesFormCompleted(4)
                             }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
 
-                                placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                placeholder="Enter your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                             <DragAndDrop onFileSelect={(file) => {
                                 refFormData.current = {
                                     ...refFormData.current,
@@ -264,7 +264,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                             }}
                             defaultValue={existingAssetPrompt ? existingAssetPrompt.topic : ""}
                             rows={4}
-                            placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                            placeholder="" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>
@@ -277,7 +277,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                                     doesFormCompleted(3)
                                 }} 
                                 preSelectValue={existingAssetPrompt ? existingAssetPrompt.type : ""}
-                                selectPlaceHolder="Select Post Type" optionLists={emailType} />
+                                selectPlaceHolder="Select Post Type" optionLists={linkedinType} />
                             </div>
 
                             <div className='w-[260px]'>

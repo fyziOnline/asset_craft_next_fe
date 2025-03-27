@@ -159,7 +159,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                 setShowLoading(false)
 
                 if (res?.isSuccess) {
-                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}`)
+                    router.replace(`/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}&assetTypeIcon=Email`)
                 }
 
                 return
@@ -248,7 +248,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                                 handleInputText(e, "webUrl")
                                 // doesFormCompleted(4)
                             }} defaultValue={existingCampaignDetails ? existingCampaignDetails.aIPromptCampaign.webUrl : ""}
-                                placeholder="Paste your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                                placeholder="Enter your URL here." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
                             <DragAndDrop onFileSelect={(file) => {
                                 refFormData.current = {
                                     ...refFormData.current,
@@ -280,7 +280,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                         }}
                             defaultValue={existingAssetPrompt ? existingAssetPrompt.topic : ""}
                             rows={4}
-                            placeholder="Please enter the name of your campaign, event or occasion." customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
+                            placeholder="" customAreaClass='whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide'></TextField>
 
                         <div className='flex items-start gap-[16%]'>
                             <div className='w-[260px]'>

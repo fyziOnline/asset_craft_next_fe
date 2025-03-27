@@ -367,6 +367,8 @@ const Page = () => {
                                 </div>
 
 
+
+
                                 {isFeedbackOpen && (
                                     <div
                                         className={`fixed md:relative top-0 right-0 bg-white md:w-[25%] feedback-panel ${isFeedbackOpen ? "block" : "hidden "}`}
