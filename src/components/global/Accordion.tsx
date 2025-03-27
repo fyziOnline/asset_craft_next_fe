@@ -32,12 +32,13 @@ interface AccordionProps {
   checked?: boolean;
   children: React.ReactNode;
   disableShowContent?: boolean;
+  isPreventEdit?: boolean;
   isShowContent?: boolean;
   isRequire?: boolean;
   handleShowContent?: () => void;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = false, disableShowContent = false, isShowContent = false, isRequire = false, handleShowContent = () => { } }) => {
+const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = false, disableShowContent = false, isShowContent = false, isRequire = false, isPreventEdit = false, handleShowContent  = () => { } }) => {
   const [showContent, setShowContent] = useState(isShowContent)
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -55,7 +56,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
   }
 
   return (
-    <div className={`flex flex-col border ${checked ? "border-sectionGrey-Liner bg-sectionGrey-lighter": "border-sectionGrey-darker bg-sectionGrey"} rounded-[20px] w-full`}>
+    <div className={`flex flex-col border ${checked ? "border-sectionGrey-Liner bg-sectionGrey-lighter": "border-sectionGrey-darker bg-sectionGrey"} ${isPreventEdit ? "cursor-not-allowed opacity-50" : ""} rounded-[20px] w-full`}>
       <div onClick={toggleContent} className={`flex items-center justify-between px-[8%] w-full h-[80px] cursor-pointer `}>
         <div className="flex items-center gap-9">
           <div>
@@ -89,7 +90,7 @@ const Accordion: React.FC<AccordionProps> = ({ HeaderTitle, children, checked = 
         </div>
       </div>
 
-      <div ref={contentRef} className={`${!showContent && "overflow-hidden" } transition-all duration-500 relative bottom-4`} style={{ height: showContent ? `auto` : "0px", }}>
+      <div ref={contentRef} className={`${!showContent && "overflow-hidden" } ${isPreventEdit && "pointer-events-none" } transition-all duration-500 relative bottom-4`} style={{ height: showContent ? `auto` : "0px", }}>
         <div className="px-[15%] pb-4">{children}</div>
       </div>
     </div>

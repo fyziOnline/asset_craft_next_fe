@@ -170,6 +170,7 @@ const LandingPage = ({ params }: LandingPageProps) => {
                     isRequire={true}
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
+                    isPreventEdit={params.asset_name ? true : false}
                 >
                     <SectionAssetDetails
                         validatingTheData={doesFormCompleted}

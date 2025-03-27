@@ -178,6 +178,7 @@ const EmailPage = ({ params }: EmailPageProps) => {
                     HeaderTitle='Project Details'
                     checked={checkedList.includes(0)}
                     handleShowContent={() => { updateShowList(0) }}
+                    isPreventEdit={params.asset_name ? true : false}
                 >
                     <SectionAssetDetails
                         validatingTheData={doesFormCompleted}
