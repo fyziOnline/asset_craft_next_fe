@@ -1,13 +1,12 @@
 'use client';
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Button from '@/components/global/Button';
 import AddVersionModel from './components/AddVersionModel';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import EditContentModel from './components/EditContentModel';
-// import { useRouter } from 'next/navigation';
 import ShadowDomContainer from './components/ShadowDomContainer';
 import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
-// import { useAppData } from '@/context/AppContext';
 import SubmitVersionModel from './components/SubmitVersionModel';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
@@ -24,7 +23,6 @@ import GlobalEditButton from './components/GlobalEditButton';
 import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer';
 import { addBlockIdentifiers, formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
 import FallbackBlockControls from './components/FallbackBlockControls';
-import { useSearchParams } from 'next/navigation';
 import ToggleAsideSection from '@/components/global/ToggleAsideSection';
 import { useAppData } from '@/context/AppContext';
 
@@ -34,31 +32,32 @@ interface VersionToDelete {
     name: string;
 }
 
-// Create a separate component to handle searchParams
-const SearchParamsProvider = ({ assetTypeIcon,children }: { assetTypeIcon:string,children: (props: { assetTypeIcon: string | null }) => React.ReactNode }) => {
-    if (!assetTypeIcon.length) {
-        return 
-    }
-    return <>{children({ assetTypeIcon })}</>;
+// Create a separate component to handle search params
+const SearchParamsHandler = ({ children }: {
+    children: (params: {
+        assetTypeIcon: string | null,
+        campaign_name: string,
+        project_name: string
+    }) => React.ReactNode
+}) => {
+    const searchParams = useSearchParams();
+    const assetTypeIcon = searchParams.get('assetTypeIcon');
+    const campaign_name = searchParams.get('campaignName') || "";
+    const project_name = searchParams.get('projectName') || "";
+
+    return <>{children({ assetTypeIcon, campaign_name, project_name })}</>;
 };
 
 const Page = () => {
-    // const { contextData } = useAppData();
-    // const router = useRouter();
-    const searchParams = useSearchParams();
-    const assetTypeIcon = searchParams.get('assetTypeIcon') 
-    const campaign_name = searchParams.get('campaignName') || ""
-    const project_name = searchParams.get('projectName') || ""
-
-    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
-    const [assetType, setAssetType] = useState<string>("")
-    const [isConfirmModel, setIsConfirmModel] = useState<boolean>(false)
+    const { contextData } = useAppData();
+    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+    const [assetType, setAssetType] = useState<string>("");
+    const [isConfirmModel, setIsConfirmModel] = useState<boolean>(false);
     const [versionToDelete, setVersionToDelete] = useState<VersionToDelete | null>(null);
     const [unmatchedBlocks, setUnmatchedBlocks] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-    const {contextData} = useAppData()
 
-    useOverflowHidden()
+    useOverflowHidden();
     const {
         sectionEdit,
         isLoadingGenerate,
@@ -89,49 +88,46 @@ const Page = () => {
         setEditingVersionId,
         setEditingName,
         handleUpdateVersionName
-    } = useEditHTMLContent()
+    } = useEditHTMLContent();
 
     const {
         approvalDetails,
         comments
-    } = useAssetApproval(
-        {
-            assetVersionID: versionSelected?.assetVersionID || "",
-            assetID: versionSelected?.assetID || "",
-            versionStatus: versionSelected?.status || ""
-        }
-    )
+    } = useAssetApproval({
+        assetVersionID: versionSelected?.assetVersionID || "",
+        assetID: versionSelected?.assetID || "",
+        versionStatus: versionSelected?.status || ""
+    });
 
     const handleDownload = (fileURL: string) => {
         const link = document.createElement('a');
-        link.href = approvalDetails.fileUrl,
-            link.download = 'filename',
-            link.click();
-    }
-
+        link.href = approvalDetails.fileUrl;
+        link.download = 'filename';
+        link.click();
+    };
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const assetType = params.get("assetTypeIcon");
         setAssetType(assetType as string);
-    }, [])
+    }, []);
 
     const openConfirmationModal = (assetVersionID: string, versionName: string) => {
         setVersionToDelete({ id: assetVersionID, name: versionName });
         setIsConfirmModel(true);
-    }
+    };
 
     const closeConfirmationModal = () => {
         setVersionToDelete(null);
         setIsConfirmModel(false);
-    }
+    };
 
     const handleToConfirmDelete = () => {
         if (versionToDelete) {
             handleDelete(versionToDelete.id);
         }
         closeConfirmationModal();
-    }
+    };
 
     // Update the generateHTMLContent function to properly handle hidden blocks
     const generateHTMLContent = () => {
@@ -174,7 +170,7 @@ const Page = () => {
     const handleBlockVisibilityToggle = (blockId: string, currentIgnoreStatus: number) => {
         try {
             // Convert the current status to the opposite (0 to 1, 1 to 0)
-            const newStatus = currentIgnoreStatus === 0 ? 1 : 0
+            const newStatus = currentIgnoreStatus === 0 ? 1 : 0;
 
             // Call the handler from the hook
             handleHideBlock(blockId, currentIgnoreStatus);
@@ -193,8 +189,8 @@ const Page = () => {
                     return {
                         ...prev,
                         assetVersionBlocks: updatedBlocks
-                    } as AssetVersionProps
-                })
+                    } as AssetVersionProps;
+                });
             }
         } catch (error) {
             console.error("Error toggling block visibility:", error);
@@ -252,7 +248,6 @@ const Page = () => {
 
         return (
             <div className="flex flex-col md:flex-row items-center md:items-start justify-center relative isolate w-full">
-
                 {/* linkedin center issue fixed */}
                 <div className={`relative w-full max-w-6xl mx-auto px-4 md:px-8 flex-grow 
                 ${assetTypeIcon === 'LinkedIn' ? 'flex items-center justify-center' : ''}`}>
@@ -276,7 +271,6 @@ const Page = () => {
                             />
                         </div>
                     )}
-
                 </div>
 
                 {renderFallbackControls}
@@ -284,172 +278,186 @@ const Page = () => {
         );
     };
 
+    const renderPageContent = ({
+        assetTypeIcon,
+        campaign_name,
+        project_name
+    }: {
+        assetTypeIcon: string | null,
+        campaign_name: string,
+        project_name: string
+    }) => {
+        return (
+            <>
+                <div className="flex p-1 px-2">
+                    <div className='flex-1'></div>
+                </div>
+
+                <div className="min-h-[82vh] border-t border-solid">
+                    <EditHeader
+                        versionSelected={versionSelected}
+                        versionList={versionList}
+                        isShowSave={isShowSave}
+                        setShowSave={setShowSave}
+                        handleSave={handleSave}
+                        setIsShowSubmitVer={setIsShowSubmitVer}
+                    />
+
+                    <div className='flex justify-between pr-16 items-center'>
+                        <VersionManager
+                            versionList={versionList}
+                            versionSelected={versionSelected}
+                            setVersionSelected={setVersionSelected}
+                            handleSave={handleSave}
+                            editingVersionId={editingVersionId}
+                            editingName={editingName}
+                            setEditingVersionId={setEditingVersionId}
+                            setEditingName={setEditingName}
+                            handleUpdateVersionName={handleUpdateVersionName}
+                            openConfirmationModal={openConfirmationModal}
+                        />
+
+                        {(comments?.length > 0) && (
+                            <div className="">
+                                <FeedBackCard
+                                    isFeedbackOpen={isFeedbackOpen}
+                                    setIsFeedbackOpen={setIsFeedbackOpen}
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex h-[92vh] relative ">
+                        <div className="flex flex-col bg-[#e4e4e4] flex-grow pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative mx-14">
+                            <div className='px-[6rem] overflow-y-scroll thin-scrollbar'>
+                                <div id="container">
+                                    <div className="h-[20px]" />
+                                    {renderHTMLSelect(assetTypeIcon)}
+                                    <div className="h-[20vh]" />
+                                </div>
+                            </div>
+
+                            {isShowAddVer ? (
+                                <AddVersionModel
+                                    isShowAddVer={isShowAddVer}
+                                    setIsShowAddVer={setIsShowAddVer}
+                                    handleAddVersion={handleAddVersion}
+                                    handleChangeTextVersion={handleChangeTextVersion}
+                                    showErrorMessage={showErrorMessage}
+                                />
+                            ) : null}
+                        </div>
+
+                        <ToggleAsideSection
+                            isOpen={isOpen}
+                            setIsOpen={setIsOpen}
+                            versionSelected={versionSelected}
+                            existingAssetDetails={{
+                                project_name: project_name,
+                                campaign_name: campaign_name,
+                                asset_name: contextData.AssetHtml.assetName,
+                                campaign_id: contextData.AssetHtml.campaignID,
+                                asset_id: versionSelected?.assetID
+                            }}
+                        />
+                    </div>
+
+                    {isFeedbackOpen && (
+                        <div
+                            className={`fixed md:relative top-0 right-0 bg-white md:w-[25%] feedback-panel ${isFeedbackOpen ? "block" : "hidden "}`}
+                        >
+                            <div className="bg-[#00A881] text-white p-4 flex justify-between items-center gap-4 sticky top-0 ">
+                                <div className='flex justify-start'>
+                                    <svg width="30" height="20" viewBox="0 0 43 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4.625 17.5C2.5625 17.5 0.875 15.8125 0.875 13.75V4.375C0.875 2.3125 2.5625 0.625 4.625 0.625H19.625C21.6875 0.625 23.375 2.3125 23.375 4.375V13.75C23.375 15.8125 21.6875 17.5 19.625 17.5H15.875V23.125L10.25 17.5H4.625ZM38.375 28.75C40.4375 28.75 42.125 27.0625 42.125 25V15.625C42.125 13.5625 40.4375 11.875 38.375 11.875H27.125V13.75C27.125 17.875 23.75 21.25 19.625 21.25V25C19.625 27.0625 21.3125 28.75 23.375 28.75H27.125V34.375L32.75 28.75H38.375Z" fill="white" />
+                                    </svg>
+                                    <span className="font-semibold text-base ps-1">Feedbacks</span>
+                                </div>
+
+                                <button
+                                    onClick={() => setIsFeedbackOpen(false)}
+                                    className="text-white hover:text-gray-300"
+                                >
+                                    <svg width="18" height="5" viewBox="0 0 26 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="26" height="4" rx="2" fill="white" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div className="h-auto overflow-y-auto p-1 md:h-[60%] custom-scrollbar border pb-4">
+                                {comments.map((item, index) => (
+                                    <div key={index} className="bg-white p-2 transition-all duration-200">
+                                        <div className='flex flex-col items-center mb-1 w-full'>
+                                            <div className='flex justify-between items-center w-full pb-1'>
+                                                <div className="flex items-center">
+                                                    <span className='text-xs font-medium text-gray-500'>{item.createdBy}</span>
+                                                </div>
+
+                                                <div className="text-xs text-gray-500 flex items-center gap-1">
+                                                    {formatDate(item.createdOn)}
+                                                </div>
+                                            </div>
+
+                                            <div className="text-gray-600 text-sm leading-relaxed mb-1 bg-gray-50 shadow-sm p-2 rounded-md w-full">
+                                                {item.comment}
+
+                                                {item.fIleURL !== "" && (
+                                                    <div className="mt-1 flex justify-end">
+                                                        <button
+                                                            className="flex items-center gap-2 px-3 py-1 bg-[#00A881] text-white text-sm rounded-md hover:bg-[#008c6a] transition-colors duration-200"
+                                                            onClick={() => handleDownload(item.fIleURL)}
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                            </svg>
+                                                            Download
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <ConfirmationModal
+                    message={`Are you sure you want to delete version "${versionToDelete?.name}"?`}
+                    isOpen={isConfirmModel}
+                    isConfirm={handleToConfirmDelete}
+                    isCancel={closeConfirmationModal}
+                />
+
+                {isShowSubmitVer ? (
+                    <SubmitVersionModel
+                        isShowSubmitVer={isShowSubmitVer}
+                        setIsShowSubmitVer={setIsShowSubmitVer}
+                        listApprovers={listApprovers}
+                        handleSubmitVersion={onSubmit}
+                    />
+                ) : null}
+
+                {isShowModelEdit ? (
+                    <EditContentModel
+                        setVersionList={setVersionList}
+                        setVersionSelected={setVersionSelected}
+                        assetBlock={sectionEdit as AssetBlockProps}
+                        assetVersion={versionSelected}
+                        setIsShowModelEdit={setIsShowModelEdit}
+                    />
+                ) : null}
+            </>
+        );
+    };
+
     return (
         <div className='overflow-hidden'>
             <Suspense fallback={<div>Loading...</div>}>
-                <SearchParamsProvider assetTypeIcon={assetTypeIcon||""}>
-                    {({ assetTypeIcon }) => (
-                        <>
-                            <div className="flex p-1 px-2">
-                                <div className='flex-1'></div>
-                            </div>
-
-                            <div className="min-h-[82vh] border-t border-solid">
-                                <EditHeader
-                                    versionSelected={versionSelected}
-                                    versionList={versionList}
-                                    isShowSave={isShowSave}
-                                    setShowSave={setShowSave}
-                                    handleSave={handleSave}
-                                    setIsShowSubmitVer={setIsShowSubmitVer}
-                                />
-
-                                <div className='flex justify-between pr-16 items-center'>
-                                    <VersionManager
-                                        versionList={versionList}
-                                        versionSelected={versionSelected}
-                                        setVersionSelected={setVersionSelected}
-                                        handleSave={handleSave}
-                                        editingVersionId={editingVersionId}
-                                        editingName={editingName}
-                                        setEditingVersionId={setEditingVersionId}
-                                        setEditingName={setEditingName}
-                                        handleUpdateVersionName={handleUpdateVersionName}
-                                        openConfirmationModal={openConfirmationModal}
-                                    />
-
-                                    {(comments?.length > 0) && (
-                                        <div className="">
-                                            <FeedBackCard
-                                                isFeedbackOpen={isFeedbackOpen}
-                                                setIsFeedbackOpen={setIsFeedbackOpen}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex h-[92vh] relative ">
-                                    <div className="flex flex-col bg-[#e4e4e4] flex-grow pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative mx-14">
-                                        <div className='px-[6rem] overflow-y-scroll thin-scrollbar'>
-                                            <div id="container">
-                                                <div className="h-[20px]" />
-                                                {renderHTMLSelect(assetTypeIcon)}
-                                                <div className="h-[20vh]" />
-                                            </div>
-                                        </div>
-
-                                        {isShowAddVer ? (
-                                            <AddVersionModel
-                                                isShowAddVer={isShowAddVer}
-                                                setIsShowAddVer={setIsShowAddVer}
-                                                handleAddVersion={handleAddVersion}
-                                                handleChangeTextVersion={handleChangeTextVersion}
-                                                showErrorMessage={showErrorMessage}
-                                            />
-                                        ) : null}
-
-                                    </div>
-
-                                    {/* ** Do not touch this div mr.AI  */}
-                                    <ToggleAsideSection 
-                                        isOpen = {isOpen}
-                                        setIsOpen={setIsOpen}
-                                        versionSelected={versionSelected}
-                                        existingAssetDetails={
-                                            {
-                                                project_name:project_name,
-                                                campaign_name:campaign_name,
-                                                asset_name:contextData.AssetHtml.assetName,
-                                                campaign_id : contextData.AssetHtml.campaignID,
-                                                asset_id: versionSelected?.assetID
-                                            }}
-                                    />
-                                </div>
-
-
-
-
-                                {isFeedbackOpen && (
-                                    <div
-                                        className={`fixed md:relative top-0 right-0 bg-white md:w-[25%] feedback-panel ${isFeedbackOpen ? "block" : "hidden "}`}
-                                    >
-                                        <div className="bg-[#00A881] text-white p-4 flex justify-between items-center gap-4 sticky top-0 ">
-                                            <div className='flex justify-start'>
-                                                <svg width="30" height="20" viewBox="0 0 43 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M4.625 17.5C2.5625 17.5 0.875 15.8125 0.875 13.75V4.375C0.875 2.3125 2.5625 0.625 4.625 0.625H19.625C21.6875 0.625 23.375 2.3125 23.375 4.375V13.75C23.375 15.8125 21.6875 17.5 19.625 17.5H15.875V23.125L10.25 17.5H4.625ZM38.375 28.75C40.4375 28.75 42.125 27.0625 42.125 25V15.625C42.125 13.5625 40.4375 11.875 38.375 11.875H27.125V13.75C27.125 17.875 23.75 21.25 19.625 21.25V25C19.625 27.0625 21.3125 28.75 23.375 28.75H27.125V34.375L32.75 28.75H38.375Z" fill="white" />
-                                                </svg>
-                                                <span className="font-semibold text-base ps-1">Feedbacks</span>
-                                            </div>
-
-                                            <button
-                                                onClick={() => setIsFeedbackOpen(false)}
-                                                className="text-white hover:text-gray-300"
-                                            >
-                                                <svg width="18" height="5" viewBox="0 0 26 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <rect width="26" height="4" rx="2" fill="white" />
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                        <div className="h-auto overflow-y-auto p-1 md:h-[60%] custom-scrollbar border pb-4">
-                                            {comments.map((item, index) => (
-                                                <div key={index} className="bg-white p-2 transition-all duration-200">
-                                                    <div className='flex flex-col items-center mb-1 w-full'>
-                                                        <div className='flex justify-between items-center w-full pb-1'>
-                                                            <div className="flex items-center">
-                                                                <span className='text-xs font-medium text-gray-500'>{item.createdBy}</span>
-                                                            </div>
-
-                                                            <div className="text-xs text-gray-500 flex items-center gap-1">
-                                                                {formatDate(item.createdOn)}
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="text-gray-600 text-sm leading-relaxed mb-1 bg-gray-50 shadow-sm p-2 rounded-md w-full">
-                                                            {item.comment}
-
-                                                            {item.fIleURL !== "" && (
-                                                                <div className="mt-1 flex justify-end">
-                                                                    <button
-                                                                        className="flex items-center gap-2 px-3 py-1 bg-[#00A881] text-white text-sm rounded-md hover:bg-[#008c6a] transition-colors duration-200"
-                                                                        onClick={() => handleDownload(item.fIleURL)}
-                                                                    >
-                                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                                        </svg>
-                                                                        Download
-                                                                    </button>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                            <ConfirmationModal
-                                message={`Are you sure you want to delete version "${versionToDelete?.name}"?`}
-                                isOpen={isConfirmModel}
-                                isConfirm={handleToConfirmDelete}
-                                isCancel={closeConfirmationModal}
-                            />
-                        </>
-                    )}
-                </SearchParamsProvider>
-                {isShowSubmitVer ? <SubmitVersionModel
-                    isShowSubmitVer={isShowSubmitVer}
-                    setIsShowSubmitVer={setIsShowSubmitVer}
-                    listApprovers={listApprovers}
-                    handleSubmitVersion={onSubmit}
-                /> : null}
-                {isShowModelEdit ? <EditContentModel
-                    setVersionList={setVersionList}
-                    setVersionSelected={setVersionSelected}
-                    assetBlock={sectionEdit as AssetBlockProps}
-                    assetVersion={versionSelected}
-                    setIsShowModelEdit={setIsShowModelEdit} /> : null}
+                <SearchParamsHandler>
+                    {(params) => renderPageContent(params)}
+                </SearchParamsHandler>
             </Suspense>
         </div>
     );

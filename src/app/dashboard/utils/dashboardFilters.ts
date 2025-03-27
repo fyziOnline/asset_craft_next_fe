@@ -145,7 +145,7 @@ const mapAssetsByType = (assets: DashboardAsset[], type: AssetType) => {
         const mappedData: AssetData = {
             assetName: data.assetName,
             campaignName: data.campaignName,
-            campaignID : data.campaignID,
+            // campaignID : data.campaignID,
             assetTypeIcon: data.assetTypeName,
             projectName: data.project,
             createdOn: formatDate(data.createdOn),
