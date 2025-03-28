@@ -104,6 +104,7 @@ export interface AllUserAssignedProps {
 export interface AssetData {
     assetTypeIcon:string
     assetName:string
+    campaignID ?:string 
     campaignName:string
     projectName:string
     createdOn:string

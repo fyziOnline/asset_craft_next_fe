@@ -2,7 +2,7 @@ import CallScriptPage from "@/app/generate-asset/assetsPromptCreationSection/Cal
 import EmailPage from "@/app/generate-asset/assetsPromptCreationSection/EmailPage"
 import LandingPage from "@/app/generate-asset/assetsPromptCreationSection/LandingPage"
 import LinkedInPage from "@/app/generate-asset/assetsPromptCreationSection/LinkedinPage"
-import { Template } from "@/types/templates"
+import { AIPromptAsset, Template } from "@/types/templates"
 import { ComponentType } from "react"
 
 export type PageType = 'Email' | 'LinkedIn' | 'Landing Page' | 'Callscript (WIP)'
@@ -10,7 +10,10 @@ export type PageType = 'Email' | 'LinkedIn' | 'Landing Page' | 'Callscript (WIP)
 interface PageParams {
     params: {
             template: Template
+            assetPrompts?: AIPromptAsset 
             project_name?: string
+            campaign_name?:string
+            asset_name?: string
     }
 }
 

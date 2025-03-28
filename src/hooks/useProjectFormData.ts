@@ -115,7 +115,6 @@ export const useProjectFormData = () => {
     }
 
     const handleChangeAssetDetails = debounce((key: string, value: string, label?: string) => {
-
         setAssetDetails(pre => ({
             ...pre,
             [key]: value
@@ -205,6 +204,7 @@ export const useProjectFormData = () => {
         isAssetNameExists,
         listProjects,
         listCampaigns,
+        listAssets,
         existingCampaignDetails,
         onChangeAssetDetails,
         assetDetails,

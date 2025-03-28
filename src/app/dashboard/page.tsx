@@ -43,6 +43,7 @@ const Dashboard: FC = () => {
 
   const [loading, setLoading] = useState(true);
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets, "email", clientAssetTypes);
+
   const { setContextData } = useAppData()
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   useEffect(() => {
