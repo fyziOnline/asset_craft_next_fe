@@ -25,4 +25,21 @@ export interface AppDataContextType {
     setError: (data: ErrorData) => void;
     userDetails: UserDetailsProps;
     setUserDetails: (data: UserDetailsProps) => void;
-  }
+}
+
+export interface editData {
+    aiPrompt: {
+        assetID?: string;
+        topic?: string;
+        type?: string;
+        keyPoints?: string;
+        targetAudience?: string | null;
+        tone?: string | null;
+        outputScale?: string | null;
+    };
+}
+
+export interface EditContextType {
+    editSection: editData;
+    setEditSection: (data: Partial<editData>) => void;
+}

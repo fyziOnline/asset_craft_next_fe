@@ -1,30 +1,26 @@
 'use client';
+
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Button from '@/components/global/Button';
-import AddVersionModel from './components/AddVersionModel';
-import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
-import EditContentModel from './components/EditContentModel';
-import ShadowDomContainer from './components/ShadowDomContainer';
+import { formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
 import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
-import SubmitVersionModel from './components/SubmitVersionModel';
+import { EditContextProvider } from '@/context/EditContext';
+import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import FeedBackCard from '@/components/cards/FeedBackCard';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
-import { FaPlus } from "react-icons/fa";
+import { useSearchParams } from 'next/navigation';
+import { useAppData } from '@/context/AppContext';
 import { formatDate } from '@/utils/formatDate';
-import { MdOutlineDelete } from "react-icons/md";
+import AddVersionModel from './components/AddVersionModel';
+import EditContentModel from './components/EditContentModel';
+import SubmitVersionModel from './components/SubmitVersionModel';
+import FeedBackCard from '@/components/cards/FeedBackCard';
 import ConfirmationModal from '@/components/global/ConfirmationModal';
-import { GlobalEdit } from '@/assets/icons/AppIcons';
 import VersionManager from './components/VersionManager';
 import EditHeader from './components/EditHeader';
 import GlobalEditButton from './components/GlobalEditButton';
 import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer';
-import { addBlockIdentifiers, formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
 import FallbackBlockControls from './components/FallbackBlockControls';
 import ToggleAsideSection from '@/components/global/ToggleAsideSection';
-import { useAppData } from '@/context/AppContext';
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -60,7 +56,6 @@ const Page = () => {
     useOverflowHidden();
     const {
         sectionEdit,
-        isLoadingGenerate,
         isShowAddVer,
         isShowSubmitVer,
         versionSelected,
@@ -77,7 +72,6 @@ const Page = () => {
         setIsShowModelEdit,
         setIsShowAddVer,
         setIsShowSubmitVer,
-        onGenerateWithAI,
         onSubmit,
         setSectionEdit,
         handleHideBlock,
@@ -455,9 +449,11 @@ const Page = () => {
     return (
         <div className='overflow-hidden'>
             <Suspense fallback={<div>Loading...</div>}>
-                <SearchParamsHandler>
-                    {(params) => renderPageContent(params)}
-                </SearchParamsHandler>
+                <EditContextProvider>
+                    <SearchParamsHandler>
+                        {(params) => renderPageContent(params)}
+                    </SearchParamsHandler>
+                </EditContextProvider>
             </Suspense>
         </div>
     );
