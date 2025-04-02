@@ -1,6 +1,6 @@
 "use client"
 
-import { editData, EditContextType } from '@/types/appContext';
+import { EditData, EditContextType } from '@/types/appContext';
 import { createContext, useContext, useState, ReactNode, FC, useEffect } from 'react'
 
 interface EditContextProviderProps {
@@ -8,8 +8,9 @@ interface EditContextProviderProps {
 }
 
 
-const INITIAL_APP_DATA: editData = {
-    aiPrompt: {}
+const INITIAL_APP_DATA: EditData = {
+    aiPrompt: {},
+    templateData: {}
 }
 
 
@@ -18,7 +19,7 @@ export const EditDataContext = createContext<EditContextType | undefined>(undefi
 export const EditContextProvider: FC<EditContextProviderProps> = ({ children }) => {
     const [editSection, setEditSection] = useState(INITIAL_APP_DATA);
 
-    const updateEditSection = (data: Partial<editData>) => {
+    const updateEditSection = (data: Partial<EditData>) => {
         setEditSection((prevData) => ({
            ...prevData,
            ...data,

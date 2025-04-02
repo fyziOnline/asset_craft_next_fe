@@ -1,6 +1,18 @@
 import { UserDetailsProps } from "./asset";
 import { AssetHtmlProps, ProjectDetails } from "./templates";
 
+interface TemplateBlock {
+    templateBlockID?: string;
+    templateID?: string;
+    blockID?: string;
+    order?: number;
+    aiTitle?: string;
+    aiPrompt?: string | null | undefined;
+    aiDescription?: string;
+    isStatic?: boolean;
+    fileURL?: string;
+}
+
 export interface AppData {
     assetTemplateShow: boolean;
     assetGenerateTemplate: string;
@@ -27,19 +39,30 @@ export interface AppDataContextType {
     setUserDetails: (data: UserDetailsProps) => void;
 }
 
-export interface editData {
+
+export interface EditData {
     aiPrompt: {
         assetID?: string;
-        topic?: string;
-        type?: string;
         keyPoints?: string;
+        outputScale?: string | null;
         targetAudience?: string | null;
         tone?: string | null;
-        outputScale?: string | null;
+        topic?: string;
+        type?: string;
+    };
+    templateData: {
+        templateID?: string;
+        layoutID?: string;
+        templateName?: string;
+        description?: string;
+        templateImageURL?: string;
+        assetTypeID?: string;
+        assetTypeName?: string;
+        templatesBlocks?: TemplateBlock[];
     };
 }
 
 export interface EditContextType {
-    editSection: editData;
-    setEditSection: (data: Partial<editData>) => void;
+    editSection: EditData;
+    setEditSection: (data: Partial<EditData>) => void;
 }

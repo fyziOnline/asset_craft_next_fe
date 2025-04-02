@@ -26,7 +26,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
         const { setError } = useAppData();
         const { setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
-        const [aiPromptAsset, setAiPromptAsset] = useState<AIPromptAsset | null>(null);
 
         const { getTemplateById, getAiPromptAssetSelect } = useGetTemplates({ type_page: "" });
 
@@ -45,6 +44,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                     }
                 ))
                 res_template = { ...res_template, templatesBlocks: updatedTemplateBlocks }
+                setEditSection({ templateData: res_template });
                 setTemplateDetails(res_template)
             } catch (error) {
                 const apiError = ApiService.handleError(error)
@@ -59,7 +59,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
         const fetchAiPromptAsset = async () => {
             try {
                 let aiAssetRes = await getAiPromptAssetSelect(existingAssetDetails?.asset_id)
-                setAiPromptAsset(aiAssetRes.aIPromptAsset)
                 setEditSection({ aiPrompt: aiAssetRes.aIPromptAsset })
             } catch (error) {
                 const apiError = ApiService.handleError(error)
@@ -72,7 +71,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
         }
 
         const renderAssetGenerateContent = () => {
-            if (!templateDetails?.assetTypeName || !aiPromptAsset) {
+            if (!templateDetails?.assetTypeName) {
                 return null
             }
 
@@ -83,7 +82,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         <Component params={
                             {
                                 template: templateDetails,
-                                assetPrompts: aiPromptAsset,
                                 project_name: existingAssetDetails?.project_name,
                                 campaign_name: existingAssetDetails?.campaign_name,
                                 asset_name: existingAssetDetails?.asset_name
