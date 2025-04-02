@@ -299,7 +299,7 @@ const LinkedInPage = ({ params }: LinkedInPageProps) => {
                 </Accordion>
             </div>
 
-            <div className='mt-[25px]'>
+            <div className={`mt-[25px] ${params.asset_name ? "hidden" : ""}`}>
                 {/* step 4 */}
                 <Accordion
                     HeaderTitle="Content Brief"
