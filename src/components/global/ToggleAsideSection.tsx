@@ -2,9 +2,12 @@ import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useAppData } from '@/context/AppContext';
 import { useEditData } from '@/context/EditContext';
 import { useGetTemplates } from '@/hooks/useGetTemplates';
+import { useRawAIOutput } from '@/hooks/useRawAIOutput';
 import { ApiService } from '@/lib/axios_generic';
-import { AIPromptAsset, AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
+import { AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
 import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } from 'react';
+import { MdOutlineVisibility } from 'react-icons/md';
+import MarkdownPopup from './MarkdownPopup';
 
 interface ToggleAsideSectionProps {
     isOpen: boolean;
@@ -21,12 +24,13 @@ interface ToggleAsideSectionProps {
     asideRef?: React.RefObject<HTMLDivElement>;
 }
 
-
 const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
-    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails ,asideRef }) => {
+    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef }) => {
         const { setError } = useAppData();
         const { setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
+        const [isMarkdownPopupOpen, setIsMarkdownPopupOpen] = useState(false);
+        const { fetchRawAIOutput, isLoading: isLoadingRawAI, rawAIOutput, assetAIPrompt } = useRawAIOutput();
 
         const { getTemplateById, getAiPromptAssetSelect } = useGetTemplates({ type_page: "" });
 
@@ -59,7 +63,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
         const fetchAiPromptAsset = async () => {
             try {
-                let aiAssetRes = await getAiPromptAssetSelect(existingAssetDetails?.asset_id)
+                const aiAssetRes = await getAiPromptAssetSelect(existingAssetDetails?.asset_id)
                 setEditSection({ aiPrompt: aiAssetRes.aIPromptAsset })
             } catch (error) {
                 const apiError = ApiService.handleError(error)
@@ -70,6 +74,25 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 })
             }
         }
+
+        const handleViewRawAIOutput = async () => {
+            try {
+                if (existingAssetDetails?.asset_id || versionSelected?.assetVersionID) {
+                    await fetchRawAIOutput({
+                        assetID: existingAssetDetails?.asset_id,
+                        assetVersionID: versionSelected?.assetVersionID
+                    });
+                    setIsMarkdownPopupOpen(true);
+                }
+            } catch (error) {
+                const apiError = ApiService.handleError(error);
+                setError({
+                    status: apiError.statusCode,
+                    message: apiError.message,
+                    showError: true
+                });
+            }
+        };
 
         const renderAssetGenerateContent = () => {
             if (!templateDetails?.assetTypeName) {
@@ -87,6 +110,17 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                                 campaign_name: existingAssetDetails?.campaign_name,
                                 asset_name: existingAssetDetails?.asset_name
                             }} />
+                        
+                        <div className="flex justify-end my-[30px]">
+                            <button
+                                onClick={handleViewRawAIOutput}
+                                disabled={isLoadingRawAI}
+                                className="flex items-center text-[#00b188] hover:text-[#008c6a] transition-colors p-2 mr-4"
+                                title="View Raw AI Output"
+                            >
+                                <MdOutlineVisibility size={20} />
+                            </button>
+                        </div>
                     </div>
                 </> : null
         };
@@ -103,11 +137,9 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
             }
         }, [existingAssetDetails]);
 
-
         if (!versionSelected || !existingAssetDetails) {
             return null;
         }
-
 
         return (
             <div className={`absolute flex top-0 h-full right-0 ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
@@ -143,9 +175,17 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         />
                     </svg>
                 </div>
+
+                <MarkdownPopup
+                    markdownContent={rawAIOutput}
+                    promptContent={assetAIPrompt}
+                    isOpen={isMarkdownPopupOpen}
+                    onClose={() => setIsMarkdownPopupOpen(false)}
+                />
             </div>
         )
     })
 
+ToggleAsideSection.displayName = 'ToggleAsideSection';
 
 export default ToggleAsideSection;
