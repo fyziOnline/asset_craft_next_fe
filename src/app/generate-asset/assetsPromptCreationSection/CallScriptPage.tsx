@@ -21,6 +21,7 @@ interface CallScriptPageProps {
     params: {
         template: Template
         project_name?: string
+        asset_name?: string
     }
 }
 
@@ -229,7 +230,7 @@ const CallScriptPage = ({ params }: CallScriptPageProps) => {
                     </div>
                 </Accordion>
             </div>
-            <div className='mt-[25px]'>
+            <div className={`mt-[25px]} ${params.asset_name ? "hidden" : ""}`}>
                 {/* step 3 */}
                 <Accordion
                     HeaderTitle="Content Brief"
