@@ -18,11 +18,12 @@ interface ToggleAsideSectionProps {
         campaign_id: string;
         asset_id: string;
     };
+    asideRef?: React.RefObject<HTMLDivElement>;
 }
 
 
 const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
-    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails }) => {
+    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails ,asideRef }) => {
         const { setError } = useAppData();
         const { setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
@@ -110,7 +111,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
         return (
             <div className={`absolute flex top-0 h-full right-0 ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
-                <div className={`bg-[#F5F5F7] pb-28 h-full overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
+                <div ref={asideRef} className={`bg-[#F5F5F7] pb-28 h-full overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
                     style={{ zIndex: 10 }} // Sidebar stays above content
                 >
                     {isOpen && (
