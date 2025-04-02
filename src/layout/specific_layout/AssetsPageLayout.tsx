@@ -7,6 +7,7 @@ import SearchBox from "@/components/global/SearchBox";
 import FilterDropdown from '@/components/global/FilterDropdown'
 import { Pagination, Stack } from '@mui/material'
 import { usePathname } from 'next/navigation'
+import Preloader from '../../../Preloader'
 
 interface Asset {
   [key: string]: string
@@ -32,6 +33,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   const [getSelectedAssetType, setGetSelectedAssetType] = useState<string>('');
   const [type, setType] = useState<string>('Email');
   const pathname = usePathname(); // Get current route
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [gridCurrentPage, setGridCurrentPage] = useState<number>(1)
   const ITEM_PER_PAGE = 9
@@ -48,6 +50,13 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
   // useEffect(() => {
 
   // }, [page]);
+
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000); // Simulate API delay or processing time
+  }, [campaign_data, searchQuery, getSelectedStatus, getSelectedAssetType]);
 
   const toggleListType = () => {
     setIsList(pre => !pre)
@@ -136,44 +145,50 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
         <span className="pr-10 cursor-pointer" onClick={toggleListType}>{!isList ? <ListIcon /> : <GridIcon />}</span>
       </div>
       <div className="px-4 lg:px-12 overflow-y-scroll h-[85vh] scrollbar-hide">
-        {filteredData.length === 0 ?
-          <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">No data available</div>
-          : !isList ?
-            <>
-              <div className=" asset-grid-layout mt-4  justify-center overflow-auto">
-                {paginatedGridData.map((data, index) => (
-                  <div key={index}
-                  >
-                    <AssetCard data={data}
-                      handleClick={handleClick} />
-                  </div>
-                ))}
-              </div>
-
-              {gridTotalPages > 1 && (
-                <div className='flex justify-center mt-2'>
-                  <Stack spacing={2}>
-                    <Pagination
-                      count={gridTotalPages}
-                      page={gridCurrentPage}
-                      showFirstButton
-                      showLastButton
-                      onChange={handleGridPageChange}
-                    />
-                  </Stack>
+        {loading ? (
+          <div className="flex flex-col items-center justify-center w-full py-4">
+            <Preloader />
+            
+          </div>
+        ) : filteredData.length === 0 ? (
+          <div className="w-full h-[70vh] flex justify-center items-center text-gray-500">
+            No data available
+          </div>
+        ) : !isList ? (
+          <>
+            <div className="asset-grid-layout mt-4 justify-center overflow-auto">
+              {paginatedGridData.map((data, index) => (
+                <div key={index}>
+                  <AssetCard data={data} handleClick={handleClick} />
                 </div>
-              )}
-            </>
-            :
-            <Table
-              isPagination={true}
-              columnWidths={columnWidthsTable}
-              handleClick={handleClick}
-              hiddenFields={hiddenFields}
-              listItems={filteredData}
-              tableHeadings={tableHeadings}
-              isIconRequired={isIconRequired}
-              arrowInHeadings={headersHavingToggle} />}
+              ))}
+            </div>
+            {gridTotalPages > 1 && (
+              <div className='flex justify-center mt-2'>
+                <Stack spacing={2}>
+                  <Pagination
+                    count={gridTotalPages}
+                    page={gridCurrentPage}
+                    showFirstButton
+                    showLastButton
+                    onChange={handleGridPageChange}
+                  />
+                </Stack>
+              </div>
+            )}
+          </>
+        ) : (
+          <Table
+            isPagination={true}
+            columnWidths={columnWidthsTable}
+            handleClick={handleClick}
+            hiddenFields={hiddenFields}
+            listItems={filteredData}
+            tableHeadings={tableHeadings}
+            isIconRequired={isIconRequired}
+            arrowInHeadings={headersHavingToggle}
+          />
+        )}
         <div className='h-[10vh]' />
       </div>
     </>

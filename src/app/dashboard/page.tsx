@@ -11,6 +11,7 @@ import { formatDate } from "@/utils/formatDate";
 import { useAppData } from "@/context/AppContext";
 import { AssetHtmlProps } from "@/types/templates";
 import { useRouter } from "next/navigation";
+import Preloader from "../../../Preloader";
 
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
@@ -28,13 +29,21 @@ const Dashboard: FC = () => {
   } = useDashboard()
 
   useEffect(() => {
-    getAssetTypes()
-    getAssetAllAtDashboard()
-    getPendingApproval()
-  }, [])
+    const fetchData = async () => {
+      await Promise.all([
+        getAssetTypes(),
+        getAssetAllAtDashboard(),
+        getPendingApproval()
+      ]);
+      setLoading(false); // Set loading to false after fetching data
+    };
 
+    fetchData();
+  }, []);
+
+  const [loading, setLoading] = useState(true);
   const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets, "email", clientAssetTypes);
-  
+
   const { setContextData } = useAppData()
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   useEffect(() => {
@@ -93,14 +102,20 @@ const Dashboard: FC = () => {
             <div className="mt-5">
               <p className="text-lg font-bold tracking-wide">Recent Assets:</p>
             </div>
-            <div>
-              {assetsDisplayTable && assetsDisplayTable.length > 0 ? (
-                <Table hiddenFields={["assetID"]} handleClick={(item) => {
-                  router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&campaignID=${item.campaignID}&assetTypeIcon=${item.assetTypeIcon}`)
-                }}
-                  listItems={assetsDisplayTable} tableHeadings={tableHeading} />
-              ) : (
-                <p></p> // Optionally, display a message if no data is available
+            <div className="relative">
+              {loading && assetsDisplayTable.length === 0 && <Preloader rowCount={3} />}
+              {!loading && assetsDisplayTable.length === 0 && (
+                <p className="text-center text-gray-500 mt-4">No data available</p>
+              )}
+              {!loading && assetsDisplayTable.length > 0 && (
+                <Table
+                  hiddenFields={["assetID"]}
+                  handleClick={(item) => {
+                    router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&assetTypeIcon=${item.assetTypeIcon}`)
+                  }}
+                  listItems={assetsDisplayTable}
+                  tableHeadings={tableHeading}
+                />
               )}
             </div>
           </div>
@@ -122,9 +137,8 @@ const Dashboard: FC = () => {
 
                         setActiveIndex(index); // Set the active index to apply the scale effect
                         setTimeout(() => setActiveIndex(null), 500); // Reset after 500ms
-                        console.log('data :',data);
-                        
-                        router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`) 
+
+                        router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`)
                       }}
                       key={index} className={`rounded-[15px] border p-3 mt-2 cursor-pointer transition-all duration-300 ease-in-out
                       ${activeIndex === index ? ' scale-[.98] bg-green-50 border-green-100' : 'scale-100'}
