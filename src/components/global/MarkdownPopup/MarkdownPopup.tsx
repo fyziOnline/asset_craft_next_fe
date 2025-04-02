@@ -49,7 +49,7 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
         <div className="flex flex-col h-full gap-4">
           {promptContent && (
             <div className="flex flex-col">
-              <h4 className="text-md font-medium mb-2">AI Request Prompt</h4>
+              <h4 className="text-md font-medium mb-2">AI Request</h4>
               <div className="overflow-y-auto custom-scrollbar max-h-[20vh] border border-gray-200 rounded p-3 bg-gray-50">
                 <div className="prose max-w-none">
                   <ReactMarkdown>{promptContent}</ReactMarkdown>

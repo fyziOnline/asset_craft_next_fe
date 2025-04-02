@@ -6,7 +6,7 @@ import { useRawAIOutput } from '@/hooks/useRawAIOutput';
 import { ApiService } from '@/lib/axios_generic';
 import { AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
 import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } from 'react';
-import { MdOutlineVisibility } from 'react-icons/md';
+import { MdDescription } from 'react-icons/md';
 import MarkdownPopup from './MarkdownPopup';
 
 interface ToggleAsideSectionProps {
@@ -102,7 +102,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
             const Component = PAGE_COMPONENT[templateDetails?.assetTypeName as PageType]
             return Component ?
                 <>
-                    <div>
+                    <div className="relative">
                         <Component params={
                             {
                                 template: templateDetails,
@@ -111,14 +111,16 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                                 asset_name: existingAssetDetails?.asset_name
                             }} />
                         
-                        <div className="flex justify-end my-[30px]">
+                        {/* Absolute positioned button that will appear on the same line as Generate */}
+                        <div className="absolute bottom-[3px] left-5">
                             <button
                                 onClick={handleViewRawAIOutput}
                                 disabled={isLoadingRawAI}
-                                className="flex items-center text-[#00b188] hover:text-[#008c6a] transition-colors p-2 mr-4"
+                                className="flex items-center gap-2 text-[#00b188] hover:text-[#008c6a] transition-colors p-2"
                                 title="View Raw AI Output"
                             >
-                                <MdOutlineVisibility size={20} />
+                                <MdDescription size={20} />
+                                <span className="text-sm">View</span>
                             </button>
                         </div>
                     </div>
