@@ -11,13 +11,14 @@ import { useAppData } from '@/context/AppContext';
 import { ApiService } from '@/lib/axios_generic';
 import { ListTypePage } from '@/data/dataGlobal';
 import { DropDownOptions } from '@/components/global/DropDown';
+import { AssetType } from '@/types/asset';
 
 export const useDashboard = () => {
     const router = useRouter();
     const campaignIDRef = useRef("")
     const isCampaignSelect = useRef(false)
     const { setShowLoading } = useLoading()
-    const { setContextData, setError, userDetails } = useAppData();
+    const { setContextData, setError } = useAppData();
 
     const [clientAssetTypes, setClientAssetTypes] = useState<ClientAssetTypeProps[]>([])
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
@@ -213,13 +214,17 @@ export const useDashboard = () => {
             }
             setContextData({ isRegenerateHTML: false, stepGenerate: 0 })
 
-            if (selectedButton?.assetTypeName.includes("Email")) {
-                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.Email}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
-            } else if (selectedButton?.assetTypeName.includes('Landing')) {
-                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LandingPage}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
-            } else if (selectedButton?.assetTypeName.includes('LinkedIn')) {
-                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage.LinkedIn}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton.assetTypeID}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
+            // Compare with AssetType enum values where possible
+            const assetTypeName = selectedButton?.assetTypeName || '';
+            
+            if (assetTypeName === AssetType.EMAIL) {
+                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage[AssetType.EMAIL]}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton?.assetTypeID || ''}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
+            } else if (assetTypeName === AssetType.LANDING_PAGE) {
+                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage[AssetType.LANDING_PAGE]}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton?.assetTypeID || ''}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
+            } else if (assetTypeName === AssetType.LINKEDIN) {
+                router.push(`my-projects/${assetDetails.project_name}/${assetDetails.campaign_name}/${ListTypePage[AssetType.LINKEDIN]}?asset_name=${assetDetails.asset_name}&assetTypeID=${selectedButton?.assetTypeID || ''}&campaignID=${campaignIDRef.current}&isCampaignSelect=${isCampaignSelect.current}`)
             }
+            // Removed CallScript handling as requested
         }
     }
 

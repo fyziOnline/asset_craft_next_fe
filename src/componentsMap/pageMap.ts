@@ -1,11 +1,13 @@
-import CallScriptPage from "@/app/generate-asset/assetsPromptCreationSection/CallScriptPage"
-import EmailPage from "@/app/generate-asset/assetsPromptCreationSection/EmailPage"
-import LandingPage from "@/app/generate-asset/assetsPromptCreationSection/LandingPage"
-import LinkedInPage from "@/app/generate-asset/assetsPromptCreationSection/LinkedinPage"
+import AssetForm from "@/app/generate-asset/assetsPromptCreationSection/AssetForm"
 import { AIPromptAsset, Template } from "@/types/templates"
 import { ComponentType } from "react"
+import { AssetType } from "@/types/assetTypes"
 
-export type PageType = 'Email' | 'LinkedIn' | 'Landing Page' | 'Callscript (WIP)'
+// Export the AssetType enum for backward compatibility
+export { AssetType as PageType };
+
+// For backwards compatibility - allow both enum values and legacy string
+export type LegacyPageType = AssetType | 'Callscript (WIP)';
 
 interface PageParams {
     params: {
@@ -17,11 +19,13 @@ interface PageParams {
     }
 }
 
-const PAGE_COMPONENT : Record<PageType,ComponentType<PageParams>> = {
-    'Email' : EmailPage,
-    'LinkedIn' : LinkedInPage,
-    'Landing Page' : LandingPage,
-    'Callscript (WIP)' : CallScriptPage
-}
+// Map using the enum as keys
+const PAGE_COMPONENT: Record<LegacyPageType, ComponentType<PageParams>> = {
+    [AssetType.EMAIL]: AssetForm,
+    [AssetType.LINKEDIN]: AssetForm,
+    [AssetType.LANDING_PAGE]: AssetForm,
+    [AssetType.CALL_SCRIPT]: AssetForm,
+    'Callscript (WIP)': AssetForm // Legacy key - will be removed once migration is complete
+} as Record<LegacyPageType, ComponentType<PageParams>>;
 
 export default PAGE_COMPONENT

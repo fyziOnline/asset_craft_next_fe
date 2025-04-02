@@ -12,6 +12,7 @@ import { useAppData } from "@/context/AppContext";
 import { AssetHtmlProps } from "@/types/templates";
 import { useRouter } from "next/navigation";
 import Preloader from "../../../Preloader";
+import { AssetType } from "@/types/asset";
 
 const tableHeading = ["Asset Name", "Campaign Name", "Project Name", "Created On", "Current Status"]
 
@@ -42,7 +43,7 @@ const Dashboard: FC = () => {
   }, []);
 
   const [loading, setLoading] = useState(true);
-  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets, "email", clientAssetTypes);
+  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets, AssetType.EMAIL, clientAssetTypes);
 
   const { setContextData } = useAppData()
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -81,10 +82,14 @@ const Dashboard: FC = () => {
             </p>
 
             <div className="flex w-full overflow-x-auto gap-4 my-5 scrollbar-hide overflow-y-hidden">
-              {clientAssetTypes.filter(item => item.assetTypeName !== "All in One").map((item, index) => (
+              {clientAssetTypes
+                .filter(item => 
+                  item.assetTypeName !== "All in One"                  
+                )
+                .map((item, index) => (
                 <Button
                   key={index}
-                  buttonText={item.assetTypeName}
+                  buttonText={item.description || item.assetTypeName}
                   showIcon={false}
                   IconComponent={item.assetTypeName === "All in One" && <ExpressIcon strokeColor="white" width="40" height="38" />}
                   backgroundColor="bg-white"

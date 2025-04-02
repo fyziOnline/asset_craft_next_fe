@@ -65,7 +65,19 @@ const getCurrentDateFormatted = (): string => {
 };
 
 // The main function that processes the dashboard assets
-const processDashboardAssets = (dashboardAssets: DashboardAsset[], assetType: AssetType = "email", clientAssetTypes: ClientAssetTypeProps[] = []): { updatedDashboardData: DashboardData[], assetsDisplayTable: any[], pendingApproval: any[], assetData: any[] } => {
+const processDashboardAssets = (
+    dashboardAssets: DashboardAsset[], 
+    assetType?: AssetType | null, 
+    clientAssetTypes: ClientAssetTypeProps[] = []
+): { 
+    updatedDashboardData: DashboardData[], 
+    assetsDisplayTable: AssetData[], 
+    pendingApproval: DashboardAsset[], 
+    assetData: AssetData[] 
+} => {
+    // Default to EMAIL if assetType is null or undefined
+    const effectiveAssetType = assetType || AssetType.EMAIL;
+    
     const dashboardData: DashboardData[] = [
         { projectName: "", allProjectDate: `as of ${getCurrentDateFormatted()}`, totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
         { projectName: "", totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
@@ -89,13 +101,13 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[], assetType: As
 
     const onReviewCount = dashboardAssets.filter(asset => asset.status === STATUS.ON_REVIEW).length;
 
-    const pendingApproval = dashboardAssets.filter(asset => asset.status === STATUS.ON_REVIEW)
+    const pendingApproval = dashboardAssets.filter(asset => asset.status === STATUS.ON_REVIEW);
 
-    const completedAssetsCount = dashboardAssets.filter(asset => asset.status === STATUS.COMPLETED).length
+    const completedAssetsCount = dashboardAssets.filter(asset => asset.status === STATUS.COMPLETED).length;
 
 
     const projectTypes = clientAssetTypes.filter(item => item.assetTypeName !== "All in One")
-        .map(item => item.assetTypeName)
+        .map(item => item.assetTypeName);
 
     const updatedDashboardData = sortedDashBoardData.map((data) => {
         if (data.projectName === "All Projects") {
@@ -124,13 +136,11 @@ const processDashboardAssets = (dashboardAssets: DashboardAsset[], assetType: As
         return data;
     });
 
-    const mappedAssets = mapAssetsByType(dashboardAssets, assetType);
-    const assetData = mappedAssets.assetData
+    const mappedAssets = mapAssetsByType(dashboardAssets, effectiveAssetType);
+    const assetData = mappedAssets.assetData;
     const assetsDisplayTable = mappedAssets.assetsDisplayTable;
     return { updatedDashboardData, assetsDisplayTable, pendingApproval, assetData };
 };
-
-
 
 const mapAssetsByType = (assets: DashboardAsset[], type: AssetType) => {
     const result = {
@@ -140,44 +150,39 @@ const mapAssetsByType = (assets: DashboardAsset[], type: AssetType) => {
 
     for (let i = 0; i < assets.length; i++) {
         const data = assets[i];
-        // console.log('data :',data);
         
         const mappedData: AssetData = {
             assetName: data.assetName,
             campaignName: data.campaignName,
-            // campaignID : data.campaignID,
+            campaignID: data.campaignID,
             assetTypeIcon: data.assetTypeName,
             projectName: data.project,
             createdOn: formatDate(data.createdOn),
             currentStatus: data.status,
             assetID: data.assetID,
+            approvedOn: data.approvedOn ? formatDate(data.approvedOn) : "",
+            approvedBy: data.approvedBy || ""
         };
 
-        const assetName = data.assetTypeName.toLocaleLowerCase()
+        const assetName = data.assetTypeName.toLocaleLowerCase();
 
-        if (assetName === type?.toLocaleLowerCase()) {
-            result.assetData.push({
-                ...mappedData,
-                approvedOn: data.approvedOn ? formatDate(data.approvedOn) : "",
-                approvedBy: data.approvedBy
-            })
+        // Handle the "All Projects" special case
+        if (type.toLocaleLowerCase() === 'all projects') {
+            result.assetData.push(mappedData);
+            continue;
         }
 
-        if (type?.toLocaleLowerCase() === 'all projects') {
-            result.assetData.push({
-                ...mappedData,
-                approvedOn: data.approvedOn ? formatDate(data.approvedOn) : "",
-                approvedBy: data.approvedBy
-            })
+        // Compare enum value string with asset type name
+        if (assetName === type.toLocaleLowerCase()) {
+            result.assetData.push(mappedData);
         }
 
         if (result.assetsDisplayTable.length < 5) {
-            result.assetsDisplayTable.push(mappedData)
+            result.assetsDisplayTable.push(mappedData);
         }
     }
 
     return result;
-}
-
+};
 
 export default processDashboardAssets;
