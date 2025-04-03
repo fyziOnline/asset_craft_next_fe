@@ -43,7 +43,12 @@ const Dashboard: FC = () => {
   }, []);
 
   const [loading, setLoading] = useState(true);
-  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(dashboardAssets, AssetType.EMAIL, clientAssetTypes);
+  const { updatedDashboardData, assetsDisplayTable } = processDashboardAssets(
+    dashboardAssets, 
+    AssetType.EMAIL, 
+    clientAssetTypes, 
+    false // Hide approval fields in dashboard
+  );
 
   const { setContextData } = useAppData()
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -120,6 +125,7 @@ const Dashboard: FC = () => {
                   }}
                   listItems={assetsDisplayTable}
                   tableHeadings={tableHeading}
+                  
                 />
               )}
             </div>

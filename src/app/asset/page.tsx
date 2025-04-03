@@ -42,7 +42,7 @@ const Page: FC = () => {
 
   useEffect(() => {
     getAssetAllAtDashboard()
-  }, [getAssetAllAtDashboard])
+  }, [])
 
   // Pass the type safely to processDashboardAssets, which now handles null/undefined properly
   const { assetData } = processDashboardAssets(dashboardAssets, type)  

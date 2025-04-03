@@ -172,7 +172,7 @@ const BaseAssetForm = ({ params, assetType, assetSpecificSection }: BaseAssetFor
 
         if (res?.isSuccess) {
           router.replace(
-            `/edit-html-content?assetID=${assetIDTemplateRef.current}&projectName=${contextData.ProjectDetails.project_name}&campaignName=${contextData.ProjectDetails.campaign_name}&assetTypeIcon=${assetType}`
+            `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${contextData.ProjectDetails.project_name || ""}&campaignName=${contextData.ProjectDetails.campaign_name || ""}&assetTypeIcon=${assetType || ""}`
           );
         }
 

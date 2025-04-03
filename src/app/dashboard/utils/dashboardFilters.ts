@@ -68,7 +68,8 @@ const getCurrentDateFormatted = (): string => {
 const processDashboardAssets = (
     dashboardAssets: DashboardAsset[], 
     assetType?: AssetType | null, 
-    clientAssetTypes: ClientAssetTypeProps[] = []
+    clientAssetTypes: ClientAssetTypeProps[] = [],
+    showApprovalFields: boolean = true
 ): { 
     updatedDashboardData: DashboardData[], 
     assetsDisplayTable: AssetData[], 
@@ -136,13 +137,13 @@ const processDashboardAssets = (
         return data;
     });
 
-    const mappedAssets = mapAssetsByType(dashboardAssets, effectiveAssetType);
+    const mappedAssets = mapAssetsByType(dashboardAssets, effectiveAssetType, showApprovalFields);
     const assetData = mappedAssets.assetData;
     const assetsDisplayTable = mappedAssets.assetsDisplayTable;
     return { updatedDashboardData, assetsDisplayTable, pendingApproval, assetData };
 };
 
-const mapAssetsByType = (assets: DashboardAsset[], type: AssetType) => {
+const mapAssetsByType = (assets: DashboardAsset[], type: AssetType, showApprovalFields: boolean = true) => {
     const result = {
         assetData: [] as AssetData[],
         assetsDisplayTable: [] as AssetData[]
@@ -151,34 +152,39 @@ const mapAssetsByType = (assets: DashboardAsset[], type: AssetType) => {
     for (let i = 0; i < assets.length; i++) {
         const data = assets[i];
         
-        const mappedData: AssetData = {
+        // Base properties that are always included
+        const mappedData: Partial<AssetData> = {
             assetName: data.assetName,
             campaignName: data.campaignName,
-            campaignID: data.campaignID,
             assetTypeIcon: data.assetTypeName,
             projectName: data.project,
             createdOn: formatDate(data.createdOn),
             currentStatus: data.status,
             assetID: data.assetID,
-            approvedOn: data.approvedOn ? formatDate(data.approvedOn) : "",
-            approvedBy: data.approvedBy || ""
         };
 
         const assetName = data.assetTypeName.toLocaleLowerCase();
+        const isAllProjects = type.toLocaleLowerCase() === 'all projects';
+
+        // Add approval fields only if showApprovalFields is true and not for 'all projects'
+        if (showApprovalFields && !isAllProjects) {
+            mappedData.approvedOn = data.approvedOn ? formatDate(data.approvedOn) : "";
+            mappedData.approvedBy = data.approvedBy || "";
+        }
 
         // Handle the "All Projects" special case
-        if (type.toLocaleLowerCase() === 'all projects') {
-            result.assetData.push(mappedData);
+        if (isAllProjects) {
+            result.assetData.push(mappedData as AssetData);
             continue;
         }
 
         // Compare enum value string with asset type name
         if (assetName === type.toLocaleLowerCase()) {
-            result.assetData.push(mappedData);
+            result.assetData.push(mappedData as AssetData);
         }
 
         if (result.assetsDisplayTable.length < 5) {
-            result.assetsDisplayTable.push(mappedData);
+            result.assetsDisplayTable.push(mappedData as AssetData);
         }
     }
 
