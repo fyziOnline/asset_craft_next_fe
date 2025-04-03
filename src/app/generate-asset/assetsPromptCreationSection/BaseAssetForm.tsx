@@ -319,7 +319,7 @@ const BaseAssetForm = ({ params, assetType, assetSpecificSection }: BaseAssetFor
               }
 
               return (
-                <div key={item.blockID}>
+                <div key={`${item.blockID}-${index}`}>
                   <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
                   <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
                   <TextField
