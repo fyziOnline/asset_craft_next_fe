@@ -2,11 +2,12 @@ import { urls } from "@/apis/urls";
 import { ApiService } from "@/lib/axios_generic";
 import { convertFileToBase64 } from "@/lib/utils";
 import { AssetHtmlProps, ProjectDetails } from "@/types/templates";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import Cookies from "js-cookie";
 import { FormDataProps, SectionProps } from "./useInputFormDataGenerate";
 import { nkey } from "@/data/keyStore";
 import moment from "moment";
+import { ApiResponse, AssetAddResponse, AssetGenerateResponse, AssetPromptResponse, AssetSelectResponse, AssetVersionResponse, CampaignAddResponse, ImageUpdateResponse, SectionResponse } from "@/types/apiResponses";
 
 interface GenerateTemplateProp {
   params?: {
@@ -15,12 +16,14 @@ interface GenerateTemplateProp {
 }
 
 export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
-  const campaignID = useMemo(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("campaignID") as string
-    }
-  }, [])
+  // Commenting out unused variable but keeping for future reference
+  // const urlCampaignID = useMemo(() => {
+  //   if (typeof window !== "undefined") {
+  //     const params = new URLSearchParams(window.location.search);
+  //     return params.get("campaignID") as string
+  //   }
+  //   return null;
+  // }, [])
   const assetPromptIDRef = useRef("");
   const assetIDTemplateRef = useRef("");
   const assetSelect = useRef<AssetHtmlProps>({} as AssetHtmlProps);
@@ -43,7 +46,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         (assetVersion) => {
           return Sections.map(async (item) => {
             try {
-              const resSectionInsert = await ApiService.post<any>(
+              const resSectionInsert = await ApiService.post<SectionResponse>(
                 urls.assetVersionBlock_aiPromptUpdateByTemplateID,
                 {
                   ...item,
@@ -71,14 +74,14 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
   const generateHTMLWithAI = async () => {
     try {
-      const resGenerateUsingAI = await ApiService.post<any>(`${urls.asset_generateMultipleVersionUsingAI}`, {
+      const resGenerateUsingAI = await ApiService.post<AssetGenerateResponse>(`${urls.asset_generateMultipleVersionUsingAI}`, {
         assetID: assetSelect.current.assetID
       })
 
       if (resGenerateUsingAI.isSuccess) {
         const generatePromises = resGenerateUsingAI.assetVersions.map(
-          async (assetVersion: any) => {
-            const resGenerate = await ApiService.get<any>(
+          async (assetVersion: AssetVersionResponse) => {
+            const resGenerate = await ApiService.get<ApiResponse>(
               `${urls.asset_generate}?assetID=${assetIDTemplateRef.current}&assetVersionID=${assetVersion.assetVersionID}`
             );
             return resGenerate;
@@ -99,15 +102,16 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
 
   const getAssetHTML = async () => {
     try {
-      const resAssetSelect = await ApiService.get<any>(
+      const resAssetSelect = await ApiService.get<AssetSelectResponse>(
         `${urls.asset_select}?assetID=${assetIDTemplateRef.current}`
       );
       if (resAssetSelect.isSuccess && resAssetSelect.assetVersions.length > 0) {
-        return resAssetSelect as AssetHtmlProps;
+        return resAssetSelect as unknown as AssetHtmlProps;
       } else {
         return returnError("An error occurred please try again later.");
       }
-    } catch (error) {
+    } catch (err) {
+      console.error("getAssetHTML error:", err);
       return returnError("An error occurred please try again later.");
     }
   };
@@ -121,7 +125,8 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       } else {
         return returnError("An error occurred please try again later.");
       }
-    } catch (error) {
+    } catch (err) {
+      console.error("generateAssetHTML error:", err);
       return returnError("An error occurred please try again later.");
     }
   };
@@ -153,13 +158,38 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     }
   };
 
+  const aiPromptAssetUpsert = async (
+    FormData: FormDataProps,
+    assetID: string,
+    promptID?: string
+  ) => {
+    try {
+      const response = await ApiService.post<AssetPromptResponse>(
+        urls.aiPrompt_Asset_insertupdate,
+        {
+          promptID: promptID || undefined,
+          assetID: assetID,
+          topic: FormData?.topic || "",
+          type: FormData?.type || "",
+          keyPoints: FormData?.keyPoints || "",
+        }
+      );
+
+      return response;
+    } catch (error) {
+      console.error('asset prompt error:', error);
+      return { isSuccess: false };
+    }
+  };
+
   const aiPromptGenerateForAsset = async () => {
     try {
-      const resGenerate = await ApiService.get<any>(
+      const resGenerate = await ApiService.get<ApiResponse>(
         `${urls.aiPrompt_GenerateAssetPrompt}?assetID=${assetIDTemplateRef.current}`
       );
       return resGenerate;
     } catch (error) {
+      console.error('asset generate error:', error)
       return { isSuccess: false };
     }
   };
@@ -169,7 +199,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       if (FormData?.fileSelected) {
         const resBase64 = await convertFileToBase64(FormData.fileSelected);
         if (resBase64.isSuccess) {
-          const resImageUpdate = await ApiService.put<any>(
+          const resImageUpdate = await ApiService.put<ImageUpdateResponse>(
             urls.aiPrompt_image_update,
             {
               originalImageName: FormData.fileSelected.name,
@@ -183,6 +213,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       }
       return 0;
     } catch (error) {
+      console.error('upload image error:', error)
       return 0;
     }
   };
@@ -192,7 +223,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     try {
       const client_ID = Cookies.get(nkey.client_ID);
       const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-      const res_campaign_add = await ApiService.post<any>(urls.campaign_add, {
+      const res_campaign_add = await ApiService.post<CampaignAddResponse>(urls.campaign_add, {
         "clientID": client_ID,
         "project": details.project_name,
         "campaignName": details.campaign_name,
@@ -208,11 +239,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       }
     } catch (error) {
       const apiError = ApiService.handleError(error)
-      // setError({
-      //   status: apiError.statusCode,
-      //   message: apiError.message,
-      //   showError: true
-      // })
+      console.error("Campaign add error:", apiError);
       return {
         campaignID: "",
         status: false
@@ -245,7 +272,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
         }
       }
 
-      const resAddWithTemplate = await ApiService.post<any>(
+      const resAddWithTemplate = await ApiService.post<AssetAddResponse>(
         urls.asset_addWithTemplate,
         {
           campaignID: campaign_id,
@@ -268,14 +295,10 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
           const allSuccess = await updateSections(Sections);
 
           if (allSuccess) {
-            const resAssetInsert = await ApiService.post<any>(
-              urls.aiPrompt_Asset_insert,
-              {
-                assetID: assetIDTemplateRef.current || "",
-                topic: FormData?.topic || "",
-                type: FormData?.type || "",
-                keyPoints: FormData?.keyPoints || "",
-              }
+            const resAssetInsert = await aiPromptAssetUpsert(
+              FormData,
+              assetIDTemplateRef.current,
+              assetPromptIDRef.current
             );
 
             if (resAssetInsert.isSuccess) {
@@ -314,15 +337,10 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     try {
       const allSuccess = await updateSections(Sections);
       if (allSuccess) {
-        const resAssetInsert = await ApiService.put<any>(
-          urls.aiPrompt_Asset_update,
-          {
-            promptID: assetPromptIDRef.current,
-            assetID: assetIDTemplateRef.current || "",
-            topic: FormData?.topic || "",
-            type: FormData?.type || "",
-            keyPoints: FormData?.keyPoints || "",
-          }
+        const resAssetInsert = await aiPromptAssetUpsert(
+          FormData,
+          assetIDTemplateRef.current,
+          assetPromptIDRef.current
         );
         if (resAssetInsert.isSuccess) {
           const fileID = await uploadImage(FormData);
