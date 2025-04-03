@@ -16,6 +16,7 @@ export const urls = {
   asset_getAssetDataUsingAI: "/asset/getAssetDataUsingAI",
   asset_generateMultipleVersionUsingAI: "/asset/generateAssetDataForMultipleVersionUsingAI",
   asset_generate: "/asset/generate",
+  asset_getRawAIOutput: "/asset/getRawAIOutput",
   assetVersionBlock_update: "/AssetVersionBlock/update",
   assetVersionBlock_updateIgnoreStatus: "/AssetVersionBlock/updateIgnoreStatus",
   assetVersionBlock_renderBlockHTML: "/AssetVersionBlock/renderBlockHTML",

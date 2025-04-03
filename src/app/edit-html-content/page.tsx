@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
 import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
 import { EditContextProvider } from '@/context/EditContext';
@@ -281,6 +281,27 @@ const Page = () => {
         );
     };
 
+    // if user click outside to close the aside section
+    const asideRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (asideRef.current && !asideRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }            
+        }
+
+        if(isOpen){
+            document.addEventListener('mousedown', handleClickOutside)
+        }else{
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    },[isOpen])
+
     const renderPageContent = ({
         assetTypeIcon,
         campaign_name,
@@ -362,6 +383,7 @@ const Page = () => {
                                 campaign_id: contextData.AssetHtml.campaignID,
                                 asset_id: versionSelected?.assetID
                             }}
+                            asideRef={asideRef}
                         />
                     </div>
 
