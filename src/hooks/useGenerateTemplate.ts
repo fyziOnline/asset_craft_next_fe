@@ -163,16 +163,22 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     assetID: string,
     promptID?: string
   ) => {
+    const postData = {
+      promptID: promptID || undefined,
+      AssetID: assetID,
+      Topic: FormData?.topic || "",
+      Type: FormData?.type || "",
+      KeyPoints: FormData?.keyPoints || "",
+      TargetAudience: FormData?.targetAudience || "",
+      Tone: FormData?.tone || "",
+      OutputScale: FormData?.outputScale || 5
+    }
+    console.log("postData", postData);
+
     try {
       const response = await ApiService.post<AssetPromptResponse>(
         urls.aiPrompt_Asset_insertupdate,
-        {
-          promptID: promptID || undefined,
-          assetID: assetID,
-          topic: FormData?.topic || "",
-          type: FormData?.type || "",
-          keyPoints: FormData?.keyPoints || "",
-        }
+        postData
       );
 
       return response;
