@@ -18,7 +18,14 @@ interface DragAndDropProps {
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "text/plain", "application/pdf"];
+const ALLOWED_TYPES = {
+  image: ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp", "image/svg+xml"],
+  text: ["text/plain"],
+  document: ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"], // .doc, .docx
+  spreadsheet: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/csv"] // .xls, .xlsx, .csv
+};
+
+
 
 const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelectedFile, dragAndDropOuterClass = "", showButtons = true }) => {
   const [file, setFile] = useState<File | null>(null);
@@ -28,6 +35,8 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
   const [errorMessage, setErrorMessage] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const ALL_ALLOWED_TYPES = Object.values(ALLOWED_TYPES).flat();
 
   // Handles button click events and updates the active state.
   const handleButtonClick = (button: "upload" | "recent") => {
@@ -44,8 +53,8 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
   // Returns an error message if the file is invalid, otherwise returns an empty string.
 
   const validateFile = (file: File) => {
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      return "Only image and text files are allowed.";
+    if (!ALL_ALLOWED_TYPES.includes(file.type)) {
+      return "Unsupported file type. Please upload a valid image, document, or spreadsheet.";
     }
     if (file.size > MAX_FILE_SIZE) {
       return "File size must be less than 10MB.";
@@ -145,7 +154,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
                 onChange={handleFileInputChange}
                 className="hidden"
                 id="file-input"
-                accept=".txt,image/*,.pdf"
+                accept=".jpg,.jpeg,.png,.gif,.webp,.svg,.txt,.pdf,.doc,.docx,.xls,.xlsx,.csv"
               />
 
             </div>
@@ -157,7 +166,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
             {file && (
               <div className="mt-2 bg-slate-100 p-2 rounded-lg relative">
                 <div className="flex items-end gap-2">
-                  <FileIcon color="#EDEDED" text={file.type.split("/")[1] || "file"} />
+                  <FileIcon color="#EDEDED" text={file.type?.split("/")?.[1] ?? "file"} />
                   <div className="text-xs text-[#242634] opacity-50">
                     <p>{file.name}</p>
                     <p>{formatFileSize(file.size)}</p>
