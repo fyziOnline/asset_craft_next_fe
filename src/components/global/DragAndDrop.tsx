@@ -18,6 +18,9 @@ interface DragAndDropProps {
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+// Allowed file types for drag-and-drop and file input.
+// The keys represent the type of file (image, text, document, spreadsheet) and the values are arrays of MIME types.
 const ALLOWED_TYPES = {
   image: ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp", "image/svg+xml"],
   text: ["text/plain"],
@@ -26,7 +29,8 @@ const ALLOWED_TYPES = {
 };
 
 
-
+// DragAndDrop component definition
+// This component allows users to drag and drop files or select them using a file input.
 const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelectedFile, dragAndDropOuterClass = "", showButtons = true }) => {
   const [file, setFile] = useState<File | null>(null);
   const [selectedFile, setSelectedFile] = useState<string>("");
@@ -36,6 +40,8 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Flatten the allowed types into a single array for easier validation.
+  // This combines all the MIME types from the ALLOWED_TYPES object into a single array.
   const ALL_ALLOWED_TYPES = Object.values(ALLOWED_TYPES).flat();
 
   // Handles button click events and updates the active state.
@@ -49,9 +55,12 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
     setDragActive(isActive);
   };
 
-  // Validates the selected file type and size.
-  // Returns an error message if the file is invalid, otherwise returns an empty string.
-
+ 
+// Validates the selected file based on type and size.
+// Returns an error message if the file is invalid, otherwise returns an empty string.
+  // The function checks if the file type is in the allowed types and if the file size is within the limit.
+  // If the file is invalid, it returns an error message.
+  // If the file is valid, it returns an empty string.
   const validateFile = (file: File) => {
     if (!ALL_ALLOWED_TYPES.includes(file.type)) {
       return "Unsupported file type. Please upload a valid image, document, or spreadsheet.";
