@@ -21,6 +21,7 @@ import GlobalEditButton from './components/GlobalEditButton';
 import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer';
 import FallbackBlockControls from './components/FallbackBlockControls';
 import ToggleAsideSection from '@/components/global/ToggleAsideSection';
+import NotFound from '@/components/global/NotFound'
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -40,6 +41,14 @@ const SearchParamsHandler = ({ children }: {
     const assetTypeIcon = searchParams.get('assetTypeIcon');
     const campaign_name = searchParams.get('campaignName') || "";
     const project_name = searchParams.get('projectName') || "";
+
+    if (!assetTypeIcon || !campaign_name || !project_name) {
+        return (
+            <NotFound
+                description='Missing required URL parameters.'
+            />
+        )
+    }
 
     return <>{children({ assetTypeIcon, campaign_name, project_name })}</>;
 };
