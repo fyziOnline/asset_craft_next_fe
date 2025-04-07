@@ -11,11 +11,15 @@ export type LegacyPageType = AssetType | 'Callscript (WIP)';
 
 interface PageParams {
     params: {
-            template: Template
-            assetPrompts?: AIPromptAsset 
-            project_name?: string
-            campaign_name?:string
-            asset_name?: string
+        template: Template
+        assetPrompts?: AIPromptAsset 
+        project_name?: string
+        campaign_name?:string
+        asset_name?: string
+        editContextData?: {
+            topic?: string;
+            keyPoints?: string;
+        }
     }
 }
 

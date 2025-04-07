@@ -27,7 +27,7 @@ interface ToggleAsideSectionProps {
 const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
     ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef }) => {
         const { setError } = useAppData();
-        const { setEditSection } = useEditData();
+        const { editSection, setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
         const [isMarkdownPopupOpen, setIsMarkdownPopupOpen] = useState(false);
         const { fetchRawAIOutput, isLoading: isLoadingRawAI, rawAIOutput, assetAIPrompt } = useRawAIOutput();
@@ -108,7 +108,11 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                                 template: templateDetails,
                                 project_name: existingAssetDetails?.project_name,
                                 campaign_name: existingAssetDetails?.campaign_name,
-                                asset_name: existingAssetDetails?.asset_name
+                                asset_name: existingAssetDetails?.asset_name,
+                                editContextData: {
+                                    topic: editSection.aiPrompt?.topic,
+                                    keyPoints: editSection.aiPrompt?.keyPoints
+                                }
                             }} />
                         
                         {/* Absolute positioned button that will appear on the same line as Generate */}

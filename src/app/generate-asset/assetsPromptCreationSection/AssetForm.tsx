@@ -13,6 +13,10 @@ interface AssetFormProps {
     campaign_name?: string;
     asset_name?: string;
     assetType?: PageType;
+    editContextData?: {
+      topic?: string;
+      keyPoints?: string;
+    };
   };
 }
 

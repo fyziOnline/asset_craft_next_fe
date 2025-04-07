@@ -25,6 +25,10 @@ export interface BaseAssetFormProps {
     campaign_name?: string;
     asset_name?: string;
     assetType?: string;
+    editContextData?: {
+      topic?: string;
+      keyPoints?: string;
+    };
   };
   assetType: string;
   assetSpecificSection: AssetSectionConfig;
@@ -288,6 +292,7 @@ const BaseAssetForm = ({ params, assetType, assetSpecificSection }: BaseAssetFor
             handleInputChange={handleInputChange}
             onValidationChange={handleValidationChange}
             assetType={assetType}
+            editContextData={params.editContextData}
           />
         </Accordion>
       </div>

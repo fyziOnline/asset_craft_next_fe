@@ -1,7 +1,7 @@
-import { AssetType } from '../../../types/assetTypes';
+import { AssetType } from '@/types/assetTypes';
 import GenericAssetSection from '@/app/generate-asset/assetsPromptCreationSection/GenericAssetSection';
-import { AIPromptAsset } from '../../../types/templates';
 import { FC } from 'react';
+import { AIPromptAsset } from '@/types/templates';
 
 // GenericAssetSection Props Interface
 export interface AssetSectionProps {
@@ -9,6 +9,10 @@ export interface AssetSectionProps {
   handleInputChange: (field: string, value: string) => void;
   onValidationChange: (isValid: boolean) => void;
   assetType?: string;
+  editContextData?: {
+    topic?: string;
+    keyPoints?: string;
+  };
 }
 
 // Field label structure
@@ -30,10 +34,22 @@ export interface AssetSectionConfig {
   component: FC<AssetSectionProps>;
 }
 
-// Complete asset configuration in one place
-export interface AssetConfig {
-  sectionConfig: AssetSectionConfig;
-  labels: AssetSectionLabels;
+// AssetTypeConfig for compatibility with existing code
+export interface AssetTypeConfig {
+  title: string;
+  fields: FieldConfig[];
+  validationRules?: string[];
+}
+
+// FieldConfig for compatibility with existing code
+export interface FieldConfig {
+  name: string;
+  type: 'text' | 'dropdown' | 'chooselabel';
+  label: string;
+  placeholder?: string;
+  isRequired?: boolean;
+  options?: { label: string; value: string }[];
+  rows?: number;
 }
 
 // Default labels for when an asset type doesn't have specific labels
@@ -48,75 +64,71 @@ const defaultLabels: AssetSectionLabels = {
   }
 };
 
-// Unified asset configuration - single source of truth
-export const assetConfig: Record<AssetType, AssetConfig> = {
-  [AssetType.EMAIL]: {
-    sectionConfig: {
-      title: 'Email - Key Messages & Content',
-      requiredFields: ['primaryMessage'],
-      component: GenericAssetSection
+// Asset-specific labels
+export const assetLabelsConfig: Record<string, AssetSectionLabels> = {
+  [AssetType.LANDING_PAGE]: {
+    primaryMessage: {
+      title: "What is the primary message of the landing page?",
+      placeholder: "Primary message"
     },
-    labels: {
-      primaryMessage: {
-        title: "What is the primary message of your email?",
-        placeholder: "Enter the main email message"
-      },
-      additionalInfo: {
-        title: "Provide additional information that supports the main message.",
-        placeholder: "Enter supporting information, features, or call-to-action details"
-      }
+    additionalInfo: {
+      title: "Provide additional information that supports the main message.",
+      placeholder: "Enter details of the asset you want to create"
+    }
+  },
+  [AssetType.EMAIL]: {
+    primaryMessage: {
+      title: "What is the primary message of your email?",
+      placeholder: "Enter the main email message"
+    },
+    additionalInfo: {
+      title: "Provide additional information that supports the main message.",
+      placeholder: "Enter supporting information, features, or call-to-action details"
     }
   },
   [AssetType.LINKEDIN]: {
-    sectionConfig: {
-      title: 'LinkedIn - Key Messages & Content',
-      requiredFields: ['primaryMessage'],
-      component: GenericAssetSection
+    primaryMessage: {
+      title: "What is the primary message of your LinkedIn post?",
+      placeholder: "Enter the main message for your LinkedIn post"
     },
-    labels: {
-      primaryMessage: {
-        title: "What is the primary message of your LinkedIn post?",
-        placeholder: "Enter the main message for your LinkedIn post"
-      },
-      additionalInfo: {
-        title: "Provide additional information that supports the main message.",
-        placeholder: "Enter supporting information, relevant hashtags, or call-to-action details"
-      }
-    }
-  },
-  [AssetType.LANDING_PAGE]: {
-    sectionConfig: {
-      title: 'Landing Page - Key Messages & Content',
-      requiredFields: ['primaryMessage'],
-      component: GenericAssetSection
-    },
-    labels: {
-      primaryMessage: {
-        title: "What is the primary message of the landing page?",
-        placeholder: "Primary message"
-      },
-      additionalInfo: {
-        title: "Provide additional information that supports the main message.",
-        placeholder: "Enter details of the asset you want to create"
-      }
+    additionalInfo: {
+      title: "Provide additional information that supports the main message.",
+      placeholder: "Enter supporting information, relevant hashtags, or call-to-action details"
     }
   },
   [AssetType.CALL_SCRIPT]: {
-    sectionConfig: {
-      title: 'Call Script - Tone, Style, and Objections',
-      requiredFields: ['primaryMessage'],
-      component: GenericAssetSection
+    primaryMessage: {
+      title: "What is the primary goal of this call script?",
+      placeholder: "Enter the main purpose of the call script"
     },
-    labels: {
-      primaryMessage: {
-        title: "What is the primary goal of this call script?",
-        placeholder: "Enter the main purpose of the call script"
-      },
-      additionalInfo: {
-        title: "Provide additional talking points or objection handling.",
-        placeholder: "Enter key talking points, objection responses, or specific information to mention"
-      }
+    additionalInfo: {
+      title: "Provide additional talking points or objection handling.",
+      placeholder: "Enter key talking points, objection responses, or specific information to mention"
     }
+  }
+};
+
+// Define asset section config mapping by type
+export const assetSectionConfig: Record<AssetType, AssetSectionConfig> = {
+  [AssetType.EMAIL]: {
+    title: 'Email - Key Messages & Content',
+    requiredFields: ['topic'],
+    component: GenericAssetSection
+  },
+  [AssetType.LINKEDIN]: {
+    title: 'LinkedIn - Key Messages & Content',
+    requiredFields: ['topic'],
+    component: GenericAssetSection
+  },
+  [AssetType.LANDING_PAGE]: {
+    title: 'Landing Page - Key Messages & Content',
+    requiredFields: ['topic'],
+    component: GenericAssetSection
+  },
+  [AssetType.CALL_SCRIPT]: {
+    title: 'Call Script - Tone, Style, and Objections',
+    requiredFields: ['topic'],
+    component: GenericAssetSection
   }
 };
 
@@ -124,54 +136,25 @@ export const assetConfig: Record<AssetType, AssetConfig> = {
  * Helper function to get section config for an asset type
  */
 export function getAssetSectionConfig(assetType: string): AssetSectionConfig {
-  if (!assetType || !assetConfig[assetType as AssetType]) {
+  if (!assetType || !assetSectionConfig[assetType as AssetType]) {
     // Return a default config if asset type not found
     return {
       title: 'Asset Content',
-      requiredFields: ['primaryMessage'],
+      requiredFields: ['topic'],
       component: GenericAssetSection
     };
   }
   
-  return assetConfig[assetType as AssetType].sectionConfig;
+  return assetSectionConfig[assetType as AssetType];
 }
 
 /**
  * Helper function to get labels for an asset type
  */
 export function getAssetLabels(assetType?: string): AssetSectionLabels {
-  if (!assetType || !assetConfig[assetType as AssetType]) {
+  if (!assetType || !assetLabelsConfig[assetType]) {
     return defaultLabels;
   }
   
-  return assetConfig[assetType as AssetType].labels;
-}
-
-/**
- * For backward compatibility - get just the section config mapping
- */
-export const assetSectionConfig: Record<AssetType, AssetSectionConfig> = Object.entries(assetConfig).reduce(
-  (acc, [key, value]) => ({
-    ...acc,
-    [key]: value.sectionConfig
-  }),
-  {} as Record<AssetType, AssetSectionConfig>
-);
-
-// Compatibility with old AssetTypeConfig interface
-export interface AssetTypeConfig {
-  title: string;
-  fields: FieldConfig[];
-  validationRules?: string[];
-}
-
-// For backward compatibility with field config
-export interface FieldConfig {
-  name: string;
-  type: 'text' | 'dropdown' | 'chooselabel';
-  label: string;
-  placeholder?: string;
-  isRequired?: boolean;
-  options?: { label: string; value: string }[];
-  rows?: number;
+  return assetLabelsConfig[assetType];
 } 
