@@ -375,6 +375,8 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   return {
     generateHTML,
     assetIDTemplateRef,
-    getAssetHTML
+    getAssetHTML,
+    aiPromptAssetUpsert,
+    aiPromptCampaignUpsert
   };
 };

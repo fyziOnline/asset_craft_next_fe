@@ -19,6 +19,7 @@ interface GenericAssetSectionProps {
     topic?: string;
     keyPoints?: string;
   };
+  isEditMode?: boolean; // Add isEditMode prop
 }
 
 interface AssetSaveResponse {
@@ -31,7 +32,8 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
   handleInputChange, 
   onValidationChange,
   assetType,
-  editContextData
+  editContextData,
+  isEditMode
 }) => {
   const { setError } = useAppData();
   const [isSaving, setIsSaving] = useState(false);
@@ -168,7 +170,8 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
       />
 
       {/* Save button - only show in edit mode when there's an existing asset */}
-      {existingData && existingData.assetID && (
+      {/* Removed the save button from here, as it's handled in BaseAssetForm */}
+      {/* {isEditMode && existingData && existingData.assetID && (
         <div className="mt-6 flex justify-end">
           <Button
             buttonText={isSaving ? "Saving..." : "Save Changes"}
@@ -180,7 +183,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
             showIcon={false}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

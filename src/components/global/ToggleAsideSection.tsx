@@ -8,6 +8,7 @@ import { AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
 import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } from 'react';
 import { MdDescription } from 'react-icons/md';
 import MarkdownPopup from './MarkdownPopup';
+import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 
 interface ToggleAsideSectionProps {
     isOpen: boolean;
@@ -22,10 +23,11 @@ interface ToggleAsideSectionProps {
         asset_id: string;
     };
     asideRef?: React.RefObject<HTMLDivElement>;
+    isEditMode?: boolean;
 }
 
 const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
-    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef }) => {
+    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef, isEditMode = false }) => {
         const { setError } = useAppData();
         const { editSection, setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
@@ -33,6 +35,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
         const { fetchRawAIOutput, isLoading: isLoadingRawAI, rawAIOutput, assetAIPrompt } = useRawAIOutput();
 
         const { getTemplateById, getAiPromptAssetSelect } = useGetTemplates({ type_page: "" });
+        const { aiPromptAssetUpsert, aiPromptCampaignUpsert } = useGenerateTemplate({ params: { templateID: templateDetails?.templateID || '' } });
 
         // Toggle sidebar open/close state.
         const toggleAside = useCallback(() => {
@@ -41,16 +44,38 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
         const fetchTemplateData = async () => {
             try {
-                let res_template: Template = await getTemplateById(versionSelected?.templateID)
-                const updatedTemplateBlocks = res_template.templatesBlocks?.map((item): TemplateBlocks => (
-                    {
-                        ...item,
-                        aiPrompt: versionSelected?.assetVersionBlocks.find(block => block.blockID === item.blockID)?.aiPrompt
-                    }
-                ))
-                res_template = { ...res_template, templatesBlocks: updatedTemplateBlocks }
-                setEditSection({ templateData: res_template });
-                setTemplateDetails(res_template)
+                // Ensure we have a valid templateID
+                if (!versionSelected?.templateID) {
+                    console.warn("No template ID selected.");
+                    return; 
+                }
+                const res = await getTemplateById(versionSelected.templateID)
+                if (res && res.isSuccess) {
+                    // Extract template data from the response
+                    const fetchedTemplate: Template = {
+                        assetTypeID: res.assetTypeID,
+                        assetTypeName: res.assetTypeName,
+                        description: res.description,
+                        isActive: res.isActive,
+                        layoutID: res.layoutID,
+                        templateID: res.templateID,
+                        templateImageURL: res.templateImageURL,
+                        templateName: res.templateName,
+                        templatesBlocks: res.templatesBlocks
+                    };
+
+                    const updatedTemplateBlocks = fetchedTemplate.templatesBlocks?.map((item): TemplateBlocks => (
+                        {
+                            ...item,
+                            aiPrompt: versionSelected?.assetVersionBlocks.find(block => block.blockID === item.blockID)?.aiPrompt
+                        }
+                    ))
+                    const finalTemplate = { ...fetchedTemplate, templatesBlocks: updatedTemplateBlocks }
+                    setEditSection({ templateData: finalTemplate });
+                    setTemplateDetails(finalTemplate)
+                } else {
+                     throw new Error(res?.message || "Failed to fetch template details");
+                }
             } catch (error) {
                 const apiError = ApiService.handleError(error)
                 setError({
@@ -63,8 +88,21 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
         const fetchAiPromptAsset = async () => {
             try {
+                 if (!existingAssetDetails?.asset_id) {
+                    console.warn("No asset ID available.");
+                    return;
+                }
                 const aiAssetRes = await getAiPromptAssetSelect(existingAssetDetails?.asset_id)
-                setEditSection({ aiPrompt: aiAssetRes.aIPromptAsset })
+                if (aiAssetRes && aiAssetRes.isSuccess) {
+                    // Convert outputScale to string to match context type
+                    const aiPromptDataForContext = {
+                        ...aiAssetRes.aIPromptAsset,
+                        outputScale: aiAssetRes.aIPromptAsset.outputScale?.toString() ?? null
+                    };
+                    setEditSection({ aiPrompt: aiPromptDataForContext })
+                } else {
+                     throw new Error(aiAssetRes?.message || "Failed to fetch AI prompt asset details");
+                }
             } catch (error) {
                 const apiError = ApiService.handleError(error)
                 setError({
@@ -113,7 +151,12 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                                     topic: editSection.aiPrompt?.topic,
                                     keyPoints: editSection.aiPrompt?.keyPoints
                                 }
-                            }} />
+                            }}
+                            isEditMode={isEditMode}
+                            aiPromptAssetUpsert={aiPromptAssetUpsert}
+                            aiPromptCampaignUpsert={aiPromptCampaignUpsert}
+                            existingAssetDetails={existingAssetDetails}
+                        />
                         
                         {/* Absolute positioned button that will appear on the same line as Generate */}
                         <div className="absolute bottom-[3px] left-5">

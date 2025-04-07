@@ -3,13 +3,24 @@ import Cookies from 'js-cookie';
 import { ApiService } from '@/lib/axios_generic';
 import { nkey } from '@/data/keyStore';
 import { urls } from '@/apis/urls';
-import { Template } from '../types/templates';
-import { ListTypePage } from '@/data/dataGlobal';
+import { Template, AIPromptAsset } from '../types/templates';
 import { useSearchParams } from 'next/navigation';
 import { useAppData } from '@/context/AppContext';
+import { ApiResponse } from '@/types/apiResponses';
 
 interface GetTemplatesProps {
     type_page?: string
+}
+
+// Define response types inline
+interface TemplateSelectAllResponse extends ApiResponse {
+    templates: Template[];
+}
+
+interface TemplateSelectResponse extends ApiResponse, Template { }
+
+interface AIPromptAssetSelectResponse extends ApiResponse {
+    aIPromptAsset: AIPromptAsset;
 }
 
 export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
@@ -29,7 +40,7 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
             setIsLoading(true);
             const client_ID = Cookies.get(nkey.client_ID)
             const assetTypeID = queryParams.get('assetTypeID')
-            const resGetTemplates = await ApiService.get<any>(`${urls.template_select_all}?clientID=${client_ID}&assetTypeID=${assetTypeID}`);
+            const resGetTemplates = await ApiService.get<TemplateSelectAllResponse>(`${urls.template_select_all}?clientID=${client_ID}&assetTypeID=${assetTypeID}`);
 
             if (resGetTemplates.isSuccess) {
                 setListTemplates(resGetTemplates.templates)
@@ -51,7 +62,7 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
             if (!templateID) {
                 throw new Error("Error : Template details missing")
             }
-            const template_res = await ApiService.get<any>(`${urls.template_select}?templateID=${templateID}`)
+            const template_res = await ApiService.get<TemplateSelectResponse>(`${urls.template_select}?templateID=${templateID}`)
             if (template_res.isSuccess) {
                 return template_res
             } else throw new Error("Unable to retrieve data")
@@ -66,7 +77,7 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
             if (!assetID) {
                 throw new Error('Error : Asset details missing')
             }
-            const aiPromptAssetRes = await ApiService.get<any>(`${urls.aiPrompt_Asset_select}?assetID=${assetID}`)
+            const aiPromptAssetRes = await ApiService.get<AIPromptAssetSelectResponse>(`${urls.aiPrompt_Asset_select}?assetID=${assetID}`)
             if (aiPromptAssetRes.isSuccess) {
                 return aiPromptAssetRes
             } else throw new Error("Unable to retrieve data")

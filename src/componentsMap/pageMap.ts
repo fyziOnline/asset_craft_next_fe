@@ -2,6 +2,8 @@ import AssetForm from "@/app/generate-asset/assetsPromptCreationSection/AssetFor
 import { AIPromptAsset, Template } from "@/types/templates"
 import { ComponentType } from "react"
 import { AssetType } from "@/types/assetTypes"
+import { FormDataProps } from "@/hooks/useInputFormDataGenerate";
+import { AssetPromptResponse, CampaignAddResponse } from "@/types/apiResponses";
 
 // Export the AssetType enum for backward compatibility
 export { AssetType as PageType };
@@ -20,7 +22,17 @@ interface PageParams {
             topic?: string;
             keyPoints?: string;
         }
-    }
+    };
+    isEditMode?: boolean;
+    aiPromptAssetUpsert?: (FormData: FormDataProps, assetID: string, promptID?: string) => Promise<AssetPromptResponse>;
+    aiPromptCampaignUpsert?: (FormData: FormDataProps, fileID: number, campaign_id: string) => Promise<{ isSuccess: boolean; promptID?: string }>;
+    existingAssetDetails?: {
+        campaign_name: string;
+        project_name: string;
+        asset_name: string;
+        campaign_id: string;
+        asset_id: string;
+    };
 }
 
 // Map using the enum as keys

@@ -13,6 +13,7 @@ export interface AssetSectionProps {
     topic?: string;
     keyPoints?: string;
   };
+  isEditMode?: boolean;
 }
 
 // Field label structure
