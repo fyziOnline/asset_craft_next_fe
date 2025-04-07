@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { AIPromptAsset, Template } from '@/types/templates';
-import { assetSectionConfig } from './assetSections';
+import { assetSectionConfig } from '@/app/generate-asset/config/assetConfig';
 import BaseAssetForm from './BaseAssetForm';
 import { PageType } from '@/componentsMap/pageMap';
 

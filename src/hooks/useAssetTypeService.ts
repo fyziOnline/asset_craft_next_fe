@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AssetTypeService } from '@/services/AssetTypeService';
 import { ClientAssetTypeProps } from '@/types/asset';
-import { AssetTypeConfig } from '@/app/generate-asset/assetsPromptCreationSection/assetTypeFactory';
+import { AssetTypeConfig } from '@/app/generate-asset/config/assetConfig';
 
 /**
  * Hook to access the AssetTypeService functionality

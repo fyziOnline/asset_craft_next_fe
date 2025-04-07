@@ -15,16 +15,7 @@ import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/u
 import { listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 import SectionAssetDetails from '@/components/assetGeneration/SectionAssetDetails';
 import { useRouter } from 'next/navigation';
-
-export interface AssetSectionConfig {
-  title: string;
-  requiredFields?: string[];
-  component: React.ComponentType<{
-    existingData: AIPromptAsset | null;
-    handleInputChange: (field: string, value: string) => void;
-    onValidationChange: (isValid: boolean) => void;
-  }>;
-}
+import { AssetSectionConfig } from '@/app/generate-asset/config/assetConfig';
 
 export interface BaseAssetFormProps {
   params: {
@@ -33,6 +24,7 @@ export interface BaseAssetFormProps {
     project_name?: string;
     campaign_name?: string;
     asset_name?: string;
+    assetType?: string;
   };
   assetType: string;
   assetSpecificSection: AssetSectionConfig;
@@ -280,7 +272,7 @@ const BaseAssetForm = ({ params, assetType, assetSpecificSection }: BaseAssetFor
         </Accordion>
       </div>
 
-      {/* Section 3: Asset-specific content */}
+      {/* Section 3: Asset-specific Content */}
       <div className="mt-[25px]">
         <Accordion
           isRequire={true}
@@ -295,6 +287,7 @@ const BaseAssetForm = ({ params, assetType, assetSpecificSection }: BaseAssetFor
             existingData={existingAssetPrompt}
             handleInputChange={handleInputChange}
             onValidationChange={handleValidationChange}
+            assetType={assetType}
           />
         </Accordion>
       </div>

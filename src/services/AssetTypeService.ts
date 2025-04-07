@@ -1,4 +1,4 @@
-import { AssetTypeConfig } from '@/app/generate-asset/assetsPromptCreationSection/assetTypeFactory';
+import { AssetTypeConfig } from '@/app/generate-asset/config/assetConfig';
 import { ClientAssetTypeProps } from '@/types/asset';
 import { useAssetTypes } from '@/hooks/useAssetTypes';
 import { useState, useEffect } from 'react';

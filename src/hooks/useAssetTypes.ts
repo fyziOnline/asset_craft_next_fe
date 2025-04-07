@@ -6,8 +6,8 @@ import { nkey } from '@/data/keyStore';
 import { ClientAssetTypeProps } from '@/types/asset';
 import { useAppData } from '@/context/AppContext';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
-import { AssetTypeConfig } from '@/app/generate-asset/assetsPromptCreationSection/assetTypeFactory';
-import { assetSectionConfig } from '@/app/generate-asset/assetsPromptCreationSection/assetSections';
+import { AssetTypeConfig } from '@/app/generate-asset/config/assetConfig';
+import { assetSectionConfig } from '@/app/generate-asset/config/assetConfig';
 import { PageType } from '@/componentsMap/pageMap';
 
 interface UseAssetTypesReturn {
