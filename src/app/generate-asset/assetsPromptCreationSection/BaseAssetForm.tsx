@@ -5,7 +5,6 @@ import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
 import DropDown from '@/components/global/DropDown';
 import ChildrenTitle from '@/components/global/ChildrenTitle';
-import RangeSlider from '@/components/global/RangeSlider';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
@@ -57,7 +56,7 @@ const initialFormData: Partial<FormDataProps> = {
   campaignGoal: '',
   targetAudience: '',
   webUrl: '',
-  outputScale: 7, // Default value
+  outputScale: 5, // Default value changed to 5
   topic: '',
   keyPoints: '',
   tone: '',
@@ -95,7 +94,7 @@ const BaseAssetForm = ({
         campaignGoal: params.editContextData?.campaignGoal ?? '',
         targetAudience: params.editContextData?.targetAudience ?? '',
         webUrl: params.editContextData?.webUrl ?? '',
-        outputScale: params.editContextData?.outputScale ? parseInt(params.editContextData.outputScale, 10) : 7,
+        outputScale: params.editContextData?.outputScale ? parseInt(params.editContextData.outputScale, 10) : 5,
         topic: params.editContextData?.topic ?? '',
         keyPoints: params.editContextData?.keyPoints ?? '',
         tone: params.editContextData?.tone ?? '',
@@ -136,14 +135,13 @@ const BaseAssetForm = ({
   const canRegenerateInEditMode = isProjectDetailsValid && isCampaignOverviewValid && assetSpecificSectionValid;
 
   const fetchExistingCampaignData = useCallback((data: CampaignSelectResponse | null) => {
-    // Populate formData ONLY in CREATE mode from this callback
     if (data && !isEditMode) {
       setFormData(prev => ({
         ...prev,
         campaignGoal: data.aIPromptCampaign.campaignGoal,
         targetAudience: data.aIPromptCampaign.targetAudience,
         webUrl: data.aIPromptCampaign.webUrl,
-        outputScale: data.aIPromptCampaign.outputScale
+        outputScale: data.aIPromptCampaign.outputScale ?? 5 
       }));
     }
   }, [isEditMode]);
@@ -461,15 +459,6 @@ const BaseAssetForm = ({
                     </div>
                   );
                 })}
-              </div>
-              <div className="w-full md:w-[300px] mt-4">
-                <ChildrenTitle title="How creative you want the output?" customClass="mt-5" />
-                <RangeSlider
-                  onSelectValue={(value) => {
-                    handleInputChange('outputScale', value);
-                  }}
-                  defaultValue={formData?.outputScale ?? 7}
-                />
               </div>
             </Accordion>
         </div>

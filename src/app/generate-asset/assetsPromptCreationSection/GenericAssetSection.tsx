@@ -2,30 +2,37 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import ChildrenTitle from '@/components/global/ChildrenTitle';
 import TextField from '@/components/global/TextField';
+import RangeSlider from '@/components/global/RangeSlider';
 import { AIPromptAsset } from '@/types/templates';
 import { getAssetLabels } from '@/app/generate-asset/config/assetConfig';
-import { useAppData } from '@/context/AppContext';
-import Button from '@/components/global/Button';
-import { ApiService } from '@/lib/axios_generic';
-import { urls } from '@/apis/urls';
+// import { useAppData } from '@/context/AppContext'; // Remove unused
+// import { ApiService } from '@/lib/axios_generic'; // Remove unused
+// import { urls } from '@/apis/urls'; // Remove unused
 
 interface GenericAssetSectionProps {
   existingData: AIPromptAsset | null;
-  handleInputChange: (field: string, value: string) => void;
+  handleInputChange: (field: string, value: string | number | null) => void;
   onValidationChange: (isValid: boolean) => void;
   assetType?: string; // Optional asset type to get specific labels
   // Optional editContext data directly passed from a component that has access
   editContextData?: {
     topic?: string;
     keyPoints?: string;
+    campaignGoal?: string;
+    targetAudience?: string;
+    webUrl?: string;
+    outputScale?: string | null;
+    tone?: string;
+    type?: string;
   };
-  isEditMode?: boolean; // Add isEditMode prop
+  isEditMode?: boolean; // Keep in props for type checking with parent, but remove from destructuring if unused
 }
 
-interface AssetSaveResponse {
-  isSuccess: boolean;
-  errorOnFailure: string;
-}
+// Remove unused interface
+// interface AssetSaveResponse {
+//   isSuccess: boolean;
+//   errorOnFailure: string;
+// }
 
 const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({ 
   existingData, 
@@ -33,10 +40,9 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
   onValidationChange,
   assetType,
   editContextData,
-  isEditMode
+  // isEditMode // Remove isEditMode from destructuring if unused
 }) => {
-  const { setError } = useAppData();
-  const [isSaving, setIsSaving] = useState(false);
+  // const { setError } = useAppData(); // Remove unused
   
   // Get labels for this asset type or use default
   const labels = useMemo(() => {
@@ -52,10 +58,21 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
   // Use memoized initial data
   const [formData, setFormData] = useState(initialFormData);
   const [validationState, setValidationState] = useState<boolean>(false);
+  
+  // Read initial outputScale from props (prefer editContextData, fallback to existingData, default 5)
+  const initialOutputScale = useMemo(() => {
+    if (editContextData?.outputScale) {
+      return parseInt(editContextData.outputScale, 10);
+    } 
+    if (existingData?.outputScale) {
+      return existingData.outputScale;
+    } 
+    return 5; // Default value
+  }, [editContextData, existingData]);
 
-  // Enhanced validation check
+  // Enhanced validation check - IGNORE outputScale
   useEffect(() => {
-    // Only primary message is required
+    // Only primary message (topic) is required
     const isValid = Boolean(
       formData.primaryMessage && formData.primaryMessage.trim() !== ''
     );
@@ -85,45 +102,6 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
       });
     }
   }, [editContextData]);
-
-  // Save changes back to the server
-  const saveChanges = async () => {
-    if (!existingData || !existingData.assetID) return;
-    
-    try {
-      setIsSaving(true);
-      
-      // Map back from our form fields to the API fields
-      const payload = {
-        assetID: existingData.assetID,
-        topic: formData.primaryMessage,
-        keyPoints: formData.additionalInfo,
-        type: existingData.type || '',
-        targetAudience: existingData.targetAudience || '',
-        tone: existingData.tone || '',
-        outputScale: existingData.outputScale || 5
-      };
-      
-      const response = await ApiService.post<AssetSaveResponse>(urls.aiPrompt_Asset_insertupdate, payload);
-      
-      if (response.isSuccess) {
-        // Update the local data to reflect the changes
-        handleInputChange('topic', formData.primaryMessage);
-        handleInputChange('keyPoints', formData.additionalInfo);
-      } else {
-        throw new Error(response.errorOnFailure || 'Failed to save changes');
-      }
-    } catch (error) {
-      const apiError = ApiService.handleError(error);
-      setError({
-        status: apiError.statusCode,
-        message: apiError.message,
-        showError: true
-      });
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
   // Memoize update function
   const updateFormData = useCallback((field: string, value: string) => {
@@ -169,21 +147,18 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
         customAreaClass="whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
       />
 
-      {/* Save button - only show in edit mode when there's an existing asset */}
-      {/* Removed the save button from here, as it's handled in BaseAssetForm */}
-      {/* {isEditMode && existingData && existingData.assetID && (
-        <div className="mt-6 flex justify-end">
-          <Button
-            buttonText={isSaving ? "Saving..." : "Save Changes"}
-            backgroundColor="bg-custom-gradient-green"
-            handleClick={saveChanges}
-            disabled={isSaving}
-            customClass="px-4 py-2"
-            textStyle="text-[0.875rem] font-medium text-white"
-            showIcon={false}
-          />
-        </div>
-      )} */}
+      {/* Add Range Slider for Output Scale */}
+      <div className="w-full md:w-[300px] mt-4">
+        <ChildrenTitle title="How creative you want the output?" customClass="mt-5" />
+        <RangeSlider
+          onSelectValue={(value) => {
+            // Ensure value is passed correctly (as number)
+            handleInputChange('outputScale', value);
+          }}
+          // Use the determined initial value
+          defaultValue={initialOutputScale} 
+        />
+      </div>
     </div>
   );
 };
