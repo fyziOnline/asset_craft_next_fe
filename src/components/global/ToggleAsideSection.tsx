@@ -142,7 +142,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         webUrl: fetchedData.webUrl,
                         outputScale: fetchedData.outputScale?.toString() ?? null // Convert to string/null
                     };
-                     console.log("[ToggleAsideSection] Fetched AI Campaign Data:", campaignDataForState); // Log fetched campaign data
+                     // console.log("[ToggleAsideSection] Fetched AI Campaign Data:", campaignDataForState); // Remove log
                     setCampaignPromptData(campaignDataForState);
                 } else {
                      throw new Error(aiCampaignRes?.message || "Failed to fetch AI prompt campaign details");
@@ -200,11 +200,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                     outputScale: campaignPromptData?.outputScale
                 }
             };
-            console.log("[ToggleAsideSection] Rendering Component with props:", {
-                 params: propsToPass,
-                 isEditMode: isEditMode,
-                 // Log other relevant props if needed 
-            });
+            // console.log("[ToggleAsideSection] Rendering Component with props:", { ... }); // Remove log
 
             return Component ?
                 <>

@@ -74,9 +74,6 @@ const BaseAssetForm = ({
   aiPromptCampaignUpsert, 
   existingAssetDetails 
 }: BaseAssetFormProps) => {
-  // ---- Log 3: Initial Props Received ----
-  console.log("[BaseAssetForm] Initial Props:", { params, isEditMode });
-
   const router = useRouter();
   const [generateStep, setGenerateStep] = useState(1);
   const { assetIDTemplateRef, generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
@@ -92,8 +89,6 @@ const BaseAssetForm = ({
 
   useEffect(() => {
     if (isEditMode && params.editContextData) {
-      // ---- Log 4: Inside Edit Mode useEffect ----
-      console.log("[BaseAssetForm] Populating formData in edit mode with:", params.editContextData);
       setFormData(prev => ({
         ...prev,
         product: params.project_name ?? '',
@@ -259,17 +254,10 @@ const BaseAssetForm = ({
   }, []);
 
   const handleSaveChanges = useCallback(async () => {
-    console.log("[BaseAssetForm] handleSaveChanges called 1");
-    console.log("[BaseAssetForm] isEditMode:", isEditMode);
-    console.log("[BaseAssetForm] isDirty:", isDirty);
-    console.log("[BaseAssetForm] isSaving:", isSaving);
-    console.log("[BaseAssetForm] aiPromptAssetUpsert:", aiPromptAssetUpsert);
-    console.log("[BaseAssetForm] aiPromptCampaignUpsert:", aiPromptCampaignUpsert);
-    console.log("[BaseAssetForm] existingAssetDetails:", existingAssetDetails);
     if (!isEditMode || !isDirty || isSaving || !aiPromptAssetUpsert || !aiPromptCampaignUpsert || !existingAssetDetails) {
       return;
     }
-    console.log("[BaseAssetForm] handleSaveChanges called");
+
     if (!isCampaignOverviewValid || !assetSpecificSectionValid) {
       setError({ status: 400, message: "Please ensure Campaign Overview and Asset Specific sections are complete and valid.", showError: true });
       return;
@@ -277,7 +265,6 @@ const BaseAssetForm = ({
 
     setIsSaving(true);
     setShowLoading(true);
-    console.log("[BaseAssetForm] handleSaveChanges called 2");
     try {
       const campaignPayload: Partial<FormDataProps> = {
         product: existingAssetDetails.project_name,
@@ -305,8 +292,6 @@ const BaseAssetForm = ({
       }
 
       setIsDirty(false);
-      console.log("Changes saved successfully!");
-
     } catch (error) {
        const apiError = ApiService.handleError(error);
         setError({

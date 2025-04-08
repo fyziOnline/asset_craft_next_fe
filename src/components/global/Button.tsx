@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import RightArrow from "../../assets/icons/RightArrow"
-import { AllinOne } from "@/assets/icons/AppIcons"
+import RightArrow from "../../assets/icons/RightArrow";
 
 /**
  * Button component renders a button with customizable text, color, and an optional icon.
@@ -53,7 +52,22 @@ const Button: React.FC<ButtonProps> = ({
   iconComponentEnd
 }) => {
   return (
-    <button disabled={disabled} onClick={handleClick} type={type} className={` ${customClass} inline-flex whitespace-nowrap items-center justify-center rounded-full ${showIcon ? `gap-3` : ``} ${backgroundColor}`}>
+    <button 
+      disabled={disabled} 
+      onClick={handleClick} 
+      type={type} 
+      className={` 
+        ${customClass} 
+        inline-flex 
+        whitespace-nowrap 
+        items-center 
+        justify-center 
+        rounded-full 
+        ${showIcon ? `gap-3` : ``} 
+        ${disabled ? 'bg-gray-300' : backgroundColor}
+        disabled:cursor-not-allowed
+      `}
+    >
       <p className={`flex items-center gap-1 text-base leading-[24px] font-bold ${textColor} ${textStyle}`}>{IconComponent}{buttonText}{iconComponentEnd}</p>
       <div className={customClassIcon}>
         {showIcon && <RightArrow color={iconColor} />}
