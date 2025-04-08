@@ -75,7 +75,7 @@ const BaseAssetForm = ({
 }: BaseAssetFormProps) => {
   const router = useRouter();
   const [generateStep, setGenerateStep] = useState(1);
-  const { assetIDTemplateRef, generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
+  const { assetIDTemplateRef, generateHTML, aiPromptGenerateForAsset } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
   const [formData, setFormData] = useState<Partial<FormDataProps>>(initialFormData);
   const [sectionsData, setSectionsData] = useState<SectionProps[]>([]);
   const { setShowLoading, showLoading } = useLoading();
@@ -296,6 +296,39 @@ const BaseAssetForm = ({
       }
 
       setIsDirty(false);
+
+      // --- Call aiPromptGenerateForAsset after successful save --- 
+      if (aiPromptGenerateForAsset) { 
+        try {
+          // Assuming assetID is available in existingAssetDetails
+          assetIDTemplateRef.current = existingAssetDetails.asset_id; // Ensure ref is set
+          const generateRes = await aiPromptGenerateForAsset();
+          if (!generateRes?.isSuccess) {
+            // Handle potential error during prompt generation if needed
+            console.error("Failed to generate AI prompt after save.");
+            setError({
+                status: 500,
+                message: "Saved successfully, but failed to regenerate AI prompt.",
+                showError: true
+            });
+          } else {
+            console.log("AI prompt regenerated successfully after save.");
+          }
+        } catch (genError) {
+            console.error("Error during aiPromptGenerateForAsset call:", genError);
+             const apiGenError = ApiService.handleError(genError);
+             setError({
+                status: apiGenError.statusCode ?? 500,
+                message: "Saved successfully, but failed to regenerate AI prompt: " + apiGenError.message,
+                showError: true
+            });
+        }
+      } else {
+          // Fallback success message if aiPromptGenerateForAsset is somehow undefined
+          setError({ message: "Changes saved successfully!", showError: true, status: 200 });
+      }
+      // --- End of new call --- 
+
     } catch (error) {
        const apiError = ApiService.handleError(error);
         setError({
@@ -310,7 +343,8 @@ const BaseAssetForm = ({
   }, [
     isEditMode, isDirty, isSaving, aiPromptAssetUpsert, aiPromptCampaignUpsert, 
     existingAssetDetails, formData, sectionsData, setShowLoading, setError, 
-    isCampaignOverviewValid, assetSpecificSectionValid
+    isCampaignOverviewValid, assetSpecificSectionValid,
+    aiPromptGenerateForAsset, assetIDTemplateRef
   ]);
 
   const generateButtonLabel = generateStep === 1 ? "Generate" : "Regenerate";

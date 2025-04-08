@@ -111,7 +111,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         outputScale: aiAssetRes.aIPromptAsset.outputScale?.toString() ?? null
                     };
                     // ---- Log 1: Data fetched for context ----
-                    console.log("[ToggleAsideSection] Fetched AI Prompt Data for Context:", aiPromptDataForContext);
                     setEditSection({ aiPrompt: aiPromptDataForContext })
                 } else {
                      throw new Error(aiAssetRes?.message || "Failed to fetch AI prompt asset details");
