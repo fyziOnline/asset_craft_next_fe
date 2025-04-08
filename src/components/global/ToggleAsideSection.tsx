@@ -207,30 +207,15 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
             // console.log("[ToggleAsideSection] OutputScale from context:", editSection.aiPrompt?.outputScale);
             // console.log("[ToggleAsideSection] editContextData being passed:", propsToPass.editContextData);
 
-            return Component ?
-                <>
-                    <div className="relative">
-                        <Component params={propsToPass}
-                            isEditMode={isEditMode}
-                            aiPromptAssetUpsert={aiPromptAssetUpsert}
-                            aiPromptCampaignUpsert={aiPromptCampaignUpsert}
-                            existingAssetDetails={existingAssetDetails}
-                        />
-                        
-                        {/* Absolute positioned button that will appear on the same line as Generate */}
-                        <div className="absolute bottom-[3px] left-5">
-                            <button
-                                onClick={handleViewRawAIOutput}
-                                disabled={isLoadingRawAI}
-                                className="flex items-center gap-2 text-[#00b188] hover:text-[#008c6a] transition-colors p-2"
-                                title="View Raw AI Output"
-                            >
-                                <MdDescription size={20} />
-                                <span className="text-sm">View</span>
-                            </button>
-                        </div>
-                    </div>
-                </> : null
+            return Component ? (
+                <Component 
+                    params={propsToPass}
+                    isEditMode={isEditMode}
+                    aiPromptAssetUpsert={aiPromptAssetUpsert}
+                    aiPromptCampaignUpsert={aiPromptCampaignUpsert}
+                    existingAssetDetails={existingAssetDetails}
+                />
+            ) : null
         };
 
         useEffect(() => {
@@ -255,11 +240,25 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
         return (
             <div className={`absolute flex top-0 h-full right-0 ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
-                <div ref={asideRef} className={`bg-[#F5F5F7] pb-28 h-full overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
+                <div 
+                    ref={asideRef} 
+                    className={`bg-[#F5F5F7] pb-28 h-full overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
                     style={{ zIndex: 10 }} // Sidebar stays above content
                 >
                     {isOpen && (
-                        <div className='w-full h-full px-5 py-3 overflow-y-auto'>
+                        <div className='w-full h-full px-5 pt-10 pb-5 relative overflow-y-auto'> 
+                            <div className="absolute top-2 right-4">
+                                <button
+                                    onClick={handleViewRawAIOutput}
+                                    disabled={isLoadingRawAI}
+                                    className="flex items-center gap-1 text-[#00b188] hover:text-[#008c6a] transition-colors p-1 rounded hover:bg-gray-200 bg-white border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    title="View Raw AI Output"
+                                >
+                                    <MdDescription size={18} />
+                                    <span className="text-xs">View AI Data</span>
+                                </button>
+                            </div>
+
                             {renderAssetGenerateContent()}
                         </div>
                     )}
