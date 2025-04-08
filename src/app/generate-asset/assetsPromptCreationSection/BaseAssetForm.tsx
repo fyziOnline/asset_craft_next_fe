@@ -85,6 +85,7 @@ const BaseAssetForm = ({
   const [isProjectDetailsValid, setIsProjectDetailsValid] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [section4Interacted, setSection4Interacted] = useState(false);
 
   useEffect(() => {
     if (isEditMode && params.editContextData) {
@@ -109,10 +110,9 @@ const BaseAssetForm = ({
           }));
         setSectionsData(initialSections);
       }
-      setIsProjectDetailsValid(true);
-      setAssetSpecificSectionValid(true);
+      setIsProjectDetailsValid(!!(params.project_name && params.campaign_name && params.asset_name));
     }
-  }, [isEditMode, params.editContextData, params.project_name, params.template, setSectionsData]);
+  }, [isEditMode, params.editContextData, params.project_name, params.campaign_name, params.asset_name, params.template, setSectionsData]);
 
   useEffect(() => {
     if (!isEditMode) {
@@ -125,7 +125,8 @@ const BaseAssetForm = ({
 
   // Calculate section validities directly
   const isCampaignOverviewValid = !!formData.campaignGoal && !!formData.targetAudience;
-  const isContentBriefValid = !isEditMode && sectionsData.length > 0 && sectionsData.every(section => section.aiPrompt && section.aiPrompt.trim().length > 0);
+  // Section 4: Valid if in edit mode OR if in create mode and user has interacted.
+  const isContentBriefValid = isEditMode || section4Interacted;
   
   // Combined validity checks for enabling buttons
   const allSectionsValidForCreate = isProjectDetailsValid && isCampaignOverviewValid && assetSpecificSectionValid;
@@ -157,13 +158,11 @@ const BaseAssetForm = ({
       keyPoints: data?.keyPoints,
       tone: data?.tone
     }));
-    setAssetSpecificSectionValid(true);
   }, [isEditMode]);
 
   useEffect(() => {
     if (!isEditMode && existingAssetPrompt) {
       appendExistingAssetPromptData(existingAssetPrompt);
-      setIsProjectDetailsValid(true);
     }
   }, [existingAssetPrompt, appendExistingAssetPromptData, isEditMode]);
 
@@ -250,6 +249,13 @@ const BaseAssetForm = ({
   const handleProjectDetailsValidation = useCallback((_step: number, isValid: boolean) => {
     setIsProjectDetailsValid(isValid);
   }, []);
+
+  // Function to mark section 4 as interacted
+  const handleSection4Interaction = useCallback(() => {
+    if (!section4Interacted) { // Only set once
+       setSection4Interacted(true);
+    }
+  }, [section4Interacted]); // Add dependency
 
   const handleSaveChanges = useCallback(async () => {
     if (!isEditMode || !isDirty || isSaving || !aiPromptAssetUpsert || !aiPromptCampaignUpsert || !existingAssetDetails) {
@@ -445,6 +451,7 @@ const BaseAssetForm = ({
             <Accordion
               HeaderTitle="Content Brief"
               checked={isContentBriefValid}
+              handleShowContent={handleSection4Interaction}
             >
               <div>
                 {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {

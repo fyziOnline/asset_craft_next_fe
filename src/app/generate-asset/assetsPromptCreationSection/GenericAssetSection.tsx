@@ -70,7 +70,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
     return scaleValue;
   }, [editContextData, existingData]);
 
-  // Enhanced validation check - IGNORE outputScale
+  // Enhanced validation check based on formData changes
   useEffect(() => {
     // Only primary message (topic) is required
     const isValid = Boolean(
@@ -84,24 +84,30 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
     }
   }, [formData, onValidationChange, validationState]);
 
-  // Ensure validation runs once on mount for existing data
+  // Ensure validation runs once on mount based on initial data (existing or edit context)
   useEffect(() => {
-    if (existingData) {
-      const isValid = Boolean(existingData.topic);
-      setValidationState(isValid);
-      onValidationChange(isValid);
-    }
-  }, [existingData, onValidationChange]);
+    const initialTopic = editContextData?.topic || existingData?.topic || '';
+    const isValid = Boolean(initialTopic && initialTopic.trim() !== '');
+    setValidationState(isValid);
+    onValidationChange(isValid);
+    // Run only once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
+  }, []); // Remove existingData/onValidationChange, add editContextData if needed? No, run once.
 
-  // Update form if editContextData changes
+  // Update form data based on props (existingData or editContextData)
   useEffect(() => {
     if (editContextData) {
       setFormData({
         primaryMessage: editContextData.topic || '',
         additionalInfo: editContextData.keyPoints || ''
       });
+    } else if (existingData) { // Fallback to existingData if editContextData is not present
+        setFormData({
+          primaryMessage: existingData.topic || '',
+          additionalInfo: existingData.keyPoints || ''
+      });
     }
-  }, [editContextData]);
+  }, [editContextData, existingData]);
 
   // Memoize update function
   const updateFormData = useCallback((field: string, value: string) => {
