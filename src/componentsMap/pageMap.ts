@@ -1,9 +1,9 @@
 import AssetForm from "@/app/generate-asset/assetsPromptCreationSection/AssetForm"
 import { AIPromptAsset, Template } from "@/types/templates"
-import { ComponentType } from "react"
+import { ComponentType, Dispatch, SetStateAction } from "react"
 import { AssetType } from "@/types/assetTypes"
 import { FormDataProps } from "@/hooks/useInputFormDataGenerate";
-import { AssetPromptResponse, CampaignAddResponse } from "@/types/apiResponses";
+import { AssetPromptResponse } from "@/types/apiResponses";
 
 // Export the AssetType enum for backward compatibility
 export { AssetType as PageType };
@@ -18,9 +18,11 @@ interface PageParams {
         project_name?: string
         campaign_name?:string
         asset_name?: string
+        assetVersionID?: string;
         editContextData?: {
             topic?: string;
             keyPoints?: string;
+            campaignGoal?: string;
         }
     };
     isEditMode?: boolean;
@@ -33,6 +35,7 @@ interface PageParams {
         campaign_id: string;
         asset_id: string;
     };
+    setIsOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 // Map using the enum as keys

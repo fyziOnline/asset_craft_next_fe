@@ -187,6 +187,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 project_name: existingAssetDetails?.project_name,
                 campaign_name: existingAssetDetails?.campaign_name,
                 asset_name: existingAssetDetails?.asset_name,
+                assetVersionID: versionSelected?.assetVersionID,
                 editContextData: {
                     // Asset specific fields from context
                     topic: editSection.aiPrompt?.topic,
@@ -213,6 +214,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                     aiPromptAssetUpsert={aiPromptAssetUpsert}
                     aiPromptCampaignUpsert={aiPromptCampaignUpsert}
                     existingAssetDetails={existingAssetDetails}
+                    setIsOpen={setIsOpen}
                 />
             ) : null
         };

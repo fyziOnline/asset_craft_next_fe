@@ -372,12 +372,52 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     }
   };
 
+  // Add function to get data using AI for a specific version
+  const getVersionDataUsingAI = async (assetVersionID: string | undefined) => {
+    if (!assetVersionID) {
+      console.error("getVersionDataUsingAI: assetVersionID is missing");
+      return { isSuccess: false };
+    }
+    try {
+      const response = await ApiService.get<ApiResponse>( // Assuming ApiResponse is suitable, adjust if needed
+        `${urls.asset_version_getDataUsingAI}?assetVersionID=${assetVersionID}`
+      );
+      return response;
+    } catch (error) {
+      console.error("Error in getVersionDataUsingAI:", error);
+      // const apiError = ApiService.handleError(error); // Remove unused
+      // Optionally set global error state here if needed
+      return { isSuccess: false };
+    }
+  };
+
+  // Add function to generate HTML for a specific version
+  const generateVersionHTML = async (assetVersionID: string | undefined) => {
+    if (!assetVersionID) {
+      console.error("generateVersionHTML: assetVersionID is missing");
+      return { isSuccess: false };
+    }
+    try {
+       const response = await ApiService.get<ApiResponse>( // Assuming ApiResponse is suitable, adjust if needed
+         `${urls.asset_version_generate}?assetVersionID=${assetVersionID}`
+       );
+       return response;
+    } catch (error) {
+       console.error("Error in generateVersionHTML:", error);
+       // const apiError = ApiService.handleError(error); // Remove unused
+       // Optionally set global error state here if needed
+       return { isSuccess: false };
+    }
+  };
+
   return {
     generateHTML,
     assetIDTemplateRef,
     getAssetHTML,
     aiPromptAssetUpsert,
     aiPromptCampaignUpsert,
-    aiPromptGenerateForAsset
+    aiPromptGenerateForAsset,
+    getVersionDataUsingAI,
+    generateVersionHTML
   };
 };

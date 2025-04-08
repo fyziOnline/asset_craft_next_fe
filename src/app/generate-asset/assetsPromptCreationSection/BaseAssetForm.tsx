@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import Accordion from '@/components/global/Accordion';
 import Button from '@/components/global/Button';
 import TextField from '@/components/global/TextField';
@@ -26,6 +26,7 @@ export interface BaseAssetFormProps {
     campaign_name?: string;
     asset_name?: string;
     assetType?: string;
+    assetVersionID?: string;
     editContextData?: {
       topic?: string;
       keyPoints?: string;
@@ -49,6 +50,7 @@ export interface BaseAssetFormProps {
     campaign_id: string;
     asset_id: string;
   };
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 const initialFormData: Partial<FormDataProps> = {
@@ -71,11 +73,12 @@ const BaseAssetForm = ({
   isEditMode = false,
   aiPromptAssetUpsert, 
   aiPromptCampaignUpsert, 
-  existingAssetDetails 
+  existingAssetDetails,
+  setIsOpen
 }: BaseAssetFormProps) => {
   const router = useRouter();
   const [generateStep, setGenerateStep] = useState(1);
-  const { assetIDTemplateRef, generateHTML, aiPromptGenerateForAsset } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
+  const { assetIDTemplateRef, generateHTML, aiPromptGenerateForAsset, getVersionDataUsingAI, generateVersionHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
   const [formData, setFormData] = useState<Partial<FormDataProps>>(initialFormData);
   const [sectionsData, setSectionsData] = useState<SectionProps[]>([]);
   const { setShowLoading, showLoading } = useLoading();
@@ -167,7 +170,62 @@ const BaseAssetForm = ({
   }, [existingAssetPrompt, appendExistingAssetPromptData, isEditMode]);
 
   const handleGenerate = useCallback(async () => {
-    if (isEditMode || generateStep === 2 || !allSectionsValidForCreate) {
+    if (isEditMode) {
+      if (showLoading || generateStep !== 1 || !canRegenerateInEditMode || !existingAssetDetails?.asset_id) {
+        if (!existingAssetDetails?.asset_id) {
+          console.error("Regenerate clicked but existingAssetDetails.asset_id is missing");
+          setError({ status: 400, message: "Cannot regenerate, asset details missing.", showError: true });
+        }
+        return;
+      }
+
+      setShowLoading(true);
+      setGenerateStep(2);
+
+      try {
+        const assetVersionID = params.assetVersionID;
+        if (!assetVersionID) {
+          throw new Error("Asset Version ID is missing, cannot regenerate.");
+        }
+
+        const getDataRes = await getVersionDataUsingAI(assetVersionID);
+
+        if (!getDataRes?.isSuccess) {
+          throw new Error("Failed to get latest AI data for version.");
+        }
+
+        console.log("Successfully fetched latest AI data for version.");
+
+        const generateHtmlRes = await generateVersionHTML(assetVersionID);
+
+        if (!generateHtmlRes?.isSuccess) {
+          throw new Error("Failed to generate HTML for version.");
+        }
+
+        console.log("Successfully generated HTML for version.");
+
+        if (setIsOpen) {
+          setIsOpen(false);
+        }
+        setGenerateStep(1);
+
+      } catch (error) {
+        console.error("Error during edit mode regeneration:", error);
+        const apiError = ApiService.handleError(error);
+        setError({
+          status: apiError.statusCode ?? 500,
+          message: apiError.message || "Failed to regenerate asset version.",
+          showError: true
+        });
+        setGenerateStep(1);
+      } finally {
+        setShowLoading(false);
+      }
+
+      return;
+    }
+
+    if (generateStep === 2 || !allSectionsValidForCreate) {
       if (!allSectionsValidForCreate && !isEditMode) {
         setError({ status: 400, message: "Please complete all required sections before generating.", showError: true });
       }
@@ -212,7 +270,8 @@ const BaseAssetForm = ({
   }, [
     isEditMode, generateStep, assetIDTemplateRef, assetType, contextData, 
     generateHTML, router, setContextData, setShowLoading, formData, sectionsData, setError,
-    allSectionsValidForCreate
+    allSectionsValidForCreate, canRegenerateInEditMode, existingAssetDetails,
+    getVersionDataUsingAI, generateVersionHTML, setIsOpen, showLoading
   ]);
 
   const handleInputChange = useCallback((field: string, value: string | number | File | null) => {
@@ -522,7 +581,7 @@ const BaseAssetForm = ({
               handleClick={handleGenerate} 
               disabled={isRegenerateDisabledInEdit} // Use specific disable logic for edit mode regeneration
               customClass="px-6 py-2" 
-              buttonText={generateButtonLabel} // Label will be Regenerate if step > 1
+              buttonText={"Regenerate"} // Always show Regenerate in edit mode
             />
           </>
         ) : (

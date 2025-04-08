@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { AIPromptAsset, Template } from '@/types/templates';
 import { assetSectionConfig } from '@/app/generate-asset/config/assetConfig';
 import BaseAssetForm from './BaseAssetForm';
@@ -18,6 +18,7 @@ interface AssetFormProps {
     campaign_name?: string;
     asset_name?: string;
     assetType?: PageType;
+    assetVersionID?: string;
     editContextData?: {
       topic?: string;
       keyPoints?: string;
@@ -39,6 +40,7 @@ interface AssetFormProps {
     campaign_id: string;
     asset_id: string;
   };
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 /**
@@ -50,7 +52,8 @@ const AssetForm = ({
   isEditMode, 
   aiPromptAssetUpsert, 
   aiPromptCampaignUpsert, 
-  existingAssetDetails 
+  existingAssetDetails,
+  setIsOpen
 }: AssetFormProps) => {
   // Get asset type from params or from template
   const assetType = params.assetType || params.template?.assetTypeName as PageType;
@@ -68,6 +71,7 @@ const AssetForm = ({
       aiPromptAssetUpsert={aiPromptAssetUpsert}
       aiPromptCampaignUpsert={aiPromptCampaignUpsert}
       existingAssetDetails={existingAssetDetails}
+      setIsOpen={setIsOpen}
     />
   );
 };
