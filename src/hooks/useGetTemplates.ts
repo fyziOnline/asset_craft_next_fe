@@ -23,6 +23,21 @@ interface AIPromptAssetSelectResponse extends ApiResponse {
     aIPromptAsset: AIPromptAsset;
 }
 
+// Define response type for Campaign select
+interface AIPromptCampaignSelectResponse extends ApiResponse {
+    aIPromptCampaign: {
+        campaignID: string;
+        clientID: string;
+        userID: string;
+        campaignGoal: string;
+        targetAudience: string;
+        webUrl: string;
+        outputScale: number;
+        createdOn: string;
+        updatedOn: string;
+    };
+}
+
 export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
     const [isLoading, setIsLoading] = useState(false)
     const [listTemplates, setListTemplates] = useState<Template[]>([])
@@ -87,10 +102,36 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
         }
     }
 
+    // Add function to fetch AI Prompt Campaign data
+    const getAiPromptCampaignSelect = async (campaignID: string | undefined) => {
+        try {
+            if (!campaignID) {
+                throw new Error('Error: Campaign details missing');
+            }
+            const aiPromptCampaignRes = await ApiService.get<AIPromptCampaignSelectResponse>(`${urls.aiPrompt_Campaign_select}?campaignID=${campaignID}`);
+            if (aiPromptCampaignRes.isSuccess) {
+                return aiPromptCampaignRes;
+            } else {
+                throw new Error("Unable to retrieve campaign prompt data");
+            }
+        } catch (error) {
+            // Use the existing error handling
+            const apiError = ApiService.handleError(error);
+            setError({ 
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            });
+            // Optionally re-throw or return null/undefined
+            return null;
+        }
+    };
+
     return {
         isLoading,
         listTemplates,
         getTemplateById,
-        getAiPromptAssetSelect
+        getAiPromptAssetSelect,
+        getAiPromptCampaignSelect // Expose the new function
     };
 };

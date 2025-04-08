@@ -1,3 +1,4 @@
+'use client';
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useAppData } from '@/context/AppContext';
 import { useEditData } from '@/context/EditContext';
@@ -9,6 +10,14 @@ import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } 
 import { MdDescription } from 'react-icons/md';
 import MarkdownPopup from './MarkdownPopup';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
+
+// Define a type for the campaign prompt data
+interface CampaignPromptData {
+    campaignGoal?: string;
+    targetAudience?: string;
+    webUrl?: string;
+    outputScale?: string | null; // Keep as string or null to match context/form data
+}
 
 interface ToggleAsideSectionProps {
     isOpen: boolean;
@@ -32,9 +41,11 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
         const { editSection, setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
         const [isMarkdownPopupOpen, setIsMarkdownPopupOpen] = useState(false);
+        // Add state for campaign prompt data
+        const [campaignPromptData, setCampaignPromptData] = useState<CampaignPromptData | null>(null); 
         const { fetchRawAIOutput, isLoading: isLoadingRawAI, rawAIOutput, assetAIPrompt } = useRawAIOutput();
 
-        const { getTemplateById, getAiPromptAssetSelect } = useGetTemplates({ type_page: "" });
+        const { getTemplateById, getAiPromptAssetSelect, getAiPromptCampaignSelect } = useGetTemplates({ type_page: "" });
         const { aiPromptAssetUpsert, aiPromptCampaignUpsert } = useGenerateTemplate({ params: { templateID: templateDetails?.templateID || '' } });
 
         // Toggle sidebar open/close state.
@@ -99,6 +110,8 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         ...aiAssetRes.aIPromptAsset,
                         outputScale: aiAssetRes.aIPromptAsset.outputScale?.toString() ?? null
                     };
+                    // ---- Log 1: Data fetched for context ----
+                    console.log("[ToggleAsideSection] Fetched AI Prompt Data for Context:", aiPromptDataForContext);
                     setEditSection({ aiPrompt: aiPromptDataForContext })
                 } else {
                      throw new Error(aiAssetRes?.message || "Failed to fetch AI prompt asset details");
@@ -112,6 +125,37 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 })
             }
         }
+
+        // Add function to fetch campaign prompt data
+        const fetchAiPromptCampaign = async () => {
+            try {
+                 if (!existingAssetDetails?.campaign_id) {
+                    console.warn("No campaign ID available.");
+                    return;
+                }
+                const aiCampaignRes = await getAiPromptCampaignSelect(existingAssetDetails.campaign_id);
+                if (aiCampaignRes && aiCampaignRes.isSuccess) {
+                    const fetchedData = aiCampaignRes.aIPromptCampaign;
+                    const campaignDataForState: CampaignPromptData = {
+                        campaignGoal: fetchedData.campaignGoal,
+                        targetAudience: fetchedData.targetAudience,
+                        webUrl: fetchedData.webUrl,
+                        outputScale: fetchedData.outputScale?.toString() ?? null // Convert to string/null
+                    };
+                     console.log("[ToggleAsideSection] Fetched AI Campaign Data:", campaignDataForState); // Log fetched campaign data
+                    setCampaignPromptData(campaignDataForState);
+                } else {
+                     throw new Error(aiCampaignRes?.message || "Failed to fetch AI prompt campaign details");
+                }
+            } catch (error) {
+                 const apiError = ApiService.handleError(error);
+                 setError({
+                    status: apiError.statusCode,
+                    message: apiError.message,
+                    showError: true
+                });
+            }
+        };
 
         const handleViewRawAIOutput = async () => {
             try {
@@ -138,20 +182,34 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
             }
 
             const Component = PAGE_COMPONENT[templateDetails?.assetTypeName as PageType]
+            
+            // ---- Log 2: Props passed to the specific asset component ----
+            const propsToPass = {
+                template: templateDetails,
+                project_name: existingAssetDetails?.project_name,
+                campaign_name: existingAssetDetails?.campaign_name,
+                asset_name: existingAssetDetails?.asset_name,
+                editContextData: {
+                    topic: editSection.aiPrompt?.topic,
+                    keyPoints: editSection.aiPrompt?.keyPoints,
+                    tone: editSection.aiPrompt?.tone,
+                    type: editSection.aiPrompt?.type,
+                    campaignGoal: campaignPromptData?.campaignGoal,
+                    targetAudience: campaignPromptData?.targetAudience,
+                    webUrl: campaignPromptData?.webUrl,
+                    outputScale: campaignPromptData?.outputScale
+                }
+            };
+            console.log("[ToggleAsideSection] Rendering Component with props:", {
+                 params: propsToPass,
+                 isEditMode: isEditMode,
+                 // Log other relevant props if needed 
+            });
+
             return Component ?
                 <>
                     <div className="relative">
-                        <Component params={
-                            {
-                                template: templateDetails,
-                                project_name: existingAssetDetails?.project_name,
-                                campaign_name: existingAssetDetails?.campaign_name,
-                                asset_name: existingAssetDetails?.asset_name,
-                                editContextData: {
-                                    topic: editSection.aiPrompt?.topic,
-                                    keyPoints: editSection.aiPrompt?.keyPoints
-                                }
-                            }}
+                        <Component params={propsToPass}
                             isEditMode={isEditMode}
                             aiPromptAssetUpsert={aiPromptAssetUpsert}
                             aiPromptCampaignUpsert={aiPromptCampaignUpsert}
@@ -183,6 +241,10 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
         useEffect(() => {
             if (existingAssetDetails && existingAssetDetails.asset_id) {
                 fetchAiPromptAsset();
+            }
+            // Fetch campaign data as well
+            if (existingAssetDetails && existingAssetDetails.campaign_id) { 
+                fetchAiPromptCampaign();
             }
         }, [existingAssetDetails]);
 

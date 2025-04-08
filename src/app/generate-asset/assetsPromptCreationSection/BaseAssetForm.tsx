@@ -11,7 +11,7 @@ import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
 import { AIPromptAsset, CampaignSelectResponse, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
-import { FormDataProps, SectionProps, useInputFormDataGenerate } from '@/hooks/useInputFormDataGenerate';
+import { FormDataProps, SectionProps } from '@/hooks/useInputFormDataGenerate';
 import { listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 import SectionAssetDetails from '@/components/assetGeneration/SectionAssetDetails';
 import { useRouter } from 'next/navigation';
@@ -52,6 +52,19 @@ export interface BaseAssetFormProps {
   };
 }
 
+const initialFormData: Partial<FormDataProps> = {
+  product: '',
+  campaignGoal: '',
+  targetAudience: '',
+  webUrl: '',
+  outputScale: 7, // Default value
+  topic: '',
+  keyPoints: '',
+  tone: '',
+  type: '',
+  fileSelected: undefined,
+};
+
 const BaseAssetForm = ({ 
   params, 
   assetType, 
@@ -61,136 +74,109 @@ const BaseAssetForm = ({
   aiPromptCampaignUpsert, 
   existingAssetDetails 
 }: BaseAssetFormProps) => {
+  // ---- Log 3: Initial Props Received ----
+  console.log("[BaseAssetForm] Initial Props:", { params, isEditMode });
+
   const router = useRouter();
   const [generateStep, setGenerateStep] = useState(1);
-  const [checkedList, setCheckedList] = useState<number[]>([]);
-  const [isShowList, setIsShowList] = useState<number[]>([]);
   const { assetIDTemplateRef, generateHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
-  const { refFormData, refSection, handleInputText: originalHandleInputText, handleInputSection } = useInputFormDataGenerate();
-  const handleInputText = originalHandleInputText as (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, field: string) => void;
+  const [formData, setFormData] = useState<Partial<FormDataProps>>(initialFormData);
+  const [sectionsData, setSectionsData] = useState<SectionProps[]>([]);
   const { setShowLoading, showLoading } = useLoading();
   const { contextData, setContextData, setError } = useAppData();
-  const [localExistingCampaignDetails, setLocalExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null);
   const [existingAssetPrompt] = useState<AIPromptAsset | null>(params.assetPrompts || null);
   const [assetSpecificSectionValid, setAssetSpecificSectionValid] = useState(false);
+  const [isProjectDetailsValid, setIsProjectDetailsValid] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (isEditMode && params.editContextData) {
-      refFormData.current = {
-        ...refFormData.current,
-        product: params.project_name,
-        campaignGoal: params.editContextData.campaignGoal,
-        targetAudience: params.editContextData.targetAudience,
-        webUrl: params.editContextData.webUrl,
-        outputScale: params.editContextData.outputScale ? parseInt(params.editContextData.outputScale, 10) : 7,
-        topic: params.editContextData.topic,
-        keyPoints: params.editContextData.keyPoints,
-        tone: params.editContextData.tone,
-        type: params.editContextData.type,
-      };
+      // ---- Log 4: Inside Edit Mode useEffect ----
+      console.log("[BaseAssetForm] Populating formData in edit mode with:", params.editContextData);
+      setFormData(prev => ({
+        ...prev,
+        product: params.project_name ?? '',
+        campaignGoal: params.editContextData?.campaignGoal ?? '',
+        targetAudience: params.editContextData?.targetAudience ?? '',
+        webUrl: params.editContextData?.webUrl ?? '',
+        outputScale: params.editContextData?.outputScale ? parseInt(params.editContextData.outputScale, 10) : 7,
+        topic: params.editContextData?.topic ?? '',
+        keyPoints: params.editContextData?.keyPoints ?? '',
+        tone: params.editContextData?.tone ?? '',
+        type: params.editContextData?.type ?? '',
+      }));
       if (params.template?.templatesBlocks) {
-        refSection.current = params.template.templatesBlocks
+        const initialSections = params.template.templatesBlocks
           .filter(item => !item.isStatic)
           .map(item => ({
             templateBlockID: item.templateBlockID || "",
             aiPrompt: item.aiPrompt || ""
           }));
+        setSectionsData(initialSections);
       }
-      setCheckedList([0, 1, 2]);
-      setIsShowList([0, 1, 2]);
+      setIsProjectDetailsValid(true);
+      setAssetSpecificSectionValid(true);
     }
-  }, [isEditMode, params.editContextData, params.project_name, refFormData, params.template, refSection]);
+  }, [isEditMode, params.editContextData, params.project_name, params.template, setSectionsData]);
 
   useEffect(() => {
     if (!isEditMode) {
-      refFormData.current = {
-        ...refFormData.current,
-        product: params.project_name
-      };
+      setFormData(prev => ({
+        ...prev,
+        product: params.project_name ?? ''
+      }));
     }
-  }, [params.project_name, isEditMode, refFormData]);
+  }, [params.project_name, isEditMode]);
 
-  const updateShowList = useCallback((value: number) => {
-    setIsShowList((prev) => {
-      if (prev.includes(value)) {
-        return prev.filter((item) => item !== value);
-      } else {
-        return [...prev, value];
-      }
-    });
-  }, []);
+  // Calculate section validities directly
+  const isCampaignOverviewValid = !!formData.campaignGoal && !!formData.targetAudience;
+  const isContentBriefValid = !isEditMode && sectionsData.length > 0 && sectionsData.every(section => section.aiPrompt && section.aiPrompt.trim().length > 0);
+  
+  // Combined validity checks for enabling buttons
+  const allSectionsValidForCreate = isProjectDetailsValid && isCampaignOverviewValid && assetSpecificSectionValid;
+  const allSectionsValidForEdit = isProjectDetailsValid && isCampaignOverviewValid && assetSpecificSectionValid; // Content brief not edited/validated in edit mode
 
-  const doesFormCompleted = useCallback((step: number, status?: boolean) => {
-    const updateCheckedList = (sectionIndex: number, isValid: boolean) => {
-      setCheckedList((prev) =>
-        isValid
-          ? prev.includes(sectionIndex) ? prev : [...prev, sectionIndex]
-          : prev.filter((item) => item !== sectionIndex)
-      );
-    };
-
-    if (step === 1) {
-      updateCheckedList(0, status ?? false);
-    }
-    if (step === 2) {
-      const isValid = 
-        !!refFormData.current?.campaignGoal?.length &&
-        !!refFormData.current?.targetAudience?.length;
-      updateCheckedList(1, isValid);
-    }
-    if (step === 3) {
-      const isValid = status !== undefined ? status : assetSpecificSectionValid;
-      updateCheckedList(2, isValid);
-    }
-    if (!isEditMode && step === 4) {
-      const section4Valid = refSection.current.every(section => section.aiPrompt && section.aiPrompt.trim().length > 0);
-      updateCheckedList(3, section4Valid);
-    }
-  }, [assetSpecificSectionValid, isEditMode, refFormData, refSection]);
+  // Validity check specifically for enabling Generate/Regenerate in Edit mode
+  const canRegenerateInEditMode = isProjectDetailsValid && isCampaignOverviewValid && assetSpecificSectionValid;
 
   const fetchExistingCampaignData = useCallback((data: CampaignSelectResponse | null) => {
-    setLocalExistingCampaignDetails(data);
+    // Populate formData ONLY in CREATE mode from this callback
     if (data && !isEditMode) {
-      refFormData.current = {
-        ...refFormData.current,
+      setFormData(prev => ({
+        ...prev,
         campaignGoal: data.aIPromptCampaign.campaignGoal,
         targetAudience: data.aIPromptCampaign.targetAudience,
         webUrl: data.aIPromptCampaign.webUrl,
         outputScale: data.aIPromptCampaign.outputScale
-      };
-      if (isShowList.includes(1) || checkedList.includes(1)) {
-        doesFormCompleted(2);
-      }
+      }));
     }
-  }, [isShowList, checkedList, doesFormCompleted, isEditMode, refFormData]);
+  }, [isEditMode]);
 
   const appendExistingAssetPromptData = useCallback((data: AIPromptAsset | null) => {
     if (!data || isEditMode) {
       return;
     }
-    refFormData.current = {
-      ...refFormData.current,
+    setFormData(prev => ({
+      ...prev,
       topic: data?.topic,
       type: data?.type,
       keyPoints: data?.keyPoints,
       tone: data?.tone
-    };
-    doesFormCompleted(3);
-  }, [doesFormCompleted, isEditMode, refFormData]);
+    }));
+    setAssetSpecificSectionValid(true);
+  }, [isEditMode]);
 
   useEffect(() => {
     if (!isEditMode && existingAssetPrompt) {
       appendExistingAssetPromptData(existingAssetPrompt);
-      setCheckedList([0, 1, 2, 3]);
+      setIsProjectDetailsValid(true);
     }
   }, [existingAssetPrompt, appendExistingAssetPromptData, isEditMode]);
 
   const handleGenerate = useCallback(async () => {
-    const allSectionsValid = checkedList.length >= 4;
-    if (isEditMode || generateStep === 2 || !allSectionsValid) {
-      if (!allSectionsValid && !isEditMode) {
+    if (isEditMode || generateStep === 2 || !allSectionsValidForCreate) {
+      if (!allSectionsValidForCreate && !isEditMode) {
         setError({ status: 400, message: "Please complete all required sections before generating.", showError: true });
       }
       return;
@@ -200,20 +186,17 @@ const BaseAssetForm = ({
 
     if (newStep > 3) {
       newStep = 1;
-      setIsShowList([]);
-      setCheckedList([]);
       setContextData({ assetTemplateShow: false });
     } else {
       setContextData({ assetTemplateShow: true });
 
       if (newStep === 2) {
-        setCheckedList((prev) => [...new Set([...prev, 0, 1, 2, 3])]);
         setContextData({ assetGenerateStatus: newStep });
         setGenerateStep(newStep);
         setShowLoading(true);
         const res = await generateHTML(
-          refFormData.current as FormDataProps,
-          refSection.current as SectionProps[],
+          formData as FormDataProps,
+          sectionsData as SectionProps[],
           contextData.ProjectDetails,
           contextData.isRegenerateHTML
         );
@@ -235,69 +218,87 @@ const BaseAssetForm = ({
     setContextData({ assetGenerateStatus: newStep });
     setGenerateStep(newStep);
   }, [
-    isEditMode, generateStep, checkedList, assetIDTemplateRef, assetType, contextData, 
-    generateHTML, router, setContextData, setShowLoading, refFormData, refSection, setError
+    isEditMode, generateStep, assetIDTemplateRef, assetType, contextData, 
+    generateHTML, router, setContextData, setShowLoading, formData, sectionsData, setError,
+    allSectionsValidForCreate
   ]);
 
-  const handleInputChange = useCallback((field: string, value: string | File) => {
-    refFormData.current = {
-      ...refFormData.current,
+  const handleInputChange = useCallback((field: string, value: string | number | File | null) => {
+    setFormData(prev => ({
+      ...prev,
       [field]: value
-    };
+    }));
     if (isEditMode) setIsDirty(true);
-  }, [isEditMode, refFormData]);
+  }, [isEditMode]);
 
-  const handleInputTextModified = useCallback((e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, field: string) => {
-    handleInputText(e, field);
-    if (isEditMode) setIsDirty(true);
-  }, [handleInputText, isEditMode]);
+  const handleInputTextChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, field: string) => {
+    handleInputChange(field, e.target.value);
+  }, [handleInputChange]);
 
   const handleInputSectionModified = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
-    handleInputSection(e, index);
+    const newValue = e.target.value;
+    setSectionsData(prevSections => {
+      const newSections = [...prevSections];
+      if (newSections[index]) {
+        newSections[index] = { ...newSections[index], aiPrompt: newValue };
+      }
+      return newSections;
+    });
     if (isEditMode) setIsDirty(true);
-    if (!isEditMode) {
-      doesFormCompleted(4);
-    }
-  }, [handleInputSection, isEditMode, doesFormCompleted]);
+  }, [isEditMode, setSectionsData]);
 
   const handleValidationChange = useCallback((isValid: boolean) => {
     setAssetSpecificSectionValid(isValid);
-    doesFormCompleted(3, isValid);
     if (isEditMode && isValid) {
       setIsDirty(prevDirty => prevDirty || isValid);
     }
-  }, [doesFormCompleted, isEditMode]);
+  }, [isEditMode]);
+
+  const handleProjectDetailsValidation = useCallback((_step: number, isValid: boolean) => {
+    setIsProjectDetailsValid(isValid);
+  }, []);
 
   const handleSaveChanges = useCallback(async () => {
+    console.log("[BaseAssetForm] handleSaveChanges called 1");
+    console.log("[BaseAssetForm] isEditMode:", isEditMode);
+    console.log("[BaseAssetForm] isDirty:", isDirty);
+    console.log("[BaseAssetForm] isSaving:", isSaving);
+    console.log("[BaseAssetForm] aiPromptAssetUpsert:", aiPromptAssetUpsert);
+    console.log("[BaseAssetForm] aiPromptCampaignUpsert:", aiPromptCampaignUpsert);
+    console.log("[BaseAssetForm] existingAssetDetails:", existingAssetDetails);
     if (!isEditMode || !isDirty || isSaving || !aiPromptAssetUpsert || !aiPromptCampaignUpsert || !existingAssetDetails) {
       return;
     }
-    
-    if (!checkedList.includes(1) || !checkedList.includes(2)) {
-      setError({ status: 400, message: "Please ensure Campaign Overview and Asset Specific sections are complete.", showError: true });
+    console.log("[BaseAssetForm] handleSaveChanges called");
+    if (!isCampaignOverviewValid || !assetSpecificSectionValid) {
+      setError({ status: 400, message: "Please ensure Campaign Overview and Asset Specific sections are complete and valid.", showError: true });
       return;
     }
 
     setIsSaving(true);
     setShowLoading(true);
-
+    console.log("[BaseAssetForm] handleSaveChanges called 2");
     try {
-      const campaignPayload = {
-        ...refFormData.current,
-        product: existingAssetDetails.project_name
+      const campaignPayload: Partial<FormDataProps> = {
+        product: existingAssetDetails.project_name,
+        campaignGoal: formData.campaignGoal,
+        targetAudience: formData.targetAudience,
+        webUrl: formData.webUrl,
+        outputScale: formData.outputScale,
       };
-      const campaignRes = await aiPromptCampaignUpsert(campaignPayload as FormDataProps, 0, existingAssetDetails.campaign_id);
+      const campaignRes = await aiPromptCampaignUpsert!(campaignPayload as FormDataProps, 0, existingAssetDetails.campaign_id);
 
       if (!campaignRes.isSuccess) {
         throw new Error("Failed to save campaign details.");
       }
 
-      const assetPayload = { 
-         ...refFormData.current, 
-         topic: refFormData.current?.topic ?? "", 
-         keyPoints: refFormData.current?.keyPoints ?? ""
+      const assetPayload: Partial<FormDataProps> = { 
+         topic: formData.topic ?? "", 
+         keyPoints: formData.keyPoints ?? "",
+         tone: formData.tone,
+         type: formData.type,
       };
-      const assetRes = await aiPromptAssetUpsert(assetPayload as FormDataProps, existingAssetDetails.asset_id);
+      const assetRes = await aiPromptAssetUpsert!(assetPayload as FormDataProps, existingAssetDetails.asset_id);
 
       if (!assetRes.isSuccess) {
         throw new Error("Failed to save asset prompt details.");
@@ -305,7 +306,6 @@ const BaseAssetForm = ({
 
       setIsDirty(false);
       console.log("Changes saved successfully!");
-      setError({ message: "Changes saved successfully!", showError: true, status: 200 });
 
     } catch (error) {
        const apiError = ApiService.handleError(error);
@@ -320,13 +320,43 @@ const BaseAssetForm = ({
     }
   }, [
     isEditMode, isDirty, isSaving, aiPromptAssetUpsert, aiPromptCampaignUpsert, 
-    existingAssetDetails, refFormData, refSection, setShowLoading, setError, 
-    checkedList, params.editContextData
+    existingAssetDetails, formData, sectionsData, setShowLoading, setError, 
+    isCampaignOverviewValid, assetSpecificSectionValid
   ]);
 
   const generateButtonLabel = generateStep === 1 ? "Generate" : "Regenerate";
-  const isGenerateDisabled = showLoading || isEditMode || generateStep === 2 || checkedList.length < 4;
-  const isSaveDisabled = showLoading || !isEditMode || !isDirty || isSaving || !checkedList.includes(1) || !checkedList.includes(2);
+  // Button disabled logic based on mode and validity
+  const isGenerateDisabled = showLoading || isEditMode || generateStep === 2 || !allSectionsValidForCreate;
+  const isSaveDisabled = showLoading || !isEditMode || !isDirty || isSaving || !allSectionsValidForEdit;
+  // Disable Regenerate in Edit mode if sections aren't valid or already generating
+  const isRegenerateDisabledInEdit = showLoading || generateStep === 2 || !canRegenerateInEditMode;
+
+  // Effect to initialize sectionsData in CREATE mode
+  useEffect(() => {
+    if (!isEditMode && params.template?.templatesBlocks) {
+      const initialSections = params.template.templatesBlocks
+        .filter(item => !item.isStatic)
+        .map(item => ({ // Initialize with empty prompts for create mode
+          templateBlockID: item.templateBlockID || "",
+          aiPrompt: "" 
+        }));
+      setSectionsData(initialSections);
+    }
+    // Reset if template disappears or mode changes to edit?
+    // else if (isEditMode || !params.template?.templatesBlocks) { 
+    //   setSectionsData([]);
+    // }
+  }, [isEditMode, params.template?.templatesBlocks, setSectionsData]);
+
+  // Effect to set product name in create mode
+  useEffect(() => {
+    if (!isEditMode) {
+      setFormData(prev => ({
+        ...prev,
+        product: params.project_name ?? ''
+      }));
+    }
+  }, [params.project_name, isEditMode]);
 
   return (
     <div className="pb-20">
@@ -334,12 +364,11 @@ const BaseAssetForm = ({
         <Accordion
           isRequire={true}
           HeaderTitle="Project Details"
-          checked={checkedList.includes(0)}
-          handleShowContent={() => { updateShowList(0); }}
+          checked={isProjectDetailsValid}
           isPreventEdit={isEditMode || !!params.asset_name}
         >
           <SectionAssetDetails
-            validatingTheData={doesFormCompleted}
+            validatingTheData={handleProjectDetailsValidation}
             returnCampaignDetails={fetchExistingCampaignData}
             existingAssetMeta={{
               campaign_name: params.campaign_name || "",
@@ -354,11 +383,7 @@ const BaseAssetForm = ({
         <Accordion
           isRequire={true}
           HeaderTitle="Campaign Overview"
-          checked={checkedList.includes(1)}
-          handleShowContent={() => {
-            updateShowList(1);
-            doesFormCompleted(2);
-          }}
+          checked={isCampaignOverviewValid}
         >
           <div>
             <div className="flex flex-wrap items-start gap-x-[16%] gap-y-4">
@@ -367,10 +392,9 @@ const BaseAssetForm = ({
                 <DropDown
                   onSelected={(optionSelected) => {
                     handleInputChange('campaignGoal', optionSelected.value);
-                    doesFormCompleted(2);
                   }}
                   isShowOther={false}
-                  preSelectValue={isEditMode ? refFormData.current?.campaignGoal : localExistingCampaignDetails?.aIPromptCampaign.campaignGoal}
+                  preSelectValue={formData?.campaignGoal}
                   selectPlaceHolder="Select Campaign Goal"
                   optionLists={listofcampains}
                 />
@@ -381,10 +405,9 @@ const BaseAssetForm = ({
                 <DropDown
                   onSelected={(optionSelected) => {
                     handleInputChange('targetAudience', optionSelected.value);
-                    doesFormCompleted(2);
                   }}
                   isShowOther={false}
-                  preSelectValue={isEditMode ? refFormData.current?.targetAudience : localExistingCampaignDetails?.aIPromptCampaign.targetAudience}
+                  preSelectValue={formData?.targetAudience}
                   selectPlaceHolder="Select Target Audience"
                   optionLists={ListTargetAudience}
                 />
@@ -394,15 +417,15 @@ const BaseAssetForm = ({
             <div className="mt-4">
               <ChildrenTitle customClass="mt-5" title="Additional Campaign Assets URL" />
               <TextField
-                handleChange={(e) => handleInputTextModified(e, "webUrl")}
-                defaultValue={isEditMode ? refFormData.current?.webUrl : localExistingCampaignDetails?.aIPromptCampaign.webUrl}
+                handleChange={(e) => handleInputTextChange(e, "webUrl")}
+                value={formData?.webUrl ?? ''}
                 placeholder="Enter your URL here."
                 customAreaClass="whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
               />
               {!isEditMode && (
                  <DragAndDrop
                     onFileSelect={(file) => {
-                      handleInputChange('fileSelected', file as unknown as File);
+                      handleInputChange('fileSelected', file as File);
                     }}
                   />
               )}
@@ -415,23 +438,17 @@ const BaseAssetForm = ({
         <Accordion
           isRequire={true}
           HeaderTitle={assetSpecificSection.title}
-          checked={checkedList.includes(2)}
-          handleShowContent={() => {
-            updateShowList(2);
-            doesFormCompleted(3);
-          }}
+          checked={assetSpecificSectionValid}
         >
           <assetSpecificSection.component
-            existingData={isEditMode ? null : existingAssetPrompt}
+            existingData={null}
+            editContextData={isEditMode ? {
+                topic: formData?.topic ?? "", 
+                keyPoints: formData?.keyPoints ?? "", 
+             } : undefined}
             handleInputChange={handleInputChange}
             onValidationChange={handleValidationChange}
             assetType={assetType}
-            editContextData={isEditMode ? { 
-                topic: refFormData.current?.topic ?? "", 
-                keyPoints: refFormData.current?.keyPoints ?? "", 
-                tone: refFormData.current?.tone ?? "",
-                type: refFormData.current?.type ?? ""
-            } : params.editContextData}
             isEditMode={isEditMode}
           />
         </Accordion>
@@ -441,24 +458,20 @@ const BaseAssetForm = ({
         <div className="mt-[25px]">
             <Accordion
               HeaderTitle="Content Brief"
-              checked={checkedList.includes(3)}
-              handleShowContent={() => {
-                updateShowList(3);
-                doesFormCompleted(4);
-              }}
+              checked={isContentBriefValid}
             >
               <div>
                 {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
-                  const sectionData = refSection.current.find(s => s.templateBlockID === item.templateBlockID);
+                  const sectionData = sectionsData[index];
                   return (
                     <div key={`${item.blockID}-${index}`}>
                       <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
                       <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
                       <TextField
                         handleChange={(e) => handleInputSectionModified(e, index)}
+                        value={sectionData?.aiPrompt ?? ''}
                         customClass="h-16"
                         placeholder={item.aiPrompt || ''}
-                        defaultValue={sectionData?.aiPrompt ?? ''}
                       />
                     </div>
                   );
@@ -468,9 +481,9 @@ const BaseAssetForm = ({
                 <ChildrenTitle title="How creative you want the output?" customClass="mt-5" />
                 <RangeSlider
                   onSelectValue={(value) => {
-                    handleInputChange('outputScale', value.toString());
+                    handleInputChange('outputScale', value);
                   }}
-                  defaultValue={refFormData.current?.outputScale ?? 7}
+                  defaultValue={formData?.outputScale ?? 7}
                 />
               </div>
             </Accordion>
@@ -479,16 +492,26 @@ const BaseAssetForm = ({
 
       <div className="flex justify-end items-center gap-4 mt-6 pr-4 sticky bottom-0 bg-gray-100 py-4 z-10">
         {isEditMode ? (
-          <Button
-            handleClick={handleSaveChanges}
-            disabled={isSaveDisabled}
-            customClass="px-6 py-2"
-            buttonText={isSaving ? "Saving..." : "Save Changes"}
-          />
+          <>
+            <Button
+              handleClick={handleSaveChanges}
+              disabled={isSaveDisabled} 
+              customClass="px-6 py-2"
+              buttonText={isSaving ? "Saving..." : "Save Changes"}
+            />
+            {/* Add Generate/Regenerate button for edit mode */}
+            <Button 
+              handleClick={handleGenerate} 
+              disabled={isRegenerateDisabledInEdit} // Use specific disable logic for edit mode regeneration
+              customClass="px-6 py-2" 
+              buttonText={generateButtonLabel} // Label will be Regenerate if step > 1
+            />
+          </>
         ) : (
+          // Create mode only shows Generate
           <Button
             handleClick={handleGenerate}
-            disabled={isGenerateDisabled}
+            disabled={isGenerateDisabled} // Use original create mode disable logic
             customClass="px-6 py-2"
             buttonText={generateButtonLabel}
           />
