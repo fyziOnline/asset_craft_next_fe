@@ -1,9 +1,15 @@
-export const ListTypePage = {
-    Email: "email" ,
-    LinkedIn: "linkedin",
-    CallScript: "call-script",
-    LandingPage: "landing-page",
-}
+import { AssetType, assetTypeToSlug } from '@/types/assetTypes';
+
+/**
+ * Maps asset types to their slug representation for URLs
+ * Using the AssetType enum as keys for type safety
+ */
+export const ListTypePage: Record<AssetType, string> = {
+    [AssetType.EMAIL]: assetTypeToSlug(AssetType.EMAIL),
+    [AssetType.LINKEDIN]: assetTypeToSlug(AssetType.LINKEDIN),
+    [AssetType.CALL_SCRIPT]: assetTypeToSlug(AssetType.CALL_SCRIPT),
+    [AssetType.LANDING_PAGE]: assetTypeToSlug(AssetType.LANDING_PAGE),
+};
 
 export const ListTargetAudience = [
     { label: 'All Target Segments', value: 'All Target Segments' },

@@ -1,3 +1,4 @@
+'use client';
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useAppData } from '@/context/AppContext';
 import { useEditData } from '@/context/EditContext';
@@ -8,6 +9,14 @@ import { AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
 import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } from 'react';
 import { MdDescription } from 'react-icons/md';
 import MarkdownPopup from './MarkdownPopup';
+import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
+
+// Define a type for the campaign prompt data
+interface CampaignPromptData {
+    campaignGoal?: string;
+    targetAudience?: string;
+    webUrl?: string;
+}
 
 interface ToggleAsideSectionProps {
     isOpen: boolean;
@@ -22,17 +31,22 @@ interface ToggleAsideSectionProps {
         asset_id: string;
     };
     asideRef?: React.RefObject<HTMLDivElement>;
+    isEditMode?: boolean;
 }
 
 const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
-    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef }) => {
+    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef, isEditMode = false }) => {
         const { setError } = useAppData();
-        const { setEditSection } = useEditData();
+        const { editSection, setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
         const [isMarkdownPopupOpen, setIsMarkdownPopupOpen] = useState(false);
-        const { fetchRawAIOutput, isLoading: isLoadingRawAI, rawAIOutput, assetAIPrompt } = useRawAIOutput();
+        // Add state for campaign prompt data
+        const [campaignPromptData, setCampaignPromptData] = useState<CampaignPromptData | null>(null); 
+        // Get baseRawPrompt from the hook
+        const { fetchRawAIOutput, isLoading: isLoadingRawAI, rawAIOutput, assetAIPrompt, baseRawPrompt } = useRawAIOutput();
 
-        const { getTemplateById, getAiPromptAssetSelect } = useGetTemplates({ type_page: "" });
+        const { getTemplateById, getAiPromptAssetSelect, getAiPromptCampaignSelect } = useGetTemplates({ type_page: "" });
+        const { aiPromptAssetUpsert, aiPromptCampaignUpsert } = useGenerateTemplate({ params: { templateID: templateDetails?.templateID || '' } });
 
         // Toggle sidebar open/close state.
         const toggleAside = useCallback(() => {
@@ -41,16 +55,38 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
         const fetchTemplateData = async () => {
             try {
-                let res_template: Template = await getTemplateById(versionSelected?.templateID)
-                const updatedTemplateBlocks = res_template.templatesBlocks?.map((item): TemplateBlocks => (
-                    {
-                        ...item,
-                        aiPrompt: versionSelected?.assetVersionBlocks.find(block => block.blockID === item.blockID)?.aiPrompt
-                    }
-                ))
-                res_template = { ...res_template, templatesBlocks: updatedTemplateBlocks }
-                setEditSection({ templateData: res_template });
-                setTemplateDetails(res_template)
+                // Ensure we have a valid templateID
+                if (!versionSelected?.templateID) {
+                    console.warn("No template ID selected.");
+                    return; 
+                }
+                const res = await getTemplateById(versionSelected.templateID)
+                if (res && res.isSuccess) {
+                    // Extract template data from the response
+                    const fetchedTemplate: Template = {
+                        assetTypeID: res.assetTypeID,
+                        assetTypeName: res.assetTypeName,
+                        description: res.description,
+                        isActive: res.isActive,
+                        layoutID: res.layoutID,
+                        templateID: res.templateID,
+                        templateImageURL: res.templateImageURL,
+                        templateName: res.templateName,
+                        templatesBlocks: res.templatesBlocks
+                    };
+
+                    const updatedTemplateBlocks = fetchedTemplate.templatesBlocks?.map((item): TemplateBlocks => (
+                        {
+                            ...item,
+                            aiPrompt: versionSelected?.assetVersionBlocks.find(block => block.blockID === item.blockID)?.aiPrompt
+                        }
+                    ))
+                    const finalTemplate = { ...fetchedTemplate, templatesBlocks: updatedTemplateBlocks }
+                    setEditSection({ templateData: finalTemplate });
+                    setTemplateDetails(finalTemplate)
+                } else {
+                     throw new Error(res?.message || "Failed to fetch template details");
+                }
             } catch (error) {
                 const apiError = ApiService.handleError(error)
                 setError({
@@ -63,8 +99,22 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
         const fetchAiPromptAsset = async () => {
             try {
+                 if (!existingAssetDetails?.asset_id) {
+                    console.warn("No asset ID available.");
+                    return;
+                }
                 const aiAssetRes = await getAiPromptAssetSelect(existingAssetDetails?.asset_id)
-                setEditSection({ aiPrompt: aiAssetRes.aIPromptAsset })
+                if (aiAssetRes && aiAssetRes.isSuccess) {
+                    // Convert outputScale to string to match context type
+                    const aiPromptDataForContext = {
+                        ...aiAssetRes.aIPromptAsset,
+                        outputScale: aiAssetRes.aIPromptAsset.outputScale?.toString() ?? null
+                    };
+                    // ---- Log 1: Data fetched for context ----
+                    setEditSection({ aiPrompt: aiPromptDataForContext })
+                } else {
+                     throw new Error(aiAssetRes?.message || "Failed to fetch AI prompt asset details");
+                }
             } catch (error) {
                 const apiError = ApiService.handleError(error)
                 setError({
@@ -74,6 +124,36 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 })
             }
         }
+
+        // Add function to fetch campaign prompt data
+        const fetchAiPromptCampaign = async () => {
+            try {
+                 if (!existingAssetDetails?.campaign_id) {
+                    console.warn("No campaign ID available.");
+                    return;
+                }
+                const aiCampaignRes = await getAiPromptCampaignSelect(existingAssetDetails.campaign_id);
+                if (aiCampaignRes && aiCampaignRes.isSuccess) {
+                    const fetchedData = aiCampaignRes.aIPromptCampaign;
+                    const campaignDataForState: CampaignPromptData = {
+                        campaignGoal: fetchedData.campaignGoal,
+                        targetAudience: fetchedData.targetAudience,
+                        webUrl: fetchedData.webUrl,
+                    };
+                     // console.log("[ToggleAsideSection] Fetched AI Campaign Data:", campaignDataForState); // Remove log
+                    setCampaignPromptData(campaignDataForState);
+                } else {
+                     throw new Error(aiCampaignRes?.message || "Failed to fetch AI prompt campaign details");
+                }
+            } catch (error) {
+                 const apiError = ApiService.handleError(error);
+                 setError({
+                    status: apiError.statusCode,
+                    message: apiError.message,
+                    showError: true
+                });
+            }
+        };
 
         const handleViewRawAIOutput = async () => {
             try {
@@ -100,31 +180,43 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
             }
 
             const Component = PAGE_COMPONENT[templateDetails?.assetTypeName as PageType]
-            return Component ?
-                <>
-                    <div className="relative">
-                        <Component params={
-                            {
-                                template: templateDetails,
-                                project_name: existingAssetDetails?.project_name,
-                                campaign_name: existingAssetDetails?.campaign_name,
-                                asset_name: existingAssetDetails?.asset_name
-                            }} />
-                        
-                        {/* Absolute positioned button that will appear on the same line as Generate */}
-                        <div className="absolute bottom-[3px] left-5">
-                            <button
-                                onClick={handleViewRawAIOutput}
-                                disabled={isLoadingRawAI}
-                                className="flex items-center gap-2 text-[#00b188] hover:text-[#008c6a] transition-colors p-2"
-                                title="View Raw AI Output"
-                            >
-                                <MdDescription size={20} />
-                                <span className="text-sm">View</span>
-                            </button>
-                        </div>
-                    </div>
-                </> : null
+            
+            // ---- Log 2: Props passed to the specific asset component ----
+            const propsToPass = {
+                template: templateDetails,
+                project_name: existingAssetDetails?.project_name,
+                campaign_name: existingAssetDetails?.campaign_name,
+                asset_name: existingAssetDetails?.asset_name,
+                assetVersionID: versionSelected?.assetVersionID,
+                editContextData: {
+                    // Asset specific fields from context
+                    topic: editSection.aiPrompt?.topic,
+                    keyPoints: editSection.aiPrompt?.keyPoints,
+                    tone: editSection.aiPrompt?.tone,
+                    type: editSection.aiPrompt?.type,
+                    
+                    // Campaign specific fields from component state
+                    campaignGoal: campaignPromptData?.campaignGoal,
+                    targetAudience: campaignPromptData?.targetAudience,
+                    webUrl: campaignPromptData?.webUrl,
+                    // Use outputScale from the Asset Prompt context (editSection)
+                    outputScale: editSection.aiPrompt?.outputScale // Already string or null from context fetch
+                }
+            };
+            // ---- Remove Logs ----
+            // console.log("[ToggleAsideSection] OutputScale from context:", editSection.aiPrompt?.outputScale);
+            // console.log("[ToggleAsideSection] editContextData being passed:", propsToPass.editContextData);
+
+            return Component ? (
+                <Component 
+                    params={propsToPass}
+                    isEditMode={isEditMode}
+                    aiPromptAssetUpsert={aiPromptAssetUpsert}
+                    aiPromptCampaignUpsert={aiPromptCampaignUpsert}
+                    existingAssetDetails={existingAssetDetails}
+                    setIsOpen={setIsOpen}
+                />
+            ) : null
         };
 
         useEffect(() => {
@@ -137,6 +229,10 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
             if (existingAssetDetails && existingAssetDetails.asset_id) {
                 fetchAiPromptAsset();
             }
+            // Fetch campaign data as well
+            if (existingAssetDetails && existingAssetDetails.campaign_id) { 
+                fetchAiPromptCampaign();
+            }
         }, [existingAssetDetails]);
 
         if (!versionSelected || !existingAssetDetails) {
@@ -145,11 +241,25 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
         return (
             <div className={`absolute flex top-0 h-full right-0 ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
-                <div ref={asideRef} className={`bg-[#F5F5F7] pb-28 h-full overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
+                <div 
+                    ref={asideRef} 
+                    className={`bg-[#F5F5F7] pb-28 h-full overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
                     style={{ zIndex: 10 }} // Sidebar stays above content
                 >
                     {isOpen && (
-                        <div className='w-full h-full px-5 py-3 overflow-y-auto'>
+                        <div className='w-full h-full px-5 pt-10 pb-5 relative overflow-y-auto'> 
+                            <div className="absolute top-2 right-4">
+                                <button
+                                    onClick={handleViewRawAIOutput}
+                                    disabled={isLoadingRawAI}
+                                    className="flex items-center gap-1 text-[#00b188] hover:text-[#008c6a] transition-colors p-1 rounded hover:bg-gray-200 bg-white border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    title="View Raw AI Output"
+                                >
+                                    <MdDescription size={18} />
+                                    <span className="text-xs">View AI Data</span>
+                                </button>
+                            </div>
+
                             {renderAssetGenerateContent()}
                         </div>
                     )}
@@ -181,6 +291,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 <MarkdownPopup
                     markdownContent={rawAIOutput}
                     promptContent={assetAIPrompt}
+                    basePromptContent={baseRawPrompt}
                     isOpen={isMarkdownPopupOpen}
                     onClose={() => setIsMarkdownPopupOpen(false)}
                 />

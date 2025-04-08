@@ -20,14 +20,13 @@ const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,ret
     handleChangeAssetDetails,
     listProjects,
     listCampaigns,
-    listAssets,
     isAssetNameExists,
     assetDetails, 
     existingCampaignDetails,
     onChangeAssetDetails
   } = useProjectFormData()
 
-  const { contextData, setContextData } = useAppData()
+  const { setContextData } = useAppData()
 
   useEffect(()=>{
     if (existingAssetMeta?.project_name.length) {
@@ -53,7 +52,7 @@ const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,ret
 
   const updateContextProjectDetails = (data:ProjectDetails) => {
     setContextData({ProjectDetails :{...data}})
-    if ( data.asset_name.length>0 && data.campaign_name.length && data.project_name.length >0) {
+    if ( data.asset_name.length>0 && data.campaign_name.length && data.project_name.length >0 && !isAssetNameExists) {
       validatingTheData(1,true)
     } else {
       validatingTheData(1, false)

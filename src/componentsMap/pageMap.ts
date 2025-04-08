@@ -1,27 +1,50 @@
-import CallScriptPage from "@/app/generate-asset/assetsPromptCreationSection/CallScriptPage"
-import EmailPage from "@/app/generate-asset/assetsPromptCreationSection/EmailPage"
-import LandingPage from "@/app/generate-asset/assetsPromptCreationSection/LandingPage"
-import LinkedInPage from "@/app/generate-asset/assetsPromptCreationSection/LinkedinPage"
+import AssetForm from "@/app/generate-asset/assetsPromptCreationSection/AssetForm"
 import { AIPromptAsset, Template } from "@/types/templates"
-import { ComponentType } from "react"
+import { ComponentType, Dispatch, SetStateAction } from "react"
+import { AssetType } from "@/types/assetTypes"
+import { FormDataProps } from "@/hooks/useInputFormDataGenerate";
+import { AssetPromptResponse } from "@/types/apiResponses";
 
-export type PageType = 'Email' | 'LinkedIn' | 'Landing Page' | 'Callscript (WIP)'
+// Export the AssetType enum for backward compatibility
+export { AssetType as PageType };
+
+// For backwards compatibility - allow both enum values and legacy string
+export type LegacyPageType = AssetType | 'Callscript (WIP)';
 
 interface PageParams {
     params: {
-            template: Template
-            assetPrompts?: AIPromptAsset 
-            project_name?: string
-            campaign_name?:string
-            asset_name?: string
-    }
+        template: Template
+        assetPrompts?: AIPromptAsset 
+        project_name?: string
+        campaign_name?:string
+        asset_name?: string
+        assetVersionID?: string;
+        editContextData?: {
+            topic?: string;
+            keyPoints?: string;
+            campaignGoal?: string;
+        }
+    };
+    isEditMode?: boolean;
+    aiPromptAssetUpsert?: (FormData: FormDataProps, assetID: string, promptID?: string) => Promise<AssetPromptResponse>;
+    aiPromptCampaignUpsert?: (FormData: FormDataProps, fileID: number, campaign_id: string) => Promise<{ isSuccess: boolean; promptID?: string }>;
+    existingAssetDetails?: {
+        campaign_name: string;
+        project_name: string;
+        asset_name: string;
+        campaign_id: string;
+        asset_id: string;
+    };
+    setIsOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
-const PAGE_COMPONENT : Record<PageType,ComponentType<PageParams>> = {
-    'Email' : EmailPage,
-    'LinkedIn' : LinkedInPage,
-    'Landing Page' : LandingPage,
-    'Callscript (WIP)' : CallScriptPage
-}
+// Map using the enum as keys
+const PAGE_COMPONENT: Record<LegacyPageType, ComponentType<PageParams>> = {
+    [AssetType.EMAIL]: AssetForm,
+    [AssetType.LINKEDIN]: AssetForm,
+    [AssetType.LANDING_PAGE]: AssetForm,
+    [AssetType.CALL_SCRIPT]: AssetForm,
+    'Callscript (WIP)': AssetForm // Legacy key - will be removed once migration is complete
+} as Record<LegacyPageType, ComponentType<PageParams>>;
 
 export default PAGE_COMPONENT

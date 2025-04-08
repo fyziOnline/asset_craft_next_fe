@@ -8,6 +8,7 @@ interface RawAIOutputResponse {
   assetID: string
   rawAIOutput: string
   assetAIPrompt: string
+  baseRawPrompt: string
 }
 
 interface UseRawAIOutputProps {
@@ -20,6 +21,7 @@ export const useRawAIOutput = () => {
   const [error, setError] = useState<string | null>(null)
   const [rawAIOutput, setRawAIOutput] = useState<string>("")
   const [assetAIPrompt, setAssetAIPrompt] = useState<string>("")
+  const [baseRawPrompt, setBaseRawPrompt] = useState<string>("")
 
   const fetchRawAIOutput = async ({ assetID, assetVersionID }: UseRawAIOutputProps) => {
     if (!assetID && !assetVersionID) {
@@ -37,18 +39,26 @@ export const useRawAIOutput = () => {
       if (response.isSuccess) {
         setRawAIOutput(response.rawAIOutput || "")
         setAssetAIPrompt(response.assetAIPrompt || "")
+        setBaseRawPrompt(response.baseRawPrompt || "")
         return {
           rawAIOutput: response.rawAIOutput,
-          assetAIPrompt: response.assetAIPrompt
+          assetAIPrompt: response.assetAIPrompt,
+          baseRawPrompt: response.baseRawPrompt
         }
       } else {
         setError(response.errorOnFailure || "Failed to fetch raw AI output")
-        return { rawAIOutput: "", assetAIPrompt: "" }
+        setRawAIOutput("")
+        setAssetAIPrompt("")
+        setBaseRawPrompt("")
+        return { rawAIOutput: "", assetAIPrompt: "", baseRawPrompt: "" }
       }
     } catch (error) {
       const apiError = ApiService.handleError(error)
       setError(apiError.message)
-      return { rawAIOutput: "", assetAIPrompt: "" }
+      setRawAIOutput("")
+      setAssetAIPrompt("")
+      setBaseRawPrompt("")
+      return { rawAIOutput: "", assetAIPrompt: "", baseRawPrompt: "" }
     } finally {
       setIsLoading(false)
     }
@@ -59,6 +69,7 @@ export const useRawAIOutput = () => {
     error,
     rawAIOutput,
     assetAIPrompt,
+    baseRawPrompt,
     fetchRawAIOutput
   }
 } 

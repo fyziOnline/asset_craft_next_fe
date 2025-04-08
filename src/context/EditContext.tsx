@@ -27,7 +27,6 @@ export const EditContextProvider: FC<EditContextProviderProps> = ({ children }) 
     }
 
     useEffect(() => {
-        console.log("Edit Context Updated:", editSection);
     }, [editSection]);
 
     return (

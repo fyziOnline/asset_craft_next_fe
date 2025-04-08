@@ -1,3 +1,5 @@
+import { AssetType } from './assetTypes';
+
 export interface ClientAssetTypeProps {
     clientAssetTypeID?: string,
     clientID?: string,
@@ -102,16 +104,17 @@ export interface AllUserAssignedProps {
 }
 
 export interface AssetData {
-    assetTypeIcon:string
-    assetName:string
-    campaignID ?:string 
-    campaignName:string
-    projectName:string
-    createdOn:string
-    currentStatus:string
-    assetID:string
-    approvedOn ?: string | undefined
-    approvedBy ?: string | undefined
+    assetTypeIcon: string;
+    assetName: string;
+    // campaignID: string;
+    campaignName: string;
+    projectName: string;
+    createdOn: string;
+    currentStatus: string;
+    assetID: string;
+    approvedOn: string;
+    approvedBy: string;
+    [key: string]: string;
 }
 
-export type AssetType = 'email' | 'linkedin' | 'landing page' | 'call script' | ""  | null
+export { AssetType };
