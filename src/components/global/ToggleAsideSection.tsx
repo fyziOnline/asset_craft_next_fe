@@ -42,7 +42,8 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
         const [isMarkdownPopupOpen, setIsMarkdownPopupOpen] = useState(false);
         // Add state for campaign prompt data
         const [campaignPromptData, setCampaignPromptData] = useState<CampaignPromptData | null>(null); 
-        const { fetchRawAIOutput, isLoading: isLoadingRawAI, rawAIOutput, assetAIPrompt } = useRawAIOutput();
+        // Get baseRawPrompt from the hook
+        const { fetchRawAIOutput, isLoading: isLoadingRawAI, rawAIOutput, assetAIPrompt, baseRawPrompt } = useRawAIOutput();
 
         const { getTemplateById, getAiPromptAssetSelect, getAiPromptCampaignSelect } = useGetTemplates({ type_page: "" });
         const { aiPromptAssetUpsert, aiPromptCampaignUpsert } = useGenerateTemplate({ params: { templateID: templateDetails?.templateID || '' } });
@@ -290,6 +291,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 <MarkdownPopup
                     markdownContent={rawAIOutput}
                     promptContent={assetAIPrompt}
+                    basePromptContent={baseRawPrompt}
                     isOpen={isMarkdownPopupOpen}
                     onClose={() => setIsMarkdownPopupOpen(false)}
                 />
