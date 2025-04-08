@@ -32,7 +32,6 @@ interface AIPromptCampaignSelectResponse extends ApiResponse {
         campaignGoal: string;
         targetAudience: string;
         webUrl: string;
-        outputScale: number;
         createdOn: string;
         updatedOn: string;
     };

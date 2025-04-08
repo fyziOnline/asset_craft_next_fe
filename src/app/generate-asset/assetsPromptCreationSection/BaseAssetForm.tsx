@@ -269,7 +269,6 @@ const BaseAssetForm = ({
         campaignGoal: formData.campaignGoal,
         targetAudience: formData.targetAudience,
         webUrl: formData.webUrl,
-        outputScale: formData.outputScale,
       };
       const campaignRes = await aiPromptCampaignUpsert!(campaignPayload as FormDataProps, 0, existingAssetDetails.campaign_id);
 
@@ -282,6 +281,7 @@ const BaseAssetForm = ({
          keyPoints: formData.keyPoints ?? "",
          tone: formData.tone,
          type: formData.type,
+         outputScale: formData.outputScale
       };
       const assetRes = await aiPromptAssetUpsert!(assetPayload as FormDataProps, existingAssetDetails.asset_id);
 
@@ -424,15 +424,18 @@ const BaseAssetForm = ({
           checked={assetSpecificSectionValid}
         >
           <assetSpecificSection.component
-            existingData={null}
-            editContextData={isEditMode ? {
+             existingData={null}
+             editContextData={isEditMode ? {
                 topic: formData?.topic ?? "", 
                 keyPoints: formData?.keyPoints ?? "", 
+                tone: formData?.tone ?? "",
+                type: formData?.type ?? "",
+                outputScale: formData?.outputScale?.toString() ?? null
              } : undefined}
-            handleInputChange={handleInputChange}
-            onValidationChange={handleValidationChange}
-            assetType={assetType}
-            isEditMode={isEditMode}
+             handleInputChange={handleInputChange}
+             onValidationChange={handleValidationChange}
+             assetType={assetType}
+             isEditMode={isEditMode}
           />
         </Accordion>
       </div>

@@ -16,7 +16,6 @@ interface CampaignPromptData {
     campaignGoal?: string;
     targetAudience?: string;
     webUrl?: string;
-    outputScale?: string | null; // Keep as string or null to match context/form data
 }
 
 interface ToggleAsideSectionProps {
@@ -140,7 +139,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         campaignGoal: fetchedData.campaignGoal,
                         targetAudience: fetchedData.targetAudience,
                         webUrl: fetchedData.webUrl,
-                        outputScale: fetchedData.outputScale?.toString() ?? null // Convert to string/null
                     };
                      // console.log("[ToggleAsideSection] Fetched AI Campaign Data:", campaignDataForState); // Remove log
                     setCampaignPromptData(campaignDataForState);
@@ -190,17 +188,23 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 campaign_name: existingAssetDetails?.campaign_name,
                 asset_name: existingAssetDetails?.asset_name,
                 editContextData: {
+                    // Asset specific fields from context
                     topic: editSection.aiPrompt?.topic,
                     keyPoints: editSection.aiPrompt?.keyPoints,
                     tone: editSection.aiPrompt?.tone,
                     type: editSection.aiPrompt?.type,
+                    
+                    // Campaign specific fields from component state
                     campaignGoal: campaignPromptData?.campaignGoal,
                     targetAudience: campaignPromptData?.targetAudience,
                     webUrl: campaignPromptData?.webUrl,
-                    outputScale: campaignPromptData?.outputScale
+                    // Use outputScale from the Asset Prompt context (editSection)
+                    outputScale: editSection.aiPrompt?.outputScale // Already string or null from context fetch
                 }
             };
-            // console.log("[ToggleAsideSection] Rendering Component with props:", { ... }); // Remove log
+            // ---- Remove Logs ----
+            // console.log("[ToggleAsideSection] OutputScale from context:", editSection.aiPrompt?.outputScale);
+            // console.log("[ToggleAsideSection] editContextData being passed:", propsToPass.editContextData);
 
             return Component ?
                 <>

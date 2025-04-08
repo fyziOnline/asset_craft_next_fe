@@ -6,12 +6,18 @@ import { AIPromptAsset } from '@/types/templates';
 // GenericAssetSection Props Interface
 export interface AssetSectionProps {
   existingData: AIPromptAsset | null;
-  handleInputChange: (field: string, value: string) => void;
+  handleInputChange: (field: string, value: string | number | null) => void;
   onValidationChange: (isValid: boolean) => void;
   assetType?: string;
   editContextData?: {
     topic?: string;
     keyPoints?: string;
+    campaignGoal?: string;
+    targetAudience?: string;
+    webUrl?: string;
+    outputScale?: string | null;
+    tone?: string;
+    type?: string;
   };
   isEditMode?: boolean;
 }

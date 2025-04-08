@@ -61,13 +61,13 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
   
   // Read initial outputScale from props (prefer editContextData, fallback to existingData, default 5)
   const initialOutputScale = useMemo(() => {
+    let scaleValue = 5; // Default
     if (editContextData?.outputScale) {
-      return parseInt(editContextData.outputScale, 10);
+      scaleValue = parseInt(editContextData.outputScale, 10);
+    } else if (existingData?.outputScale) { // Fallback to existingData if editContextData doesn't have it
+      scaleValue = existingData.outputScale;
     } 
-    if (existingData?.outputScale) {
-      return existingData.outputScale;
-    } 
-    return 5; // Default value
+    return scaleValue;
   }, [editContextData, existingData]);
 
   // Enhanced validation check - IGNORE outputScale
