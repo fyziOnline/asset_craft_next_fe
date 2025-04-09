@@ -2,6 +2,15 @@ import { FC, useEffect, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { MdOutlineClose } from 'react-icons/md'
 
+const cleanMarkdownContent = (content: string): string => {
+  // Remove ```markdown at start and ``` at end if present
+  const trimmed = content.trim()
+  if (trimmed.startsWith('```markdown\n') && trimmed.endsWith('```')) {
+    return trimmed.slice(11, -3).trim()
+  }
+  return trimmed
+}
+
 interface MarkdownPopupProps {
   markdownContent: string
   promptContent: string
@@ -57,7 +66,7 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
                   <div className="mb-3 pb-3 border-b border-blue-100">
                     <p className="text-xs font-semibold text-blue-700 mb-1 uppercase tracking-wider">Base Prompt:</p>
                     <div className="prose prose-sm max-w-none text-gray-800">
-                      <ReactMarkdown>{basePromptContent}</ReactMarkdown>
+                      <ReactMarkdown>{cleanMarkdownContent(basePromptContent)}</ReactMarkdown>
                     </div>
                   </div>
                 )}
@@ -65,7 +74,7 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
                   <div>
                     {basePromptContent && <p className="text-xs font-semibold text-blue-700 mb-1 uppercase tracking-wider">Specific Prompt:</p>}
                     <div className="prose prose-sm max-w-none text-gray-800">
-                      <ReactMarkdown>{promptContent}</ReactMarkdown>
+                      <ReactMarkdown>{cleanMarkdownContent(promptContent)}</ReactMarkdown>
                     </div>
                   </div>
                 )}
@@ -79,7 +88,7 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
               <h4 className="text-lg font-medium mb-2 text-gray-600">Raw AI Output</h4>
               <div className="overflow-y-auto custom-scrollbar border border-gray-200 rounded p-4 bg-gray-50">
                 <div className="prose max-w-none text-gray-800">
-                  <ReactMarkdown>{markdownContent}</ReactMarkdown>
+                  <ReactMarkdown>{cleanMarkdownContent(markdownContent)}</ReactMarkdown>
                 </div>
               </div>
             </div>
