@@ -581,14 +581,14 @@ const BaseAssetForm = ({
           <>
             <Button
               handleClick={handleSaveChanges}
-              disabled={isSaveDisabled} 
+              disabled={isSaveDisabled && isDirty} 
               customClass="px-6 py-2"
               buttonText={isSaving ? "Saving..." : "Save Changes"}
             />
             {/* Add Generate/Regenerate button for edit mode */}
             <Button 
               handleClick={handleGenerate} 
-              disabled={isRegenerateDisabledInEdit} // Use specific disable logic for edit mode regeneration
+              disabled={isRegenerateDisabledInEdit && isDirty} // Use specific disable logic for edit mode regeneration
               customClass="px-6 py-2" 
               buttonText={"Regenerate"} // Always show Regenerate in edit mode
             />
