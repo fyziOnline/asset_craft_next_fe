@@ -35,7 +35,7 @@ interface ToggleAsideSectionProps {
 }
 
 const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
-    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef, isEditMode = false }) => {
+    ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef, isEditMode = false }) => {            
         const { setError } = useAppData();
         const { editSection, setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
@@ -199,13 +199,9 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                     campaignGoal: campaignPromptData?.campaignGoal,
                     targetAudience: campaignPromptData?.targetAudience,
                     webUrl: campaignPromptData?.webUrl,
-                    // Use outputScale from the Asset Prompt context (editSection)
                     outputScale: editSection.aiPrompt?.outputScale // Already string or null from context fetch
                 }
             };
-            // ---- Remove Logs ----
-            // console.log("[ToggleAsideSection] OutputScale from context:", editSection.aiPrompt?.outputScale);
-            // console.log("[ToggleAsideSection] editContextData being passed:", propsToPass.editContextData);
 
             return Component ? (
                 <Component 

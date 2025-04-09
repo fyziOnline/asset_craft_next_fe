@@ -108,10 +108,6 @@ const Page = () => {
         link.click();
     };
 
-    useEffect(() => {
-        // const params = new URLSearchParams(window.location.search); // Remove unused variable
-        // const assetType = params.get("assetTypeIcon");
-    }, []);
 
     const openConfirmationModal = (assetVersionID: string, versionName: string) => {
         setVersionToDelete({ id: assetVersionID, name: versionName });

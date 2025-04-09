@@ -201,6 +201,17 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     }
   };
 
+  const getAssetByVersionId = async(versionId:string) => {
+    try {
+      const res_version = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${versionId}`)
+      return res_version
+    } catch (error) {
+      const apiError = ApiService.handleError(error)
+      console.error("API Error :",apiError);
+      return{isSuccess:false}
+    }
+  }
+
   const uploadImage = async (FormData: FormDataProps) => {
     try {
       if (FormData?.fileSelected) {
@@ -418,6 +429,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     aiPromptCampaignUpsert,
     aiPromptGenerateForAsset,
     getVersionDataUsingAI,
+    getAssetByVersionId,
     generateVersionHTML
   };
 };

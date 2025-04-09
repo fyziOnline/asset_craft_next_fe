@@ -8,7 +8,7 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
-import { AIPromptAsset, CampaignSelectResponse, Template } from '@/types/templates';
+import { AIPromptAsset, AssetVersionProps, CampaignSelectResponse, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps } from '@/hooks/useInputFormDataGenerate';
 import { listofcampains, ListTargetAudience } from '@/data/dataGlobal';
@@ -78,7 +78,7 @@ const BaseAssetForm = ({
 }: BaseAssetFormProps) => {
   const router = useRouter();
   const [generateStep, setGenerateStep] = useState(1);
-  const { assetIDTemplateRef, generateHTML, aiPromptGenerateForAsset, getVersionDataUsingAI, generateVersionHTML } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
+  const { assetIDTemplateRef, generateHTML, aiPromptGenerateForAsset, getVersionDataUsingAI, generateVersionHTML, getAssetByVersionId } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
   const [formData, setFormData] = useState<Partial<FormDataProps>>(initialFormData);
   const [sectionsData, setSectionsData] = useState<SectionProps[]>([]);
   const { setShowLoading, showLoading } = useLoading();
@@ -196,13 +196,22 @@ const BaseAssetForm = ({
 
         console.log("Successfully fetched latest AI data for version.");
 
-        const generateHtmlRes = await generateVersionHTML(assetVersionID);
-
+        const generateHtmlRes = await generateVersionHTML(assetVersionID) as any;
+        // console.log("generateHtmlRes ",generateHtmlRes);
+        // console.log("contextData :",contextData.AssetHtml.assetVersions);
+        // console.log("contextData :",contextData);
+        // console.log("assetVersionID :",assetVersionID);
+        const updatedVersion = await getAssetByVersionId(assetVersionID)
+        const updatedVersionList: AssetVersionProps[] | any  = contextData.AssetHtml.assetVersions.map(version => 
+          version.assetVersionID === assetVersionID ? updatedVersion : version
+        ) 
+        setContextData({AssetHtml:{...contextData.AssetHtml,assetVersions:updatedVersionList}})
+ 
         if (!generateHtmlRes?.isSuccess) {
           throw new Error("Failed to generate HTML for version.");
         }
 
-        console.log("Successfully generated HTML for version.");
+        // console.log("Successfully generated HTML for version.");
 
         if (setIsOpen) {
           setIsOpen(false);
