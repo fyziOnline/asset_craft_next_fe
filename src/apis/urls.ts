@@ -23,6 +23,7 @@ export const urls = {
   aiPrompt_Asset_select: "/aiPrompt/Asset/select",
   aiPrompt_Asset_insert: "/aiPrompt/Asset/insert",
   aiPrompt_Asset_update: "/aiPrompt/Asset/update",
+  aiPrompt_Asset_insertupdate: "/aiPrompt/Asset/insertupdate",
   aiPrompt_Campaign_select: "/aiPrompt/Campaign/select",
   aiPrompt_Campaign_insert: "/aiPrompt/Campaign/insert",
   aiPrompt_Campaign_update: "/aiPrompt/Campaign/update",

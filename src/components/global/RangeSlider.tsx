@@ -11,63 +11,84 @@ interface RangeProp {
     defaultValue?: number
 }
 
-const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '100', steps = 10, label = 'range', onSelectValue = () => { }, defaultValue = 7 }) => {
-    const singleStepRange = parseInt(maxValue) / steps
+const RangeSlider: FC<RangeProp> = ({ minValue = '0', maxValue = '10', steps = 10, label = 'range', onSelectValue = () => { }, defaultValue = 5 }) => {
+    const min = parseInt(minValue, 10);
+    const max = parseInt(maxValue, 10);
+    const range = max - min;
+    const stepSize = range / steps;
 
-    const clampedDefaultValue = defaultValue * singleStepRange 
+    const calculateInitialValue = (defaultVal: number) => {
+        const clampedDefault = Math.max(min, Math.min(max, defaultVal)); 
+        return ((clampedDefault - min) / range) * 100; 
+    };
+
+    const calculateInitialDisplayValue = (defaultVal: number) => {
+         const clampedDefault = Math.max(min, Math.min(max, defaultVal));
+         return Math.round((clampedDefault - min) / stepSize) * stepSize + min;
+    };
     
-    const [value, setValue] = useState<number>(clampedDefaultValue)
-    const [valueToDisplay, setValueToDisplay] = useState<number>(clampedDefaultValue)
-    const selectRangeRef = useRef<HTMLParagraphElement>(null)
+    const [internalValue, setInternalValue] = useState<number>(calculateInitialValue(defaultValue)); 
+    const [displayValue, setDisplayValue] = useState<number>(calculateInitialDisplayValue(defaultValue)); 
+    const outputRef = useRef<HTMLSpanElement>(null);
 
-    const setSnapToValue = (value: number) => {
-        return Math.round(value / singleStepRange)
-    }
+    const snapValue = (val: number) => {
+        const scaledValue = (val / 100) * range + min;
+        const snappedStepValue = Math.round((scaledValue - min) / stepSize) * stepSize + min;
+        return Math.max(min, Math.min(max, snappedStepValue)); 
+    };
 
     const handleRangeSelection = (e: ChangeEvent<HTMLInputElement>) => {
-        const rangeValue = parseInt(e.target.value)
-        setValue(rangeValue)
-        const snapToValue = setSnapToValue(rangeValue)
-        setValueToDisplay(snapToValue)
-        onSelectValue(snapToValue)
-    }
-
-    const onHandleRelease = () => {
-        setValue(valueToDisplay * singleStepRange)
-        if (selectRangeRef.current) {
-            selectRangeRef.current.innerText = valueToDisplay.toString()
-        }
-    }
+        const rangeValue = parseInt(e.target.value, 10);
+        setInternalValue(rangeValue);
+        const snappedValue = snapValue(rangeValue);
+        setDisplayValue(snappedValue);
+        onSelectValue(snappedValue);
+    };
 
     useEffect(() => {
-        if (selectRangeRef.current) {
-            selectRangeRef.current.innerText = defaultValue.toString();
-        }
-        setValue(clampedDefaultValue)
-        setValueToDisplay(clampedDefaultValue)
-    }, [defaultValue]);
+        const newInitialValue = calculateInitialValue(defaultValue);
+        const newInitialDisplayValue = calculateInitialDisplayValue(defaultValue);
+        setInternalValue(newInitialValue);
+        setDisplayValue(newInitialDisplayValue);
+    }, [defaultValue, min, max, range, stepSize]);
 
+    useEffect(() => {
+        if (outputRef.current) {
+            const percentage = internalValue;
+            outputRef.current.style.left = `calc(${percentage}% - ${percentage * 0.1}px)`;
+        }
+    }, [internalValue]);
 
     return (
-        <div className='relative'>
-            <div>
+        <div className='relative pt-6'>
+            <div className='relative h-4'>
+                <span 
+                  ref={outputRef} 
+                  className='absolute bottom-full mb-1 text-sm text-gray-700 font-medium transform -translate-x-1/2 px-1 bg-white rounded shadow'
+                  style={{ }}
+                >
+                    {displayValue}
+                </span>
+                
                 <label htmlFor="range" className='sr-only'>{label}</label>
                 <input
                     type="range"
-                    min={minValue}
-                    max={maxValue}
-                    value={value}
+                    min="0"
+                    max="100"
+                    value={internalValue}
                     title=''
                     id='range'
                     onChange={handleRangeSelection}
-                    onMouseUp={onHandleRelease}
-                    onTouchEnd={onHandleRelease}
-                    className='custom-range bg-grey-700 '
+                    className='custom-range bg-grey-700 absolute inset-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10'
                 />
-                <div className="absolute z-0 top-[5%] h-4 rounded-lg bg-green-100 pointer-events-none" style={{ width: `${(value / parseInt(maxValue)) * 100}%` }} ></div>
+                <div className="absolute top-1/2 left-0 right-0 h-2 rounded-lg bg-gray-200 pointer-events-none transform -translate-y-1/2"></div>
+                <div 
+                  className="absolute top-1/2 left-0 h-2 rounded-lg bg-green-500 pointer-events-none transform -translate-y-1/2 z-0" 
+                  style={{ width: `${internalValue}%` }} 
+                ></div>
             </div>
-            <p ref={selectRangeRef} className='absolute left-0 top-[75%] text-grey-300'>{defaultValue}</p>
-            <p className={`absolute right-0 top-[75%] ${value !== parseInt(maxValue) ? 'text-grey-300' : 'text-green-100'}`}>{steps}</p>
+            <p className='absolute left-0 top-full mt-1 text-sm text-grey-300'>{min}</p>
+            <p className={`absolute right-0 top-full mt-1 text-sm text-grey-300`}>{max}</p>
         </div>
     )
 }

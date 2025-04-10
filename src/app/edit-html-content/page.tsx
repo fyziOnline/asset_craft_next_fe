@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
 import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
 import { EditContextProvider } from '@/context/EditContext';
@@ -56,7 +56,6 @@ const SearchParamsHandler = ({ children }: {
 const Page = () => {
     const { contextData } = useAppData();
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
-    const [assetType, setAssetType] = useState<string>("");
     const [isConfirmModel, setIsConfirmModel] = useState<boolean>(false);
     const [versionToDelete, setVersionToDelete] = useState<VersionToDelete | null>(null);
     const [unmatchedBlocks, setUnmatchedBlocks] = useState<string[]>([]);
@@ -102,18 +101,13 @@ const Page = () => {
         versionStatus: versionSelected?.status || ""
     });
 
-    const handleDownload = (fileURL: string) => {
+    const handleDownload = () => {
         const link = document.createElement('a');
         link.href = approvalDetails.fileUrl;
         link.download = 'filename';
         link.click();
     };
 
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const assetType = params.get("assetTypeIcon");
-        setAssetType(assetType as string);
-    }, []);
 
     const openConfirmationModal = (assetVersionID: string, versionName: string) => {
         setVersionToDelete({ id: assetVersionID, name: versionName });
@@ -281,27 +275,6 @@ const Page = () => {
         );
     };
 
-    // if user click outside to close the aside section
-    const asideRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (asideRef.current && !asideRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
-            }            
-        }
-
-        if(isOpen){
-            document.addEventListener('mousedown', handleClickOutside)
-        }else{
-            document.removeEventListener('mousedown', handleClickOutside)
-        }
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
-        }
-    },[isOpen])
-
     const renderPageContent = ({
         assetTypeIcon,
         campaign_name,
@@ -383,7 +356,7 @@ const Page = () => {
                                 campaign_id: contextData.AssetHtml.campaignID,
                                 asset_id: versionSelected?.assetID
                             }}
-                            asideRef={asideRef}
+                            isEditMode={true}
                         />
                     </div>
 
@@ -430,7 +403,7 @@ const Page = () => {
                                                     <div className="mt-1 flex justify-end">
                                                         <button
                                                             className="flex items-center gap-2 px-3 py-1 bg-[#00A881] text-white text-sm rounded-md hover:bg-[#008c6a] transition-colors duration-200"
-                                                            onClick={() => handleDownload(item.fIleURL)}
+                                                            onClick={() => handleDownload()}
                                                         >
                                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

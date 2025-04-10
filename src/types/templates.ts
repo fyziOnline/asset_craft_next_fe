@@ -52,6 +52,8 @@ export interface AIPromptAsset {
     targetAudience: string
     tone: string
     outputScale: number
+    primaryMessage?: string
+    additionalInfo?: string
   }
 
 
