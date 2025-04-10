@@ -89,6 +89,7 @@ const BaseAssetForm = ({
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [section4Interacted, setSection4Interacted] = useState(false);
+  const [isValidUrl, setIsValidUrl] = useState<boolean>(false);
 
   useEffect(() => {
     if (isEditMode && params.editContextData) {
@@ -127,7 +128,10 @@ const BaseAssetForm = ({
   }, [params.project_name, isEditMode]);
 
   // Calculate section validities directly
-  const isCampaignOverviewValid = !!formData.campaignGoal && !!formData.targetAudience;
+  // const isCampaignOverviewValid = !!formData.campaignGoal && !!formData.targetAudience;
+  const isCampaignOverviewValid = !!formData.campaignGoal && !!formData.targetAudience && (
+    formData.webUrl?.trim() === '' || !isValidUrl
+  );
   // Section 4: Valid if in edit mode OR if in create mode and user has interacted.
   const isContentBriefValid = isEditMode || section4Interacted;
   
@@ -292,8 +296,25 @@ const BaseAssetForm = ({
   }, [isEditMode]);
 
   const handleInputTextChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, field: string) => {
+    const value = e.target.value;
+    // console.log("value :",value);
+    setIsValidUrl(false)
+    
+    if(field === "webUrl" &&value.trim() !== '') {
+      if(!validateUrl(value)){
+        setIsValidUrl(true)
+      }
+    }
+
     handleInputChange(field, e.target.value);
   }, [handleInputChange]);
+
+  // url validationn function
+  const validateUrl = (url: string): boolean => {
+    const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
+    return regex.test(url);
+  };
+  
 
   const handleInputSectionModified = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
     const newValue = e.target.value;
@@ -513,6 +534,9 @@ const BaseAssetForm = ({
                 placeholder="Enter your URL here."
                 customAreaClass="whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
               />
+              {
+                isValidUrl && <p className='text-red-500 -mt-2'>Invalid URL</p>
+              }
               {!isEditMode && (
                  <DragAndDrop
                     onFileSelect={(file) => {
