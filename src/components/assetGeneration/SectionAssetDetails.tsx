@@ -73,7 +73,8 @@ const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,ret
           <DropDown
             onSelected={(optionSelected) => { handleChangeAssetDetails("project_name", optionSelected.value, optionSelected.label || '') }}
             preSelectValue={existingAssetMeta?.project_name}
-            selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name" otherFieldErrorText={!isProductNameValid ? `Product/Solution name cannot be ${assetDetails.project_name}` : ''}></DropDown>
+            selectPlaceHolder="Select Project/Solution Name" optionLists={listProjects} otherFieldText="Specify project name" otherFieldErrorText={!isProductNameValid ? `Product/Solution name cannot be ${assetDetails.project_name}` : ''}>
+          </DropDown>
         </div>
 
         <div className='flex flex-col gap-3'>

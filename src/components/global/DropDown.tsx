@@ -105,14 +105,14 @@ const DropDown: React.FC<DropDownProps> = ({
                 <p className={`text-base ${!selectedOption ? "text-[#666666]" : ""}`}>{selectedOption || selectPlaceHolder}</p>
                 <span className={`cursor-pointer transition-transform ${showOptionList ? "rotate-180" : ""}`}><MdOutlineKeyboardArrowDown size={25} /></span>
             </div>
-            <div className={`z-[40] h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all relative duration-300 ease-in-out ${showOptionList ? 'max-h-[140px] overflow-y-scroll opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
+            <div className={`z-[40] h-auto bg-white flex flex-col shadow-dropdown-shadow rounded-lg transition-all relative duration-300 ease-in-out ${showOptionList ? 'max-h-[185px] overflow-y-scroll opacity-100' : 'max-h-0 opacity-0'} ${dropdownWidthClass}`}>
                 {showOptionList &&
                     <>
                         {optionLists.map((options, index) => (
                             <div
                                 key={index}
                                 onClick={() => handleSelectList(options)}
-                                className='h-11 px-4 py-3 flex items-center text-base cursor-pointer'
+                                className='h-11 px-4 py-3 flex items-center text-base cursor-pointer hover:bg-[#e6f7f4] hover:text-[#0a8c78] hover:rounded-lg my-[2px] duration-200'
                             >
                                 {options.label}
                             </div>
