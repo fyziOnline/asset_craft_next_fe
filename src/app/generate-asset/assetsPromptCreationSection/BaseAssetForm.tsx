@@ -321,8 +321,7 @@ const BaseAssetForm = ({
   const handleInputSectionModified = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>, index: number, trimOnBlur = false) => {
     let newValue = e.target.value;
     if (trimOnBlur) newValue = newValue.trim(); // only trims when user leaves the field
-    console.log(newValue);
-
+    //console.log(newValue);
     setSectionsData(prevSections => {
       const newSections = [...prevSections];
       if (newSections[index]) {
