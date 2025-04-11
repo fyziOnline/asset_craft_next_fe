@@ -13,7 +13,7 @@ import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps } from '@/hooks/useInputFormDataGenerate';
 import { listofcampains, ListTargetAudience } from '@/data/dataGlobal';
 import SectionAssetDetails from '@/components/assetGeneration/SectionAssetDetails';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { AssetSectionConfig } from '@/app/generate-asset/config/assetConfig';
 import { AssetPromptResponse } from '@/types/apiResponses';
 import { ApiService } from '@/lib/axios_generic';
@@ -470,6 +470,8 @@ const BaseAssetForm = ({
     }
   }, [params.project_name, isEditMode]);
 
+  const getCurrentPath = usePathname()
+
   return (
     <div className="pb-20">
       <div>
@@ -554,6 +556,7 @@ const BaseAssetForm = ({
           isRequire={true}
           HeaderTitle={assetSpecificSection.title}
           checked={assetSpecificSectionValid}
+          {...(getCurrentPath === "/edit-html-content" && { isShowContent: true })}
         >
           <assetSpecificSection.component
              existingData={null}
@@ -600,7 +603,7 @@ const BaseAssetForm = ({
         </div>
       )}
 
-      <div className="flex justify-end items-center gap-4 mt-6 pr-4 sticky bottom-0 bg-gray-100 py-4 z-10">
+      <div className="flex justify-end items-center gap-4 mt-5 pr-4 bottom-0 bg-gray-100 py-4">
         {isEditMode ? (
           <>
             <Button
