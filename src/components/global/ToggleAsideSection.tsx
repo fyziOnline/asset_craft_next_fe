@@ -239,7 +239,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
             <div className={`absolute flex top-0 h-full right-0 ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
                 <div 
                     ref={asideRef} 
-                    className={`bg-[#F5F5F7] pb-28 h-full overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-41px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
+                    className={`bg-[#F5F5F7] pb-28 h-full overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-120px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
                     style={{ zIndex: 10 }} // Sidebar stays above content
                 >
                     {isOpen && (
@@ -263,7 +263,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
                 <div
                     onClick={toggleAside}
-                    className={`absolute top-[1rem] transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300`}
+                    className={`absolute top-[-4rem] transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300 border-t-2 border-l-2 border-b-2`}
                     style={{ right: isOpen ? '100%' : '0px', zIndex: 20 }}
                 >
                     <svg
