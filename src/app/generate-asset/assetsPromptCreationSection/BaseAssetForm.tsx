@@ -66,13 +66,13 @@ const initialFormData: Partial<FormDataProps> = {
   fileSelected: undefined,
 };
 
-const BaseAssetForm = ({ 
-  params, 
-  assetType, 
-  assetSpecificSection, 
+const BaseAssetForm = ({
+  params,
+  assetType,
+  assetSpecificSection,
   isEditMode = false,
-  aiPromptAssetUpsert, 
-  aiPromptCampaignUpsert, 
+  aiPromptAssetUpsert,
+  aiPromptCampaignUpsert,
   existingAssetDetails,
   setIsOpen
 }: BaseAssetFormProps) => {
@@ -134,7 +134,7 @@ const BaseAssetForm = ({
   );
   // Section 4: Valid if in edit mode OR if in create mode and user has interacted.
   const isContentBriefValid = isEditMode || section4Interacted;
-  
+
   // Combined validity checks for enabling buttons
   const allSectionsValidForCreate = isProjectDetailsValid && isCampaignOverviewValid && assetSpecificSectionValid;
   const allSectionsValidForEdit = isProjectDetailsValid && isCampaignOverviewValid && assetSpecificSectionValid; // Content brief not edited/validated in edit mode
@@ -149,7 +149,7 @@ const BaseAssetForm = ({
         campaignGoal: data.aIPromptCampaign.campaignGoal,
         targetAudience: data.aIPromptCampaign.targetAudience,
         webUrl: data.aIPromptCampaign.webUrl,
-        outputScale: data.aIPromptCampaign.outputScale ?? 5 
+        outputScale: data.aIPromptCampaign.outputScale ?? 5
       }));
     }
   }, [isEditMode]);
@@ -206,11 +206,11 @@ const BaseAssetForm = ({
         // console.log("contextData :",contextData);
         // console.log("assetVersionID :",assetVersionID);
         const updatedVersion = await getAssetByVersionId(assetVersionID)
-        const updatedVersionList: AssetVersionProps[] | any  = contextData.AssetHtml.assetVersions.map(version => 
+        const updatedVersionList: AssetVersionProps[] | any = contextData.AssetHtml.assetVersions.map(version =>
           version.assetVersionID === assetVersionID ? updatedVersion : version
-        ) 
-        setContextData({AssetHtml:{...contextData.AssetHtml,assetVersions:updatedVersionList}})
- 
+        )
+        setContextData({ AssetHtml: { ...contextData.AssetHtml, assetVersions: updatedVersionList } })
+
         if (!generateHtmlRes?.isSuccess) {
           throw new Error("Failed to generate HTML for version.");
         }
@@ -244,7 +244,7 @@ const BaseAssetForm = ({
       }
       return;
     }
-    
+
     let newStep = generateStep + 1;
 
     if (newStep > 3) {
@@ -281,16 +281,18 @@ const BaseAssetForm = ({
     setContextData({ assetGenerateStatus: newStep });
     setGenerateStep(newStep);
   }, [
-    isEditMode, generateStep, assetIDTemplateRef, assetType, contextData, 
+    isEditMode, generateStep, assetIDTemplateRef, assetType, contextData,
     generateHTML, router, setContextData, setShowLoading, formData, sectionsData, setError,
     allSectionsValidForCreate, canRegenerateInEditMode, existingAssetDetails,
     getVersionDataUsingAI, generateVersionHTML, setIsOpen, showLoading
   ]);
 
   const handleInputChange = useCallback((field: string, value: string | number | File | null) => {
+
+    const trimmedValue = typeof value === 'string' ? value.trim() : value;
     setFormData(prev => ({
       ...prev,
-      [field]: value
+      [field]: trimmedValue
     }));
     if (isEditMode) setIsDirty(true);
   }, [isEditMode]);
@@ -299,9 +301,9 @@ const BaseAssetForm = ({
     const value = e.target.value;
     // console.log("value :",value);
     setIsValidUrl(false)
-    
-    if(field === "webUrl" &&value.trim() !== '') {
-      if(!validateUrl(value)){
+
+    if (field === "webUrl" && value.trim() !== '') {
+      if (!validateUrl(value)) {
         setIsValidUrl(true)
       }
     }
@@ -314,10 +316,13 @@ const BaseAssetForm = ({
     const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
     return regex.test(url);
   };
-  
 
-  const handleInputSectionModified = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
-    const newValue = e.target.value;
+
+  const handleInputSectionModified = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>, index: number, trimOnBlur = false) => {
+    let newValue = e.target.value;
+    if (trimOnBlur) newValue = newValue.trim(); // only trims when user leaves the field
+    console.log(newValue);
+
     setSectionsData(prevSections => {
       const newSections = [...prevSections];
       if (newSections[index]) {
@@ -342,7 +347,7 @@ const BaseAssetForm = ({
   // Function to mark section 4 as interacted
   const handleSection4Interaction = useCallback(() => {
     if (!section4Interacted) { // Only set once
-       setSection4Interacted(true);
+      setSection4Interacted(true);
     }
   }, [section4Interacted]); // Add dependency
 
@@ -371,12 +376,12 @@ const BaseAssetForm = ({
         throw new Error("Failed to save campaign details.");
       }
 
-      const assetPayload: Partial<FormDataProps> = { 
-         topic: formData.topic ?? "", 
-         keyPoints: formData.keyPoints ?? "",
-         tone: formData.tone,
-         type: formData.type,
-         outputScale: formData.outputScale
+      const assetPayload: Partial<FormDataProps> = {
+        topic: formData.topic ?? "",
+        keyPoints: formData.keyPoints ?? "",
+        tone: formData.tone,
+        type: formData.type,
+        outputScale: formData.outputScale
       };
       const assetRes = await aiPromptAssetUpsert!(assetPayload as FormDataProps, existingAssetDetails.asset_id);
 
@@ -387,7 +392,7 @@ const BaseAssetForm = ({
       setIsDirty(false);
 
       // --- Call aiPromptGenerateForAsset after successful save --- 
-      if (aiPromptGenerateForAsset) { 
+      if (aiPromptGenerateForAsset) {
         try {
           // Assuming assetID is available in existingAssetDetails
           assetIDTemplateRef.current = existingAssetDetails.asset_id; // Ensure ref is set
@@ -396,42 +401,42 @@ const BaseAssetForm = ({
             // Handle potential error during prompt generation if needed
             console.error("Failed to generate AI prompt after save.");
             setError({
-                status: 500,
-                message: "Saved successfully, but failed to regenerate AI prompt.",
-                showError: true
+              status: 500,
+              message: "Saved successfully, but failed to regenerate AI prompt.",
+              showError: true
             });
           } else {
             console.log("AI prompt regenerated successfully after save.");
           }
         } catch (genError) {
-            console.error("Error during aiPromptGenerateForAsset call:", genError);
-             const apiGenError = ApiService.handleError(genError);
-             setError({
-                status: apiGenError.statusCode ?? 500,
-                message: "Saved successfully, but failed to regenerate AI prompt: " + apiGenError.message,
-                showError: true
-            });
+          console.error("Error during aiPromptGenerateForAsset call:", genError);
+          const apiGenError = ApiService.handleError(genError);
+          setError({
+            status: apiGenError.statusCode ?? 500,
+            message: "Saved successfully, but failed to regenerate AI prompt: " + apiGenError.message,
+            showError: true
+          });
         }
       } else {
-          // Fallback success message if aiPromptGenerateForAsset is somehow undefined
-          setError({ message: "Changes saved successfully!", showError: true, status: 200 });
+        // Fallback success message if aiPromptGenerateForAsset is somehow undefined
+        setError({ message: "Changes saved successfully!", showError: true, status: 200 });
       }
       // --- End of new call --- 
 
     } catch (error) {
-       const apiError = ApiService.handleError(error);
-        setError({
-            status: apiError.statusCode ?? 500,
-            message: apiError.message,
-            showError: true
-        });
+      const apiError = ApiService.handleError(error);
+      setError({
+        status: apiError.statusCode ?? 500,
+        message: apiError.message,
+        showError: true
+      });
     } finally {
       setIsSaving(false);
       setShowLoading(false);
     }
   }, [
-    isEditMode, isDirty, isSaving, aiPromptAssetUpsert, aiPromptCampaignUpsert, 
-    existingAssetDetails, formData, sectionsData, setShowLoading, setError, 
+    isEditMode, isDirty, isSaving, aiPromptAssetUpsert, aiPromptCampaignUpsert,
+    existingAssetDetails, formData, sectionsData, setShowLoading, setError,
     isCampaignOverviewValid, assetSpecificSectionValid,
     aiPromptGenerateForAsset, assetIDTemplateRef
   ]);
@@ -450,7 +455,7 @@ const BaseAssetForm = ({
         .filter(item => !item.isStatic)
         .map(item => ({ // Initialize with empty prompts for create mode
           templateBlockID: item.templateBlockID || "",
-          aiPrompt: "" 
+          aiPrompt: ""
         }));
       setSectionsData(initialSections);
     }
@@ -538,11 +543,11 @@ const BaseAssetForm = ({
                 isValidUrl && <p className='text-red-500 -mt-2'>Invalid URL</p>
               }
               {!isEditMode && (
-                 <DragAndDrop
-                    onFileSelect={(file) => {
-                      handleInputChange('fileSelected', file as File);
-                    }}
-                  />
+                <DragAndDrop
+                  onFileSelect={(file) => {
+                    handleInputChange('fileSelected', file as File);
+                  }}
+                />
               )}
             </div>
           </div>
@@ -556,47 +561,48 @@ const BaseAssetForm = ({
           checked={assetSpecificSectionValid}
         >
           <assetSpecificSection.component
-             existingData={null}
-             editContextData={isEditMode ? {
-                topic: formData?.topic ?? "", 
-                keyPoints: formData?.keyPoints ?? "", 
-                tone: formData?.tone ?? "",
-                type: formData?.type ?? "",
-                outputScale: formData?.outputScale?.toString() ?? null
-             } : undefined}
-             handleInputChange={handleInputChange}
-             onValidationChange={handleValidationChange}
-             assetType={assetType}
-             isEditMode={isEditMode}
+            existingData={null}
+            editContextData={isEditMode ? {
+              topic: formData?.topic ?? "",
+              keyPoints: formData?.keyPoints ?? "",
+              tone: formData?.tone ?? "",
+              type: formData?.type ?? "",
+              outputScale: formData?.outputScale?.toString() ?? null
+            } : undefined}
+            handleInputChange={handleInputChange}
+            onValidationChange={handleValidationChange}
+            assetType={assetType}
+            isEditMode={isEditMode}
           />
         </Accordion>
       </div>
 
       {!isEditMode && (
         <div className="mt-[25px]">
-            <Accordion
-              HeaderTitle="Content Brief"
-              checked={isContentBriefValid}
-              handleShowContent={handleSection4Interaction}
-            >
-              <div>
-                {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
-                  const sectionData = sectionsData[index];
-                  return (
-                    <div key={`${item.blockID}-${index}`}>
-                      <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
-                      <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
-                      <TextField
-                        handleChange={(e) => handleInputSectionModified(e, index)}
-                        value={sectionData?.aiPrompt ?? ''}
-                        customClass="h-16"
-                        placeholder={item.aiPrompt || ''}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </Accordion>
+          <Accordion
+            HeaderTitle="Content Brief"
+            checked={isContentBriefValid}
+            handleShowContent={handleSection4Interaction}
+          >
+            <div>
+              {params.template?.templatesBlocks && params.template?.templatesBlocks.filter((item) => !item.isStatic).map((item, index) => {
+                const sectionData = sectionsData[index];
+                return (
+                  <div key={`${item.blockID}-${index}`}>
+                    <ChildrenTitle title={`Section ${index + 1}: ${item.aiTitle || ''}`} customClass={`text-[18px] ${index === 0 ? "" : "mt-[20px]"}`} />
+                    <ChildrenTitle title={item.aiDescription || ''} customClass="text-[14px]" />
+                    <TextField
+                      handleChange={(e) => handleInputSectionModified(e, index)}
+                      onBlur={(e) => handleInputSectionModified(e, index, true)} // Call trim function on blur
+                      value={sectionData?.aiPrompt ?? ''}
+                      customClass="h-16"
+                      placeholder={item.aiPrompt || ''}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </Accordion>
         </div>
       )}
 
@@ -605,15 +611,15 @@ const BaseAssetForm = ({
           <>
             <Button
               handleClick={handleSaveChanges}
-              disabled={isSaveDisabled && isDirty} 
+              disabled={isSaveDisabled && isDirty}
               customClass="px-6 py-2"
               buttonText={isSaving ? "Saving..." : "Save Changes"}
             />
             {/* Add Generate/Regenerate button for edit mode */}
-            <Button 
-              handleClick={handleGenerate} 
+            <Button
+              handleClick={handleGenerate}
               disabled={isRegenerateDisabledInEdit && isDirty} // Use specific disable logic for edit mode regeneration
-              customClass="px-6 py-2" 
+              customClass="px-6 py-2"
               buttonText={"Regenerate"} // Always show Regenerate in edit mode
             />
           </>
