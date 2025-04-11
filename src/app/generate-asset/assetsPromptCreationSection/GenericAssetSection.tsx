@@ -34,16 +34,16 @@ interface GenericAssetSectionProps {
 //   errorOnFailure: string;
 // }
 
-const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({ 
-  existingData, 
-  handleInputChange, 
+const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
+  existingData,
+  handleInputChange,
   onValidationChange,
   assetType,
   editContextData,
   // isEditMode // Remove isEditMode from destructuring if unused
 }) => {
   // const { setError } = useAppData(); // Remove unused
-  
+
   // Get labels for this asset type or use default
   const labels = useMemo(() => {
     return getAssetLabels(assetType);
@@ -58,7 +58,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
   // Use memoized initial data
   const [formData, setFormData] = useState(initialFormData);
   const [validationState, setValidationState] = useState<boolean>(false);
-  
+
   // Read initial outputScale from props (prefer editContextData, fallback to existingData, default 5)
   const initialOutputScale = useMemo(() => {
     let scaleValue = 5; // Default
@@ -66,7 +66,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
       scaleValue = parseInt(editContextData.outputScale, 10);
     } else if (existingData?.outputScale) { // Fallback to existingData if editContextData doesn't have it
       scaleValue = existingData.outputScale;
-    } 
+    }
     return scaleValue;
   }, [editContextData, existingData]);
 
@@ -76,7 +76,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
     const isValid = Boolean(
       formData.primaryMessage && formData.primaryMessage.trim() !== ''
     );
-    
+
     // Only update validation state if it has changed
     if (isValid !== validationState) {
       setValidationState(isValid);
@@ -102,9 +102,9 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
         additionalInfo: editContextData.keyPoints || ''
       });
     } else if (existingData) { // Fallback to existingData if editContextData is not present
-        setFormData({
-          primaryMessage: existingData.topic || '',
-          additionalInfo: existingData.keyPoints || ''
+      setFormData({
+        primaryMessage: existingData.topic || '',
+        additionalInfo: existingData.keyPoints || ''
       });
     }
   }, [editContextData, existingData]);
@@ -112,7 +112,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
   // Memoize update function
   const updateFormData = useCallback((field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    
+
     // Map the form fields to the API fields when sending to parent
     if (field === 'primaryMessage') {
       handleInputChange('topic', value);
@@ -123,34 +123,34 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
 
   return (
     <div className="max-w-[90%]">
-      <ChildrenTitle 
-        showStar={true} 
-        customClass="mt-5" 
-        title={labels.primaryMessage.title} 
+      <ChildrenTitle
+        showStar={true}
+        customClass="mt-5"
+        title={labels.primaryMessage.title}
       />
-      <TextField 
+      <TextField
         handleChange={(e) => {
           updateFormData('primaryMessage', e.target.value);
         }}
         defaultValue={formData.primaryMessage}
         rows={4}
-        placeholder={labels.primaryMessage.placeholder} 
-        customAreaClass="whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
+        placeholder={labels.primaryMessage.placeholder}
+        customAreaClass=" overflow-x-auto overflow-y-auto"
       />
 
-      <ChildrenTitle 
-        showStar={false} 
-        customClass="mt-5" 
-        title={labels.additionalInfo.title} 
+      <ChildrenTitle
+        showStar={false}
+        customClass="mt-5"
+        title={labels.additionalInfo.title}
       />
-      <TextField 
+      <TextField
         handleChange={(e) => {
           updateFormData('additionalInfo', e.target.value);
         }}
         defaultValue={formData.additionalInfo}
         rows={4}
         placeholder={labels.additionalInfo.placeholder}
-        customAreaClass="whitespace-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
+        customAreaClass=" overflow-x-auto overflow-y-auto"
       />
 
       {/* Add Range Slider for Output Scale */}
@@ -162,7 +162,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
             handleInputChange('outputScale', value);
           }}
           // Use the determined initial value
-          defaultValue={initialOutputScale} 
+          defaultValue={initialOutputScale}
         />
       </div>
     </div>
