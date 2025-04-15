@@ -608,7 +608,7 @@ const BaseAssetForm = ({
         </div>
       )}
 
-      <div className="flex justify-end items-center gap-4 mt-5 pr-4 bottom-0 bg-gray-100 py-4">
+      <div className="flex justify-end items-center gap-4 mt-5 pr-4 bottom-0 py-4">
         {isEditMode ? (
           <>
             <Button
