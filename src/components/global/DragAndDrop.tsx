@@ -118,7 +118,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
 
   return (
     <div className={`${showButtons ? "h-[230px]" : "h-full"} rounded-3xl overflow-hidden flex flex-col ${dragAndDropOuterClass}`}>
-      {showButtons && (
+      {/* {showButtons && (
         <div className="w-full h-[68px] flex items-center justify-center bg-white border-b border-[#EBEFF2]">
           <div className="relative flex items-center w-[240px] h-[40px] bg-[#e6ecf1] rounded-full p-1">
             <div className={`absolute top-1 left-1 h-[calc(100%-8px)] w-[48%] bg-[#00A881] rounded-full shadow-md transition-transform duration-300 ease-in-out ${activeButton === "upload" ? "translate-x-0" : "translate-x-full"}`} />
@@ -136,7 +136,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
             </button>
           </div>
         </div>
-      )}
+      )} */}
 
       <div className={`w-full flex-1 p-8 flex items-center relative ${activeButton === 'upload' ? "bg-[#F7F9FB] justify-center" : "bg-white"}`}>
         {activeButton === "upload" && (
