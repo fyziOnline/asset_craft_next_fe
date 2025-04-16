@@ -30,6 +30,7 @@ interface TextFieldProps {
   placeholder?: string;
   rows?: number;
   handleChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
 }
 
 const TextField: React.FC<TextFieldProps> = ({
@@ -43,6 +44,7 @@ const TextField: React.FC<TextFieldProps> = ({
   readOnly = false,
   placeholder,
   rows = 1,
+  onBlur, 
   handleChange
 }) => {
   return (
@@ -55,6 +57,7 @@ const TextField: React.FC<TextFieldProps> = ({
         readOnly={readOnly}
         placeholder={placeholder}
         rows={rows}
+        onBlur={onBlur}
         onChange={handleChange}
         defaultValue={defaultValue}
         className={`w-full h-full px-3 py-3 rounded-[10px] text-base italic outline-none resize-none ${customAreaClass}`}
