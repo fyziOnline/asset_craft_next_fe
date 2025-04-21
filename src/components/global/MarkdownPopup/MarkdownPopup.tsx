@@ -3,6 +3,7 @@ import { MdOutlineClose } from 'react-icons/md'
 import ReactMarkdown from 'react-markdown'
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
+import { ChevronDown, ChevronRight, Edit3 } from 'lucide-react';
 
 const cleanMarkdownContent = (content: string): string => {
   // Remove ```markdown ... ``` wrapper if present, handling variations
@@ -34,7 +35,7 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
   const [isEditing, setIsEditing] = useState(false)
   const [editedBasePrompt, setEditedBasePrompt] = useState(basePromptContent || '')
   const [savedBasePrompt, setSavedBasePrompt] = useState(basePromptContent || '')
-
+  const [isRequestExpanded, setIsRequestExpanded] = useState(false);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -55,15 +56,16 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
   useEffect(() => {
     if (!isOpen) {
       setIsEditing(false)
+      setIsRequestExpanded(false)
     } else {
       setSavedBasePrompt(basePromptContent || '')
       setEditedBasePrompt(basePromptContent || '')
     }
-  }, [isOpen, basePromptContent, promptContent])
-
+  }, [isOpen, basePromptContent])
 
   const handleEditClick = () => {
     setIsEditing(true)
+    setIsRequestExpanded(true)
   }
 
   const handleCancelClick = () => {
@@ -111,73 +113,81 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
         </div>
 
         <div className="flex flex-col flex-grow overflow-hidden gap-4">
-          {/* Combined AI Request Section */}
+          {/* Collapsible AI Request Section */}
           {(basePromptContent || promptContent) && (
-            <div className="flex flex-col">
-              <h4 className="text-lg font-medium text-gray-600 mb-2">AI Request</h4>
+            <div className="border border-blue-200 rounded">
+              <button
+                onClick={() => setIsRequestExpanded(!isRequestExpanded)}
+                className="flex justify-between items-center w-full p-3 bg-blue-50 hover:bg-blue-100 transition-colors rounded-t"
+                aria-expanded={isRequestExpanded}
+              >
+                <h4 className="text-lg font-medium text-gray-600">AI Request</h4>
+                {isRequestExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+              </button>
 
-              {/* Base Prompt Section */}
-              <div className="overflow-y-auto custom-scrollbar max-h-[40vh] border border-blue-200 rounded p-4 bg-blue-50 mb-4">
-                {(basePromptContent || isEditing) && (
-                  <div className="border-b border-blue-100 pb-3 mb-3">
-                    <div className="flex justify-between items-center mb-1">
-                      <p className="text-xs font-semibold text-blue-700 uppercase tracking-wider">
-                        Base Prompt:
-                      </p>
-                      {isEditing ? (
-                        <div className="flex items-center gap-2">
-                           <button
-                             onClick={handleSaveClick}
-                             className="text-xs bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full font-medium transition-colors">
-                             Save
-                           </button>
-                           <button
-                             onClick={handleCancelClick}
-                             className="text-xs text-gray-600 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors"
-                           >
-                             Cancel
-                           </button>
+              {isRequestExpanded && (
+                <div className="p-4 border-t border-gray-200 bg-blue-50/50">
+                  {/* Base Prompt Section */}
+                  <div className="overflow-y-auto custom-scrollbar max-h-[40vh]">
+                    {(basePromptContent || isEditing) && (
+                      <div className="border-b border-blue-100 pb-3 mb-3">
+                        <div className="flex justify-between items-center mb-1">
+                          <p className="text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                            Base Prompt:
+                          </p>
+                          {isEditing ? (
+                            <div className="flex items-center gap-2">
+                               <button
+                                 onClick={handleSaveClick}
+                                 className="text-xs bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full font-medium transition-colors">
+                                 Save
+                               </button>
+                               <button
+                                 onClick={handleCancelClick}
+                                 className="text-xs text-gray-600 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors"
+                               >
+                                 Cancel
+                               </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={handleEditClick}
+                              className='text-xs cursor-pointer flex items-center text-blue-600 hover:text-blue-800 font-medium'
+                            >
+                              <Edit3 size={14} className="mr-1" />
+                               Edit
+                             </button>
+                          )}
                         </div>
-                      ) : (
-                        <button
-                          onClick={handleEditClick}
-                          className='text-xs cursor-pointer flex items-center text-blue-600 hover:text-blue-800 font-medium'
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor" className="mr-1">
-                             <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                             <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
-                           </svg>
-                           Edit
-                         </button>
-                      )}
-                    </div>
-                    {isEditing ? (
-                      <textarea
-                        value={editedBasePrompt}
-                        onChange={(e) => setEditedBasePrompt(e.target.value)}
-                        className="w-full p-2 outline-none border border-blue-300 bg-white rounded-md resize-y scrollbar-hide text-sm text-gray-800"
-                        rows={6} // Increased rows for editing
-                      />
-                    ) : (
-                      <div className="prose prose-sm max-w-none text-gray-800">
-                        <ReactMarkdown>
-                          {cleanMarkdownContent(savedBasePrompt)}
-                        </ReactMarkdown>
+                        {isEditing ? (
+                          <textarea
+                            value={editedBasePrompt}
+                            onChange={(e) => setEditedBasePrompt(e.target.value)}
+                            className="w-full p-2 outline-none border border-blue-300 bg-white rounded-md resize-y scrollbar-hide text-sm text-gray-800"
+                            rows={6}
+                          />
+                        ) : (
+                          <div className="prose prose-sm max-w-none text-gray-800">
+                            <ReactMarkdown>
+                              {cleanMarkdownContent(savedBasePrompt)}
+                            </ReactMarkdown>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Specific Prompt Section (Non-Editable) */}
+                     {promptContent && (
+                      <div>
+                        <p className="text-xs font-semibold text-blue-700 mb-1 uppercase tracking-wider">Specific Prompt:</p>
+                        <div className="prose prose-sm max-w-none text-gray-800">
+                          <ReactMarkdown>{cleanMarkdownContent(promptContent)}</ReactMarkdown>
+                        </div>
                       </div>
                     )}
                   </div>
-                )}
-
-                {/* Specific Prompt Section (Non-Editable) */}
-                 {promptContent && (
-                  <div>
-                    <p className="text-xs font-semibold text-blue-700 mb-1 uppercase tracking-wider">Specific Prompt:</p>
-                    <div className="prose prose-sm max-w-none text-gray-800">
-                      <ReactMarkdown>{cleanMarkdownContent(promptContent)}</ReactMarkdown>
-                    </div>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -185,7 +195,7 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
           {markdownContent && (
             <div className="flex flex-col flex-grow overflow-hidden">
               <h4 className="text-lg font-medium mb-2 text-gray-600">Raw AI Output</h4>
-              <div className="overflow-y-auto custom-scrollbar border border-gray-200 rounded p-4 bg-gray-50">
+              <div className="overflow-y-auto custom-scrollbar border border-gray-200 rounded p-4 bg-gray-50 flex-grow">
                 <div className="prose max-w-none text-gray-800">
                   <ReactMarkdown>{cleanMarkdownContent(markdownContent)}</ReactMarkdown>
                 </div>
