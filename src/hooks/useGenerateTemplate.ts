@@ -149,6 +149,8 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
           outputScale: FormData?.outputScale || 0,
           fileID: fileID,
           webUrl: FormData?.webUrl || "",
+          fileName: FormData?.fileName || ""
+          // fileSelected:FormData?.fileSelected,
         }
       );
 

@@ -15,6 +15,7 @@ interface DragAndDropProps {
   onRemoveSelectedFile?: () => void
   dragAndDropOuterClass?: string;
   showButtons?: boolean;
+  uploadedFile?: string
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -31,7 +32,7 @@ const ALLOWED_TYPES = {
 
 // DragAndDrop component definition
 // This component allows users to drag and drop files or select them using a file input.
-const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelectedFile, dragAndDropOuterClass = "", showButtons = true }) => {
+const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelectedFile, dragAndDropOuterClass = "", showButtons = true, uploadedFile = "" }) => {
   const [file, setFile] = useState<File | null>(null);
   const [selectedFile, setSelectedFile] = useState<string>("");
   const [dragActive, setDragActive] = useState<boolean>(false);
@@ -55,9 +56,9 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
     setDragActive(isActive);
   };
 
- 
-// Validates the selected file based on type and size.
-// Returns an error message if the file is invalid, otherwise returns an empty string.
+
+  // Validates the selected file based on type and size.
+  // Returns an error message if the file is invalid, otherwise returns an empty string.
   // The function checks if the file type is in the allowed types and if the file size is within the limit.
   // If the file is invalid, it returns an error message.
   // If the file is valid, it returns an empty string.
@@ -115,6 +116,9 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
     if (onRemoveSelectedFile) onRemoveSelectedFile();
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
+
+  const fileName = uploadedFile?.split('/').pop()?.split('_').slice(1).join('_');
+  const extension = fileName?.split('.').pop();
 
   return (
     <div className={`${showButtons ? "h-[230px]" : "h-full"} rounded-3xl overflow-hidden flex flex-col ${dragAndDropOuterClass}`}>
@@ -186,6 +190,20 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
                 </div>
               </div>
             )}
+
+            {
+              !file && uploadedFile && (
+                <div onClick={() => window.open(uploadedFile, '_blank')}
+                  className="mt-2 bg-slate-100 p-2 rounded-lg relative cursor-pointer">
+                  <div className="flex items-center gap-2">
+                    <FileIcon color="#EDEDED" text={extension} />
+                    <div className="text-xs text-[#242634] opacity-50">
+                      <p>{fileName}</p>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
           </div>
         )}
 
