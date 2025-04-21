@@ -1,5 +1,8 @@
 import type { Config } from "tailwindcss";
 import { PluginAPI } from "tailwindcss/types/config";
+import tailwindcssAnimate from "tailwindcss-animate";
+import tailwindScrollbar from "tailwind-scrollbar";
+import tailwindcssTypography from "@tailwindcss/typography";
 
 
 
@@ -141,11 +144,34 @@ const config: Config = {
         'rage-thumb-shadow': '0 0 2px rgba(0, 0, 0, 0.2)',
         'box-green-shadow': '0px 10px 20px 0px rgba(0, 168, 129, 0.50);'
       },
+      typography: ({ theme }: { theme: (path: string) => string }) => ({
+        DEFAULT: {
+          css: {
+            hr: {
+              marginTop: '.5em',    // Reduced from default (usually 2em or more)
+              marginBottom: '.5em', // Reduced from default
+              borderColor: theme('colors.gray.300'), // Optional: ensure consistent color
+            },
+            // You can add other prose customizations here if needed
+          },
+        },
+        // Add customizations for other prose variants like prose-sm if used
+        sm: {
+          css: {
+            hr: {
+              marginTop: '0.5em', // Adjust for smaller prose
+              marginBottom: '0.5em',
+              borderColor: theme('colors.gray.300'),
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [
-    require("tailwindcss-animate"),
-    require("tailwind-scrollbar"),
+    tailwindcssAnimate,
+    tailwindScrollbar,
+    tailwindcssTypography,
     function ({ addComponents } : PluginAPI) {
       addComponents({
         '.custom-range': {
