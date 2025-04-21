@@ -52,5 +52,6 @@ export const urls = {
   asset_version_updateField: "/asset/version/updateField",
   get_visual_media_library:"/VisualLibrary",
   assetversion_status_change: "/approval/assetApproval/ChangeStatus",
-  get_llm_models: "/api/LLMConfig/models"
+  get_llm_models: "/api/LLMConfig/models",
+  base_rawai_prompt : "/asset/baseRawAIPrompt"
 };
