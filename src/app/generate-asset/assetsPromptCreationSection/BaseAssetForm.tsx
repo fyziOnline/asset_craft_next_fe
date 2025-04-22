@@ -36,6 +36,8 @@ export interface BaseAssetFormProps {
       outputScale?: string | null;
       tone?: string;
       type?: string;
+      fileName?:string;
+      fileSelected?:File
     };
   };
   assetType: string;
@@ -64,6 +66,7 @@ const initialFormData: Partial<FormDataProps> = {
   tone: '',
   type: '',
   fileSelected: undefined,
+  fileName:''
 };
 
 const BaseAssetForm = ({
@@ -91,8 +94,11 @@ const BaseAssetForm = ({
   const [section4Interacted, setSection4Interacted] = useState(false);
   const [isValidUrl, setIsValidUrl] = useState<boolean>(false);
 
+  // console.log('params',params);
+  // console.log('formData',formData)
+
   useEffect(() => {
-    if (isEditMode && params.editContextData) {
+    if (isEditMode && params.editContextData) {      
       setFormData(prev => ({
         ...prev,
         product: params.project_name ?? '',
@@ -104,6 +110,7 @@ const BaseAssetForm = ({
         keyPoints: params.editContextData?.keyPoints ?? '',
         tone: params.editContextData?.tone ?? '',
         type: params.editContextData?.type ?? '',
+        fileName:params.editContextData?.fileName ?? ''
       }));
       if (params.template?.templatesBlocks) {
         const initialSections = params.template.templatesBlocks
@@ -362,13 +369,18 @@ const BaseAssetForm = ({
 
     setIsSaving(true);
     setShowLoading(true);
-    try {
+    try {      
       const campaignPayload: Partial<FormDataProps> = {
         product: existingAssetDetails.project_name,
         campaignGoal: formData.campaignGoal,
         targetAudience: formData.targetAudience,
         webUrl: formData.webUrl,
+        fileName:formData.fileName,
+        // fileSelected:formData.fileSelected
       };
+
+      console.log("campaignPayload :",campaignPayload);
+      
       const campaignRes = await aiPromptCampaignUpsert!(campaignPayload as FormDataProps, 0, existingAssetDetails.campaign_id);
 
       if (!campaignRes.isSuccess) {
@@ -543,13 +555,14 @@ const BaseAssetForm = ({
               {
                 isValidUrl && <p className='text-red-500 -mt-2'>Invalid URL</p>
               }
-              {!isEditMode && (
+              {/* {isEditMode && ( */}
                 <DragAndDrop
                   onFileSelect={(file) => {
                     handleInputChange('fileSelected', file as File);
                   }}
+                  {...(getCurrentPath === "/edit-html-content" && { uploadedFile:formData.fileName })}
                 />
-              )}
+              {/* )} */}
             </div>
           </div>
         </Accordion>

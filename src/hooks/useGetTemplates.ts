@@ -34,6 +34,7 @@ interface AIPromptCampaignSelectResponse extends ApiResponse {
         webUrl: string;
         createdOn: string;
         updatedOn: string;
+        fileName:string
     };
 }
 

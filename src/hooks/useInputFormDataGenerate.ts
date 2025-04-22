@@ -11,6 +11,7 @@ export interface FormDataProps {
     keyPoints?: string,
     fileSelected?: File,
     webUrl?: string
+    fileName?:string
 }
 
 export interface SectionProps {

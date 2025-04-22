@@ -22,6 +22,7 @@ const Header: FC = () => {
   const searchParams = useSearchParams()
   const projectName = searchParams.get('projectName')
   const campaignName = searchParams.get('campaignName')
+  const assetName = searchParams.get('assetName')
 
   const handleReturnToPrevious = () => {
 
@@ -83,8 +84,10 @@ const Header: FC = () => {
             </div>
             <div className="flex gap-2 pl-4">
               <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{projectName}</span>
-              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">|</span>
+              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">|</span> 
               <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{campaignName}</span>
+              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">|</span> 
+              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{assetName}</span>
             </div>
             <Title classNameCustom="ml-4" titleName={getTitlePage()} />
           </div>
