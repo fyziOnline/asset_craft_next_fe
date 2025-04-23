@@ -1,12 +1,13 @@
 "use client"
 
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { LoginPageIcon1, LoginPageIcon2, LoginPageIcon3, LoginPageIcon4, UserIcon } from "@/assets/icons/AppIcons";
 import { useLogin } from "@/hooks/useLogin";
 import { useRouter } from "next/navigation";
 import { IoMdClose } from "react-icons/io";
 import Button from "@/components/global/Button";
 import HomeHeader from "@/components/Layout/HomeHeader";
+import { useLoading } from "@/components/global/Loading/LoadingContext";
 
 type TaglineObj = {
   title: string
@@ -34,6 +35,9 @@ const TaglineContents: TaglineObj[] = [
 
 const Home: FC = () => {
   const router = useRouter()
+  const { setShowLoading } = useLoading(); // Get the loading context
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null); // User authorization state
+
 
   const {
     isLoading,
@@ -51,11 +55,25 @@ const Home: FC = () => {
     errorMessage
   } = useLogin();
 
+
   useEffect(() => {
-    if (checkIsUserAuthorized()) {
+    setShowLoading(true); // Show loading overlay while checking authorization
+    const authorized = checkIsUserAuthorized();
+    setIsAuthorized(authorized);
+    
+    if (authorized) {
+
       router.push('/dashboard');
+      
+    } else {
+      setShowLoading(false); // Hide loading overlay if not authorized
     }
-  }, [checkIsUserAuthorized]);
+  }, [checkIsUserAuthorized, router, setShowLoading]);
+
+  // If the user is authorized, do not render the login screen
+  if (isAuthorized) {
+    return <div className="w-100 h-screen bg-white z-50 scrollbar-hide"></div>; 
+  }
 
   return (
     <div>
