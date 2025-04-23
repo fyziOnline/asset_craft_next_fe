@@ -81,7 +81,7 @@ const BaseAssetForm = ({
 }: BaseAssetFormProps) => {
   const router = useRouter();
   const [generateStep, setGenerateStep] = useState(1);
-  const { assetIDTemplateRef, generateHTML, aiPromptGenerateForAsset, getVersionDataUsingAI, generateVersionHTML, getAssetByVersionId } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
+  const { assetIDTemplateRef, generateHTML, aiPromptGenerateForAsset, getVersionDataUsingAI, generateVersionHTML, getAssetByVersionId,uploadImage } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
   const [formData, setFormData] = useState<Partial<FormDataProps>>(initialFormData);
   const [sectionsData, setSectionsData] = useState<SectionProps[]>([]);
   const { setShowLoading, showLoading } = useLoading();
@@ -94,8 +94,6 @@ const BaseAssetForm = ({
   const [section4Interacted, setSection4Interacted] = useState(false);
   const [isValidUrl, setIsValidUrl] = useState<boolean>(false);
 
-  // console.log('params',params);
-  // console.log('formData',formData)
 
   useEffect(() => {
     if (isEditMode && params.editContextData) {      
@@ -295,7 +293,6 @@ const BaseAssetForm = ({
   ]);
 
   const handleInputChange = useCallback((field: string, value: string | number | File | null) => {
-
     const trimmedValue = typeof value === 'string' ? value.trim() : value;
     setFormData(prev => ({
       ...prev,
@@ -374,14 +371,13 @@ const BaseAssetForm = ({
         product: existingAssetDetails.project_name,
         campaignGoal: formData.campaignGoal,
         targetAudience: formData.targetAudience,
-        webUrl: formData.webUrl,
-        fileName:formData.fileName,
-        // fileSelected:formData.fileSelected
+        webUrl: formData.webUrl
       };
 
-      console.log("campaignPayload :",campaignPayload);
+      const getFileId = await uploadImage(formData);
+      // console.log("getFileId :",getFileId);
       
-      const campaignRes = await aiPromptCampaignUpsert!(campaignPayload as FormDataProps, 0, existingAssetDetails.campaign_id);
+      const campaignRes = await aiPromptCampaignUpsert!(campaignPayload as FormDataProps, getFileId, existingAssetDetails.campaign_id);
 
       if (!campaignRes.isSuccess) {
         throw new Error("Failed to save campaign details.");

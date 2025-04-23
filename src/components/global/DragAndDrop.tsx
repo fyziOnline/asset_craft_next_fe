@@ -38,6 +38,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [activeButton, setActiveButton] = useState<"upload" | "recent">("upload");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isOriginalFileRemoved, setIsOriginalFileRemoved] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -84,6 +85,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
 
     setErrorMessage("");
     setFile(file);
+    setIsOriginalFileRemoved(true)
     if (onFileSelect) onFileSelect(file);
   };
 
@@ -192,7 +194,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
             )}
 
             {
-              !file && uploadedFile && (
+              !file && uploadedFile && !isOriginalFileRemoved &&(
                 <div onClick={() => window.open(uploadedFile, '_blank')}
                   className="mt-2 bg-slate-100 p-2 rounded-lg relative cursor-pointer">
                   <div className="flex items-center gap-2">
