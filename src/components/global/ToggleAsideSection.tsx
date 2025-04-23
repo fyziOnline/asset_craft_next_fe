@@ -16,6 +16,7 @@ interface CampaignPromptData {
     campaignGoal?: string;
     targetAudience?: string;
     webUrl?: string;
+    fileName?: string;
 }
 
 interface ToggleAsideSectionProps {
@@ -135,10 +136,12 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 const aiCampaignRes = await getAiPromptCampaignSelect(existingAssetDetails.campaign_id);
                 if (aiCampaignRes && aiCampaignRes.isSuccess) {
                     const fetchedData = aiCampaignRes.aIPromptCampaign;
+                    
                     const campaignDataForState: CampaignPromptData = {
                         campaignGoal: fetchedData.campaignGoal,
                         targetAudience: fetchedData.targetAudience,
                         webUrl: fetchedData.webUrl,
+                        fileName:fetchedData.fileName
                     };
                      // console.log("[ToggleAsideSection] Fetched AI Campaign Data:", campaignDataForState); // Remove log
                     setCampaignPromptData(campaignDataForState);
@@ -199,7 +202,8 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                     campaignGoal: campaignPromptData?.campaignGoal,
                     targetAudience: campaignPromptData?.targetAudience,
                     webUrl: campaignPromptData?.webUrl,
-                    outputScale: editSection.aiPrompt?.outputScale // Already string or null from context fetch
+                    outputScale: editSection.aiPrompt?.outputScale, // Already string or null from context fetch
+                    fileName:campaignPromptData?.fileName
                 }
             };
 
