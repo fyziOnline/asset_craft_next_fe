@@ -1,5 +1,4 @@
 import React from 'react';
-import { AssetVersionProps } from '@/types/templates';
 
 // Define status color mapping
 export const statusColors: Record<string, string> = {
@@ -9,24 +8,19 @@ export const statusColors: Record<string, string> = {
 };
 
 interface StatusLegendProps {
-    versionList: AssetVersionProps[];
+    statusList: string[];
 }
 
-const StatusLegend: React.FC<StatusLegendProps> = ({ versionList }) => {
-    // Get unique statuses from the version list
-    const uniqueStatuses = Array.from(
-        new Set(versionList.map(version => version.status).filter(Boolean))
-    ) as string[];
-
+const StatusLegend: React.FC<StatusLegendProps> = ({ statusList }) => {
     // If no statuses are available, don't render the component
-    if (uniqueStatuses.length === 0) {
+    if (statusList.length === 0) {
         return null;
     }
 
     return (
         <div className="flex items-center space-x-4 p-2">
             <div className='text-base tracking-wide'>Legend :</div>
-            {uniqueStatuses.map((status) => (
+            {statusList.map((status) => (
                 <div key={status} className="flex items-center">
                     <div 
                         className="w-3 h-3 rounded-full mr-2" 

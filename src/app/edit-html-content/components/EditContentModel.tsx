@@ -2,12 +2,11 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers, materialCells, } from '@jsonforms/material-renderers';
-import { AssetBlockProps, AssetHtmlProps, AssetVersionProps } from '@/types/templates';
+import { AssetBlockProps, AssetHTMLData, AssetHtmlProps, AssetVersionProps } from '@/types/templates';
 import Button from '@/components/global/Button';
 import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
 import { createTheme, TextareaAutosize, ThemeProvider } from '@mui/material';
-import { useAppData } from '@/context/AppContext';
 import ShadowDomContainer from './ShadowDomContainer';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,6 +16,7 @@ import { ImagePickerTester } from './Controller/test/ImageController';
 import { ImagePickerController } from './Controller/ImagePickerController';
 import { STATUS } from '@/constants';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 
 const customTheme = createTheme({
     palette: {
@@ -67,15 +67,12 @@ const customTheme = createTheme({
 });
 
 interface EditContentModelProps {
-    setVersionList?: (value: AssetVersionProps[]) => void,
-    setVersionSelected?: (value: AssetVersionProps) => void,
     setIsShowModelEdit: React.Dispatch<React.SetStateAction<boolean>>,
     assetBlock: AssetBlockProps,
     assetVersion: AssetVersionProps
 }
 
-const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVersionList = () => { }, setVersionSelected = () => { } }: EditContentModelProps) => {
-    const { contextData, setContextData } = useAppData();
+const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion }: EditContentModelProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
     const [isEditPrompt, setIsEditPrompt] = useState(false);
@@ -91,6 +88,10 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
     const [isUpdatingPreview, setIsUpdatingPreview] = useState(false);
     const lastSavedDataRef = useRef(assetBlock.blockData);
     const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+    const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData() as AssetHTMLData
+    const updateEntireVersionList = useEditAssetStoreSelector.use.updateEntireVersionList()
+    const versionList = useEditAssetStoreSelector.use.versionList() as AssetVersionProps[]
     
     // Function to refresh preview HTML
     const refreshPreview = useCallback(async () => {
@@ -246,12 +247,11 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                 if (resGenerate.isSuccess) {
                     const resAssetSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersion.assetVersionID}`);
                     if (resAssetSelect.isSuccess) {
-                        const assetHtml = contextData.AssetHtml
-                        const indexAssetVersion = assetHtml.assetVersions.findIndex((item) => item.assetVersionID === assetVersion.assetVersionID)
-                        assetHtml.assetVersions[indexAssetVersion] = resAssetSelect
-                        setVersionList(assetHtml.assetVersions)
-                        setVersionSelected(resAssetSelect)
-                        setContextData({ AssetHtml: assetHtml as AssetHtmlProps });
+                        const {isSuccess,errorOnFailure,...updatedVersion} = resAssetSelect
+                        
+                        const indexAssetVersion = versionList.findIndex((item) => item.assetVersionID === assetVersion.assetVersionID)
+                        const newVersionList = versionList[indexAssetVersion] = updatedVersion
+                        updateEntireVersionList(newVersionList)
                         setIsShowModelEdit(false);
                     }
 
@@ -278,7 +278,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
         <ThemeProvider theme={customTheme}>
             <div onClick={handleClick} className="fixed z-[100] left-0 right-0 top-0 bottom-0 bg-black bg-opacity-55 flex items-center justify-center">
                 <div className='w-[90vw] bg-white rounded-md relative flex flex-col'>
-                    <div className='flex flex-row flex-1'>
+                    <div className='flex flex-row flex-1 border-solid border-violet-500'>
                         {(assetBlock.blockHTMLGenerated || previewHtml) ? (
                             <div className='p-1 max-w-[50vw] h-[86vh] overflow-y-scroll scrollbar-hide relative border-r border-solid border-[#D9D9D9]'>
                                 <div className="absolute top-2 right-2 z-10 hidden">
@@ -307,6 +307,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                 )}
                             </div>
                         ) : null}
+                        {/* col 2  below */}
                         <div className='flex-1 h-[86vh] overflow-y-scroll scrollbar-hide px-5 py-2'>
                             <div className='mt-7' />
                             {!assetBlock.isStatic ? <div className='pb-3'>
@@ -331,41 +332,44 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                     className={`w-full p-3 border rounded-[10px] resize-none focus:border-[#01A982] outline-none ${isEditPrompt ? `hover:border-[#01A982]` : ``}`}
                                 />
                                 <div className='flex justify-end mt-3'>
-                                    {!isEditPrompt ? <Button
-                                        handleClick={onGenerateWithAI}
-                                        disabled={isLoadingGenerate}
-                                        buttonText={isLoadingGenerate ? 'Generating...' : 'Generate Data Using AI'}
-                                        showIcon={false}
-                                        textStyle='text-[1rem] font-base text-[#00A881]'
-                                        textColor="text-[#fff]"
-                                        backgroundColor={isLoadingGenerate ? "bg-[#00A881]" : "bg-custom-gradient-green"}
-                                        customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' /> :
-                                        <div className='flex'>
+                                    {!isEditPrompt 
+                                        ? 
                                             <Button
-                                                handleClick={() => {
-                                                    const newAssetBlockDataVersions = {
-                                                        ...assetBlockSelected,
-                                                        aiPrompt: refAiPromptCurrent.current
-                                                    }
-                                                    setAssetBlockSelected(newAssetBlockDataVersions)
-                                                    setIsEditPrompt(false)
-                                                }}
-                                                buttonText='Cancel'
-                                                showIcon={false}
-                                                textStyle='text-[1rem] font-base'
-                                                textColor="text-[#00A881]"
-                                                backgroundColor="bg-[#fff]"
-                                                customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
-                                            <Button
-                                                handleClick={onSaveAIPrompt}
-                                                disabled={isLoading}
-                                                buttonText={isLoading ? 'Saving...' : 'Save Changes'}
-                                                showIcon={false}
-                                                textStyle='text-[1rem] font-base text-[#00A881]'
-                                                textColor="text-[#fff]"
-                                                backgroundColor={isLoading ? "bg-[#00A881]" : "bg-custom-gradient-green"}
-                                                customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
-                                        </div>}
+                                            handleClick={onGenerateWithAI}
+                                            disabled={isLoadingGenerate}
+                                            buttonText={isLoadingGenerate ? 'Generating...' : 'Generate Data Using AI'}
+                                            showIcon={false}
+                                            textStyle='text-[1rem] font-base text-[#00A881]'
+                                            textColor="text-[#fff]"
+                                            backgroundColor={isLoadingGenerate ? "bg-[#00A881]" : "bg-custom-gradient-green"}
+                                            customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' /> 
+                                        :
+                                            <div className='flex'>
+                                                <Button
+                                                    handleClick={() => {
+                                                        const newAssetBlockDataVersions = {
+                                                            ...assetBlockSelected,
+                                                            aiPrompt: refAiPromptCurrent.current
+                                                        }
+                                                        setAssetBlockSelected(newAssetBlockDataVersions)
+                                                        setIsEditPrompt(false)
+                                                    }}
+                                                    buttonText='Cancel'
+                                                    showIcon={false}
+                                                    textStyle='text-[1rem] font-base'
+                                                    textColor="text-[#00A881]"
+                                                    backgroundColor="bg-[#fff]"
+                                                    customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white mr-[20px] border border-solid border-[#00A881]' />
+                                                <Button
+                                                    handleClick={onSaveAIPrompt}
+                                                    disabled={isLoading}
+                                                    buttonText={isLoading ? 'Saving...' : 'Save Changes'}
+                                                    showIcon={false}
+                                                    textStyle='text-[1rem] font-base text-[#00A881]'
+                                                    textColor="text-[#fff]"
+                                                    backgroundColor={isLoading ? "bg-[#00A881]" : "bg-custom-gradient-green"}
+                                                    customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
+                                            </div>}
                                 </div>
                             </div> : null}
                             
@@ -384,13 +388,14 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                         { tester: CustomTextTester, renderer: CustomTextArea },
                                         {tester : ImagePickerTester, renderer : ImagePickerController }
                                     ]}
-                                    uischema={contextData.AssetHtml.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined }
+                                    uischema={assetHTMLData.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined }
                                     cells={materialCells}
                                     onChange={onHandleEditData}
                                 />
                             </div>
                         </div>
                     </div>
+                    {/* section footer  */}
                     <div className='border-t border-solid border-[#D9D9D9] p-4 flex justify-end'>
                         <div className='flex'>
                             <Button
@@ -404,6 +409,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion, setVer
                                 customClass='static ml-[0px] px-[35px] py-[10px] group-hover:border-white' />
                         </div>
                     </div>
+                    {/* float : close top right  */}
                     <div className='absolute top-1 right-1'>
                         <div
                             onClick={() => setIsShowModelEdit(false)}

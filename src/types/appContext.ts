@@ -1,5 +1,5 @@
 import { UserDetailsProps } from "./asset";
-import { AssetHtmlProps, ProjectDetails } from "./templates";
+import { AssetHtmlProps, AssetVersionProps, ProjectDetails } from "./templates";
 
 interface TemplateBlock {
     templateBlockID?: string;
@@ -60,6 +60,8 @@ export interface EditData {
         assetTypeName?: string;
         templatesBlocks?: TemplateBlock[];
     };
+    // versionsList :AssetVersionProps[] | [];
+    // selectedAssetVersion:AssetVersionProps | {}
 }
 
 export interface EditContextType {

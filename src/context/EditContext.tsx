@@ -3,6 +3,8 @@
 import { EditData, EditContextType } from '@/types/appContext';
 import { createContext, useContext, useState, ReactNode, FC, useEffect } from 'react'
 
+import {  } from '@/types/templates';
+
 interface EditContextProviderProps {
     children: ReactNode;
 }
@@ -10,7 +12,7 @@ interface EditContextProviderProps {
 
 const INITIAL_APP_DATA: EditData = {
     aiPrompt: {},
-    templateData: {}
+    templateData: {},
 }
 
 

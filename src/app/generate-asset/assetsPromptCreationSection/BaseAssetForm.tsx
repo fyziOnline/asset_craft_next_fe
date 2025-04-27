@@ -201,10 +201,6 @@ const BaseAssetForm = ({
         console.log("Successfully fetched latest AI data for version.");
 
         const generateHtmlRes = await generateVersionHTML(assetVersionID) as any;
-        // console.log("generateHtmlRes ",generateHtmlRes);
-        // console.log("contextData :",contextData.AssetHtml.assetVersions);
-        // console.log("contextData :",contextData);
-        // console.log("assetVersionID :",assetVersionID);
         const updatedVersion = await getAssetByVersionId(assetVersionID)
         const updatedVersionList: AssetVersionProps[] | any  = contextData.AssetHtml.assetVersions.map(version => 
           version.assetVersionID === assetVersionID ? updatedVersion : version
@@ -215,7 +211,6 @@ const BaseAssetForm = ({
           throw new Error("Failed to generate HTML for version.");
         }
 
-        // console.log("Successfully generated HTML for version.");
 
         if (setIsOpen) {
           setIsOpen(false);

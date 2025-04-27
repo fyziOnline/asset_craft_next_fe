@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useMemo } from "react";
-import { createPortal } from "react-dom";
 import { AssetBlockProps } from "@/types/templates";
-import BlockControls from "./BlockControls";
 
 interface EnhancedShadowDomContainerProps {
   htmlContent: string;

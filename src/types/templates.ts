@@ -1,14 +1,3 @@
-export interface TemplateBlocks {
-    templateBlockID?: string;
-    templateID?: string;
-    blockID?: string;
-    order?: number;
-    aiTitle?: string;
-    aiPrompt?: string | null;
-    aiDescription?: string;
-    isStatic?: boolean
-}
-
 export interface Template {
     assetTypeID?: string,
     assetTypeName?: string,
@@ -18,16 +7,18 @@ export interface Template {
     templateID?: string,
     templateImageURL?: string,
     templateName?: string,
-    templatesBlocks?: {
-        templateBlockID?: string;
-        templateID?: string;
-        blockID?: string;
-        order?: number;
-        aiTitle?: string;
-        aiPrompt?: string | null;
-        aiDescription?: string;
-        isStatic?: boolean
-    }[]
+    templatesBlocks?: TemplateBlocks[]
+}
+
+export interface TemplateBlocks {
+    templateBlockID?: string;
+    templateID?: string;
+    blockID?: string;
+    order?: number;
+    aiTitle?: string;
+    aiPrompt?: string | null;
+    aiDescription?: string;
+    isStatic?: boolean
 }
 
 export interface CampaignSelectResponse {
@@ -71,38 +62,14 @@ export interface AssetHtmlProps {
     layoutID: string,
     layoutName: string,
     layoutHTML: string,
-    assetVersions: [
-        {
-            assetVersionID: string,
-            assetID: string,
-            versionNumber: number,
-            versionName: string,
-            htmlGenerated: string,
-            layoutHTMLGenerated: string,
-            htmlFileURL: string,
-            zipFileURL: string,
-            assetVersionBlocks: [
-                {
-                    assetVersionBlockID: string,
-                    assetVersionID: string,
-                    blockID: string,
-                    blockName: string,
-                    aiPrompt: string,
-                    blockData: string,
-                    blockHTMLGenerated: string,
-                    sortOrder: number,
-                    description: string,
-                    type: string,
-                    schema: string,
-                    uiSchema: string,
-                    html: string,
-                    ignoreBlock: number,
-                    isStatic: boolean
-                }
-            ]
-        }
-    ]
+    assetVersions: AssetVersionProps[]
 }
+
+export type AssetHTMLData = Omit<
+    AssetHtmlProps,
+    "isSuccess" | "errorOnFailure" |  "assetVersions" 
+>
+
 
 export interface AssetVersionProps {
     assetVersionID: string,
@@ -115,25 +82,7 @@ export interface AssetVersionProps {
     htmlFileURL: string,
     zipFileURL: string,
     status?: string,
-    assetVersionBlocks: [
-        {
-            assetVersionBlockID: string,
-            assetVersionID: string,
-            blockID: string,
-            blockName: string,
-            aiPrompt: string,
-            blockData: string,
-            blockHTMLGenerated: string,
-            sortOrder: number,
-            description: string,
-            type: string,
-            schema: string,
-            uiSchema: string,
-            html: string,
-            ignoreBlock: number,
-            isStatic: boolean
-        }
-    ]
+    assetVersionBlocks: AssetBlockProps[]
 }
 
 export interface AssetBlockProps {

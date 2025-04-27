@@ -36,14 +36,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         const res_Template = await getTemplateById(selectedTemplate.templateID)
         selectedTemplateRef.current = res_Template as Template
           setContextData({ assetGenerateStatus: 1, assetTemplateShow: false, stepGenerate: 1 })
-        // const res_Template = await ApiService.get<any>(`${urls.template_select}?templateID=${selectedTemplate.templateID}`)
-        
-        // if (res_Template.isSuccess) {
-        //   selectedTemplateRef.current = res_Template as Template
-        //   setContextData({ assetGenerateStatus: 1, assetTemplateShow: false, stepGenerate: 1 })
-        // }
       } catch (error) {
-        // console.error('API Error:', ApiService.handleError(error));
         alert(ApiService.handleError(error));
       } finally {
         setShowLoading(false)

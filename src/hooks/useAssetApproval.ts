@@ -23,28 +23,28 @@ class ApiError extends Error {
 export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
     const router = useRouter()
 
+    const initStateApprovalDetails = {
+        assetApprovalID: "",
+        assetID: "",
+        assetVersionID: "",
+        approverID: "",
+        editorID: "",
+        assignedTo: 0,
+        createdBy: "",
+        createdOn: "",
+        modifiedBy: "",
+        modifiedOn: "",
+        fileUrl: "",
+        comments: "",
+        editorName: ""
+    }
+
     const [reAssignLoading, setReAssignLoading] = useState<boolean>(false)
     const [loadingApproval, setLoadingApproval] = useState<boolean>(false)
     const [isReAssignSuccessFull, setIsReAssignSuccessFull] = useState<boolean>(false)
     const [canReassign, setCanReassign] = useState<boolean>(false)
     const { setError } = useAppData()
-    const [approvalDetails, setApprovalDetails] = useState<AssetApprovalResponse>(
-        {
-            assetApprovalID: "",
-            assetID: "",
-            assetVersionID: "",
-            approverID: "",
-            editorID: "",
-            assignedTo: 0,
-            createdBy: "",
-            createdOn: "",
-            modifiedBy: "",
-            modifiedOn: "",
-            fileUrl: "",
-            comments: "",
-            editorName: ""
-        }
-    )
+    const [approvalDetails, setApprovalDetails] = useState<AssetApprovalResponse>(initStateApprovalDetails)
     const [fileConversionError, setFileConversionError] = useState<{} | null>(null)
     const [reAssignAssetDetails, setReAssignAssetDetails] = useState<ReAssignApprovalDetailsStruct>({
         fileInBase64: "",
@@ -60,7 +60,7 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
         fIleURL: string;
     }
 
-    const [comments, setComments] = useState<Comment[]>([])
+    const [comments, setComments] = useState<Comment[] | null>([])
 
     useEffect(() => {
         if (assetData.assetVersionID) {
@@ -116,13 +116,14 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
 
     const getApprovalDetails = async () => {
         try {
-            // setReAssignLoading(true)
             const res_approvalDetails = await ApiService.get<any>(`${urls.getAssetApprovalDetails}?assetVersionID=${assetData.assetVersionID}`)
-            // if (!res_approvalDetails || res_approvalDetails.errorOnFailure.length > 0 ) {
-            //     throw new ApiError('Approval details fetch failed', 400, res_approvalDetails.errorOnFailure);
-            // }
-            setApprovalDetails(res_approvalDetails.assetApproval)
-            setComments(res_approvalDetails.comments)
+            if (res_approvalDetails.isSuccess) {
+                setApprovalDetails(res_approvalDetails.assetApproval)
+                setComments(res_approvalDetails.comments)
+            } else {
+                setApprovalDetails(initStateApprovalDetails)
+                setComments(null)
+            }
         } catch (error) {
             const apiError = ApiService.handleError(error)
             setIsReAssignSuccessFull(false)
@@ -137,35 +138,6 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
         }
     }
 
-    // const reAssignAsset = async () => {
-    //     try {
-    //         setReAssignLoading(true)
-    //         setCanReassign(false)
-    //         if(reAssignAssetDetails.fileName !== ""  ) {
-    //             const resRemoteFileUpload = await uploadReAssignFile(approvalDetails)
-    //             if(!resRemoteFileUpload?.status) {
-    //                 throw new ApiError('Uploading file failed', 500, {});
-    //             }
-    //         }
-
-    //         const resReAssignment = await updateAssetReassign (approvalDetails)
-    //         if (resReAssignment?.status) { 
-    //             setIsReAssignSuccessFull(true)
-    //         }
-    //     } catch (error) {
-    //         const apiError = ApiService.handleError(error)
-    //         setIsReAssignSuccessFull(false)
-    //         setError({
-    //             status: apiError.statusCode,
-    //             message: apiError.message,
-    //             showError: true,
-    //         })
-    //     } finally {
-    //         setReAssignLoading(false)
-    //         setCanReassign(true)
-    //     }
-
-    // }
 
     const reAssignAsset = async () => {
         try {
@@ -218,28 +190,6 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
 
     }
 
-    // const updateAssetReassign = async (approvalDetails:AssetApprovalResponse) => {
-    //     try {
-    //         const res_updateAssetReassignFinal = await ApiService.put<any>(urls.updateAssetReassignFinal,{
-    //             "assetVersionID": approvalDetails.assetVersionID,
-    //             "approverID": approvalDetails.approverID,
-    //             "editorID": approvalDetails.editorID,
-    //             // "comments": reAssignAssetDetails.comment
-    //         })
-    //         if (res_updateAssetReassignFinal.isSuccess) {
-    //             return { status : true}
-    //         }
-    //         if (res_updateAssetReassignFinal.errorOnFailure.length>0) {
-    //             throw new ApiError(
-    //                 'Failed to upload reassignment file',
-    //                 400,
-    //                 res_updateAssetReassignFinal.errorOnFailure
-    //             )
-    //         }
-    //     } catch (error) {
-    //         throw new ApiError('Reassignment error', 500, error)
-    //     }
-    // }
 
     const approveAsset = async () => {
         try {
