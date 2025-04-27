@@ -36,15 +36,15 @@ type AssetDetails = {
     project_name: string;
     campaign_name: string;
     asset_name: string;
-    campaignID : string
+    campaignID: string
 };
 export const useProjectFormData = () => {
     const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
-    const [isProductNameValid,setIsProductNameValid] = useState<boolean>(true)
+    const [isProductNameValid, setIsProductNameValid] = useState<boolean>(true)
     const [listProjects, setListProjects] = useState<DropDownOptions[]>([]);
     const [listCampaigns, setListCampaigns] = useState<CampaignsProps[]>([]);
     const [listAssets, setListAssets] = useState<AssetsProps[]>([]);
-      const [existingCampaignDetails,setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
+    const [existingCampaignDetails, setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
 
     // const campaignIDRef = useRef("")
     const isCampaignSelect = useRef(false)
@@ -53,7 +53,7 @@ export const useProjectFormData = () => {
 
     const [assetDetails, setAssetDetails] = useState<AssetDetails>({
         project_name: '',
-        campaignID : '',
+        campaignID: '',
         campaign_name: '',
         asset_name: ''
     })
@@ -89,7 +89,7 @@ export const useProjectFormData = () => {
 
     const getListCampaign = async (projectName: string, label: string) => {
         try {
-            if (projectName.trim().length === 0 || label === 'Other' ) {
+            if (projectName.trim().length === 0 || label === 'Other') {
                 setListCampaigns([])
                 return
             }
@@ -115,38 +115,41 @@ export const useProjectFormData = () => {
     }
 
     const handleChangeAssetDetails = debounce((key: string, value: string, label?: string) => {
+        value = value.trim(); // Remove leading and trailing spaces
+
         setAssetDetails(pre => ({
             ...pre,
             [key]: value
-        }))
+        }));
 
         if (key === "project_name") {
-            if (['other', 'others'].includes(value.trim().toLowerCase())){
-                setIsProductNameValid(false) 
-                setAssetDetails(pre=>({
+            if (['other', 'others'].includes(value.toLowerCase())) {
+                setIsProductNameValid(false);
+                setAssetDetails(pre => ({
                     ...pre,
-                    [key] : ''
-                }))
+                    [key]: ''
+                }));
             } else {
-                setIsProductNameValid(true)
+                setIsProductNameValid(true);
             }
-            getListCampaign(value, label || "")
+            getListCampaign(value, label || "");
         } else if (key === "campaign_name") {
-            handleCheckCampNameExists(listCampaigns, value)
+            handleCheckCampNameExists(listCampaigns, value);
         } else if (key === "asset_name") {
-            const checkAssetNameExists = listAssets.filter((item) => item.assetName.toLowerCase() === value.toLowerCase())
+            const checkAssetNameExists = listAssets.filter((item) => item.assetName.trim().toLowerCase() === value.toLowerCase());
             if (checkAssetNameExists.length > 0) {
-                setAssetDetails(pre=>({
+                setAssetDetails(pre => ({
                     ...pre,
-                    [key] : ''
-                }))
-                setIsAssetNameExists(true)
+                    [key]: ''
+                }));
+                setIsAssetNameExists(true);
             } else {
-                setIsAssetNameExists(false)
+                setIsAssetNameExists(false);
             }
         }
-        
-    }, 500)
+
+    }, 500);
+
 
 
     const handleCheckCampNameExists = (listCampaigns: CampaignsProps[], value: string) => {
@@ -154,12 +157,12 @@ export const useProjectFormData = () => {
         const checkCampNameExists = listCampaigns.filter((item) => item.campaignName.toLowerCase() === trimmedValue.toLowerCase())
         if (checkCampNameExists.length > 0) {
             // campaignIDRef.current = checkCampNameExists[0].campaignID
-            setAssetDetails(pre=>({...pre,campaignID:checkCampNameExists[0].campaignID}))
+            setAssetDetails(pre => ({ ...pre, campaignID: checkCampNameExists[0].campaignID }))
             isCampaignSelect.current = true
             getAssetAll(checkCampNameExists[0].campaignID)
             collectCampaignData(checkCampNameExists[0].campaignID)
         } else {
-            setAssetDetails(pre=>({...pre,campaignID:""}))
+            setAssetDetails(pre => ({ ...pre, campaignID: "" }))
             isCampaignSelect.current = false
             setListAssets([])
             setIsAssetNameExists(false)
@@ -167,7 +170,7 @@ export const useProjectFormData = () => {
         }
     }
 
-    const collectCampaignData = async (campaign_id:string) => {
+    const collectCampaignData = async (campaign_id: string) => {
         try {
             const res = await ApiService.get<any>(`${urls.aiPrompt_Campaign_select}?CampaignID=${campaign_id}`)
             if (res.isSuccess) {

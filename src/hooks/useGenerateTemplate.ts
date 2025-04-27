@@ -132,29 +132,33 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     }
   };
 
-
   const aiPromptCampaignUpsert = async (
     FormData: FormDataProps,
-    fileID: number,
-    campaign_id: string
+    fileID?: number,
+    campaign_id?: string
   ) => {
     try {
-      const response = await ApiService.post<{isSuccess: boolean; promptID?: string}>(
-        urls.aiPrompt_Campaign_insertupdate,
-        {
-          campaignID: campaign_id,
-          product: FormData?.product || "",
-          campaignGoal: FormData?.campaignGoal || "",
-          targetAudience: FormData?.targetAudience || "",
-          outputScale: FormData?.outputScale || 0,
-          fileID: fileID,
-          webUrl: FormData?.webUrl || "",
-        }
-      );
-
+      const payload: any = {
+        campaignID: campaign_id,
+        product: FormData?.product || "",
+        campaignGoal: FormData?.campaignGoal || "",
+        targetAudience: FormData?.targetAudience || "",
+        outputScale: FormData?.outputScale || 0,
+        webUrl: FormData?.webUrl || "",
+      };
+  
+      if (fileID && fileID !== 0) {
+        payload.fileID = fileID;
+      }
+  
+      const response = await ApiService.post<{
+        isSuccess: boolean;
+        promptID?: string;
+      }>(urls.aiPrompt_Campaign_insertupdate, payload);
+  
       return response;
     } catch (error) {
-      console.error('campaign error:', error);
+      console.error("campaign error:", error);
       return { isSuccess: false };
     }
   };
@@ -213,6 +217,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   }
 
   const uploadImage = async (FormData: FormDataProps) => {
+    console.log("FormData in uploadImage :",FormData);
     try {
       if (FormData?.fileSelected) {
         const resBase64 = await convertFileToBase64(FormData.fileSelected);
@@ -430,6 +435,7 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     aiPromptGenerateForAsset,
     getVersionDataUsingAI,
     getAssetByVersionId,
-    generateVersionHTML
+    generateVersionHTML,
+    uploadImage
   };
 };

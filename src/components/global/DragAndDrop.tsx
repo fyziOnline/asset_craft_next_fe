@@ -15,6 +15,7 @@ interface DragAndDropProps {
   onRemoveSelectedFile?: () => void
   dragAndDropOuterClass?: string;
   showButtons?: boolean;
+  uploadedFile?: string
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -31,12 +32,13 @@ const ALLOWED_TYPES = {
 
 // DragAndDrop component definition
 // This component allows users to drag and drop files or select them using a file input.
-const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelectedFile, dragAndDropOuterClass = "", showButtons = true }) => {
+const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelectedFile, dragAndDropOuterClass = "", showButtons = true, uploadedFile = "" }) => {
   const [file, setFile] = useState<File | null>(null);
   const [selectedFile, setSelectedFile] = useState<string>("");
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [activeButton, setActiveButton] = useState<"upload" | "recent">("upload");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isOriginalFileRemoved, setIsOriginalFileRemoved] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -55,9 +57,9 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
     setDragActive(isActive);
   };
 
- 
-// Validates the selected file based on type and size.
-// Returns an error message if the file is invalid, otherwise returns an empty string.
+
+  // Validates the selected file based on type and size.
+  // Returns an error message if the file is invalid, otherwise returns an empty string.
   // The function checks if the file type is in the allowed types and if the file size is within the limit.
   // If the file is invalid, it returns an error message.
   // If the file is valid, it returns an empty string.
@@ -83,6 +85,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
 
     setErrorMessage("");
     setFile(file);
+    setIsOriginalFileRemoved(true)
     if (onFileSelect) onFileSelect(file);
   };
 
@@ -116,9 +119,12 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const fileName = uploadedFile?.split('/').pop()?.split('_').slice(1).join('_');
+  const extension = fileName?.split('.').pop();
+
   return (
     <div className={`${showButtons ? "h-[230px]" : "h-full"} rounded-3xl overflow-hidden flex flex-col ${dragAndDropOuterClass}`}>
-      {showButtons && (
+      {/* {showButtons && (
         <div className="w-full h-[68px] flex items-center justify-center bg-white border-b border-[#EBEFF2]">
           <div className="relative flex items-center w-[240px] h-[40px] bg-[#e6ecf1] rounded-full p-1">
             <div className={`absolute top-1 left-1 h-[calc(100%-8px)] w-[48%] bg-[#00A881] rounded-full shadow-md transition-transform duration-300 ease-in-out ${activeButton === "upload" ? "translate-x-0" : "translate-x-full"}`} />
@@ -136,7 +142,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
             </button>
           </div>
         </div>
-      )}
+      )} */}
 
       <div className={`w-full flex-1 p-8 flex items-center relative ${activeButton === 'upload' ? "bg-[#F7F9FB] justify-center" : "bg-white"}`}>
         {activeButton === "upload" && (
@@ -186,6 +192,20 @@ const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelect, onRemoveSelecte
                 </div>
               </div>
             )}
+
+            {
+              !file && uploadedFile && !isOriginalFileRemoved &&(
+                <div onClick={() => window.open(uploadedFile, '_blank')}
+                  className="mt-2 bg-slate-100 p-2 rounded-lg relative cursor-pointer">
+                  <div className="flex items-center gap-2">
+                    <FileIcon color="#EDEDED" text={extension} />
+                    <div className="text-xs text-[#242634] opacity-50">
+                      <p>{fileName}</p>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
           </div>
         )}
 
