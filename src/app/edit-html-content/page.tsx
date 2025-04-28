@@ -60,6 +60,7 @@ const Page = () => {
     const [versionToDelete, setVersionToDelete] = useState<VersionToDelete | null>(null);
     const [unmatchedBlocks, setUnmatchedBlocks] = useState<string[]>([]);
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
+    const [toggleStateAsideSection,setToggleSideAsideSection] = useState<boolean>(false)
 
     const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
     const versionList_n = useEditAssetStoreSelector.use.versionList()
@@ -336,19 +337,19 @@ const Page = () => {
                             ) : null}
                         </div>
 
-                        {/* <ToggleAsideSection
-                            isOpen={isOpen}
-                            setIsOpen={setIsOpen}
-                            versionSelected={versionSelected}
-                            existingAssetDetails={{
-                                project_name: project_name,
-                                campaign_name: campaign_name,
-                                asset_name: contextData.AssetHtml.assetName,
-                                campaign_id: contextData.AssetHtml.campaignID,
-                                asset_id: versionSelected?.assetID
-                            }}
+                        <ToggleAsideSection
+                            isOpen={toggleStateAsideSection}
+                            setIsOpen={setToggleSideAsideSection}
+                            versionSelected={selectedVersion_n}
+                            // existingAssetDetails={{
+                            //     project_name: project_name,
+                            //     campaign_name: campaign_name,
+                            //     asset_name: contextData.AssetHtml.assetName,
+                            //     campaign_id: contextData.AssetHtml.campaignID,
+                            //     asset_id: versionSelected?.assetID
+                            // }}
                             isEditMode={true}
-                        /> */}
+                        />
                     </div>
 
                     {/* {comments && comments.length > 0 && ( */}

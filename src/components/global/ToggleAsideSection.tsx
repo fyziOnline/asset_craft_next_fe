@@ -38,7 +38,7 @@ interface ToggleAsideSectionProps {
 const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
     ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef, isEditMode = false }) => {            
         const { setError } = useAppData();
-        const { editSection, setEditSection } = useEditData();
+        // const { editSection, setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
         const [isMarkdownPopupOpen, setIsMarkdownPopupOpen] = useState(false);
         // Add state for campaign prompt data
@@ -83,7 +83,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         }
                     ))
                     const finalTemplate = { ...fetchedTemplate, templatesBlocks: updatedTemplateBlocks }
-                    setEditSection({ templateData: finalTemplate });
+                    // setEditSection({ templateData: finalTemplate });
                     setTemplateDetails(finalTemplate)
                 } else {
                      throw new Error(res?.message || "Failed to fetch template details");
@@ -112,7 +112,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         outputScale: aiAssetRes.aIPromptAsset.outputScale?.toString() ?? null
                     };
                     // ---- Log 1: Data fetched for context ----
-                    setEditSection({ aiPrompt: aiPromptDataForContext })
+                    // setEditSection({ aiPrompt: aiPromptDataForContext })
                 } else {
                      throw new Error(aiAssetRes?.message || "Failed to fetch AI prompt asset details");
                 }
@@ -193,16 +193,17 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 assetVersionID: versionSelected?.assetVersionID,
                 editContextData: {
                     // Asset specific fields from context
-                    topic: editSection.aiPrompt?.topic,
-                    keyPoints: editSection.aiPrompt?.keyPoints,
-                    tone: editSection.aiPrompt?.tone,
-                    type: editSection.aiPrompt?.type,
+
+                    // topic: editSection.aiPrompt?.topic,
+                    // keyPoints: editSection.aiPrompt?.keyPoints,
+                    // tone: editSection.aiPrompt?.tone,
+                    // type: editSection.aiPrompt?.type,
                     
                     // Campaign specific fields from component state
                     campaignGoal: campaignPromptData?.campaignGoal,
                     targetAudience: campaignPromptData?.targetAudience,
                     webUrl: campaignPromptData?.webUrl,
-                    outputScale: editSection.aiPrompt?.outputScale, // Already string or null from context fetch
+                    // outputScale: editSection.aiPrompt?.outputScale, // Already string or null from context fetch
                     fileName:campaignPromptData?.fileName
                 }
             };

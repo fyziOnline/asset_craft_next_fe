@@ -79,12 +79,9 @@ const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
         {/* Header */}
         <div className="bg-[#00A881] text-white p-4 flex justify-between items-center sticky top-0 z-10">
           <div className="flex items-center space-x-2">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.17L4.58 16.59L4 17.17V4H20V16Z" fill="white"/>
-              <path d="M12 10C12.55 10 13 9.55 13 9C13 8.45 12.55 8 12 8C11.45 8 11 8.45 11 9C11 9.55 11.45 10 12 10Z" fill="white"/>
-              <path d="M16 10C16.55 10 17 9.55 17 9C17 8.45 16.55 8 16 8C15.45 8 15 8.45 15 9C15 9.55 15.45 10 16 10Z" fill="white"/>
-              <path d="M8 10C8.55 10 9 9.55 9 9C9 8.45 8.55 8 8 8C7.45 8 7 8.45 7 9C7 9.55 7.45 10 8 10Z" fill="white"/>
-            </svg>
+                <svg width="30" height="20" viewBox="0 0 43 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.625 17.5C2.5625 17.5 0.875 15.8125 0.875 13.75V4.375C0.875 2.3125 2.5625 0.625 4.625 0.625H19.625C21.6875 0.625 23.375 2.3125 23.375 4.375V13.75C23.375 15.8125 21.6875 17.5 19.625 17.5H15.875V23.125L10.25 17.5H4.625ZM38.375 28.75C40.4375 28.75 42.125 27.0625 42.125 25V15.625C42.125 13.5625 40.4375 11.875 38.375 11.875H27.125V13.75C27.125 17.875 23.75 21.25 19.625 21.25V25C19.625 27.0625 21.3125 28.75 23.375 28.75H27.125V34.375L32.75 28.75H38.375Z" fill="white" />
+                </svg>
             <h2 className="font-semibold text-lg">Feedback</h2>
           </div>
           <button
