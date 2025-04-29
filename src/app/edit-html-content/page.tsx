@@ -278,7 +278,7 @@ const Page = () => {
         project_name: string
     }) => {
         return (
-            <>
+            <div className='relative'>
                 <div className="flex p-1 px-2">
                     <div className='flex-1'></div>
                 </div>
@@ -294,14 +294,10 @@ const Page = () => {
                     <div className='flex justify-between pr-16 items-center'>
                         <VersionManager
                             versionList={versionList_n}
-                            // versionSelected={versionSelected}
                             selectedVersionID={selectedVersionID}
-                            // setVersionSelected={setVersionSelected}
                             handleSave={handleSave}
                             editingVersionId={editingVersionId}
-                            // editingName={editingName}
                             setEditingVersionId={setEditingVersionId}
-                            // setEditingName={setEditingName}
                             handleUpdateVersionName={handleUpdateVersionName}
                             openConfirmationModal={openConfirmationModal}
                         />
@@ -316,7 +312,7 @@ const Page = () => {
                         )}
                     </div>
 
-                    <div className="flex h-[92vh] relative ">
+                    <div className="flex h-[92vh] relative border-red-500 border-solid">
                         <div className="flex flex-col bg-[#e4e4e4] flex-grow pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative mx-14">
                             <div className='px-[6rem] overflow-y-scroll thin-scrollbar'>
                                 <div id="container">
@@ -336,31 +332,31 @@ const Page = () => {
                                 />
                             ) : null}
                         </div>
-
-                        <ToggleAsideSection
-                            isOpen={toggleStateAsideSection}
-                            setIsOpen={setToggleSideAsideSection}
-                            versionSelected={selectedVersion_n}
-                            // existingAssetDetails={{
-                            //     project_name: project_name,
-                            //     campaign_name: campaign_name,
-                            //     asset_name: contextData.AssetHtml.assetName,
-                            //     campaign_id: contextData.AssetHtml.campaignID,
-                            //     asset_id: versionSelected?.assetID
-                            // }}
-                            isEditMode={true}
-                        />
+                        
                     </div>
 
                     {/* {comments && comments.length > 0 && ( */}
                         <FeedbackPanel
-                        comments={comments || []}
-                        isOpen={isFeedbackOpen}
-                        onClose={() => setIsFeedbackOpen(false)}
-                        onDownloadFile={handleDownloadFile}
-                      />
+                            comments={comments || []}
+                            isOpen={isFeedbackOpen}
+                            onClose={() => setIsFeedbackOpen(false)}
+                            onDownloadFile={handleDownloadFile}
+                        />
 {/* )} */}
                 </div>
+                <ToggleAsideSection
+                    isOpen={toggleStateAsideSection}
+                    setIsOpen={setToggleSideAsideSection}
+                    versionSelected={selectedVersion_n}
+                    existingAssetDetails={{
+                        project_name: project_name,
+                        campaign_name: campaign_name,
+                        asset_name: "",
+                        campaign_id: "",
+                        asset_id: ""
+                    }}
+                    isEditMode={true}
+                />
 
                 <ConfirmationModal
                     message={`Are you sure you want to delete version "${versionToDelete?.name}"?`}
@@ -385,7 +381,7 @@ const Page = () => {
                         setIsShowModelEdit={setIsShowModelEdit}
                     />
                 ) : null}
-            </>
+            </div>
         );
     };
 
