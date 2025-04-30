@@ -47,20 +47,14 @@ export const useEditHTMLContent = () => {
     }, [])
 
     const resAssetHtml = async () => {
-        console.log('1');
-        
         try {
             let assetID = ""
             if (typeof window !== "undefined") {
                 const params = new URLSearchParams(window.location.search);
                 assetID = params.get("assetID") as string
             }
-        console.log('2');
-
 
             if (!assetID) {
-                console.log('1!');
-
                 return await resAssetVersion()
             }
 
@@ -68,7 +62,6 @@ export const useEditHTMLContent = () => {
 
             assetIDTemplateRef.current = assetID
             const res = await getAssetHTML()
-        console.log('3');
 
             if (res.isSuccess) {
 
@@ -102,16 +95,11 @@ export const useEditHTMLContent = () => {
                 layoutName = params.get("layoutName") as string
             }
             const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersionID}`)
-            console.log("1!1 reselct resAssetVersionSelect",resSelect);
-            
+
             if (resSelect.isSuccess) {
-                console.log("1!2");
-                
-                // setAssetHTMLData(resSelect)
                 setAssetHTMLFromSingleVersion(resSelect)
             }
         } catch (error) {
-            console.log('error :1!1!',error);
             
             const apiError = ApiService.handleError(error)
             setError({

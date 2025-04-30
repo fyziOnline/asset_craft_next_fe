@@ -12,8 +12,6 @@ const useEditAssetStore = create<EditAssetStore>((set,get) => ({
   
   // Actions
   setAssetHTMLData: (assetHTMLRecord) => {
-    console.log("assetHTMLRecords :",assetHTMLRecord);
-    
     const {selectedVersionID} = get()
     const {
       isSuccess,
@@ -44,14 +42,10 @@ const useEditAssetStore = create<EditAssetStore>((set,get) => ({
       layoutName,
       ...restOfData
     } = assetHTMLSingleVersionRecord;
-    console.log("assetHTMLSingleVersionRecord :",assetHTMLSingleVersionRecord);
-    console.log("restOfData :",restOfData);
     
 
     set({
-      // assetHTMLData: filteredResponse,
       versionList: [{...restOfData}],
-      // versionUniqueStatuses : uniqueStatuses,
       selectedVersionID : restOfData.assetVersionID
     });
   },

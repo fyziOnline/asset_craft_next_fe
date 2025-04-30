@@ -17,7 +17,6 @@ import EditHeader from './components/EditHeader';
 import GlobalEditButton from './components/GlobalEditButton';
 import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer';
 import FallbackBlockControls from './components/FallbackBlockControls';
-// import ToggleAsideSection from '@/components/global/ToggleAsideSection';
 import NotFound from '@/components/global/NotFound'
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 import FeedbackPanel from './components/FeedbackPanel';
@@ -344,19 +343,6 @@ const Page = () => {
                         />
 {/* )} */}
                 </div>
-                {/* <ToggleAsideSection
-                    isOpen={toggleStateAsideSection}
-                    setIsOpen={setToggleSideAsideSection}
-                    versionSelected={selectedVersion}
-                    existingAssetDetails={{
-                        project_name: project_name,
-                        campaign_name: campaign_name,
-                        asset_name: assetHTMLData.assetName,
-                        campaign_id: assetHTMLData.campaignID,
-                        asset_id: assetHTMLData.assetID
-                    }}
-                    isEditMode={true}
-                /> */}
                 <AssetToggleAside
                     isOpen={toggleStateAsideSection}
                     setIsOpen={setToggleSideAsideSection}
