@@ -2,12 +2,11 @@
 
 import { FC, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
-import { AssetBlockProps } from '@/types/templates';
-import { useAppData } from '@/context/AppContext';
+import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { MdOutlineFileUpload } from "react-icons/md";
-import { MdOutlineClose } from "react-icons/md";
+// import { MdOutlineClose } from "react-icons/md";
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 import Button from '@/components/global/Button';
 import DragAndDrop from '@/components/global/DragAndDrop';
@@ -18,18 +17,31 @@ import FeedBackCard from '@/components/cards/FeedBackCard';
 import { PeopleIcon } from '@/assets/icons/AppIcons';
 import PopupCard from '@/components/global/Popup/PopupCard';
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { formatDate } from '@/utils/formatDate';
+// import { formatDate } from '@/utils/formatDate';
+import { useEditAssetStoreSelector } from '@/store/editAssetStore';
+import FeedbackPanel from '../edit-html-content/components/FeedbackPanel';
 
 
 const Page: FC = () => {
-    const { contextData } = useAppData();
-
     const [showUploadPopup, setShowUploadPopup] = useState(false);
-
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
-
+    
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [isShowModelEdit,setIsShowModelEdit] = useState<boolean>(false)
 
+    const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
+    const versionList = useEditAssetStoreSelector.use.versionList()
+    const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
+    console.log('selected Version id :',selectedVersionID);
+    
+    const versionSelected = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+
+    const handleDownloadFile = (fileUrl: string) => {
+        const link = document.createElement('a');
+        link.href = fileUrl || approvalDetails?.fileUrl || '';
+        link.download = 'feedback-attachment';
+        link.click();
+      };
 
     const handleShowPopUp = () => {
         setShowUploadPopup((prev) => !prev)
@@ -40,16 +52,16 @@ const Page: FC = () => {
     const {
         sectionEdit,
         isShowAddVer,
-        versionSelected,
+        // versionSelected,
         isShowSave,
-        isShowModelEdit,
+        // isShowModelEdit,
         setShowSave,
-        setVersionSelected,
-        setVersionList,
+        // setVersionSelected,
+        // setVersionList,
         handleAddVersion,
         handleChangeTextVersion,
         handleSave,
-        setIsShowModelEdit,
+        // setIsShowModelEdit,
         setIsShowAddVer,
         setSectionEdit,
         handleHideBlock,
@@ -92,14 +104,6 @@ const Page: FC = () => {
             console.error("Invalid versionSelected data");
         }
     };
-
-    const handleDownload = (fileUrl: string) => {
-        const link = document.createElement('a');
-        link.href = approvalDetails.fileUrl,
-            link.download = 'filename',
-            link.click();
-    }
-
 
     const htmlOtherAsset = () => {
         let htmlContent = ''
@@ -154,7 +158,7 @@ const Page: FC = () => {
 
         // render other layout 
         const listLayout = ["landing", "linkedin", "callscript"]
-        const hasMatchLayoutName = listLayout.some(substring => contextData.AssetHtml?.layoutName?.toLowerCase().includes(substring.toLowerCase()));
+        const hasMatchLayoutName = listLayout.some(substring => assetHTMLData.layoutName?.toLowerCase().includes(substring.toLowerCase()));
         if (hasMatchLayoutName) {
             return <div className='flex justify-center'>
                 <ShadowDomContainer onClick={handleClickEdit} htmlContent={htmlOtherAsset()}></ShadowDomContainer>
@@ -290,7 +294,7 @@ const Page: FC = () => {
 
                         {/* FeedBack logo */}
 
-                        {(comments?.length > 0) &&
+                        {(comments && comments?.length > 0) &&
                             <div className='flex justify-end pr-16 items-center py-2'>
                                 <FeedBackCard
                                     isFeedbackOpen={isFeedbackOpen}
@@ -319,12 +323,17 @@ const Page: FC = () => {
                             </div>
 
                             {/* Feedback Panel */}
-                            {isFeedbackOpen && (
+                            <FeedbackPanel 
+                                comments={comments || []}
+                                isOpen ={isFeedbackOpen}
+                                onClose={()=>setIsFeedbackOpen(false)}
+                                onDownloadFile={handleDownloadFile}
+                            />
+                            {/* {isFeedbackOpen && (
                                 <div
                                     className={`fixed md:relative top-0 right-0 bg-white md:w-[35%] feedback-panel ${isFeedbackOpen ? "block" : "hidden "
                                         }`}
                                 >
-                                    {/* Header */}
                                     <div className="bg-[#00A881] text-white p-4 flex justify-between items-center gap-4 sticky top-0">
 
 
@@ -390,7 +399,7 @@ const Page: FC = () => {
 
                                     </div>
                                 </div>
-                            )}
+                            )} */}
 
                         </div>
 
@@ -398,11 +407,10 @@ const Page: FC = () => {
 
                     </div>
                     {isShowModelEdit ? <EditContentModel
-                        setVersionList={setVersionList}
-                        setVersionSelected={setVersionSelected}
                         assetBlock={sectionEdit as AssetBlockProps}
                         assetVersion={versionSelected}
-                        setIsShowModelEdit={setIsShowModelEdit} /> : null}
+                        setIsShowModelEdit={setIsShowModelEdit}
+                    /> : null}
                 </div>
             </Suspense>
 

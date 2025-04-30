@@ -84,6 +84,14 @@ export interface AssetVersionProps {
     assetVersionBlocks: AssetBlockProps[]
 }
 
+export interface AssetVersionPropsExtended extends AssetVersionProps {
+    layoutHTML : string 
+    layoutID : string 
+    layoutName : string
+    isSuccess: boolean
+    errorOnFailure: string
+}
+
 export interface AssetBlockProps {
     assetVersionBlockID: string,
     assetVersionID: string,

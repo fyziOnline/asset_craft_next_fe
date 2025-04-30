@@ -62,11 +62,12 @@ const Page = () => {
     const [toggleStateAsideSection,setToggleSideAsideSection] = useState<boolean>(false)
 
     const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
-    const versionList_n = useEditAssetStoreSelector.use.versionList()
+    const versionList = useEditAssetStoreSelector.use.versionList()
     const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
     const updateVersionField = useEditAssetStoreSelector.use.updateVersionField()
 
-    const selectedVersion_n = versionList_n.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+    // const selectedVersion = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+    const selectedVersion = versionList[0] as AssetVersionProps
     
     const handleDownloadFile = (fileUrl: string) => {
         const link = document.createElement('a');
@@ -102,9 +103,9 @@ const Page = () => {
         approvalDetails,
         comments,
     } = useAssetApproval({
-        assetVersionID: selectedVersion_n?.assetVersionID || "",
-        assetID: selectedVersion_n?.assetID || "",
-        versionStatus: selectedVersion_n?.status || ""
+        assetVersionID: selectedVersion?.assetVersionID || "",
+        assetID: selectedVersion?.assetID || "",
+        versionStatus: selectedVersion?.status || ""
     });
 
 
@@ -128,12 +129,12 @@ const Page = () => {
 
     // Update the generateHTMLContent function to properly handle hidden blocks
     const generateHTMLContent = () => {
-        if (!selectedVersion_n?.assetVersionBlocks) {
+        if (!selectedVersion?.assetVersionBlocks) {
             return '<div>No content available</div>';
         }
         let blocksHTML = '';
         // Process each block
-        selectedVersion_n.assetVersionBlocks.forEach((block) => {
+        selectedVersion.assetVersionBlocks.forEach((block) => {
             // Process both visible and hidden blocks, but mark hidden ones
             const processedBlockHTML = processBlockHTML(
                 block.blockHTMLGenerated || '',
@@ -146,14 +147,14 @@ const Page = () => {
             blocksHTML += processedBlockHTML + '\n';
         });
         // Combine layout with blocks
-        return formatContentWithBlocks(selectedVersion_n.layoutHTMLGenerated || '', blocksHTML);
+        return formatContentWithBlocks(selectedVersion.layoutHTMLGenerated || '', blocksHTML);
     };
 
 
     // Replace the htmlOtherAsset function
     const htmlContent = useMemo(() => {
         return generateHTMLContent();
-    }, [selectedVersion_n]);
+    }, [selectedVersion]);
 
     // Handle edit block
     const handleEditBlock = (block: AssetBlockProps) => {
@@ -171,15 +172,15 @@ const Page = () => {
             handleHideBlock(blockId, currentIgnoreStatus);
 
             // Update local state to provide immediate UI feedback
-            if (selectedVersion_n?.assetVersionBlocks) {
-                const updatedBlocks = selectedVersion_n.assetVersionBlocks.map(block => {
+            if (selectedVersion?.assetVersionBlocks) {
+                const updatedBlocks = selectedVersion.assetVersionBlocks.map(block => {
                     if (block.assetVersionBlockID === blockId) {
                         return { ...block, ignoreBlock: newStatus };
                     }
                     return block;
                 });
 
-                updateVersionField(selectedVersion_n.assetVersionID,{assetVersionBlocks:updatedBlocks})
+                updateVersionField(selectedVersion.assetVersionID,{assetVersionBlocks:updatedBlocks})
             }
         } catch (error) {
             console.error("Error toggling block visibility:", error);
@@ -200,7 +201,7 @@ const Page = () => {
         // Only show blocks that are truly unmatched (not matched but hidden)
         // Now we'll filter out blocks that are just hidden, as they're displayed in-place
         const trulyUnmatchedBlocks = unmatchedBlocks.filter(blockId => {
-            const block = selectedVersion_n?.assetVersionBlocks?.find(
+            const block = selectedVersion?.assetVersionBlocks?.find(
                 b => b.assetVersionBlockID === blockId
             );
             // We want to include only blocks that are truly unmatched and not just hidden
@@ -214,22 +215,22 @@ const Page = () => {
 
         return (
             <FallbackBlockControls
-                blocks={selectedVersion_n?.assetVersionBlocks || []}
+                blocks={selectedVersion?.assetVersionBlocks || []}
                 onEditBlock={handleEditBlock}
                 onToggleBlockVisibility={handleBlockVisibilityToggle}
                 unmatchedBlocks={trulyUnmatchedBlocks}
             />
         );
-    }, [unmatchedBlocks, selectedVersion_n?.assetVersionBlocks]);
+    }, [unmatchedBlocks, selectedVersion?.assetVersionBlocks]);
 
     // Update the renderHTMLSelect function to accept assetTypeIcon as a parameter
     const renderHTMLSelect = (assetTypeIcon: string | null) => {
-        if (!selectedVersion_n?.assetVersionBlocks) {
+        if (!selectedVersion?.assetVersionBlocks) {
             return null;
         }
 
         // Filter for global block
-        const globalBlock = selectedVersion_n.assetVersionBlocks.find(item =>
+        const globalBlock = selectedVersion.assetVersionBlocks.find(item =>
             item.blockName === '_global_1' &&
             item.blockData !== "{}" &&
             item.blockData !== ""
@@ -242,7 +243,7 @@ const Page = () => {
                 ${assetTypeIcon === 'LinkedIn' ? 'flex items-center justify-center' : ''}`}>
                     <EnhancedShadowDomContainer
                         htmlContent={htmlContent}
-                        blocks={selectedVersion_n.assetVersionBlocks}
+                        blocks={selectedVersion.assetVersionBlocks}
                         onEditBlock={handleEditBlock}
                         onToggleBlockVisibility={handleBlockVisibilityToggle}
                         onUnmatchedBlocks={handleUnmatchedBlocks}
@@ -292,7 +293,7 @@ const Page = () => {
 
                     <div className='flex justify-between pr-16 items-center'>
                         <VersionManager
-                            versionList={versionList_n}
+                            versionList={versionList}
                             selectedVersionID={selectedVersionID}
                             handleSave={handleSave}
                             editingVersionId={editingVersionId}
@@ -346,7 +347,7 @@ const Page = () => {
                 {/* <ToggleAsideSection
                     isOpen={toggleStateAsideSection}
                     setIsOpen={setToggleSideAsideSection}
-                    versionSelected={selectedVersion_n}
+                    versionSelected={selectedVersion}
                     existingAssetDetails={{
                         project_name: project_name,
                         campaign_name: campaign_name,
@@ -359,7 +360,7 @@ const Page = () => {
                 <AssetToggleAside
                     isOpen={toggleStateAsideSection}
                     setIsOpen={setToggleSideAsideSection}
-                    versionSelected={selectedVersion_n}
+                    versionSelected={selectedVersion}
                     existingAssetDetails={{
                         project_name: project_name,
                         campaign_name: campaign_name,
@@ -389,7 +390,7 @@ const Page = () => {
                 {isShowModelEdit ? (
                     <EditContentModel
                         assetBlock={sectionEdit as AssetBlockProps}
-                        assetVersion={selectedVersion_n}
+                        assetVersion={selectedVersion}
                         setIsShowModelEdit={setIsShowModelEdit}
                     />
                 ) : null}

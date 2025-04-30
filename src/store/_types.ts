@@ -1,4 +1,4 @@
-import { AssetHTMLData, AssetHtmlProps, AssetVersionProps } from "@/types/templates"
+import { AssetHTMLData, AssetHtmlProps, AssetVersionProps, AssetVersionPropsExtended } from "@/types/templates"
  
 export type EditAssetStore = {
   // State properties
@@ -15,6 +15,7 @@ export type EditAssetStore = {
   deleteVersionFromTheList : (v_id:string) => void
   updateVersionList : (newVersion:AssetVersionProps) => void
   updateEntireVersionList : (newList:AssetVersionProps[]) => void
+  setAssetHTMLFromSingleVersion : (assetHTMLSingleVersionRecord:AssetVersionPropsExtended) => void
 }
 
 export type GenerateAssetStore = {
