@@ -1,12 +1,10 @@
 import React from 'react';
 import Button from '@/components/global/Button';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { AssetVersionProps } from '@/types/templates';
 import StatusLegend from './StatusLegend';
+import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 
 interface EditHeaderProps {
-    versionSelected: AssetVersionProps;
-    versionList: AssetVersionProps[];
     isShowSave: boolean;
     setShowSave: (show: boolean) => void;
     handleSave: (type: number) => void;
@@ -14,17 +12,18 @@ interface EditHeaderProps {
 }
 
 const EditHeader: React.FC<EditHeaderProps> = ({
-    versionSelected,
-    versionList,
     isShowSave,
     setShowSave,
     handleSave,
     setIsShowSubmitVer
 }) => {
+
+    const uniquesStatusesList = useEditAssetStoreSelector.use.versionUniqueStatuses()
+    
     return (
         <div className='flex justify-between items-center px-14 py-4'>
             <div className='flex-1'>
-                <StatusLegend versionList={versionList} />
+                <StatusLegend statusList={uniquesStatusesList} />
             </div>
             <div className='flex gap-4'>
                 <div className='relative w-[150px] bg-white shadow-sm rounded'>

@@ -1,10 +1,7 @@
-// import generatePDF, { Options } from "react-to-pdf";
-// need to remove react-to-pdf
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppData } from '@/context/AppContext';
 import { ApiService } from "@/lib/axios_generic";
 import { urls } from "@/apis/urls";
-import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import { nkey } from "@/data/keyStore";
 import { AssetBlockProps, AssetHtmlProps, AssetVersionProps } from "@/types/templates";
@@ -14,39 +11,34 @@ import { useLoading } from "@/components/global/Loading/LoadingContext";
 import { useGenerateTemplate } from "./useGenerateTemplate";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import useEditAssetStore from '@/store/editAssetStore';
 
 export const useEditHTMLContent = () => {
-    const router = useRouter();
-    const { contextData, setContextData, setError } = useAppData();
+    const {  setError } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
     const [isShowSubmitVer, setIsShowSubmitVer] = useState(false)
     const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
-    const [versionList, setVersionList] = useState<AssetVersionProps[]>(contextData.AssetHtml.assetVersions || [])
-    const [versionSelected, setVersionSelected] = useState<AssetVersionProps>(contextData.AssetHtml.assetVersions?.[0])
     const [sectionEdit, setSectionEdit] = useState<AssetBlockProps>()
     const [listApprovers, setListApprovers] = useState<ApproverProps[]>([])
-    const [isShowModelEdit, setIsShowModelEdit] = useState(false)
     const { setShowLoading } = useLoading()
     const { assetIDTemplateRef, getAssetHTML } = useGenerateTemplate({})
     const refVersion = useRef('')
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [editingVersionId, setEditingVersionId] = useState<string | null>(null);
-    const [editingName, setEditingName] = useState("");
 
-    useEffect(() => {
-        try {
-            const findSelected = contextData.AssetHtml.assetVersions?.filter((item) => item.assetVersionID === versionSelected.assetVersionID)
-            if (findSelected.length > 0) {
-                setVersionSelected(findSelected[0])
-            } else {
-                setVersionSelected(contextData.AssetHtml.assetVersions[0])
-            }
-            setVersionList(contextData.AssetHtml.assetVersions)
-        } catch (error) {
+    const versionList_n = useEditAssetStore.getState().versionList
+    const assetHTMLData = useEditAssetStore.getState().assetHTMLData
+    const selectedVersionID = useEditAssetStore.getState().selectedVersionID
+    
+    const setAssetHTMLData = useEditAssetStore.getState().setAssetHTMLData
+    const updateVersionField = useEditAssetStore.getState().updateVersionField
+    const deleteVersionFromTheList = useEditAssetStore.getState().deleteVersionFromTheList
+    const updateVersionList = useEditAssetStore.getState().updateVersionList
+    const updateEntireVersionList = useEditAssetStore.getState().updateEntireVersionList
+    const updateUniqueStatusList = useEditAssetStore.getState().updateUniqueStatusList
+    
 
-        }
-    }, [contextData.AssetHtml])
 
     useEffect(() => {
         resAssetHtml()
@@ -70,12 +62,9 @@ export const useEditHTMLContent = () => {
             assetIDTemplateRef.current = assetID
             const res = await getAssetHTML()
             if (res.isSuccess) {
+
                 const AssetHtml = res as AssetHtmlProps
-                
-                setContextData({ AssetHtml: AssetHtml });
-                setVersionList(AssetHtml.assetVersions || [])
-                
-                setVersionSelected(AssetHtml.assetVersions?.[0])
+                setAssetHTMLData(AssetHtml)
             } else {
                 alert("An error occurred, please try again later.")
             }
@@ -105,13 +94,7 @@ export const useEditHTMLContent = () => {
             }
             const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersionID}`)
             if (resSelect.isSuccess) {
-                let AssetHtml = contextData.AssetHtml
-                AssetHtml.assetVersions = [resSelect]
-                AssetHtml.assetName = assetName
-                AssetHtml.layoutName = layoutName
-                setVersionSelected(resSelect)
-                setVersionList([resSelect])
-                setContextData({ AssetHtml: AssetHtml })
+                setAssetHTMLData(resSelect)
             }
         } catch (error) {
             const apiError = ApiService.handleError(error)
@@ -141,66 +124,20 @@ export const useEditHTMLContent = () => {
             })
         }
     }
-
-
-    // code below is older methode to generate pdf ---------->
-
-    // const getTargetElement = (): HTMLElement => {
-    //     const containerDiv = document.createElement('div')
-    //     containerDiv.id = 'pdf-container';
-    //     containerDiv.innerHTML = versionSelected.htmlGenerated
-    //     document.body.appendChild(containerDiv)
-    //     return containerDiv
-    //   }
-    
-    // const cleanupElement = (element: HTMLElement) => {
-    //   if (element && element.parentNode) {
-    //     element.parentNode.removeChild(element);
-    //   }
-    // }
-
-    // const handleSave = async (type: number) => {
-    //     if (type === 1) {
-    //         setIsShowAddVer(true)
-    //     } else {
-    //         if (typeof window !== 'undefined') {
-    //             if (type === 2) {
-    //                 window.open(versionSelected.htmlFileURL, '_blank', 'noopener,noreferrer');
-    //             } else if (type === 3) {
-    //                 window.open(versionSelected.zipFileURL, '_blank', 'noopener,noreferrer');
-    //             }  else if (type === 4) {
-    //                 await new Promise(resolve => setTimeout(resolve, 1000))
-    //                 const options: Options = {
-    //                     filename: `${contextData.AssetHtml.assetName as string} - ${versionSelected.versionName as string}.pdf`,
-    //                     page: {
-    //                         margin: { left: -20, right: -20, top: 0, bottom: 0 }
-    //                     },
-    //                 }
-    //                 try {
-    //                     await generatePDF(getTargetElement,options)
-    //                 } catch (error) {
-    //                     console.error('Error generating PDF:', error);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     setShowSave(false)
-    // }
-
-    // ------> 
     
     const handleSave = async (type: number) => {
         if (type === 1) {
             setIsShowAddVer(true)
         } else {
+            const selectedVersion= versionList_n.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
             if (typeof window !== 'undefined') {
                 if (type === 2) {
-                    window.open(versionSelected.htmlFileURL, '_blank', 'noopener,noreferrer');
+                    window.open(selectedVersion?.htmlFileURL, '_blank', 'noopener,noreferrer');
                 } else if (type === 3) {
-                    window.open(versionSelected.zipFileURL, '_blank', 'noopener,noreferrer');
+                    window.open(selectedVersion?.zipFileURL, '_blank', 'noopener,noreferrer');
                 }  else if (type === 4) {
                     const element = document.createElement('div')
-                    element.innerHTML = versionSelected.htmlGenerated
+                    element.innerHTML = selectedVersion?.htmlGenerated
                     document.body.appendChild(element)
                     try {
                         await new Promise(resolve => setTimeout(resolve,1000))
@@ -215,7 +152,7 @@ export const useEditHTMLContent = () => {
                         const pdfHeight = (canvas.height * pdfWidth) / canvas.width
 
                         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-                        pdf.save(`${contextData.AssetHtml.assetName} - ${versionSelected.versionName}.pdf`)
+                        pdf.save(`${assetHTMLData.assetName} - ${selectedVersion.versionName}.pdf`)
                     } catch (err) {
                       console.error('Error generating PDF:', err)
                     } finally {
@@ -234,11 +171,12 @@ export const useEditHTMLContent = () => {
     };
 
     const handleAddVersion = async () => {
+        const selectedVersion= versionList_n.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
         try {
             if (refVersion.current !== "") {
                 setShowErrorMessage(false)
                 const resAddNewVersion = await ApiService.post<any>(urls.asset_version_copy, {
-                    assetVersionID: versionSelected.assetVersionID,
+                    assetVersionID: selectedVersion.assetVersionID,
                     versionName: refVersion.current
 
                 })
@@ -247,19 +185,17 @@ export const useEditHTMLContent = () => {
                     const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${resAddNewVersion.assetVersionID}`)
 
                     if (resSelect.isSuccess) {
-
-                        const AssetHtml = contextData.AssetHtml
-                        const assetVersions = contextData.AssetHtml.assetVersions
-                        const versionExist = assetVersions.some((version) => version.assetVersionID === resSelect.assetVersionID)
+                        const {
+                            isSuccess,
+                            errorOnFailure,
+                            ...restOfNewVersionData
+                        } = resSelect
+                        const versionExist = versionList_n.some((version) => version.assetVersionID === resSelect.assetVersionID)
 
                         if (!versionExist) {
-                            setVersionList((prev) => [...prev, resSelect]);
+                            updateVersionList(restOfNewVersionData)
                         }
 
-                        assetVersions.push(resSelect)
-                        AssetHtml.assetVersions = assetVersions
-                        setVersionSelected(resSelect)
-                        setContextData({ AssetHtml: AssetHtml })
                         setIsShowAddVer(false)
                         setShowErrorMessage(false)
                         refVersion.current = ""
@@ -280,20 +216,20 @@ export const useEditHTMLContent = () => {
     };
 
     const onGenerateWithAI = async () => {
+        const selectedVersion= versionList_n.find(v=>v.assetID===selectedVersionID) as AssetVersionProps
         try {
             setIsLoadingGenerate(true)
-            const resGenerateWithAI = await ApiService.get<any>(`${urls.asset_version_getDataUsingAI}?assetVersionID=${versionSelected.assetVersionID}`)
+            const resGenerateWithAI = await ApiService.get<any>(`${urls.asset_version_getDataUsingAI}?assetVersionID=${selectedVersion.assetVersionID}`)
             if (resGenerateWithAI.isSuccess) {
-                const resGenerate = await ApiService.get<any>(`${urls.asset_version_generate}?assetVersionID=${versionSelected.assetVersionID}`)
+                const resGenerate = await ApiService.get<any>(`${urls.asset_version_generate}?assetVersionID=${selectedVersion.assetVersionID}`)
                 if (resGenerate.isSuccess) {
-                    const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${versionSelected.assetVersionID}`)
+                    const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${selectedVersion.assetVersionID}`)
                     if (resSelect.isSuccess) {
-                        const AssetHtml = contextData.AssetHtml
-                        const indexVersion = contextData.AssetHtml.assetVersions.findIndex((item) => item.assetVersionID === versionSelected.assetVersionID)
-                        const assetVersions = contextData.AssetHtml.assetVersions
-                        assetVersions[indexVersion] = resSelect
-                        AssetHtml.assetVersions = assetVersions
-                        setContextData({ AssetHtml: AssetHtml })
+                        const {isSuccess,errorOnFailure,...updatedVersion} = resSelect
+
+                        const indexAssetVersion = versionList_n.findIndex((item) => item.assetVersionID === selectedVersion.assetVersionID)
+                        const newVersionList = versionList_n[indexAssetVersion] = updatedVersion
+                        updateEntireVersionList(newVersionList)
                     }
                 }
             }
@@ -310,20 +246,21 @@ export const useEditHTMLContent = () => {
     }
 
     const onSubmit = async (itemSelected: Option , isComments : string) => {
+        const selectedVersion= versionList_n.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
         try {
-            //setShowLoading(true)
             const resSubmit = await ApiService.post<any>(urls.approval_assetApproval_SubmitForApproval, {
-                "assetID": versionSelected.assetID,
-                "assetVersionID": versionSelected.assetVersionID,
+                "assetID": selectedVersion.assetID,
+                "assetVersionID": selectedVersion.assetVersionID,
                 "approverID": itemSelected.value,
                 "comments": isComments
             })
 
             if (resSubmit.isSuccess) {
-                // Delay closing the modal for 3 seconds
+                updateVersionField(selectedVersionID,{status:'On Review'})
+                updateUniqueStatusList()
+                // Delay closing the modal for 1 seconds
                 setTimeout(() => {
                     setIsShowSubmitVer(false);
-                    // router.replace("/dashboard") // Uncomment if you want to navigate after closing
                 }, 1000);
             } else {
                 alert("Submit failed, please try again later.");
@@ -342,6 +279,7 @@ export const useEditHTMLContent = () => {
     }
 
     const handleHideBlock = async (assetVersionBlockID: string, ignoreBlock: number) => {
+        const selectedVersion= versionList_n.find(v=>v.assetID===selectedVersionID) as AssetVersionProps
         try {
             setShowLoading(true)
             const resUpdateIgnoreStatus = await ApiService.put<any>(urls.assetVersionBlock_updateIgnoreStatus, {
@@ -349,18 +287,15 @@ export const useEditHTMLContent = () => {
                 "status": ignoreBlock == 1 ? 0 : 1
             })
             if (resUpdateIgnoreStatus.isSuccess) {
-                const resGenerate = await ApiService.get<any>(`${urls.asset_version_generate}?assetVersionID=${versionSelected.assetVersionID}`)
+                const resGenerate = await ApiService.get<any>(`${urls.asset_version_generate}?assetVersionID=${selectedVersion.assetVersionID}`)
                 if (resGenerate.isSuccess) {
-                    const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${versionSelected.assetVersionID}`)
+                    const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${selectedVersion.assetVersionID}`)
                     if (resSelect.isSuccess) {
-                        const AssetHtml = contextData.AssetHtml
-                        const indexVersion = contextData.AssetHtml.assetVersions.findIndex((item) => item.assetVersionID === versionSelected.assetVersionID)
-                        const assetVersions = contextData.AssetHtml.assetVersions
-                        assetVersions[indexVersion] = resSelect
-                        AssetHtml.assetVersions = assetVersions
-                        setVersionSelected(resSelect)
-                        setVersionList(assetVersions)
-                        setContextData({ AssetHtml: AssetHtml })
+                        const {isSuccess,errorOnFailure,...updatedVersion} = resSelect
+
+                        const indexAssetVersion = versionList_n.findIndex((item) => item.assetVersionID === selectedVersion.assetVersionID)
+                        const newVersionList = versionList_n[indexAssetVersion] = updatedVersion
+                        updateEntireVersionList(newVersionList)
                     }
                 }
             }
@@ -382,14 +317,8 @@ export const useEditHTMLContent = () => {
             const res = await ApiService.delete<any>(`${urls.asset_verdion_delete}?assetVersionID=${assetVersionID}`)
 
             if(res.isSuccess) {
-                setVersionList(prevList => {
-                    const updatedList = prevList.filter(item => item.assetVersionID !== assetVersionID);
-                    // If the deleted item was selected, update versionSelected to the last item in the list
-                    if (versionSelected?.assetVersionID === assetVersionID) {
-                        setVersionSelected(updatedList.length > 0 ? updatedList[updatedList.length - 1] : contextData.AssetHtml.assetVersions[0]);
-                    }
-                    return updatedList;
-                });
+                deleteVersionFromTheList(assetVersionID)
+                updateUniqueStatusList()
             }
 
         } catch (error) {
@@ -411,17 +340,7 @@ export const useEditHTMLContent = () => {
             });
 
             if (res.isSuccess) {
-                setVersionList(prevList => 
-                    prevList.map(version => 
-                        version.assetVersionID === assetVersionID 
-                            ? { ...version, versionName: newName }
-                            : version
-                    )
-                );
-
-                if (versionSelected.assetVersionID === assetVersionID) {
-                    setVersionSelected(prev => ({ ...prev, versionName: newName }));
-                }
+                updateVersionField(assetVersionID,{versionName:newName})
             }
         } catch (error) {
             const apiError = ApiService.handleError(error);
@@ -432,7 +351,6 @@ export const useEditHTMLContent = () => {
             });
         } finally {
             setEditingVersionId(null);
-            setEditingName("");
         }
     };
 
@@ -441,20 +359,14 @@ export const useEditHTMLContent = () => {
         isLoadingGenerate,
         isShowAddVer,
         isShowSubmitVer,
-        versionSelected,
         isShowSave,
-        versionList,
         listApprovers,
-        isShowModelEdit,
         setShowSave,
-        setVersionSelected,
-        setVersionList,
         handleAddVersion,
         handleChangeTextVersion,
         handleSave,
         setIsShowAddVer,
         setIsShowSubmitVer,
-        setIsShowModelEdit,
         onGenerateWithAI,
         onSubmit,
         setSectionEdit,
@@ -462,9 +374,7 @@ export const useEditHTMLContent = () => {
         showErrorMessage,
         handleDelete,
         editingVersionId,
-        editingName,
         setEditingVersionId,
-        setEditingName,
         handleUpdateVersionName,
     };
 

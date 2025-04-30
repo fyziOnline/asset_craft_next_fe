@@ -29,7 +29,7 @@ const FeedBackCard: React.FC<FeedBackCardProps> = ({ isFeedbackOpen, setIsFeedba
                             fill="white"
                         />
                     </svg>
-                    <div className="bg-[#E06565] absolute rounded-full w-[12px] h-[12px] top-[-3px] right-[-2px]"></div>
+                    {/* <div className="bg-[#E06565] absolute rounded-full w-[12px] h-[12px] top-[-3px] right-[-2px]"></div> */}
                 </div>
             )}
         </div>

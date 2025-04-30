@@ -1,11 +1,10 @@
 'use client';
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useAppData } from '@/context/AppContext';
-import { useEditData } from '@/context/EditContext';
 import { useGetTemplates } from '@/hooks/useGetTemplates';
 import { useRawAIOutput } from '@/hooks/useRawAIOutput';
 import { ApiService } from '@/lib/axios_generic';
-import { AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
+import { AIPromptAsset, AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
 import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } from 'react';
 import { MdDescription } from 'react-icons/md';
 import MarkdownPopup from './MarkdownPopup';
@@ -38,8 +37,10 @@ interface ToggleAsideSectionProps {
 const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
     ({ isOpen, setIsOpen, versionSelected, existingAssetDetails, asideRef, isEditMode = false }) => {            
         const { setError } = useAppData();
-        const { editSection, setEditSection } = useEditData();
+        // const { editSection, setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
+        const [aiPromptAssetData,setAIPromptAssetData] = useState<AIPromptAsset | Record<string, any> | null>(null)
+
         const [isMarkdownPopupOpen, setIsMarkdownPopupOpen] = useState(false);
         // Add state for campaign prompt data
         const [campaignPromptData, setCampaignPromptData] = useState<CampaignPromptData | null>(null); 
@@ -83,7 +84,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         }
                     ))
                     const finalTemplate = { ...fetchedTemplate, templatesBlocks: updatedTemplateBlocks }
-                    setEditSection({ templateData: finalTemplate });
                     setTemplateDetails(finalTemplate)
                 } else {
                      throw new Error(res?.message || "Failed to fetch template details");
@@ -110,9 +110,8 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                     const aiPromptDataForContext = {
                         ...aiAssetRes.aIPromptAsset,
                         outputScale: aiAssetRes.aIPromptAsset.outputScale?.toString() ?? null
-                    };
-                    // ---- Log 1: Data fetched for context ----
-                    setEditSection({ aiPrompt: aiPromptDataForContext })
+                    } as AIPromptAsset | Record<string,any>
+                    setAIPromptAssetData(aiPromptDataForContext)
                 } else {
                      throw new Error(aiAssetRes?.message || "Failed to fetch AI prompt asset details");
                 }
@@ -143,7 +142,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         webUrl: fetchedData.webUrl,
                         fileName:fetchedData.fileName
                     };
-                     // console.log("[ToggleAsideSection] Fetched AI Campaign Data:", campaignDataForState); // Remove log
                     setCampaignPromptData(campaignDataForState);
                 } else {
                      throw new Error(aiCampaignRes?.message || "Failed to fetch AI prompt campaign details");
@@ -193,16 +191,17 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 assetVersionID: versionSelected?.assetVersionID,
                 editContextData: {
                     // Asset specific fields from context
-                    topic: editSection.aiPrompt?.topic,
-                    keyPoints: editSection.aiPrompt?.keyPoints,
-                    tone: editSection.aiPrompt?.tone,
-                    type: editSection.aiPrompt?.type,
+
+                    topic: aiPromptAssetData?.topic,
+                    keyPoints: aiPromptAssetData?.keyPoints,
+                    tone: aiPromptAssetData?.tone,
+                    type: aiPromptAssetData?.type,
                     
                     // Campaign specific fields from component state
                     campaignGoal: campaignPromptData?.campaignGoal,
                     targetAudience: campaignPromptData?.targetAudience,
                     webUrl: campaignPromptData?.webUrl,
-                    outputScale: editSection.aiPrompt?.outputScale, // Already string or null from context fetch
+                    outputScale: aiPromptAssetData?.outputScale, // Already string or null from context fetch
                     fileName:campaignPromptData?.fileName
                 }
             };
@@ -240,14 +239,14 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
         }
 
         return (
-            <div className={`absolute flex top-0 h-full right-0 ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
+            <div className={`absolute top-4 right-0 h-[70vh] ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
                 <div 
                     ref={asideRef} 
-                    className={`bg-[#F5F5F7] pb-28 h-full overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute top-[-120px] right-0 ${isOpen ? 'w-full' : 'w-[0px]'}`}
+                    className={`bg-[#F5F5F7] pb-28 overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute ${isOpen ? 'w-full' : 'w-[0px]'}`}
                     style={{ zIndex: 10 }} // Sidebar stays above content
                 >
                     {isOpen && (
-                        <div className='w-full h-full px-5 pt-10 pb-5 relative overflow-y-auto'> 
+                        <div className='w-full px-5 pt-10 pb-5 relative overflow-y-auto'> 
                             <div className="absolute top-2 right-4">
                                 <button
                                     onClick={handleViewRawAIOutput}
@@ -267,7 +266,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
 
                 <div
                     onClick={toggleAside}
-                    className={`absolute top-[-4rem] transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300 border-t-2 border-l-2 border-b-2`}
+                    className={`absolute top-10 transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300 border-t-2 border-l-2 border-b-2`}
                     style={{ right: isOpen ? '100%' : '0px', zIndex: 20 }}
                 >
                     <svg

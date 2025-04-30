@@ -1,42 +1,43 @@
 import React from 'react';
-import { AssetVersionProps } from '@/types/templates';
 
-// Define status color mapping
 export const statusColors: Record<string, string> = {
-    "In Progress": "#2196F3", // Blue
-    "On Review": "#FF9800", // Orange
-    "Completed": "#4CAF50", // Green
+  "In Progress": "#2196F3", // Blue
+  "On Review": "#FF9800", // Orange
+  "Completed": "#4CAF50", // Green
 };
 
 interface StatusLegendProps {
-    versionList: AssetVersionProps[];
+  statusList: string[];
 }
 
-const StatusLegend: React.FC<StatusLegendProps> = ({ versionList }) => {
-    // Get unique statuses from the version list
-    const uniqueStatuses = Array.from(
-        new Set(versionList.map(version => version.status).filter(Boolean))
-    ) as string[];
+const StatusLegend: React.FC<StatusLegendProps> = ({ statusList }) => {
+  if (statusList.length === 0) {
+    return null;
+  }
 
-    // If no statuses are available, don't render the component
-    if (uniqueStatuses.length === 0) {
-        return null;
-    }
-
-    return (
-        <div className="flex items-center space-x-4 p-2">
-            <div className='text-base tracking-wide'>Legend :</div>
-            {uniqueStatuses.map((status) => (
-                <div key={status} className="flex items-center">
-                    <div 
-                        className="w-3 h-3 rounded-full mr-2" 
-                        style={{ backgroundColor: statusColors[status] || "#9E9E9E" }}
-                    />
-                    <span className="text-sm text-gray-700">{status}</span>
-                </div>
-            ))}
-        </div>
-    );
+  return (
+    <div className="flex items-center">
+      <span className="text-xs uppercase tracking-wider text-gray-500 mr-2">Legend:</span>
+      <div className="flex gap-2 flex-wrap">
+        {statusList.map((status) => {
+          const color = statusColors[status] || "#9E9E9E";
+          return (
+            <div 
+              key={status}
+              className="px-2 py-0.5 rounded-md text-[11px] font-normal"
+              style={{ 
+                backgroundColor: `${color}15`, // even softer background
+                color: color,
+                border: `1px solid ${color}30`,
+              }}
+            >
+              {status}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 
-export default StatusLegend; 
+export default StatusLegend;
