@@ -27,7 +27,7 @@ export const useEditHTMLContent = () => {
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [editingVersionId, setEditingVersionId] = useState<string | null>(null);
 
-    const versionList_n = useEditAssetStore.getState().versionList
+    const versionList = useEditAssetStore.getState().versionList
     const assetHTMLData = useEditAssetStore.getState().assetHTMLData
     const selectedVersionID = useEditAssetStore.getState().selectedVersionID
     
@@ -37,6 +37,7 @@ export const useEditHTMLContent = () => {
     const updateVersionList = useEditAssetStore.getState().updateVersionList
     const updateEntireVersionList = useEditAssetStore.getState().updateEntireVersionList
     const updateUniqueStatusList = useEditAssetStore.getState().updateUniqueStatusList
+    const setAssetHTMLFromSingleVersion = useEditAssetStore.getState().setAssetHTMLFromSingleVersion
     
 
 
@@ -46,14 +47,20 @@ export const useEditHTMLContent = () => {
     }, [])
 
     const resAssetHtml = async () => {
+        console.log('1');
+        
         try {
             let assetID = ""
             if (typeof window !== "undefined") {
                 const params = new URLSearchParams(window.location.search);
                 assetID = params.get("assetID") as string
             }
+        console.log('2');
+
 
             if (!assetID) {
+                console.log('1!');
+
                 return await resAssetVersion()
             }
 
@@ -61,6 +68,8 @@ export const useEditHTMLContent = () => {
 
             assetIDTemplateRef.current = assetID
             const res = await getAssetHTML()
+        console.log('3');
+
             if (res.isSuccess) {
 
                 const AssetHtml = res as AssetHtmlProps
@@ -93,10 +102,17 @@ export const useEditHTMLContent = () => {
                 layoutName = params.get("layoutName") as string
             }
             const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersionID}`)
+            console.log("1!1 reselct resAssetVersionSelect",resSelect);
+            
             if (resSelect.isSuccess) {
-                setAssetHTMLData(resSelect)
+                console.log("1!2");
+                
+                // setAssetHTMLData(resSelect)
+                setAssetHTMLFromSingleVersion(resSelect)
             }
         } catch (error) {
+            console.log('error :1!1!',error);
+            
             const apiError = ApiService.handleError(error)
             setError({
                 status: apiError.statusCode,
@@ -129,7 +145,7 @@ export const useEditHTMLContent = () => {
         if (type === 1) {
             setIsShowAddVer(true)
         } else {
-            const selectedVersion= versionList_n.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+            const selectedVersion= versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
             if (typeof window !== 'undefined') {
                 if (type === 2) {
                     window.open(selectedVersion?.htmlFileURL, '_blank', 'noopener,noreferrer');
@@ -171,7 +187,7 @@ export const useEditHTMLContent = () => {
     };
 
     const handleAddVersion = async () => {
-        const selectedVersion= versionList_n.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+        const selectedVersion= versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
         try {
             if (refVersion.current !== "") {
                 setShowErrorMessage(false)
@@ -190,7 +206,7 @@ export const useEditHTMLContent = () => {
                             errorOnFailure,
                             ...restOfNewVersionData
                         } = resSelect
-                        const versionExist = versionList_n.some((version) => version.assetVersionID === resSelect.assetVersionID)
+                        const versionExist = versionList.some((version) => version.assetVersionID === resSelect.assetVersionID)
 
                         if (!versionExist) {
                             updateVersionList(restOfNewVersionData)
@@ -216,7 +232,7 @@ export const useEditHTMLContent = () => {
     };
 
     const onGenerateWithAI = async () => {
-        const selectedVersion= versionList_n.find(v=>v.assetID===selectedVersionID) as AssetVersionProps
+        const selectedVersion= versionList.find(v=>v.assetID===selectedVersionID) as AssetVersionProps
         try {
             setIsLoadingGenerate(true)
             const resGenerateWithAI = await ApiService.get<any>(`${urls.asset_version_getDataUsingAI}?assetVersionID=${selectedVersion.assetVersionID}`)
@@ -227,8 +243,8 @@ export const useEditHTMLContent = () => {
                     if (resSelect.isSuccess) {
                         const {isSuccess,errorOnFailure,...updatedVersion} = resSelect
 
-                        const indexAssetVersion = versionList_n.findIndex((item) => item.assetVersionID === selectedVersion.assetVersionID)
-                        const newVersionList = versionList_n[indexAssetVersion] = updatedVersion
+                        const indexAssetVersion = versionList.findIndex((item) => item.assetVersionID === selectedVersion.assetVersionID)
+                        const newVersionList = versionList[indexAssetVersion] = updatedVersion
                         updateEntireVersionList(newVersionList)
                     }
                 }
@@ -246,7 +262,7 @@ export const useEditHTMLContent = () => {
     }
 
     const onSubmit = async (itemSelected: Option , isComments : string) => {
-        const selectedVersion= versionList_n.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+        const selectedVersion= versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
         try {
             const resSubmit = await ApiService.post<any>(urls.approval_assetApproval_SubmitForApproval, {
                 "assetID": selectedVersion.assetID,
@@ -279,7 +295,7 @@ export const useEditHTMLContent = () => {
     }
 
     const handleHideBlock = async (assetVersionBlockID: string, ignoreBlock: number) => {
-        const selectedVersion= versionList_n.find(v=>v.assetID===selectedVersionID) as AssetVersionProps
+        const selectedVersion= versionList.find(v=>v.assetID===selectedVersionID) as AssetVersionProps
         try {
             setShowLoading(true)
             const resUpdateIgnoreStatus = await ApiService.put<any>(urls.assetVersionBlock_updateIgnoreStatus, {
@@ -293,8 +309,8 @@ export const useEditHTMLContent = () => {
                     if (resSelect.isSuccess) {
                         const {isSuccess,errorOnFailure,...updatedVersion} = resSelect
 
-                        const indexAssetVersion = versionList_n.findIndex((item) => item.assetVersionID === selectedVersion.assetVersionID)
-                        const newVersionList = versionList_n[indexAssetVersion] = updatedVersion
+                        const indexAssetVersion = versionList.findIndex((item) => item.assetVersionID === selectedVersion.assetVersionID)
+                        const newVersionList = versionList[indexAssetVersion] = updatedVersion
                         updateEntireVersionList(newVersionList)
                     }
                 }

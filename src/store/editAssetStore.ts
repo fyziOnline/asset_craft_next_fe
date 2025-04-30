@@ -12,6 +12,8 @@ const useEditAssetStore = create<EditAssetStore>((set,get) => ({
   
   // Actions
   setAssetHTMLData: (assetHTMLRecord) => {
+    console.log("assetHTMLRecords :",assetHTMLRecord);
+    
     const {selectedVersionID} = get()
     const {
       isSuccess,
@@ -21,15 +23,37 @@ const useEditAssetStore = create<EditAssetStore>((set,get) => ({
     } = assetHTMLRecord;
 
     const uniqueStatuses = Array.from(
-        new Set(assetVersions.map(version => version.status).filter(Boolean))
+        new Set(assetVersions?.map(version => version.status).filter(Boolean))
     ) as string[];
+
 
     set({
         assetHTMLData: filteredResponse,
         versionList: assetVersions || [],
         versionUniqueStatuses : uniqueStatuses,
-        selectedVersionID : selectedVersionID.length ? selectedVersionID : assetVersions[0]?.assetVersionID
+        selectedVersionID : selectedVersionID.length ? selectedVersionID : assetVersions[0]?.assetVersionID 
       });
+  },
+
+  setAssetHTMLFromSingleVersion : (assetHTMLSingleVersionRecord) => {
+    const {
+      isSuccess,
+      errorOnFailure,
+      layoutHTML,
+      layoutID, 
+      layoutName,
+      ...restOfData
+    } = assetHTMLSingleVersionRecord;
+    console.log("assetHTMLSingleVersionRecord :",assetHTMLSingleVersionRecord);
+    console.log("restOfData :",restOfData);
+    
+
+    set({
+      // assetHTMLData: filteredResponse,
+      versionList: [{...restOfData}],
+      // versionUniqueStatuses : uniqueStatuses,
+      selectedVersionID : restOfData.assetVersionID
+    });
   },
 
   setSelectedVersion : (v_id)=>{
