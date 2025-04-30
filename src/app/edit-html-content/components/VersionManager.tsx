@@ -179,33 +179,33 @@ const VersionManager: React.FC<VersionManagerProps> = ({
                 )
             })}
 
+            {/* Updated Add New Version button - always showing "+" with different style */}
             {versionList.length < 7 && (
                 <div
                     onClick={() => handleSave(1)}
-                    className='group relative flex items-center justify-center cursor-pointer transition-all -bottom-[1px]'
+                    className="group relative flex items-center justify-center cursor-pointer -bottom-[1px]"
                 >
-                    {versionList.length > 0 &&
-                        <div 
-                            className="flex items-center justify-center transition-all duration-200 bg-[#00A989] rounded-full w-8 h-8 hover:bg-[#008c73]"
+                    <div 
+                        className="flex items-center justify-center transition-all duration-200 bg-gray-100 border border-gray-200 rounded-full w-6 h-6 ml-2 hover:bg-white hover:border-gray-300 hover:shadow-sm"
+                    >
+                        <svg 
+                            width="16" 
+                            height="16" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="text-[#00A989]"
                         >
-                            <svg 
-                                width="16" 
-                                height="16" 
-                                viewBox="0 0 24 24" 
-                                fill="none" 
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="text-white"
-                            >
-                                <path 
-                                    d="M12 5V19M5 12H19" 
-                                    stroke="currentColor" 
-                                    strokeWidth="2.5" 
-                                    strokeLinecap="round" 
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
-                        </div>
-                    }
+                            <path 
+                                d="M12 5V19M5 12H19" 
+                                stroke="currentColor" 
+                                strokeWidth="2.5" 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                    </div>
+                    
                     <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 -top-8 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
                         Add New Version
                         <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-700"></div>

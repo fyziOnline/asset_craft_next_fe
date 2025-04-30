@@ -1,23 +1,7 @@
-import { AssetHTMLData, AssetHtmlProps, AssetVersionProps } from '@/types/templates'
 import { create } from 'zustand'
 import { createSelectors } from './createStoreSelector'
+import { EditAssetStore } from './_types';
 
-type EditAssetStore = {
-  // State properties
-  assetHTMLData: AssetHTMLData | Record<string, any>
-  versionList: AssetVersionProps[]
-  selectedVersionID: string
-  versionUniqueStatuses:string[]
-  
-  // Actions properties
-  setAssetHTMLData: (assetHTMLRecord: AssetHtmlProps) => void
-  setSelectedVersion : (v_id:string) => void
-  updateVersionField : (v_id:string,filedToUpdate:Partial<AssetVersionProps>) => void
-  updateUniqueStatusList : () => void
-  deleteVersionFromTheList : (v_id:string) => void
-  updateVersionList : (newVersion:AssetVersionProps) => void
-  updateEntireVersionList : (newList:AssetVersionProps[]) => void
-}
   
 const useEditAssetStore = create<EditAssetStore>((set,get) => ({
   // Initial state

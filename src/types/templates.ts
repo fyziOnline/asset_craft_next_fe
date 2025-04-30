@@ -47,7 +47,6 @@ export interface AIPromptAsset {
     additionalInfo?: string
   }
 
-
 export interface AssetHtmlProps {
     isSuccess: boolean,
     errorOnFailure: string,

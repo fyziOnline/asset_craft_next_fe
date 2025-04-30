@@ -2,7 +2,6 @@ import { FC, useEffect } from "react";
 import { UserIcon } from "@/assets/icons/AppIcons"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useAppData } from "@/context/AppContext";
-import { BackIcon } from "@/assets/icons/AppIcons";
 import Link from 'next/link'
 import Title from "../global/Title";
 import useHeader from "@/hooks/useHeader";
@@ -80,8 +79,6 @@ const Header: FC = () => {
         <div className="w-full flex justify-between items-center">
           <div className="flex flex-row items-center">
             <div onClick={handleReturnToPrevious} className="h-[2rem] cursor-pointer absolute w-[2rem] rounded-full bottom-[-1rem] left-2 bg-[#f5f5f7] flex items-center justify-center">
-              {/* <BackIcon /> */}
-              {/* <ArrowBigLeft /> */}
               <svg width="7" height="14" viewBox="0 0 7 14" fill="white" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0.64645 6.94975L6.19972 1.39647V2.55381L1.80378 6.94975L6.19972 11.3457V12.503L0.64645 6.94975Z" fill="#00a881" stroke="#00a881" stroke-width="1.25"/>
               </svg>

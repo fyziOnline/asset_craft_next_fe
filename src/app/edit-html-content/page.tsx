@@ -3,12 +3,10 @@
 import React, { Suspense, useMemo, useState } from 'react';
 import { formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
 import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
-import { EditContextProvider } from '@/context/EditContext';
 import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 import { useSearchParams } from 'next/navigation';
-import { formatDate } from '@/utils/formatDate';
 import AddVersionModel from './components/AddVersionModel';
 import EditContentModel from './components/EditContentModel';
 import SubmitVersionModel from './components/SubmitVersionModel';
@@ -19,10 +17,11 @@ import EditHeader from './components/EditHeader';
 import GlobalEditButton from './components/GlobalEditButton';
 import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer';
 import FallbackBlockControls from './components/FallbackBlockControls';
-import ToggleAsideSection from '@/components/global/ToggleAsideSection';
+// import ToggleAsideSection from '@/components/global/ToggleAsideSection';
 import NotFound from '@/components/global/NotFound'
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 import FeedbackPanel from './components/FeedbackPanel';
+import AssetToggleAside from './components/AssetTogglAsideSection';
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -64,7 +63,7 @@ const Page = () => {
 
     const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
     const versionList_n = useEditAssetStoreSelector.use.versionList()
-    
+    const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
     const updateVersionField = useEditAssetStoreSelector.use.updateVersionField()
 
     const selectedVersion_n = versionList_n.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
@@ -344,16 +343,29 @@ const Page = () => {
                         />
 {/* )} */}
                 </div>
-                <ToggleAsideSection
+                {/* <ToggleAsideSection
                     isOpen={toggleStateAsideSection}
                     setIsOpen={setToggleSideAsideSection}
                     versionSelected={selectedVersion_n}
                     existingAssetDetails={{
                         project_name: project_name,
                         campaign_name: campaign_name,
-                        asset_name: "",
-                        campaign_id: "",
-                        asset_id: ""
+                        asset_name: assetHTMLData.assetName,
+                        campaign_id: assetHTMLData.campaignID,
+                        asset_id: assetHTMLData.assetID
+                    }}
+                    isEditMode={true}
+                /> */}
+                <AssetToggleAside
+                    isOpen={toggleStateAsideSection}
+                    setIsOpen={setToggleSideAsideSection}
+                    versionSelected={selectedVersion_n}
+                    existingAssetDetails={{
+                        project_name: project_name,
+                        campaign_name: campaign_name,
+                        asset_name: assetHTMLData.assetName,
+                        campaign_id: assetHTMLData.campaignID,
+                        asset_id: assetHTMLData.assetID
                     }}
                     isEditMode={true}
                 />
@@ -388,11 +400,9 @@ const Page = () => {
     return (
         <div className='overflow-hidden'>
             <Suspense fallback={<div>Loading...</div>}>
-                {/* <EditContextProvider> */}
                     <SearchParamsHandler>
                         {(params) => renderPageContent(params)}
                     </SearchParamsHandler>
-                {/* </EditContextProvider> */}
             </Suspense>
         </div>
     );

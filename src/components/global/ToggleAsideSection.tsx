@@ -1,11 +1,10 @@
 'use client';
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useAppData } from '@/context/AppContext';
-import { useEditData } from '@/context/EditContext';
 import { useGetTemplates } from '@/hooks/useGetTemplates';
 import { useRawAIOutput } from '@/hooks/useRawAIOutput';
 import { ApiService } from '@/lib/axios_generic';
-import { AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
+import { AIPromptAsset, AssetVersionProps, Template, TemplateBlocks } from '@/types/templates';
 import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } from 'react';
 import { MdDescription } from 'react-icons/md';
 import MarkdownPopup from './MarkdownPopup';
@@ -40,6 +39,8 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
         const { setError } = useAppData();
         // const { editSection, setEditSection } = useEditData();
         const [templateDetails, setTemplateDetails] = useState<Template | null>(null);
+        const [aiPromptAssetData,setAIPromptAssetData] = useState<AIPromptAsset | Record<string, any> | null>(null)
+
         const [isMarkdownPopupOpen, setIsMarkdownPopupOpen] = useState(false);
         // Add state for campaign prompt data
         const [campaignPromptData, setCampaignPromptData] = useState<CampaignPromptData | null>(null); 
@@ -83,7 +84,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         }
                     ))
                     const finalTemplate = { ...fetchedTemplate, templatesBlocks: updatedTemplateBlocks }
-                    // setEditSection({ templateData: finalTemplate });
                     setTemplateDetails(finalTemplate)
                 } else {
                      throw new Error(res?.message || "Failed to fetch template details");
@@ -110,9 +110,8 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                     const aiPromptDataForContext = {
                         ...aiAssetRes.aIPromptAsset,
                         outputScale: aiAssetRes.aIPromptAsset.outputScale?.toString() ?? null
-                    };
-                    // ---- Log 1: Data fetched for context ----
-                    // setEditSection({ aiPrompt: aiPromptDataForContext })
+                    } as AIPromptAsset | Record<string,any>
+                    setAIPromptAssetData(aiPromptDataForContext)
                 } else {
                      throw new Error(aiAssetRes?.message || "Failed to fetch AI prompt asset details");
                 }
@@ -143,7 +142,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                         webUrl: fetchedData.webUrl,
                         fileName:fetchedData.fileName
                     };
-                     // console.log("[ToggleAsideSection] Fetched AI Campaign Data:", campaignDataForState); // Remove log
                     setCampaignPromptData(campaignDataForState);
                 } else {
                      throw new Error(aiCampaignRes?.message || "Failed to fetch AI prompt campaign details");
@@ -194,16 +192,16 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 editContextData: {
                     // Asset specific fields from context
 
-                    // topic: editSection.aiPrompt?.topic,
-                    // keyPoints: editSection.aiPrompt?.keyPoints,
-                    // tone: editSection.aiPrompt?.tone,
-                    // type: editSection.aiPrompt?.type,
+                    topic: aiPromptAssetData?.topic,
+                    keyPoints: aiPromptAssetData?.keyPoints,
+                    tone: aiPromptAssetData?.tone,
+                    type: aiPromptAssetData?.type,
                     
                     // Campaign specific fields from component state
                     campaignGoal: campaignPromptData?.campaignGoal,
                     targetAudience: campaignPromptData?.targetAudience,
                     webUrl: campaignPromptData?.webUrl,
-                    // outputScale: editSection.aiPrompt?.outputScale, // Already string or null from context fetch
+                    outputScale: aiPromptAssetData?.outputScale, // Already string or null from context fetch
                     fileName:campaignPromptData?.fileName
                 }
             };
