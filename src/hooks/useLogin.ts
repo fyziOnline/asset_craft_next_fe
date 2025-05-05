@@ -62,6 +62,7 @@ export const useLogin = () => {
 
     const handleLogin = async (skipLoading = false) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
         try {
             if (email.length === 0) {
                 setErrorMessage("Email is required")

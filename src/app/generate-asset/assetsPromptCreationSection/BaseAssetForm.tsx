@@ -480,7 +480,7 @@ const BaseAssetForm = ({
   const getCurrentPath = usePathname()
 
   return (
-    <div className="pb-20">
+    <div className=" flex-1 pb-36 h-screen overflow-y-auto px-4">
       <div>
         <Accordion
           isRequire={true}
@@ -500,7 +500,7 @@ const BaseAssetForm = ({
         </Accordion>
       </div>
 
-      <div className="mt-[25px]">
+      <div className="mt-[25px]"> 
         <Accordion
           isRequire={true}
           HeaderTitle="Campaign Overview"
@@ -612,7 +612,7 @@ const BaseAssetForm = ({
         </div>
       )}
 
-      <div className="flex justify-end items-center gap-4 mt-5 pr-4 bottom-0 py-4">
+      <div className=" flex justify-end items-center gap-4 mt-5 pr-4 bottom-0 py-4">
         {isEditMode ? (
           <>
             <Button

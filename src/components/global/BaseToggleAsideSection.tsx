@@ -50,7 +50,9 @@ const BaseToggleAside: FC<BaseToggleAsideProps> = ({
             <div 
                 ref={ref} 
                 className={`bg-[#F5F5F7] pb-28 overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute ${isOpen ? 'w-full' : 'w-[0px]'}`}
-                style={{ zIndex: 10 }} // Sidebar stays above content
+                style={{
+                    right: isOpen ? '0px' : '-100%', 
+                     zIndex: 10 }} // Sidebar stays above content
             >
                 {isOpen && (
                     children
@@ -60,7 +62,10 @@ const BaseToggleAside: FC<BaseToggleAsideProps> = ({
             <div
                 onClick={toggleAside}
                 className={`absolute top-10 transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300 border-t-2 border-l-2 border-b-2`}
-                style={{ right: isOpen ? '100%' : '0px', zIndex: 20 }}
+                style={{
+                    right: isOpen ? '100%' : '0px', // Move the button off-screen when open
+                    zIndex: 20,                   
+                }}
             >
                 <svg
                     width="8"
