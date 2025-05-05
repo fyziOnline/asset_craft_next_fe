@@ -33,7 +33,7 @@ const AssetOnReviw: FC = () => {
 
     const handleClick = (item: any) => {
         router.push(`/edit-html-content?assetID=${item.assetID}`)
-        router.push(`/edit-html-content?assetID=${item.assetID}&campaignName=${item.campaignName}&projectName=${item.projectName}&assetTypeIcon=${item.assetTypeIcon}`)
+        router.push(`/edit-html-content?assetID=${item.assetID}&campaignName=${item.campaignName}&projectName=${item.projectName}&assetTypeIcon=${item.assetTypeIcon}&assetName=${item.assetName}`)
     }    
 
     return (
