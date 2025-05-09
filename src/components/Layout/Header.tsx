@@ -6,12 +6,12 @@ import Link from 'next/link'
 import Title from "../global/Title";
 import useHeader from "@/hooks/useHeader";
 import GoBackButton from "../global/GoBackButton";
+import { useAppNavigation } from "@/hooks/useAppNavigation";
 
 const Header: FC = () => {
-  const router = useRouter()
   const pathname = usePathname()
   const { getUserDetails } = useHeader()
-  const { userDetails, contextData, setContextData } = useAppData()
+  const { userDetails, contextData } = useAppData()
 
   useEffect(() => {
     if (!userDetails?.userID) {
@@ -19,19 +19,12 @@ const Header: FC = () => {
     }
   }, [userDetails?.userID]);
 
+  useAppNavigation();
+
   const searchParams = useSearchParams()
   const projectName = searchParams.get('projectName')
   const campaignName = searchParams.get('campaignName')
   const assetName = searchParams.get('assetName')
-
-  const handleReturnToPrevious = () => {
-
-    if (contextData.stepGenerate === 1) {
-      setContextData({ stepGenerate: 0 })
-    } else {
-      router.back()
-    }
-  }
 
   const getTitlePage = () => {
     if (pathname === "/generate-asset") {
@@ -79,12 +72,12 @@ const Header: FC = () => {
       <header className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] px-7 md:px-10 z-50 border-b shadow-sm">
         <div className="w-full flex justify-between items-center">
           <div className="flex flex-row items-center space-x-2">
-          <GoBackButton />
+            <GoBackButton />
             <div className="flex gap-2 pl-4">
               <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{projectName}</span>
-              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">|</span> 
+              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">|</span>
               <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{campaignName}</span>
-              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">|</span> 
+              <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">|</span>
               <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{assetName}</span>
             </div>
             <Title classNameCustom="ml-4" titleName={getTitlePage()} />
@@ -104,24 +97,7 @@ const Header: FC = () => {
       <div className="w-full flex justify-between items-center">
 
         <div className="flex flex-row items-center">
-          <div onClick={handleReturnToPrevious} className="w-[30px] h-[30px] cursor-pointer">
-            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="30" height="30" rx="15" fill="#00A881" />
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M22.5 20.9385C20.165 18.6985 18.4255 17.4275 16.7615 17.1255C15.0975 16.8235 13.531 16.771 
-                12.057 17.0135V21L6 14.4545L12.057 8V11.822C14.425 11.841 16.449 12.9355 18.1165 14.784C19.784 16.6325 
-                20.7445 18.918 22.5 20.9385Z"
-                fill="white"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                transform="translate(2, 0)"  //<!-- Moves the arrow 1px to the right -->
-              />
-            </svg>
-          </div>
-
+          <GoBackButton />
           <Title classNameCustom="ml-4" titleName={getTitlePage()} />
         </div>
 
