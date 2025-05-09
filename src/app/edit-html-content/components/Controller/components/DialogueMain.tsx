@@ -144,9 +144,6 @@ const DialogueMain: FC<DialogueMainProps> = ({
         };
     });
 
-    // console.log('selectedImageVersion', selectedImageVersion);
-    
-
     const [originalRendered, setOriginalRendered] = useState<boolean>(false);
     // const [showResizePopup, setResizePopup] = useState<boolean>(false);
 

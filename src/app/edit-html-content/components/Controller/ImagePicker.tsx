@@ -124,10 +124,6 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label, uisc
     });
   }, [library, orientationFilter, allowedOrientation, searchQuery]);
 
-  /*   useEffect(() => {
-      console.log("Filtered Media Titles:", filteredMedia.map(item => item.title));
-    }, [filteredMedia]); */
-
   const handleBack = () => {
     setOpenSelectedMediaPreview(false)
     setResizePopup(false)
