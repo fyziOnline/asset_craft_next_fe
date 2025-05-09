@@ -12,16 +12,20 @@ export const useAppNavigation = () => {
 
     // Record the current path on mount
     useEffect(() => {
+        console.log('[useAppNavigation] Current path:', pathName);
         addPath(pathName);
     }, [pathName, addPath])
 
     const navigateToPreviousPage = () => {
         const previousPath = getPreviousPath();
+        console.log('[useAppNavigation] Retrieved previous path:', previousPath);
 
         if (previousPath) {
+            console.log('[useAppNavigation] Navigating to:', previousPath);
             router.push(previousPath)
         } else {
-            router.push("/");
+            console.log('[useAppNavigation] No previous path found. Navigating to root.');
+            router.push("/dashboard");
         }
     };
 
