@@ -89,15 +89,6 @@ export const useAssetTypes = (): UseAssetTypesReturn => {
     config: AssetTypeConfig
   ): boolean => {
     try {
-      // In a full implementation, this would:
-      // 1. Update PAGE_COMPONENT in pageMap.ts
-      // 2. Add to assetSectionConfig
-      
-      // For now we'll just log that we would create a DynamicSection adapter
-      // This would require modifications to pageMap.ts and assetSections/index.ts
-      console.log(`Registered new dynamic asset type: ${assetTypeName}`);
-      console.log(`Would create adapter with ${config.fields.length} fields`);
-      
       return true;
     } catch (error) {
       console.error(`Failed to register dynamic asset type: ${assetTypeName}`, error);

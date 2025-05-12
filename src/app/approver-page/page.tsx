@@ -32,7 +32,6 @@ const Page: FC = () => {
     const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
     const versionList = useEditAssetStoreSelector.use.versionList()
     const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
-    console.log('selected Version id :',selectedVersionID);
     
     const versionSelected = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
 
