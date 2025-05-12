@@ -9,6 +9,7 @@ import { useAppData } from '@/context/AppContext'
 import TemplateSelectionContainer from '../layout/TemplateSelectionContainer'
 import TemplateGenerationSection from '../layout/TemplateGenerationSection'
 import { PageType } from '@/componentsMap/pageMap'
+import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore'
 
 type ProgressComponent = ReactNode;
 interface ProjectAssetProp {
@@ -24,10 +25,13 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
   const { contextData, setContextData } = useAppData();
-  const [progressionSteps,setProgressionSteps] = useState<0|1>(0)
+
+  const updatedProgressionStep = useGenerateAssetStoreSelector.use.updateProgressionStep()
+  const updateAssetGenerateStep = useGenerateAssetStoreSelector.use.updateAssetGenerateStep()
+  const progressionStep = useGenerateAssetStoreSelector.use.progressionStep()
 
   const handleNext = async (selectedTemplate: Template) => {
-    if (progressionSteps < total_steps) {
+    if (progressionStep < total_steps) {
       try {
         setShowLoading(true)
         if (!selectedTemplate.templateID) {
@@ -36,7 +40,8 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         }
         const res_Template = await getTemplateById(selectedTemplate.templateID)
         selectedTemplateRef.current = res_Template as Template
-        setProgressionSteps(1)
+        updatedProgressionStep('inc')
+        updateAssetGenerateStep('inc')
           setContextData({ assetGenerateStatus: 1, assetTemplateShow: false })
       } catch (error) {
         alert(ApiService.handleError(error));
@@ -63,7 +68,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
     )
   } 
 
-  return pageProgressComponents[contextData.stepGenerate]
+  return pageProgressComponents[progressionStep]
 }
 
 export default ProgressSection

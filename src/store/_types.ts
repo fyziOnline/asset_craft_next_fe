@@ -22,7 +22,9 @@ export type GenerateAssetStore = {
     aiPrompt : Record<string, any>
     templateData : Record<string,any>
     progressionStep : 0 | 1
+    assetGenerateSteps: 0 | 1 | 2 | 3 // these is the step tracking the generating process mainly used as condition to show preview
 
     // Action Properties 
     updateProgressionStep : (flag:'inc'|'dec'|'reset') => void
+    updateAssetGenerateStep : (flag:'inc'|'dec'|'reset') => void
 }

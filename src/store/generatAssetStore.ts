@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { GenerateAssetStore } from "./_types"
+import { createSelectors } from "./createStoreSelector"
 
 
 const useGenerateAssetStore = create<GenerateAssetStore>((set,get)=>({
@@ -7,9 +8,10 @@ const useGenerateAssetStore = create<GenerateAssetStore>((set,get)=>({
     aiPrompt : {},
     templateData : {},
     progressionStep : 0,
+    assetGenerateSteps : 0,
 
     // Actions
-    updateProgressionStep : (flag) => {
+    updateProgressionStep : (flag:string) => {
         set((state)=>{
             switch (flag) {
                 case 'inc' : 
@@ -22,6 +24,25 @@ const useGenerateAssetStore = create<GenerateAssetStore>((set,get)=>({
                     return state
             }
         })
+    },
+
+    updateAssetGenerateStep : (flag:string) => {
+        set((state)=>{
+            switch (flag) {
+                case 'inc' : 
+                    state.assetGenerateSteps === 1 ? state : {assetGenerateSteps : state.assetGenerateSteps + 1}
+                case 'dec' :
+                    state.assetGenerateSteps === 0 ? state : {assetGenerateSteps : state.assetGenerateSteps - 1}
+                case 'reset' : 
+                    return {assetGenerateSteps : 0}
+                default :
+                    return state
+            }
+        })
     }
 
 }))
+
+export const useGenerateAssetStoreSelector = createSelectors(useGenerateAssetStore)
+
+export default useGenerateAssetStore

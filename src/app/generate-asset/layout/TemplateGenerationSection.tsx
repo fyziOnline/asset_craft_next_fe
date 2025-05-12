@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useAppData } from '@/context/AppContext';
 import { Template } from '@/types/templates';
 import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
+import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore';
 
 interface TemplateViewerProps {
     params: {
@@ -14,6 +15,9 @@ interface TemplateViewerProps {
 
 const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const { contextData } = useAppData();
+
+    const assetGenerateSteps = useGenerateAssetStoreSelector.use.assetGenerateSteps()
+
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleSidebar = () => {
@@ -106,17 +110,17 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                     </div>
                 </div>
                 <div className="flex">
-                    {contextData.assetGenerateStatus === 1 &&
+                    {assetGenerateSteps === 1 &&
                         <div className='ml-1'> 
                             <div onClick={toggleSidebar} className='flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] relative bg-[#00b188] rounded-[10px_0px_0px_10px] mt-[20px] cursor-pointer'>
                                 <img src="/vector_right_arrow.svg" className={`relative w-[10.5px] h-[18.5px] mt-[-0.25px] mb-[-0.25px] mr-[-0.75px] transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`} alt="vector" />
                             </div>
                         </div>
                     }
-                    <div className={`bg-[#F5F5F7] h-[90vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (contextData.assetGenerateStatus === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
-                        {contextData.assetGenerateStatus === 1 && sidebarStep1()}
-                        {contextData.assetGenerateStatus === 2 && sidebarStep2()}
-                        {contextData.assetGenerateStatus === 3 && sidebarStep3()}
+                    <div className={`bg-[#F5F5F7] h-[90vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (assetGenerateSteps === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
+                        {assetGenerateSteps === 1 && sidebarStep1()}
+                        {assetGenerateSteps === 2 && sidebarStep2()}
+                        {assetGenerateSteps === 3 && sidebarStep3()}
                     </div>
                 </div>
             </div>
