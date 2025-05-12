@@ -21,4 +21,8 @@ export type EditAssetStore = {
 export type GenerateAssetStore = {
     aiPrompt : Record<string, any>
     templateData : Record<string,any>
+    progressionStep : 0 | 1
+
+    // Action Properties 
+    updateProgressionStep : (flag:'inc'|'dec'|'reset') => void
 }
