@@ -1,8 +1,8 @@
-import React from 'react';
-import Button from '@/components/global/Button';
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import StatusLegend from './StatusLegend';
+import React, { useEffect, useRef } from 'react';
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
+import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
+import Button from '@/components/global/Button';
+import StatusLegend from './StatusLegend';
 
 interface EditHeaderProps {
     isShowSave: boolean;
@@ -19,16 +19,30 @@ const EditHeader: React.FC<EditHeaderProps> = ({
 }) => {
 
     const uniquesStatusesList = useEditAssetStoreSelector.use.versionUniqueStatuses()
-    
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setShowSave(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [setShowSave])
+
     return (
         <div className='flex justify-between items-center px-14 py-4'>
             <div className='flex-1'>
                 <StatusLegend statusList={uniquesStatusesList} />
             </div>
             <div className='flex gap-4'>
-                <div className='relative w-[150px] bg-white shadow-sm rounded'>
-                    <div 
-                        onClick={() => setShowSave(!isShowSave)} 
+                <div ref={dropdownRef} className='relative w-[150px] bg-white shadow-sm rounded'>
+                    <div
+                        onClick={() => setShowSave(!isShowSave)}
                         className='flex items-center justify-between px-4 py-2 cursor-pointer'
                     >
                         <p className='text-base px-2'>Download</p>
@@ -60,11 +74,11 @@ const EditHeader: React.FC<EditHeaderProps> = ({
                     )}
                 </div>
                 <div className='h-full w-[1.5px] bg-sectionGrey'></div>
-                <Button 
-                    buttonText='Submit' 
-                    handleClick={() => setIsShowSubmitVer(true)} 
-                    showIcon={false} 
-                    customClass='px-10 py-1' 
+                <Button
+                    buttonText='Submit'
+                    handleClick={() => setIsShowSubmitVer(true)}
+                    showIcon={false}
+                    customClass='px-10 py-1'
                 />
             </div>
         </div>
