@@ -2,29 +2,38 @@
 import { FC, ReactNode } from "react"
 import MainLayout from "./MainLayout"
 import HomeLayout from "./HomeLayout"
-import { usePathname } from "next/navigation";
-import NavbarFooterLayout from "./NavbarFooterLayout";
+import { usePathname } from "next/navigation"
+import NavbarFooterLayout from "./NavbarFooterLayout"
 
-type LayoutType = "main" | "home" | "navbarFooterLayout";
+type LayoutType = "main" | "home" | "navbarFooterLayout"
 
 interface WrapperProps {
-    children: ReactNode;
-    layout?: LayoutType;
+  children: ReactNode
+  layout?: LayoutType
 }
 
 const Layout = {
-    main: MainLayout,
-    home: HomeLayout,
-    navbarFooterLayout: NavbarFooterLayout
-};
+  main: MainLayout,
+  home: HomeLayout,
+  navbarFooterLayout: NavbarFooterLayout,
+}
 
 const LayoutWrapper: FC<WrapperProps> = ({ children }) => {
-    const pathname = usePathname()
-    // const layoutType: LayoutType = ["/edit-html-content"].includes(pathname) ? "navbarFooterLayout" : pathname === "/" ? "home" : "main";
-    const layoutType: LayoutType =  pathname === "/" ? "home" : "main";
-    const WrappingLayout = Layout[layoutType];
+  const pathname = usePathname()
 
-    return <WrappingLayout>{children}</WrappingLayout>
+  let layoutType: LayoutType
+
+  if (pathname === "/") {
+    layoutType = "home"
+  } else if (pathname === "/Profile") {
+    layoutType = "navbarFooterLayout"
+  } else {
+    layoutType = "main"
+  }
+
+  const WrappingLayout = Layout[layoutType]
+
+  return <WrappingLayout>{children}</WrappingLayout>
 }
 
 export default LayoutWrapper

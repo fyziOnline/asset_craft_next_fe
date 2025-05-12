@@ -13,6 +13,7 @@ import { useAppData } from '@/context/AppContext';
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import LayoutWrapper from '@/layout/LayoutWrapper'
 import Button from '@/components/global/Button'
+import GoBackButton from '@/components/global/GoBackButton';
 
 interface LLMModel {
     modelID: string;
@@ -173,8 +174,11 @@ const ProfilePage: React.FC = () => {
 
     return (
         <LayoutWrapper layout='main'>
-            <div className='w-[80%] h-full mx-auto'>
-                <div className='flex items-baseline justify-between mb-5'>
+            <div className='w-[80%] h-full mx-auto relative'>
+                <div className='absolute -left-10 top-2'>
+                    <GoBackButton />
+                </div>
+                <div className='flex items-baseline justify-start mb-5'>
                     <h1 className="text-[30px] text-green-100 font-bold leading-normal">
                         Welcome, {userDetails?.name}
                     </h1>
@@ -227,7 +231,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                 </div>
 
-                <div className='flex flex-wrap gap-x-6 gap-y-4 mt-20'>
+                <div className='flex flex-wrap gap-x-6 gap-y-4 mt-12'>
                     <div className='flex flex-col flex-1'>
                         <label className='text-base font-light text-black' htmlFor="">Full Name</label>
                         <div className='bg-grey-100 p-1 rounded-md px-4 py-2 mt-3'>
