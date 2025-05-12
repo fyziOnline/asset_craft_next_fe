@@ -79,10 +79,10 @@ const Header: FC = () => {
   return (
     <header className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] px-7 md:px-10 z-50 border-b shadow-sm">
       <div className="w-full flex justify-between items-center">
-        <div className="flex flex-row items-center space-x-1">
+        <div className="flex flex-row items-center space-x-3">
           <GoBackButton />
           {showDetails &&
-            <div className="flex gap-2 pl-4">
+            <div className="flex items-center gap-2">
               <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{projectName}</span>
               <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">|</span>
               <span className="text-sm md:text-xl text-[#7F7F7F] leading-normal font-bold">{campaignName}</span>
