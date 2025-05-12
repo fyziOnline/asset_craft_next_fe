@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/hooks/useProfile';
 import { SignOutIcon, UserDetailsIcon } from '@/assets/icons/AppIcons';
@@ -176,7 +176,9 @@ const ProfilePage: React.FC = () => {
         <LayoutWrapper layout='main'>
             <div className='w-[80%] h-full mx-auto relative'>
                 <div className='absolute -left-10 top-2'>
-                    <GoBackButton />
+                    <Suspense fallback={null}>
+                        <GoBackButton />
+                    </Suspense>
                 </div>
                 <div className='flex items-baseline justify-start mb-5'>
                     <h1 className="text-[30px] text-green-100 font-bold leading-normal">
