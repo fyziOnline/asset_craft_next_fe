@@ -1,3 +1,4 @@
+import LoadingIndicator from "@/components/global/LoadingIndicator";
 import Footer from "@/components/Layout/Footer";
 import Header from "@/components/Layout/Header";
 import Navbar from "@/components/Layout/Navbar";
@@ -13,7 +14,7 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   
   return (
     <>
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoadingIndicator />}>
       <Header />
     </Suspense>
       <Navbar />
