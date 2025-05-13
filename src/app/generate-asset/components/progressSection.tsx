@@ -8,13 +8,14 @@ import { Template } from '@/types/templates'
 import { useAppData } from '@/context/AppContext'
 import TemplateSelectionContainer from '../layout/TemplateSelectionContainer'
 import TemplateGenerationSection from '../layout/TemplateGenerationSection'
-import { PageType } from '@/componentsMap/pageMap'
+// import { PageType } from '@/componentsMap/pageMap'
 import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore'
+import { AssetType } from '@/types/assetTypes'
 
 type ProgressComponent = ReactNode;
 interface ProjectAssetProp {
   params: {
-    type_page: PageType
+    type_page: AssetType
   }
   handleEdit?: () => void
 }
@@ -42,7 +43,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         selectedTemplateRef.current = res_Template as Template
         updatedProgressionStep('inc')
         updateAssetGenerateStep('inc')
-          setContextData({ assetGenerateStatus: 1, assetTemplateShow: false })
+          setContextData({ assetGenerateStatus: 1, assetTemplateShow: true })
       } catch (error) {
         alert(ApiService.handleError(error));
       } finally {

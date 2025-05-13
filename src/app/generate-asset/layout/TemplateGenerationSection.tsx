@@ -3,13 +3,15 @@ import React, { FC, useState } from 'react';
 import Image from 'next/image';
 import { useAppData } from '@/context/AppContext';
 import { Template } from '@/types/templates';
-import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
+// import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore';
+import AssetForm from '../assetsPromptCreationSection/AssetForm';
+import { AssetType } from '@/types/assetTypes';
 
 interface TemplateViewerProps {
     params: {
         template: Template
-        type_page: PageType
+        type_page: AssetType
     }
 }
 
@@ -17,6 +19,11 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const { contextData } = useAppData();
 
     const assetGenerateSteps = useGenerateAssetStoreSelector.use.assetGenerateSteps()
+    const progressionStep = useGenerateAssetStoreSelector.use.progressionStep()
+
+    console.log('====================================');
+    console.log('TemplateGenerationSection, progressionStep :', progressionStep);
+    console.log('====================================');
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -25,8 +32,9 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     };
 
     const renderAssetGenerateContent = () => {
-        const Component = PAGE_COMPONENT[params.type_page]
-        return Component ? <Component params={params} /> : null
+        // const Component = PAGE_COMPONENT[params.type_page]
+        return <AssetForm params= {params} />
+        // return Component ? <Component params={params} /> : null
     };
 
     const sidebarStep1 = () => {

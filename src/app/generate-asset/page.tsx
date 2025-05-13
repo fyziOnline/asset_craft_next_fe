@@ -7,7 +7,8 @@ import React, {
 } from 'react';
 import ProgressSection from "./components/progressSection"
 import { useSearchParams } from 'next/navigation';
-import { PageType } from '@/componentsMap/pageMap';
+// import { PageType } from '@/componentsMap/pageMap';
+import { AssetType } from '@/types/assetTypes';
 
 
 const GenerateAssetContent: FC = () => {
@@ -20,7 +21,7 @@ const GenerateAssetContent: FC = () => {
   return (
     <>
       <div className="overflow-x-hidden">
-        <ProgressSection params={{ type_page: assetType as PageType }} />
+        <ProgressSection params={{ type_page: assetType as AssetType }} />
       </div>
     </>
   )

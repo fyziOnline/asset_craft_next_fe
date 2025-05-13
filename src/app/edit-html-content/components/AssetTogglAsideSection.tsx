@@ -4,12 +4,13 @@ import { MdDescription } from 'react-icons/md'
 import { useAppData } from '@/context/AppContext'
 import { ApiService } from '@/lib/axios_generic'
 import { AIPromptAsset, AssetVersionProps, Template, TemplateBlocks } from '@/types/templates'
-import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap'
+// import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap'
 import { useGetTemplates } from '@/hooks/useGetTemplates'
 import { useRawAIOutput } from '@/hooks/useRawAIOutput'
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate'
 import MarkdownPopup from '@/components/global/MarkdownPopup'
 import BaseToggleAside from '@/components/global/BaseToggleAsideSection'
+import AssetForm from '@/app/generate-asset/assetsPromptCreationSection/AssetForm'
 
 // Define a type for the campaign prompt data
 interface CampaignPromptData {
@@ -180,7 +181,7 @@ const AssetToggleAside: FC<AssetToggleAsideProps> = ({
             return null
         }
 
-        const Component = PAGE_COMPONENT[templateDetails?.assetTypeName as PageType]
+        // const Component = PAGE_COMPONENT[templateDetails?.assetTypeName as PageType]
         
         const propsToPass = {
             template: templateDetails,
@@ -206,8 +207,8 @@ const AssetToggleAside: FC<AssetToggleAsideProps> = ({
         };
 
 
-        return Component ? (
-            <Component 
+        // return Component ? (
+          return  <AssetForm 
                 params={propsToPass}
                 isEditMode={isEditMode}
                 aiPromptAssetUpsert={aiPromptAssetUpsert}
@@ -215,7 +216,7 @@ const AssetToggleAside: FC<AssetToggleAsideProps> = ({
                 existingAssetDetails={existingAssetDetails}
                 setIsOpen={setIsOpen}
             />
-        ) : null
+        // ) : null
     }
 
     useEffect(() => {

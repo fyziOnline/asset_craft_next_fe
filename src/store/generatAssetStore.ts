@@ -12,10 +12,11 @@ const useGenerateAssetStore = create<GenerateAssetStore>((set,get)=>({
 
     // Actions
     updateProgressionStep : (flag:string) => {
+        const upperBound = 1
         set((state)=>{
             switch (flag) {
                 case 'inc' : 
-                    state.progressionStep === 1 ? state : {progressionStep : state.progressionStep + 1}
+                    state.progressionStep === upperBound ? state : {progressionStep : state.progressionStep + 1}
                 case 'dec' :
                     state.progressionStep === 0 ? state : {progressionStep : state.progressionStep - 1}
                 case 'reset' : 
@@ -27,10 +28,11 @@ const useGenerateAssetStore = create<GenerateAssetStore>((set,get)=>({
     },
 
     updateAssetGenerateStep : (flag:string) => {
+        const upperBound = 3
         set((state)=>{
             switch (flag) {
                 case 'inc' : 
-                    state.assetGenerateSteps === 1 ? state : {assetGenerateSteps : state.assetGenerateSteps + 1}
+                    state.assetGenerateSteps === upperBound ? state : {assetGenerateSteps : state.assetGenerateSteps + 1}
                 case 'dec' :
                     state.assetGenerateSteps === 0 ? state : {assetGenerateSteps : state.assetGenerateSteps - 1}
                 case 'reset' : 
