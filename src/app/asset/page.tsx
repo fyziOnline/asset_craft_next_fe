@@ -16,6 +16,7 @@ interface AssetClickItem {
   campaignName: string;
   campaignID?: string;
   assetTypeIcon: string;
+  assetName : string;
 }
 
 // The Asset type expected by AssetsPageLayout
@@ -62,7 +63,7 @@ const Page: FC = () => {
   const hiddenFields = ["dataItem", "assetID"]
 
   const handleClick = (item: AssetClickItem) => {
-    router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&campaignID=${item.campaignID || ''}&assetTypeIcon=${item.assetTypeIcon}`)
+    router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&campaignID=${item.campaignID || ''}&assetTypeIcon=${item.assetTypeIcon}&assetName=${item.assetName}`)
   }
 
   return (
