@@ -178,7 +178,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
       Tone: FormData?.tone || "",
       OutputScale: FormData?.outputScale || 5
     }
-    console.log("postData", postData);
 
     try {
       const response = await ApiService.post<AssetPromptResponse>(
@@ -217,7 +216,6 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
   }
 
   const uploadImage = async (FormData: FormDataProps) => {
-    console.log("FormData in uploadImage :",FormData);
     try {
       if (FormData?.fileSelected) {
         const resBase64 = await convertFileToBase64(FormData.fileSelected);

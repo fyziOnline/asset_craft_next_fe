@@ -203,8 +203,6 @@ const BaseAssetForm = ({
           throw new Error("Failed to get latest AI data for version.");
         }
 
-        console.log("Successfully fetched latest AI data for version.");
-
         const generateHtmlRes = await generateVersionHTML(assetVersionID) as any;
         const updatedVersion = await getAssetByVersionId(assetVersionID)
         const updatedVersionList: AssetVersionProps[] | any = contextData.AssetHtml.assetVersions.map(version =>
@@ -298,7 +296,6 @@ const BaseAssetForm = ({
 
   const handleInputTextChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, field: string) => {
     const value = e.target.value;
-    // console.log("value :",value);
     setIsValidUrl(false)
 
     if (field === "webUrl" && value.trim() !== '') {
@@ -320,7 +317,7 @@ const BaseAssetForm = ({
   const handleInputSectionModified = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>, index: number, trimOnBlur = false) => {
     let newValue = e.target.value;
     if (trimOnBlur) newValue = newValue.trim(); // only trims when user leaves the field
-    //console.log(newValue);
+
     setSectionsData(prevSections => {
       const newSections = [...prevSections];
       if (newSections[index]) {
@@ -370,8 +367,7 @@ const BaseAssetForm = ({
       };
 
       const getFileId = await uploadImage(formData);
-      // console.log("getFileId :",getFileId);
-      
+  
       const campaignRes = await aiPromptCampaignUpsert!(campaignPayload as FormDataProps, getFileId, existingAssetDetails.campaign_id);
 
       if (!campaignRes.isSuccess) {
@@ -480,7 +476,7 @@ const BaseAssetForm = ({
   const getCurrentPath = usePathname()
 
   return (
-    <div className="pb-20">
+    <div className=" flex-1 pb-36 h-screen overflow-y-auto px-4">
       <div>
         <Accordion
           isRequire={true}
@@ -500,7 +496,7 @@ const BaseAssetForm = ({
         </Accordion>
       </div>
 
-      <div className="mt-[25px]">
+      <div className="mt-[25px]"> 
         <Accordion
           isRequire={true}
           HeaderTitle="Campaign Overview"
@@ -612,7 +608,7 @@ const BaseAssetForm = ({
         </div>
       )}
 
-      <div className="flex justify-end items-center gap-4 mt-5 pr-4 bottom-0 py-4">
+      <div className=" flex justify-end items-center gap-4 mt-5 pr-4 bottom-0 py-4">
         {isEditMode ? (
           <>
             <Button

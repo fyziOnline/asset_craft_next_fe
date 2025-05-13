@@ -53,7 +53,6 @@ export const useEditHTMLContent = () => {
                 const params = new URLSearchParams(window.location.search);
                 assetID = params.get("assetID") as string
             }
-
             if (!assetID) {
                 return await resAssetVersion()
             }
@@ -62,7 +61,6 @@ export const useEditHTMLContent = () => {
 
             assetIDTemplateRef.current = assetID
             const res = await getAssetHTML()
-
             if (res.isSuccess) {
 
                 const AssetHtml = res as AssetHtmlProps
