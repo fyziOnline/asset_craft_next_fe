@@ -50,7 +50,8 @@ const Table: React.FC<TableProps> = ({ listItems,
 
   // Extract column names from the first item in the list
   const getListItemsHeadings = listItems.length > 0 ? Object.keys(listItems[0]).filter((item) => !hiddenFields.includes(item)) : []
-  const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
+  // const visibleHeadings = getListItemsHeadings.filter(heading => heading !== 'assetTypeIcon');
+  const visibleHeadings = tableHeadings.filter(heading => heading !== 'assetTypeIcon');
 
   useEffect(() => {
     setSortListData(listItems)
