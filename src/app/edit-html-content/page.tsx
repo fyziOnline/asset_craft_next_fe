@@ -58,7 +58,7 @@ const Page = () => {
     const [versionToDelete, setVersionToDelete] = useState<VersionToDelete | null>(null);
     const [unmatchedBlocks, setUnmatchedBlocks] = useState<string[]>([]);
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
-    const [toggleStateAsideSection,setToggleSideAsideSection] = useState<boolean>(false)
+    const [toggleStateAsideSection, setToggleSideAsideSection] = useState<boolean>(false)
 
     const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
     const versionList = useEditAssetStoreSelector.use.versionList()
@@ -67,15 +67,15 @@ const Page = () => {
 
     // const selectedVersion = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
     const selectedVersion = versionList[0] as AssetVersionProps
-    
+
     const handleDownloadFile = (fileUrl: string) => {
         const link = document.createElement('a');
         link.href = fileUrl || approvalDetails?.fileUrl || '';
         link.download = 'feedback-attachment';
         link.click();
-      };
+    };
 
-      useOverflowHidden();
+    useOverflowHidden();
     const {
         sectionEdit,
         isShowAddVer,
@@ -179,7 +179,7 @@ const Page = () => {
                     return block;
                 });
 
-                updateVersionField(selectedVersion.assetVersionID,{assetVersionBlocks:updatedBlocks})
+                updateVersionField(selectedVersion.assetVersionID, { assetVersionBlocks: updatedBlocks })
             }
         } catch (error) {
             console.error("Error toggling block visibility:", error);
@@ -331,17 +331,14 @@ const Page = () => {
                                 />
                             ) : null}
                         </div>
-                        
-                    </div>
 
-                    {/* {comments && comments.length > 0 && ( */}
-                        <FeedbackPanel
-                            comments={comments || []}
-                            isOpen={isFeedbackOpen}
-                            onClose={() => setIsFeedbackOpen(false)}
-                            onDownloadFile={handleDownloadFile}
-                        />
-{/* )} */}
+                    </div>
+                    <FeedbackPanel
+                        comments={comments || []}
+                        isOpen={isFeedbackOpen}
+                        onClose={() => setIsFeedbackOpen(false)}
+                        onDownloadFile={handleDownloadFile}
+                    />
                 </div>
                 <AssetToggleAside
                     isOpen={toggleStateAsideSection}
@@ -387,9 +384,9 @@ const Page = () => {
     return (
         <div className='overflow-hidden'>
             <Suspense fallback={<div>Loading...</div>}>
-                    <SearchParamsHandler>
-                        {(params) => renderPageContent(params)}
-                    </SearchParamsHandler>
+                <SearchParamsHandler>
+                    {(params) => renderPageContent(params)}
+                </SearchParamsHandler>
             </Suspense>
         </div>
     );

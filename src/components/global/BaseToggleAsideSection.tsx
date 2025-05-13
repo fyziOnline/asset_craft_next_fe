@@ -1,4 +1,5 @@
 'use client'
+
 import { Dispatch, FC, SetStateAction, useCallback, useRef } from 'react'
 
 interface BaseToggleAsideProps {
@@ -31,40 +32,31 @@ const BaseToggleAside: FC<BaseToggleAsideProps> = ({
 }) => {
     const internalRef = useRef<HTMLDivElement>(null)
     const ref = externalRef || internalRef
-    
+
     // Toggle sidebar open/close state
     const toggleAside = useCallback(() => {
         setIsOpen(prev => !prev)
     }, [setIsOpen])
 
-    // Calculate position for toggle button
-    const getButtonPositionStyle = () => {
-        if (toggleButtonPosition === 'top') {
-            return { top: '10px' }
-        }
-        return { top: '50%', transform: 'translateY(-50%)' }
-    }
-
     return (
         <div className={`absolute top-4 right-0 h-[70vh] ${isOpen ? 'min-w-[40vw] ' : 'w-[0px]'}`}>
-            <div 
-                ref={ref} 
+            <div
+                ref={ref}
                 className={`bg-[#F5F5F7] pb-28 overflow-y-scroll flex items-center justify-center transition-all duration-300 ease-in-out absolute ${isOpen ? 'w-full' : 'w-[0px]'}`}
                 style={{
-                    right: isOpen ? '0px' : '-100%', 
-                     zIndex: 10 }} // Sidebar stays above content
+                    right: isOpen ? '0px' : '-100%',
+                    zIndex: 40
+                }} // Sidebar stays above content
             >
-                {isOpen && (
-                    children
-                )}
+                {isOpen && children}
             </div>
-            {/* Toggle button */}
+
             <div
                 onClick={toggleAside}
                 className={`absolute top-10 transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300 border-t-2 border-l-2 border-b-2`}
                 style={{
                     right: isOpen ? '100%' : '0px', // Move the button off-screen when open
-                    zIndex: 20,                   
+                    zIndex: 20,
                 }}
             >
                 <svg
