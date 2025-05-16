@@ -14,6 +14,7 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import LayoutWrapper from '@/layout/LayoutWrapper'
 import Button from '@/components/global/Button'
 import GoBackButton from '@/components/global/GoBackButton';
+import LoadingIndicator from '@/components/global/LoadingIndicator';
 
 interface LLMModel {
     modelID: string;
@@ -176,7 +177,7 @@ const ProfilePage: React.FC = () => {
         <LayoutWrapper layout='main'>
             <div className='w-[80%] h-full mx-auto relative'>
                 <div className='absolute -left-10 top-2'>
-                    <Suspense fallback={null}>
+                    <Suspense fallback={<LoadingIndicator />}>
                         <GoBackButton />
                     </Suspense>
                 </div>

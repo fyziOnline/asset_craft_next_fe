@@ -22,6 +22,7 @@ import NotFound from '@/components/global/NotFound'
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 import FeedbackPanel from './components/FeedbackPanel';
 import AssetToggleAside from './components/AssetTogglAsideSection';
+import LoadingIndicator from '@/components/global/LoadingIndicator';
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -385,10 +386,10 @@ const Page = () => {
 
     return (
         <div className='overflow-hidden'>
-            <Suspense fallback={<div>Loading...</div>}>
-                <SearchParamsHandler>
-                    {(params) => renderPageContent(params)}
-                </SearchParamsHandler>
+            <Suspense fallback={<LoadingIndicator />}>
+                    <SearchParamsHandler>
+                        {(params) => renderPageContent(params)}
+                    </SearchParamsHandler>
             </Suspense>
         </div>
     );

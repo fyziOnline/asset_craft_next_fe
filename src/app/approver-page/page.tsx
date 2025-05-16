@@ -20,6 +20,7 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 // import { formatDate } from '@/utils/formatDate';
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 import FeedbackPanel from '../edit-html-content/components/FeedbackPanel';
+import LoadingIndicator from '@/components/global/LoadingIndicator';
 
 
 const Page: FC = () => {
@@ -212,7 +213,7 @@ const Page: FC = () => {
 
     return (
         <>
-            <Suspense>
+            <Suspense fallback={<LoadingIndicator />}>
                 <div className='overflow-hidden'>
                     {/* <div className="flex p-1 px-2">
                         <div className='flex-1'>
