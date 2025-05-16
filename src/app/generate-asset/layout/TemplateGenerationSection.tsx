@@ -19,13 +19,11 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     const { contextData } = useAppData();
 
     const assetGenerateSteps = useGenerateAssetStoreSelector.use.assetGenerateSteps()
-    const progressionStep = useGenerateAssetStoreSelector.use.progressionStep()
-
     console.log('====================================');
-    console.log('TemplateGenerationSection, progressionStep :', progressionStep);
+    console.log('assetGenerateSteps :',assetGenerateSteps);
     console.log('====================================');
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -38,6 +36,9 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     };
 
     const sidebarStep1 = () => {
+        console.log('====================================');
+        console.log('rendering sidebar content 1');
+        console.log('====================================');
 
         const content = (title: string, content: string) => {
             return (
@@ -84,6 +85,10 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     }
 
     const sidebarStep2 = () => {
+         console.log('====================================');
+        console.log('rendering sidebar content 1');
+        console.log('====================================');
+
         return (
             <div className='w-[94%] h-[94%] relative'>
                 <Image
@@ -96,13 +101,13 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
         )
     }
 
-    const sidebarStep3 = () => {
-        return (
-            <>
-                <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
-            </>
-        );
-    }
+    // const sidebarStep3 = () => {
+    //     return (
+    //         <>
+    //             <div className='pointer-events-none' dangerouslySetInnerHTML={{ __html: contextData.AssetHtml?.assetVersions?.[0]?.htmlGenerated || "" }} />
+    //         </>
+    //     );
+    // }
 
     return (
         <div className='min-h-[82vh]'>
@@ -125,10 +130,10 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             </div>
                         </div>
                     }
-                    <div className={`bg-[#F5F5F7] h-[90vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${contextData.assetTemplateShow || isOpen ? (assetGenerateSteps === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
+                    <div className={`bg-[#F5F5F7] h-[90vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${ isOpen ? (assetGenerateSteps === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
                         {assetGenerateSteps === 1 && sidebarStep1()}
                         {assetGenerateSteps === 2 && sidebarStep2()}
-                        {assetGenerateSteps === 3 && sidebarStep3()}
+                        {/* {assetGenerateSteps === 3 && sidebarStep3()} */}
                     </div>
                 </div>
             </div>

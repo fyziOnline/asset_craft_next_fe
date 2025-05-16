@@ -272,17 +272,17 @@ export const useGenerateTemplate = ({ params }: GenerateTemplateProp) => {
     FormData: FormDataProps,
     Sections: SectionProps[],
     ProjectDetails: ProjectDetails,
-    isRegenerateHTML: boolean
+    // isRegenerateHTML: boolean
   ) => {
     let campaign_id = ProjectDetails.campaignID;
     isCampaignSelect.current = campaign_id.length !== 0;
     
     try {
       // Handle HTML regeneration path
-      if (isRegenerateHTML) {
-        const result = await reGenerateHTML(FormData, Sections, campaign_id);
-        return result;
-      }
+      // if (isRegenerateHTML) {
+      //   const result = await reGenerateHTML(FormData, Sections, campaign_id);
+      //   return result;
+      // }
 
       if (campaign_id.length === 0) {
         const resAddCampaign = await addCampaign(ProjectDetails)

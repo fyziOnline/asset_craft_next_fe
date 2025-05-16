@@ -1,11 +1,9 @@
 'use client'
-import { urls } from '@/apis/urls'
 import { useLoading } from '@/components/global/Loading/LoadingContext'
 import { useGetTemplates } from '@/hooks/useGetTemplates'
 import { ApiService } from '@/lib/axios_generic'
 import { FC, ReactNode, useRef, useState } from 'react'
 import { Template } from '@/types/templates'
-import { useAppData } from '@/context/AppContext'
 import TemplateSelectionContainer from '../layout/TemplateSelectionContainer'
 import TemplateGenerationSection from '../layout/TemplateGenerationSection'
 // import { PageType } from '@/componentsMap/pageMap'
@@ -25,10 +23,8 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const { listTemplates,getTemplateById } = useGetTemplates({ type_page: params.type_page })
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
-  const { contextData, setContextData } = useAppData();
 
   const updatedProgressionStep = useGenerateAssetStoreSelector.use.updateProgressionStep()
-  const updateAssetGenerateStep = useGenerateAssetStoreSelector.use.updateAssetGenerateStep()
   const progressionStep = useGenerateAssetStoreSelector.use.progressionStep()
 
   const handleNext = async (selectedTemplate: Template) => {
@@ -42,8 +38,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         const res_Template = await getTemplateById(selectedTemplate.templateID)
         selectedTemplateRef.current = res_Template as Template
         updatedProgressionStep('inc')
-        updateAssetGenerateStep('inc')
-          setContextData({ assetGenerateStatus: 1, assetTemplateShow: true })
+          // setContextData({ assetGenerateStatus: 1, assetTemplateShow: true })
       } catch (error) {
         alert(ApiService.handleError(error));
       } finally {
