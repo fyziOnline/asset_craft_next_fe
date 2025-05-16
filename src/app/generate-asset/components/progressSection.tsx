@@ -6,7 +6,6 @@ import { FC, ReactNode, useRef, useState } from 'react'
 import { Template } from '@/types/templates'
 import TemplateSelectionContainer from '../layout/TemplateSelectionContainer'
 import TemplateGenerationSection from '../layout/TemplateGenerationSection'
-// import { PageType } from '@/componentsMap/pageMap'
 import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore'
 import { AssetType } from '@/types/assetTypes'
 

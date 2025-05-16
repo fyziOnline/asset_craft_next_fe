@@ -1,5 +1,4 @@
 import Footer from '@/components/Layout/Footer'
-import HomeHeader from '@/components/Layout/HomeHeader'
 import { FC, ReactNode } from 'react'
 
 interface LayoutProps {
