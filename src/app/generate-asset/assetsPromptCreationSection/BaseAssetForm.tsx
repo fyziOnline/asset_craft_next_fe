@@ -269,19 +269,15 @@ const BaseAssetForm = ({
           formData as FormDataProps,
           sectionsData as SectionProps[],
           projectDetails,
-          // contextData.isRegenerateHTML
         );
         setShowLoading(false);
 
         if (res?.isSuccess) {
           router.replace(
-            `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${contextData.ProjectDetails.project_name || ""}&campaignName=${contextData.ProjectDetails.campaign_name || ""}&assetTypeIcon=${assetType || ""}`
-          );
+            `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${projectDetails.project_name || ""}&campaignName=${projectDetails.campaignID || ""}&assetTypeIcon=${assetType || ""}`
+          );                    
         }
         else {
-          console.log('====================================');
-          console.log('running else ');
-          console.log('====================================');
           setGenerateStep(1);
           generationStepStatus = 'reset'
         }
