@@ -60,7 +60,7 @@ const Page = () => {
     const [versionToDelete, setVersionToDelete] = useState<VersionToDelete | null>(null);
     const [unmatchedBlocks, setUnmatchedBlocks] = useState<string[]>([]);
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
-    const [toggleStateAsideSection,setToggleSideAsideSection] = useState<boolean>(false)
+    const [toggleStateAsideSection, setToggleSideAsideSection] = useState<boolean>(false)
 
     const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
     const versionList = useEditAssetStoreSelector.use.versionList()
@@ -69,15 +69,15 @@ const Page = () => {
 
     // const selectedVersion = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
     const selectedVersion = versionList[0] as AssetVersionProps
-    
+
     const handleDownloadFile = (fileUrl: string) => {
         const link = document.createElement('a');
         link.href = fileUrl || approvalDetails?.fileUrl || '';
         link.download = 'feedback-attachment';
         link.click();
-      };
+    };
 
-      useOverflowHidden();
+    useOverflowHidden();
     const {
         sectionEdit,
         isShowAddVer,
@@ -181,7 +181,7 @@ const Page = () => {
                     return block;
                 });
 
-                updateVersionField(selectedVersion.assetVersionID,{assetVersionBlocks:updatedBlocks})
+                updateVersionField(selectedVersion.assetVersionID, { assetVersionBlocks: updatedBlocks })
             }
         } catch (error) {
             console.error("Error toggling block visibility:", error);
@@ -333,31 +333,16 @@ const Page = () => {
                                 />
                             ) : null}
                         </div>
-                        
-                    </div>
 
-                    {/* {comments && comments.length > 0 && ( */}
-                        <FeedbackPanel
-                            comments={comments || []}
-                            isOpen={isFeedbackOpen}
-                            onClose={() => setIsFeedbackOpen(false)}
-                            onDownloadFile={handleDownloadFile}
-                        />
-{/* )} */}
+                    </div>
+                    <FeedbackPanel
+                        comments={comments || []}
+                        isOpen={isFeedbackOpen}
+                        onClose={() => setIsFeedbackOpen(false)}
+                        onDownloadFile={handleDownloadFile}
+                    />
                 </div>
-                {/* <ToggleAsideSection
-                    isOpen={toggleStateAsideSection}
-                    setIsOpen={setToggleSideAsideSection}
-                    versionSelected={selectedVersion}
-                    existingAssetDetails={{
-                        project_name: project_name,
-                        campaign_name: campaign_name,
-                        asset_name: assetHTMLData.assetName,
-                        campaign_id: assetHTMLData.campaignID,
-                        asset_id: assetHTMLData.assetID
-                    }}
-                    isEditMode={true}
-                /> */}
+
                 <AssetToggleAside
                     isOpen={toggleStateAsideSection}
                     setIsOpen={setToggleSideAsideSection}

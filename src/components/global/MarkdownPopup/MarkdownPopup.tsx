@@ -100,7 +100,7 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
       <div
         ref={popupRef}
-        className="bg-white rounded-lg shadow-xl p-6 max-w-4xl w-full max-h-[90vh] flex flex-col"
+        className="bg-white rounded-lg shadow-xl p-6 max-w-4xl w-full max-h-[80vh] flex flex-col"
       >
         <div className="flex justify-between items-center mb-4 border-b pb-2">
           <h3 className="text-xl font-semibold text-gray-700">AI Request & Output</h3>

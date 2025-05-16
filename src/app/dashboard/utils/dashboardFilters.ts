@@ -77,7 +77,9 @@ const processDashboardAssets = (
     assetData: AssetData[] 
 } => {
     // Default to EMAIL if assetType is null or undefined
-    const effectiveAssetType = assetType || AssetType.EMAIL;
+    // const effectiveAssetType = assetType || AssetType.EMAIL;
+    const effectiveAssetType = assetType ?? null;
+
     
     const dashboardData: DashboardData[] = [
         { projectName: "", allProjectDate: `as of ${getCurrentDateFormatted()}`, totalAssets: 0, underReview: 0, inProgress: 0, completedAssets: 0 },
@@ -143,7 +145,7 @@ const processDashboardAssets = (
     return { updatedDashboardData, assetsDisplayTable, pendingApproval, assetData };
 };
 
-const mapAssetsByType = (assets: DashboardAsset[], type: AssetType, showApprovalFields: boolean = true) => {
+const mapAssetsByType = (assets: DashboardAsset[], type?: AssetType | null , showApprovalFields: boolean = true) => {
     const result = {
         assetData: [] as AssetData[],
         assetsDisplayTable: [] as AssetData[]
@@ -164,7 +166,9 @@ const mapAssetsByType = (assets: DashboardAsset[], type: AssetType, showApproval
         };
 
         const assetName = data.assetTypeName.toLocaleLowerCase();
-        const isAllProjects = type.toLocaleLowerCase() === 'all projects';
+        // const isAllProjects = type.toLocaleLowerCase() === 'all projects';
+        const isAllProjects = type === null || type === undefined || type.toLowerCase() === 'all projects';
+
 
         // Add approval fields only if showApprovalFields is true and not for 'all projects'
         if (showApprovalFields && !isAllProjects) {
