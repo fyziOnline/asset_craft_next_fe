@@ -6,7 +6,6 @@ import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { MdOutlineFileUpload } from "react-icons/md";
-// import { MdOutlineClose } from "react-icons/md";
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 import Button from '@/components/global/Button';
 import DragAndDrop from '@/components/global/DragAndDrop';
@@ -17,7 +16,6 @@ import FeedBackCard from '@/components/cards/FeedBackCard';
 import { PeopleIcon } from '@/assets/icons/AppIcons';
 import PopupCard from '@/components/global/Popup/PopupCard';
 import { AiOutlineCheckCircle } from "react-icons/ai";
-// import { formatDate } from '@/utils/formatDate';
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 import FeedbackPanel from '../edit-html-content/components/FeedbackPanel';
 import LoadingIndicator from '@/components/global/LoadingIndicator';
@@ -52,16 +50,11 @@ const Page: FC = () => {
     const {
         sectionEdit,
         isShowAddVer,
-        // versionSelected,
         isShowSave,
-        // isShowModelEdit,
         setShowSave,
-        // setVersionSelected,
-        // setVersionList,
         handleAddVersion,
         handleChangeTextVersion,
         handleSave,
-        // setIsShowModelEdit,
         setIsShowAddVer,
         setSectionEdit,
         handleHideBlock,

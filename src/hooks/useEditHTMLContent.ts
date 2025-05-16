@@ -47,7 +47,6 @@ export const useEditHTMLContent = () => {
     }, [])
 
     const resAssetHtml = async () => {
-        
         try {
             let assetID = ""
             if (typeof window !== "undefined") {
@@ -96,10 +95,10 @@ export const useEditHTMLContent = () => {
             const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersionID}`)
 
             if (resSelect.isSuccess) {
-                // setAssetHTMLData(resSelect)
                 setAssetHTMLFromSingleVersion(resSelect)
             }
         } catch (error) {
+            
             const apiError = ApiService.handleError(error)
             setError({
                 status: apiError.statusCode,

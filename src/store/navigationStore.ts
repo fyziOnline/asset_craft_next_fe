@@ -10,7 +10,6 @@ interface NavigationState {
 export const useNavigationStore = create<NavigationState>((set, get) => ({
     history: ['/dashboard'],
     addPath: (path: string) => {
-        console.log('[addPath] Adding path:', path);
         set((state) => {
             // Prevent adding duplicate path if it's the same as the last one
             if (state.history[state.history.length - 1] === path) {

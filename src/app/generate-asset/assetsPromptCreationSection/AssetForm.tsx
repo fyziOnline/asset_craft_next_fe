@@ -3,9 +3,10 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { AIPromptAsset, Template } from '@/types/templates';
 import { assetSectionConfig } from '@/app/generate-asset/config/assetConfig';
 import BaseAssetForm from './BaseAssetForm';
-import { PageType } from '@/componentsMap/pageMap';
+// import { PageType } from '@/componentsMap/pageMap';
 import { FormDataProps } from '@/hooks/useInputFormDataGenerate';
 import { AssetPromptResponse } from '@/types/apiResponses';
+import { AssetType } from '@/types/assetTypes';
 
 type AiPromptAssetUpsertFunc = (FormData: FormDataProps, assetID: string, promptID?: string) => Promise<AssetPromptResponse>;
 type AiPromptCampaignUpsertFunc = (FormData: FormDataProps, fileID: number, campaign_id: string) => Promise<{ isSuccess: boolean; promptID?: string }>;
@@ -17,7 +18,7 @@ interface AssetFormProps {
     project_name?: string;
     campaign_name?: string;
     asset_name?: string;
-    assetType?: PageType;
+    assetType?: AssetType;
     assetVersionID?: string;
     editContextData?: {
       topic?: string;
@@ -56,8 +57,7 @@ const AssetForm = ({
   setIsOpen
 }: AssetFormProps) => {
   // Get asset type from params or from template
-  const assetType = params.assetType || params.template?.assetTypeName as PageType;
-  
+  const assetType = params.assetType || params.template?.assetTypeName as AssetType;
   if (!assetType || !assetSectionConfig[assetType]) {
     return <div>Invalid asset type: {assetType}</div>;
   }

@@ -8,7 +8,7 @@ import ChildrenTitle from '@/components/global/ChildrenTitle';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import { useAppData } from '@/context/AppContext';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
-import { AIPromptAsset, AssetVersionProps, CampaignSelectResponse, Template } from '@/types/templates';
+import { AIPromptAsset, AssetVersionProps, CampaignSelectResponse, ProjectDetails, Template } from '@/types/templates';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { FormDataProps, SectionProps } from '@/hooks/useInputFormDataGenerate';
 import { listofcampains, ListTargetAudience } from '@/data/dataGlobal';
@@ -17,6 +17,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { AssetSectionConfig } from '@/app/generate-asset/config/assetConfig';
 import { AssetPromptResponse } from '@/types/apiResponses';
 import { ApiService } from '@/lib/axios_generic';
+import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore';
 
 export interface BaseAssetFormProps {
   params: {
@@ -93,7 +94,14 @@ const BaseAssetForm = ({
   const [isSaving, setIsSaving] = useState(false);
   const [section4Interacted, setSection4Interacted] = useState(false);
   const [isValidUrl, setIsValidUrl] = useState<boolean>(false);
-
+  const [projectDetails,setProjectDetails] = useState<ProjectDetails>({
+    project_name: "",
+    campaign_name: "",
+    asset_name: "",
+    campaignID: ""
+  })
+  
+  const updateAssetGenerateStep = useGenerateAssetStoreSelector.use.updateAssetGenerateStep()
 
   useEffect(() => {
     if (isEditMode && params.editContextData) {      
@@ -178,111 +186,111 @@ const BaseAssetForm = ({
     }
   }, [existingAssetPrompt, appendExistingAssetPromptData, isEditMode]);
 
-  const handleGenerate = useCallback(async () => {
-    if (isEditMode) {
-      if (showLoading || generateStep !== 1 || !canRegenerateInEditMode || !existingAssetDetails?.asset_id) {
-        if (!existingAssetDetails?.asset_id) {
-          console.error("Regenerate clicked but existingAssetDetails.asset_id is missing");
-          setError({ status: 400, message: "Cannot regenerate, asset details missing.", showError: true });
-        }
-        return;
+  // Separate function for regenerating in edit mode
+  const handleRegenerate = useCallback(async () => {
+    if (showLoading || generateStep !== 1 || !canRegenerateInEditMode || !existingAssetDetails?.asset_id) {
+      if (!existingAssetDetails?.asset_id) {
+        console.error("Regenerate clicked but existingAssetDetails.asset_id is missing");
+        setError({ status: 400, message: "Cannot regenerate, asset details missing.", showError: true });
       }
-
-      setShowLoading(true);
-      setGenerateStep(2);
-
-      try {
-        const assetVersionID = params.assetVersionID;
-        if (!assetVersionID) {
-          throw new Error("Asset Version ID is missing, cannot regenerate.");
-        }
-
-        const getDataRes = await getVersionDataUsingAI(assetVersionID);
-
-        if (!getDataRes?.isSuccess) {
-          throw new Error("Failed to get latest AI data for version.");
-        }
-
-        const generateHtmlRes = await generateVersionHTML(assetVersionID) as any;
-        const updatedVersion = await getAssetByVersionId(assetVersionID)
-        const updatedVersionList: AssetVersionProps[] | any = contextData.AssetHtml.assetVersions.map(version =>
-          version.assetVersionID === assetVersionID ? updatedVersion : version
-        )
-        setContextData({ AssetHtml: { ...contextData.AssetHtml, assetVersions: updatedVersionList } })
-
-        if (!generateHtmlRes?.isSuccess) {
-          throw new Error("Failed to generate HTML for version.");
-        }
-
-
-        if (setIsOpen) {
-          setIsOpen(false);
-        }
-        setGenerateStep(1);
-
-      } catch (error) {
-        console.error("Error during edit mode regeneration:", error);
-        const apiError = ApiService.handleError(error);
-        setError({
-          status: apiError.statusCode ?? 500,
-          message: apiError.message || "Failed to regenerate asset version.",
-          showError: true
-        });
-        setGenerateStep(1);
-      } finally {
-        setShowLoading(false);
-      }
-
       return;
     }
 
+    setShowLoading(true);
+    setGenerateStep(2);
+
+    try {
+      const assetVersionID = params.assetVersionID;
+      if (!assetVersionID) {
+        throw new Error("Asset Version ID is missing, cannot regenerate.");
+      }
+
+      const getDataRes = await getVersionDataUsingAI(assetVersionID);
+
+      if (!getDataRes?.isSuccess) {
+        throw new Error("Failed to get latest AI data for version.");
+      }
+
+      const generateHtmlRes = await generateVersionHTML(assetVersionID) as any;
+      const updatedVersion = await getAssetByVersionId(assetVersionID)
+      const updatedVersionList: AssetVersionProps[] | any = contextData.AssetHtml.assetVersions.map(version =>
+        version.assetVersionID === assetVersionID ? updatedVersion : version
+      )
+      setContextData({ AssetHtml: { ...contextData.AssetHtml, assetVersions: updatedVersionList } })
+
+      if (!generateHtmlRes?.isSuccess) {
+        throw new Error("Failed to generate HTML for version.");
+      }
+
+      if (setIsOpen) {
+        setIsOpen(false);
+      }
+      setGenerateStep(1);
+
+    } catch (error) {
+      console.error("Error during regeneration:", error);
+      const apiError = ApiService.handleError(error);
+      setError({
+        status: apiError.statusCode ?? 500,
+        message: apiError.message || "Failed to regenerate asset version.",
+        showError: true
+      });
+      setGenerateStep(1);
+    } finally {
+      setShowLoading(false);
+    }
+  }, [
+    showLoading, generateStep, canRegenerateInEditMode, existingAssetDetails, 
+    params.assetVersionID, getVersionDataUsingAI, generateVersionHTML, getAssetByVersionId, 
+    contextData, setContextData, setIsOpen, setError, setShowLoading
+  ]);
+
+  // Function for initial generation in create mode
+  const handleGenerate = useCallback(async () => {
     if (generateStep === 2 || !allSectionsValidForCreate) {
-      if (!allSectionsValidForCreate && !isEditMode) {
+      if (!allSectionsValidForCreate) {
         setError({ status: 400, message: "Please complete all required sections before generating.", showError: true });
       }
       return;
     }
 
     let newStep = generateStep + 1;
+    let generationStepStatus :'inc'|'reset' = 'inc'
 
     if (newStep > 3) {
       newStep = 1;
-      setContextData({ assetTemplateShow: false });
+      generationStepStatus = 'reset'
     } else {
-      setContextData({ assetTemplateShow: true });
-
       if (newStep === 2) {
-        setContextData({ assetGenerateStatus: newStep });
+        generationStepStatus = 'inc'
         setGenerateStep(newStep);
         setShowLoading(true);
         const res = await generateHTML(
           formData as FormDataProps,
           sectionsData as SectionProps[],
-          contextData.ProjectDetails,
-          contextData.isRegenerateHTML
+          projectDetails,
         );
         setShowLoading(false);
 
         if (res?.isSuccess) {
           router.replace(
-            `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${contextData.ProjectDetails.project_name || ""}&campaignName=${contextData.ProjectDetails.campaign_name || ""}&assetTypeIcon=${assetType || ""}`
-          );
+            `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${projectDetails.project_name || ""}&campaignName=${projectDetails.campaignID || ""}&assetTypeIcon=${assetType || ""}`
+          );                    
         }
         else {
           setGenerateStep(1);
-          setContextData({ assetGenerateStatus: 1, assetTemplateShow: false });
+          generationStepStatus = 'reset'
         }
 
         return;
       }
     }
-    setContextData({ assetGenerateStatus: newStep });
+    updateAssetGenerateStep(generationStepStatus)
     setGenerateStep(newStep);
   }, [
-    isEditMode, generateStep, assetIDTemplateRef, assetType, contextData,
+    generateStep, assetIDTemplateRef, assetType, contextData,
     generateHTML, router, setContextData, setShowLoading, formData, sectionsData, setError,
-    allSectionsValidForCreate, canRegenerateInEditMode, existingAssetDetails,
-    getVersionDataUsingAI, generateVersionHTML, setIsOpen, showLoading
+    allSectionsValidForCreate
   ]);
 
   const handleInputChange = useCallback((field: string, value: string | number | File | null) => {
@@ -389,11 +397,9 @@ const BaseAssetForm = ({
 
       setIsDirty(false);
 
-      // --- Call aiPromptGenerateForAsset after successful save --- 
       if (aiPromptGenerateForAsset) {
         try {
-          // Assuming assetID is available in existingAssetDetails
-          assetIDTemplateRef.current = existingAssetDetails.asset_id; // Ensure ref is set
+          assetIDTemplateRef.current = existingAssetDetails.asset_id; 
           const generateRes = await aiPromptGenerateForAsset();
           if (!generateRes?.isSuccess) {
             // Handle potential error during prompt generation if needed
@@ -419,8 +425,6 @@ const BaseAssetForm = ({
         // Fallback success message if aiPromptGenerateForAsset is somehow undefined
         setError({ message: "Changes saved successfully!", showError: true, status: 200 });
       }
-      // --- End of new call --- 
-
     } catch (error) {
       const apiError = ApiService.handleError(error);
       setError({
@@ -434,12 +438,12 @@ const BaseAssetForm = ({
     }
   }, [
     isEditMode, isDirty, isSaving, aiPromptAssetUpsert, aiPromptCampaignUpsert,
-    existingAssetDetails, formData, sectionsData, setShowLoading, setError,
+    existingAssetDetails, formData, setShowLoading, setError,
     isCampaignOverviewValid, assetSpecificSectionValid,
-    aiPromptGenerateForAsset, assetIDTemplateRef
+    aiPromptGenerateForAsset, assetIDTemplateRef, uploadImage
   ]);
 
-  const generateButtonLabel = generateStep === 1 ? "Generate" : "Regenerate";
+  // const generateButtonLabel = generateStep === 1 ? "Generate" : "Regenerate";
   // Button disabled logic based on mode and validity
   const isGenerateDisabled = showLoading || isEditMode || generateStep === 2 || !allSectionsValidForCreate;
   const isSaveDisabled = showLoading || !isEditMode || !isDirty || isSaving || !allSectionsValidForEdit;
@@ -457,10 +461,7 @@ const BaseAssetForm = ({
         }));
       setSectionsData(initialSections);
     }
-    // Reset if template disappears or mode changes to edit?
-    // else if (isEditMode || !params.template?.templatesBlocks) { 
-    //   setSectionsData([]);
-    // }
+    
   }, [isEditMode, params.template?.templatesBlocks, setSectionsData]);
 
   // Effect to set product name in create mode
@@ -486,6 +487,7 @@ const BaseAssetForm = ({
         >
           <SectionAssetDetails
             validatingTheData={handleProjectDetailsValidation}
+            updateProjectDetails={setProjectDetails}
             returnCampaignDetails={fetchExistingCampaignData}
             existingAssetMeta={{
               campaign_name: params.campaign_name || "",
@@ -613,25 +615,25 @@ const BaseAssetForm = ({
           <>
             <Button
               handleClick={handleSaveChanges}
-              disabled={isSaveDisabled && isDirty}
+              disabled={isSaveDisabled}
               customClass="px-6 py-2"
               buttonText={isSaving ? "Saving..." : "Save Changes"}
             />
-            {/* Add Generate/Regenerate button for edit mode */}
+            {/* Regenerate button for edit mode */}
             <Button
-              handleClick={handleGenerate}
-              disabled={isRegenerateDisabledInEdit && isDirty} // Use specific disable logic for edit mode regeneration
+              handleClick={handleRegenerate}
+              disabled={isRegenerateDisabledInEdit}
               customClass="px-6 py-2"
-              buttonText={"Regenerate"} // Always show Regenerate in edit mode
+              buttonText="Regenerate"
             />
           </>
         ) : (
           // Create mode only shows Generate
           <Button
             handleClick={handleGenerate}
-            disabled={isGenerateDisabled} // Use original create mode disable logic
+            disabled={isGenerateDisabled}
             customClass="px-6 py-2"
-            buttonText={generateButtonLabel}
+            buttonText="Generate"
           />
         )}
       </div>
@@ -639,4 +641,4 @@ const BaseAssetForm = ({
   );
 };
 
-export default BaseAssetForm; 
+export default BaseAssetForm;
