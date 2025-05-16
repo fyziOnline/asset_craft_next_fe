@@ -3,7 +3,6 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { AIPromptAsset, Template } from '@/types/templates';
 import { assetSectionConfig } from '@/app/generate-asset/config/assetConfig';
 import BaseAssetForm from './BaseAssetForm';
-// import { PageType } from '@/componentsMap/pageMap';
 import { FormDataProps } from '@/hooks/useInputFormDataGenerate';
 import { AssetPromptResponse } from '@/types/apiResponses';
 import { AssetType } from '@/types/assetTypes';

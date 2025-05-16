@@ -1,9 +1,7 @@
 'use client';
 import React, { FC, useState } from 'react';
 import Image from 'next/image';
-import { useAppData } from '@/context/AppContext';
 import { Template } from '@/types/templates';
-// import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore';
 import AssetForm from '../assetsPromptCreationSection/AssetForm';
 import { AssetType } from '@/types/assetTypes';
@@ -16,12 +14,8 @@ interface TemplateViewerProps {
 }
 
 const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
-    const { contextData } = useAppData();
 
     const assetGenerateSteps = useGenerateAssetStoreSelector.use.assetGenerateSteps()
-    console.log('====================================');
-    console.log('assetGenerateSteps :',assetGenerateSteps);
-    console.log('====================================');
 
     const [isOpen, setIsOpen] = useState(true);
 
@@ -36,9 +30,6 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     };
 
     const sidebarStep1 = () => {
-        console.log('====================================');
-        console.log('rendering sidebar content 1');
-        console.log('====================================');
 
         const content = (title: string, content: string) => {
             return (
@@ -85,9 +76,6 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
     }
 
     const sidebarStep2 = () => {
-         console.log('====================================');
-        console.log('rendering sidebar content 1');
-        console.log('====================================');
 
         return (
             <div className='w-[94%] h-[94%] relative'>
