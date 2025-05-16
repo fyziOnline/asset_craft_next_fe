@@ -481,7 +481,7 @@ const BaseAssetForm = ({
   const getCurrentPath = usePathname()
 
   return (
-    <div className=" flex-1 pb-36 h-screen overflow-y-auto px-4">
+    <div className=" flex-1 pb-36 px-4 h-full overflow-auto scrollbar-hide">
       <div>
         <Accordion
           isRequire={true}
@@ -502,7 +502,7 @@ const BaseAssetForm = ({
         </Accordion>
       </div>
 
-      <div className="mt-[25px]"> 
+      <div className="mt-[25px] "> 
         <Accordion
           isRequire={true}
           HeaderTitle="Campaign Overview"

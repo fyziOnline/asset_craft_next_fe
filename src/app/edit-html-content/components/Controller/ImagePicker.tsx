@@ -11,6 +11,7 @@ import ImageEditWindow from './components/image-crop-window/ImageCropWindow';
 // import { useAppData } from '@/context/AppContext';
 import SearchBox from "@/components/global/SearchBox";
 import NotFound from '@/assets/icons/NotFound';
+import LoadingIndicator from '@/components/global/LoadingIndicator';
 
 const DialogueMain = lazy(() => import('./components/DialogueMain'))
 
@@ -171,7 +172,7 @@ export const ImagePicker: FC<ImagePickerProps> = ({ value, onChange, label, uisc
             </div>
 
             {/* body of custom renderer dialogue box  */}
-            <Suspense fallback={<div className="flex-1 flex items-center justify-center">Loading...</div>}>
+            <Suspense fallback={<LoadingIndicator />}>
 
               {filteredMedia.length > 0 ? (
                 <DialogueMain

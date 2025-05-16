@@ -490,3 +490,24 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(100, 100, 100, 0.5) transparent;
 }
+
+/* Hide scrollbar completely across browsers including arrows */
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.scrollbar-hide::-webkit-scrollbar-thumb,
+.scrollbar-hide::-webkit-scrollbar-track,
+.scrollbar-hide::-webkit-scrollbar-button {
+  display: none !important;
+  background: transparent;
+  height: 0;
+  width: 0;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
