@@ -7,17 +7,23 @@ import LoadingIndicator from '@/components/global/LoadingIndicator';
 
 const ProgressSection = lazy(() => import('./components/progressSection'));
 
-export default function GenerateAssetPage() {
+function GenerateAssetContent() {
   const params = useSearchParams();
-
   const assetType = params.get('asset-type') as PageType;
 
   return (
-    <div className="overflow-x-hidden">
-      <Suspense fallback={<LoadingIndicator />}>
-        <ProgressSection params={{ type_page: assetType }} />
-      </Suspense>
-    </div>
-  )
+    <Suspense fallback={<LoadingIndicator />}>
+      <ProgressSection params={{ type_page: assetType }} />
+    </Suspense>
+  );
 }
 
+export default function GenerateAssetPage() {
+  return (
+    <div className="overflow-x-hidden">
+      <Suspense fallback={<LoadingIndicator />}>
+        <GenerateAssetContent />
+      </Suspense>
+    </div>
+  );
+}
