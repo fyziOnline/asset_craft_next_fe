@@ -17,7 +17,6 @@ import EditHeader from './components/EditHeader';
 import GlobalEditButton from './components/GlobalEditButton';
 import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer';
 import FallbackBlockControls from './components/FallbackBlockControls';
-// import ToggleAsideSection from '@/components/global/ToggleAsideSection';
 import NotFound from '@/components/global/NotFound'
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 import FeedbackPanel from './components/FeedbackPanel';
@@ -342,7 +341,6 @@ const Page = () => {
                         onDownloadFile={handleDownloadFile}
                     />
                 </div>
-
                 <AssetToggleAside
                     isOpen={toggleStateAsideSection}
                     setIsOpen={setToggleSideAsideSection}

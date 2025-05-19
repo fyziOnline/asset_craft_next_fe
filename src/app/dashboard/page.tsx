@@ -58,7 +58,6 @@ const Dashboard: FC = () => {
       stepGenerate: 0,
       AssetHtml: {} as AssetHtmlProps,
       assetGenerateStatus: 1,
-      assetTemplateShow: false
     })
   }, [])
 

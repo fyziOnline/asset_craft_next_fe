@@ -1,8 +1,8 @@
-import { FC, useEffect } from "react"
+import React, { Dispatch, FC, SetStateAction, useEffect } from "react"
 import DropDown from "../global/DropDown"
 // import InputAreaSearch from "../global/InputAreaSearch"
 import TextField from "../global/TextField"
-import { useAppData } from "@/context/AppContext"
+// import { useAppData } from "@/context/AppContext"
 import { useProjectFormData } from "@/hooks/useProjectFormData"
 import { CampaignSelectResponse, ProjectDetails } from "@/types/templates"
 // import Search from "../global/Search"
@@ -11,10 +11,11 @@ import ProgressiveDropDownSearch from "../global/ProgressiveDropDownSearch"
 type SectionAssetDetailsProps = {
   validatingTheData: (step: number,status : boolean) => void
   returnCampaignDetails: (data:CampaignSelectResponse|null) => void
+  updateProjectDetails:Dispatch<SetStateAction<ProjectDetails>>
   existingAssetMeta ?: {campaign_name:string,project_name:string,asset_name:string}
 };
 
-const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,returnCampaignDetails,existingAssetMeta }) => {
+const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,returnCampaignDetails,updateProjectDetails,existingAssetMeta }) => {
   const {
     isProductNameValid,
     handleChangeAssetDetails,
@@ -26,7 +27,7 @@ const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,ret
     onChangeAssetDetails
   } = useProjectFormData()
 
-  const { setContextData } = useAppData()
+  // const { setContextData } = useAppData()
 
   useEffect(()=>{
     if (existingAssetMeta?.project_name.length) {
@@ -51,7 +52,10 @@ const SectionAssetDetails:FC<SectionAssetDetailsProps> = ({validatingTheData,ret
   },[existingCampaignDetails])
 
   const updateContextProjectDetails = (data:ProjectDetails) => {
-    setContextData({ProjectDetails :{...data}})
+    updateProjectDetails((pre)=>{
+      return !pre ? ({...data}) : ({...pre,...data})
+    })
+    // setContextData({ProjectDetails :{...data}})
     if ( data.asset_name.length>0 && data.campaign_name.length && data.project_name.length >0 && !isAssetNameExists) {
       validatingTheData(1,true)
     } else {
