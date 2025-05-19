@@ -293,6 +293,9 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                     basePromptContent={baseRawPrompt}
                     isOpen={isMarkdownPopupOpen}
                     onClose={() => setIsMarkdownPopupOpen(false)}
+                    projectName={existingAssetDetails?.project_name ?? ''}
+                    campaignName={existingAssetDetails?.campaign_name ?? ''}
+                    assetName={existingAssetDetails?.asset_name ?? ''}
                 />
             </div>
         )

@@ -169,7 +169,7 @@ const Page = () => {
             const newStatus = currentIgnoreStatus === 0 ? 1 : 0;
 
             // Call the handler from the hook
-            handleHideBlock(blockId, currentIgnoreStatus);
+            // handleHideBlock(blockId, currentIgnoreStatus);
 
             // Update local state to provide immediate UI feedback
             if (selectedVersion?.assetVersionBlocks) {
@@ -217,7 +217,7 @@ const Page = () => {
             <FallbackBlockControls
                 blocks={selectedVersion?.assetVersionBlocks || []}
                 onEditBlock={handleEditBlock}
-                onToggleBlockVisibility={handleBlockVisibilityToggle}
+                onToggleBlockVisibility= {handleBlockVisibilityToggle}
                 unmatchedBlocks={trulyUnmatchedBlocks}
             />
         );
@@ -245,7 +245,7 @@ const Page = () => {
                         htmlContent={htmlContent}
                         blocks={selectedVersion.assetVersionBlocks}
                         onEditBlock={handleEditBlock}
-                        onToggleBlockVisibility={handleBlockVisibilityToggle}
+                        onToggleBlockVisibility= {handleBlockVisibilityToggle}
                         onUnmatchedBlocks={handleUnmatchedBlocks}
                         assetTypeIcon={assetTypeIcon}
                     />

@@ -134,18 +134,23 @@ export const useLogin = () => {
                     router.push('/dashboard');
                 } else {
                     CookieManager.clearAuthCookies(true);
-                    alert("Failed to get client information!");
+                    // alert("Failed to get client information!");
+                    setErrorMessage("Failed to get client information!");
                 }
             } else {
-                alert("OTP code is incorrect!");
+                // alert("OTP code is incorrect!");
+                setErrorMessage("OTP code is incorrect!");
             }
         } catch (error) {
-            const apiError = ApiService.handleError(error)
-            setError({
-                status: apiError.statusCode,
-                message: apiError.message,
-                showError: true
-            })
+            console.error("OTP Error:", error);
+        setErrorMessage("Please enter the correct OTP");
+            // const apiError = ApiService.handleError(error)
+            // setErrorMessage(apiError.message || "Something went wrong while verifying OTP");
+            // setError({
+            //     status: apiError.statusCode,
+            //     message: apiError.message,
+            //     showError: true
+            // })
         } finally {
             setIsVerifyingOtp(false);
         }
@@ -153,6 +158,7 @@ export const useLogin = () => {
 
     const onChangeOtp = (e: ChangeEvent<HTMLInputElement>) => {
         otpRef.current = e.target.value;
+        setErrorMessage("");
     }
 
     const handleCancelOtp = () => {
