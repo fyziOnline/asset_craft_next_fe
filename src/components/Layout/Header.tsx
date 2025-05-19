@@ -16,7 +16,15 @@ const UserSection: FC<{ showWelcome?: boolean }> = ({ showWelcome = false }) => 
     <div className="flex items-center gap-3">
       <h1 className="text-lg font-semibold text-[#00A881] tracking-wide">{text}</h1>
       <Link href="/Profile" className="cursor-pointer">
-        <UserIcon />
+        {userDetails?.fileUrl ? (
+          <img
+            src={userDetails.fileUrl}
+            alt="User"
+            className="w-8 h-8 rounded-full object-cover"
+          />
+        ) : (
+          <UserIcon />
+        )}
       </Link>
     </div>
   );
@@ -33,6 +41,12 @@ const Header: FC = () => {
       getUserDetails();
     }
   }, [userDetails?.userID]);
+
+  useEffect(() => {
+    if (userDetails) {
+      console.log("User Details from Header:", userDetails.fileUrl);
+    }
+  }, [userDetails]);
 
   useAppNavigation();
 
@@ -95,7 +109,17 @@ const Header: FC = () => {
 
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-bold text-[#00A881] tracking-wide">{userDetails?.name}</h1>
-          <Link href="/Profile" className="cursor-pointer"><UserIcon /></Link>
+          <Link href="/Profile" className="cursor-pointer">
+            {userDetails?.fileUrl ? (
+              <img
+                src={userDetails.fileUrl}
+                alt="User"
+                className="w-8 h-8 rounded-full object-cover"
+              />
+            ) : (
+              <UserIcon />
+            )}
+          </Link>
         </div>
       </div>
     </header>
