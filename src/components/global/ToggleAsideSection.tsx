@@ -1,5 +1,4 @@
 'use client';
-import PAGE_COMPONENT, { PageType } from '@/componentsMap/pageMap';
 import { useAppData } from '@/context/AppContext';
 import { useGetTemplates } from '@/hooks/useGetTemplates';
 import { useRawAIOutput } from '@/hooks/useRawAIOutput';
@@ -9,6 +8,7 @@ import { Dispatch, FC, SetStateAction, useCallback, memo, useEffect, useState } 
 import { MdDescription } from 'react-icons/md';
 import MarkdownPopup from './MarkdownPopup';
 import { useGenerateTemplate } from '@/hooks/useGenerateTemplate';
+import AssetForm from '@/app/generate-asset/assetsPromptCreationSection/AssetForm';
 
 // Define a type for the campaign prompt data
 interface CampaignPromptData {
@@ -180,7 +180,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 return null
             }
 
-            const Component = PAGE_COMPONENT[templateDetails?.assetTypeName as PageType]
             
             // ---- Log 2: Props passed to the specific asset component ----
             const propsToPass = {
@@ -206,8 +205,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                 }
             };
 
-            return Component ? (
-                <Component 
+                <AssetForm 
                     params={propsToPass}
                     isEditMode={isEditMode}
                     aiPromptAssetUpsert={aiPromptAssetUpsert}
@@ -215,7 +213,6 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
                     existingAssetDetails={existingAssetDetails}
                     setIsOpen={setIsOpen}
                 />
-            ) : null
         };
 
         useEffect(() => {
