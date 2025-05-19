@@ -112,6 +112,16 @@ export const assetLabelsConfig: Record<string, AssetSectionLabels> = {
       title: "Provide additional talking points or objection handling.",
       placeholder: "Enter key talking points, objection responses, or specific information to mention"
     }
+  },
+  [AssetType.PDF_SUMMARY]: {
+    primaryMessage: {
+      title: "What is the primary message of your PDF summary?",
+      placeholder: "Enter the main message for your PDF summary"
+    },
+    additionalInfo: {
+      title: "Provide additional information that supports the main message.",
+      placeholder: "Enter details of the asset you want to create"
+    }
   }
 };
 
@@ -134,6 +144,11 @@ export const assetSectionConfig: Record<AssetType, AssetSectionConfig> = {
   },
   [AssetType.CALL_SCRIPT]: {
     title: 'Call Script - Tone, Style, and Objections',
+    requiredFields: ['topic'],
+    component: GenericAssetSection
+  },
+  [AssetType.PDF_SUMMARY]: {
+    title: 'PDF Summary - Key Messages & Content',
     requiredFields: ['topic'],
     component: GenericAssetSection
   }
