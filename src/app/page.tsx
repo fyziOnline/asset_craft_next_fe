@@ -120,8 +120,15 @@ const Home: FC = () => {
               type="text"
               placeholder="Enter Your OTP"
               onChange={onChangeOtp}
-              className="w-[34ch] p-4 mb-4 bg-transparent text-white border border-white placeholder:text-white rounded-full outline-none text-center text-lg tracking-widest placeholder:tracking-wide focus:placeholder:text-gray-300"
+              className={`w-[34ch] p-4 mb-4 bg-transparent text-white border border-white 
+              placeholder:text-white rounded-full outline-none text-center text-lg 
+              tracking-widest placeholder:tracking-wide focus:placeholder:text-gray-300
+              w-[34ch] p-4 mb-1 bg-transparent text-white border 
+    ${errorMessage ? "border-red-500" : "border-white"} `}
             />
+            {errorMessage && (
+  <p className="text-red-500 text-sm mb-4 text-center">{errorMessage}</p>
+)}
 
             <p className="text-base text-white mb-2 tracking-wider">Didn't receive the OTP?</p>
 

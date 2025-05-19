@@ -28,9 +28,22 @@ interface MarkdownPopupProps {
   isOpen: boolean
 
   onClose: () => void
+  projectName: string
+  campaignName: string
+  assetName: string
 }
 
-const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent, basePromptContent, isOpen, onClose }) => {
+const MarkdownPopup: FC<MarkdownPopupProps> = ({
+   markdownContent, 
+   promptContent,
+    basePromptContent, 
+    isOpen,
+     onClose,
+     projectName,
+     campaignName,
+     assetName,
+
+    }) => {
   const popupRef = useRef<HTMLDivElement>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [editedBasePrompt, setEditedBasePrompt] = useState(basePromptContent || '')
@@ -103,7 +116,14 @@ const MarkdownPopup: FC<MarkdownPopupProps> = ({ markdownContent, promptContent,
         className="bg-white rounded-lg shadow-xl p-6 max-w-4xl w-full max-h-[80vh] flex flex-col"
       >
         <div className="flex justify-between items-center mb-4 border-b pb-2">
-          <h3 className="text-xl font-semibold text-gray-700">AI Request & Output</h3>
+        <div className="flex flex-col">
+    <h3 className="text-xl font-semibold text-gray-700">AI Request & Output</h3>
+    <p className="text-sm text-gray-500">
+      <span className="font-medium"></span> {projectName} &nbsp; | &nbsp;
+      <span className="font-medium"></span> {campaignName} &nbsp; | &nbsp;
+      <span className="font-medium"></span> {assetName}
+    </p>
+  </div>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 transition-colors"

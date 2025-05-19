@@ -12,7 +12,7 @@ interface ErrorPopupProps {
     message?: string;
 }
 
-const ErrorPopup: React.FC<ErrorPopupProps> = ({ title = "Error" }) => {
+const ErrorPopup: React.FC<ErrorPopupProps> = ({ title = "Error",message }) => {
     const router = useRouter();
     const { error, setError } = useAppData();
 
@@ -37,16 +37,20 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({ title = "Error" }) => {
         setError({ showError: false, status: 0, message: '' });
     }, [setError]);
 
+
     useEffect(() => {
         if (error.showError) {
             const accessToken = Cookies.get(nkey.auth_token);
-            if (!accessToken) {
-                resetError();
-                clearCookies();
-                router.push("/");
+            if (!accessToken && (error.status === 401 || error.status === 403)) {
+                setTimeout(() => {
+                    resetError();
+                    clearCookies();
+                    router.push("/");
+                }, 3000); // 3 seconds delay
             }
         }
-    }, [error.showError, clearCookies, resetError, router]);
+    }, [error.showError, error.status, clearCookies, resetError, router]);
+
 
     const handleClick = useCallback(() => {
         if (isAuthError) {
@@ -59,7 +63,39 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({ title = "Error" }) => {
         }
     }, [isAuthError, clearCookies, resetError, router]);
 
-    if (!error.showError) return null;
+     if (!error.showError) return null;
+
+
+    const getErrorMessage = () => {
+
+        if (error.message === "Network Error" || error.status === 0) {
+            return "Please check your internet connection.";
+        }
+    
+        if (error.status >= 500) {
+            return "Server glitch, please try again after some time.";
+        }
+    
+        if (error.status === 404) {
+            return "not found.";
+        }
+    
+        if (isAuthError) {
+            return "Your session has expired. Please login again.";
+        }
+    
+        return error.message || "Something went wrong. Please try again.";
+    };
+    
+
+    const getErrorTitle = () => {
+        if (isAuthError) return "Session Expired";
+        if (error.status === 404) return "Screen Not Found";
+        if (error.status >= 500) return "Server Error";
+        if (error.message === "Network Error" || error.status === 0) return "Network Error";
+        return title;
+    };
+
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-[999] overflow-hidden">
@@ -69,9 +105,9 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({ title = "Error" }) => {
                 </div>
                 <div className="flex items-center justify-center mt-4 text-2xl flex-col">
                     <p className="font-semibold tracking-wide">Whoops,</p>
-                    <p className="font-semibold tracking-wide">{errorTitle}</p>
+                    <p className="font-semibold tracking-wide">{getErrorTitle()}</p>
                 </div>
-                <p className="text-[#969696] mt-2 tracking-wide text-wrap text-center">{error.message}</p>
+                <p className="text-[#969696] mt-2 tracking-wide text-wrap text-center">{getErrorMessage()}</p>
                 <div className="flex items-center justify-center">
                     <button onClick={handleClick} className="mt-6 px-14 py-2 bg-red-600 text-white rounded-full hover:bg-red-700">
                         {buttonText}
