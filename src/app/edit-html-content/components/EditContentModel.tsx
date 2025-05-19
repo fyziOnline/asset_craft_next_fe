@@ -266,7 +266,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion }: Edit
             }
         } catch (error) {
             console.error('API Error:', ApiService.handleError(error));
-            alert(ApiService.handleError(error));
+            // alert(ApiService.handleError(error));
         } finally {
             setIsLoading(false);
             setShowLoading(false)
