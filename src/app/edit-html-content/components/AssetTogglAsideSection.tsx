@@ -247,7 +247,7 @@ const AssetToggleAside: FC<AssetToggleAsideProps> = ({
             toggleButtonColor="#00b188"
             toggleButtonSize={{ width: "25px", height: "56px" }}
         >
-            <div className='w-full px-5 pt-10 pb-5 relative overflow-y-auto'> 
+            <div className='w-full px-5 pt-10 relative overflow-y-auto h-screen'> 
                 <div className="absolute top-2 right-4">
                     <button
                         onClick={handleViewRawAIOutput}

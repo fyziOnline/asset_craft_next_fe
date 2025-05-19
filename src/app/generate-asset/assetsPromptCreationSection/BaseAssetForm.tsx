@@ -229,12 +229,12 @@ const BaseAssetForm = ({
 
     } catch (error) {
       console.error("Error during regeneration:", error);
-      const apiError = ApiService.handleError(error);
-      setError({
-        status: apiError.statusCode ?? 500,
-        message: apiError.message || "Failed to regenerate asset version.",
-        showError: true
-      });
+      // const apiError = ApiService.handleError(error);
+      // setError({
+      //   status: apiError.statusCode ?? 500,
+      //   message: apiError.message || "Failed to regenerate asset version.",
+      //   showError: true
+      // });
       setGenerateStep(1);
     } finally {
       setShowLoading(false);
