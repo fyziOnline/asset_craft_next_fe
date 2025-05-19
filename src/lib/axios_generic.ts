@@ -6,9 +6,9 @@ import { urls } from '@/apis/urls';
 // Custom error class for API errors
 class ApiError extends Error {
   status?: number;
-  data?: any;
+  data?: unknown;
 
-  constructor(message: string, status?: number, data?: any) {
+  constructor(message: string, status?: number, data?: unknown) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
@@ -37,10 +37,10 @@ interface TokenErrorResponse {
 let isRefreshing = false;
 let failedQueue: Array<{
   resolve: (token: string) => void;
-  reject: (error: any) => void;
+  reject: (error: unknown) => void;
 }> = [];
 
-const processQueue = (error: any, token: string | null = null) => {
+const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue.forEach(prom => {
     if (error) {
       prom.reject(error);
@@ -51,13 +51,19 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
+// Default timeout in milliseconds (2 minutes)
+const DEFAULT_TIMEOUT = 120000;
+
+// Extended timeout for AI operations (5 minutes)
+const EXTENDED_TIMEOUT = 300000;
+
 // Create axios instance with base configuration
 const apiClient: AxiosInstance = axios.create({
   baseURL: process.env.API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 120000, // 2 minutes
+  timeout: DEFAULT_TIMEOUT,
 });
 
 // Request interceptor for adding auth token
@@ -71,18 +77,18 @@ apiClient.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error)
 );
 
 interface ApiErrorResponse {
   message: string;
   // Add other properties if any
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Update the response interceptor
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response: AxiosResponse) => response,
   async (error: AxiosError<TokenErrorResponse>) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
     
@@ -148,7 +154,8 @@ apiClient.interceptors.response.use(
 
     // Transform axios error to custom ApiError
     if (error.response) {
-      const errorData = error.response.data as ApiErrorResponse;
+      // Cast error response data to unknown first, then to ApiErrorResponse to avoid type errors
+      const errorData = error.response.data as unknown as ApiErrorResponse;
       throw new ApiError(
         errorData.message || 'An error occurred',
         error.response.status,
@@ -162,10 +169,67 @@ apiClient.interceptors.response.use(
   }
 );
 
+// Helper method to get appropriate timeout based on URL
+const getTimeoutForRequest = (url: string, configTimeout?: number): number => {
+  if (configTimeout !== undefined) {
+    return configTimeout;
+  }
+  
+  // Use extended timeout for AI-related operations
+  if (url.includes('getDataUsingAI') || 
+      url.includes('generateMultipleVersion') || 
+      url.includes('baseRawAIPrompt')) {
+    return EXTENDED_TIMEOUT;
+  }
+  
+  return DEFAULT_TIMEOUT;
+};
+
 /**
  * Generic API service for making HTTP requests
  */
 export const ApiService = {
+  /**
+   * Internal method to handle requests with common functionality
+   * @private
+   */
+  async _request<T, D = unknown>(
+    method: 'get' | 'post' | 'put' | 'delete',
+    url: string,
+    data?: D,
+    config: AxiosRequestConfig = {}
+  ): Promise<T> {
+    try {
+      // Set appropriate timeout for this request
+      const requestConfig = {
+        ...config,
+        timeout: getTimeoutForRequest(url, config.timeout)
+      };
+      
+      let response: AxiosResponse<T>;
+      
+      switch (method) {
+        case 'get':
+          response = await apiClient.get(url, requestConfig);
+          break;
+        case 'post':
+          response = await apiClient.post(url, data, requestConfig);
+          break;
+        case 'put':
+          response = await apiClient.put(url, data, requestConfig);
+          break;
+        case 'delete':
+          response = await apiClient.delete(url, requestConfig);
+          break;
+      }
+      
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) throw error;
+      throw new ApiError('An unexpected error occurred', 500);
+    }
+  },
+
   /**
    * GET request
    */
@@ -173,47 +237,29 @@ export const ApiService = {
     url: string,
     config: AxiosRequestConfig = {}
   ): Promise<T> {
-    try {
-      const response: AxiosResponse<T> = await apiClient.get(url, config);
-      return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) throw error;
-      throw new ApiError('An unexpected error occurred', 500);
-    }
+    return this._request<T>('get', url, undefined, config);
   },
 
   /**
    * POST request
    */
-  async post<T, D = any>(
+  async post<T, D = unknown>(
     url: string,
     data?: D,
     config: AxiosRequestConfig = {}
   ): Promise<T> {
-    try {
-      const response: AxiosResponse<T> = await apiClient.post(url, data, config);
-      return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) throw error;
-      throw new ApiError('An unexpected error occurred', 500);
-    }
+    return this._request<T, D>('post', url, data, config);
   },
 
   /**
    * PUT request
    */
-  async put<T, D = any>(
+  async put<T, D = unknown>(
     url: string,
     data?: D,
     config: AxiosRequestConfig = {}
   ): Promise<T> {
-    try {
-      const response: AxiosResponse<T> = await apiClient.put(url, data, config);
-      return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) throw error;
-      throw new ApiError('An unexpected error occurred', 500);
-    }
+    return this._request<T, D>('put', url, data, config);
   },
 
   /**
@@ -223,13 +269,7 @@ export const ApiService = {
     url: string,
     config: AxiosRequestConfig = {}
   ): Promise<T> {
-    try {
-      const response: AxiosResponse<T> = await apiClient.delete(url, config);
-      return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) throw error;
-      throw new ApiError('An unexpected error occurred', 500);
-    }
+    return this._request<T>('delete', url, undefined, config);
   },
 
   /**

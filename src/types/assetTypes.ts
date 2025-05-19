@@ -6,7 +6,8 @@ export enum AssetType {
   EMAIL = 'Email',
   LINKEDIN = 'LinkedIn',
   LANDING_PAGE = 'Landing Page',
-  CALL_SCRIPT = 'Call Script'
+  CALL_SCRIPT = 'Call Script',
+  PDF_SUMMARY = 'PDF Summary'
 }
 
 /**
@@ -25,7 +26,8 @@ export function slugToAssetType(slug: string): AssetType | null {
     'email': AssetType.EMAIL,
     'linkedin': AssetType.LINKEDIN,
     'landing-page': AssetType.LANDING_PAGE,
-    'call-script': AssetType.CALL_SCRIPT
+    'call-script': AssetType.CALL_SCRIPT,
+    'pdf-summary': AssetType.PDF_SUMMARY
   };
   
   return slugMap[slug] || null;

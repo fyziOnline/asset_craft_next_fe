@@ -9,6 +9,7 @@ export const ListTypePage: Record<AssetType, string> = {
     [AssetType.LINKEDIN]: assetTypeToSlug(AssetType.LINKEDIN),
     [AssetType.CALL_SCRIPT]: assetTypeToSlug(AssetType.CALL_SCRIPT),
     [AssetType.LANDING_PAGE]: assetTypeToSlug(AssetType.LANDING_PAGE),
+    [AssetType.PDF_SUMMARY]: assetTypeToSlug(AssetType.PDF_SUMMARY),
 };
 
 export const ListTargetAudience = [
