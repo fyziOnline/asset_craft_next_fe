@@ -17,11 +17,11 @@ import EditHeader from './components/EditHeader';
 import GlobalEditButton from './components/GlobalEditButton';
 import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer';
 import FallbackBlockControls from './components/FallbackBlockControls';
-// import ToggleAsideSection from '@/components/global/ToggleAsideSection';
 import NotFound from '@/components/global/NotFound'
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 import FeedbackPanel from './components/FeedbackPanel';
 import AssetToggleAside from './components/AssetTogglAsideSection';
+import LoadingIndicator from '@/components/global/LoadingIndicator';
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -341,7 +341,6 @@ const Page = () => {
                         onDownloadFile={handleDownloadFile}
                     />
                 </div>
-
                 <AssetToggleAside
                     isOpen={toggleStateAsideSection}
                     setIsOpen={setToggleSideAsideSection}
@@ -385,10 +384,10 @@ const Page = () => {
 
     return (
         <div className='overflow-hidden'>
-            <Suspense fallback={<div>Loading...</div>}>
-                <SearchParamsHandler>
-                    {(params) => renderPageContent(params)}
-                </SearchParamsHandler>
+            <Suspense fallback={<LoadingIndicator />}>
+                    <SearchParamsHandler>
+                        {(params) => renderPageContent(params)}
+                    </SearchParamsHandler>
             </Suspense>
         </div>
     );

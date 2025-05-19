@@ -3,12 +3,12 @@ import { ApiService } from '@/lib/axios_generic';
 import { urls } from '@/apis/urls';
 import Cookies from 'js-cookie';
 import { nkey } from '@/data/keyStore';
-import { ClientAssetTypeProps } from '@/types/asset';
+import { AssetType, ClientAssetTypeProps } from '@/types/asset';
 import { useAppData } from '@/context/AppContext';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import { AssetTypeConfig } from '@/app/generate-asset/config/assetConfig';
 import { assetSectionConfig } from '@/app/generate-asset/config/assetConfig';
-import { PageType } from '@/componentsMap/pageMap';
+
 
 interface UseAssetTypesReturn {
   clientAssetTypes: ClientAssetTypeProps[];
@@ -68,7 +68,7 @@ export const useAssetTypes = (): UseAssetTypesReturn => {
   // Get config for a specific asset type
   const getAssetTypeConfig = useCallback((assetTypeName: string): AssetTypeConfig | null => {
     // Check if assetTypeName exists in the standard asset section config
-    const assetType = assetTypeName as PageType;
+    const assetType = assetTypeName as AssetType;
     
     if (assetSectionConfig[assetType]) {
       // Return the existing configuration

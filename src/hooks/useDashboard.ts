@@ -212,7 +212,7 @@ export const useDashboard = () => {
                 const resAddCampaign = await addCampaign()
                 if (!resAddCampaign) { return }
             }
-            setContextData({ isRegenerateHTML: false, stepGenerate: 0 })
+            // setContextData({ isRegenerateHTML: false, stepGenerate: 0 })
 
             // Compare with AssetType enum values where possible
             const assetTypeName = selectedButton?.assetTypeName || '';

@@ -2,15 +2,24 @@
 
 import React, {
   FC,
+  lazy,
   Suspense,
+  useEffect,
   useMemo
 } from 'react';
-import ProgressSection from "./components/progressSection"
 import { useSearchParams } from 'next/navigation';
-import { PageType } from '@/componentsMap/pageMap';
+import LoadingIndicator from '@/components/global/LoadingIndicator';
+import { AssetType } from '@/types/assetTypes';
+import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore';
 
+const ProgressSection = lazy(() => import('./components/progressSection'));
 
 const GenerateAssetContent: FC = () => {
+  const resetAssetGenerateStore = useGenerateAssetStoreSelector.use.resetAssetGenerateStore()
+  useEffect(()=>{
+    resetAssetGenerateStore()
+  },[])
+  
   const params = useSearchParams()
 
   const assetType = useMemo(() => {
@@ -20,18 +29,18 @@ const GenerateAssetContent: FC = () => {
   return (
     <>
       <div className="overflow-x-hidden">
-        <ProgressSection params={{ type_page: assetType as PageType }} />
+        <ProgressSection params={{ type_page: assetType as AssetType }} />
       </div>
     </>
   )
 }
 
-const GenerateAssetPage = () => {
+export default function GenerateAssetPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <GenerateAssetContent />
-    </Suspense>
+    <div className="overflow-x-hidden">
+      <Suspense fallback={<LoadingIndicator />}>
+        <GenerateAssetContent />
+      </Suspense>
+    </div>
   );
-};
-
-export default GenerateAssetPage
+}

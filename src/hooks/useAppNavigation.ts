@@ -14,7 +14,6 @@ export const useAppNavigation = () => {
     
     const fullUrl = searchParams.toString() ? `${pathName}?${searchParams.toString()}` : pathName;
     
-    console.log('[useAppNavigation] History:', useNavigationStore.getState().history);
     
     // Record the current path on mount
     useEffect(() => {
@@ -23,7 +22,6 @@ export const useAppNavigation = () => {
 
     const navigateToPreviousPage = () => {
         const previousPath = getPreviousPath();
-        console.log('[useAppNavigation] Retrieved previous path:', previousPath);
 
         if (previousPath) {
             router.push(previousPath)
