@@ -29,7 +29,7 @@ const useEditAssetStore = create<EditAssetStore>((set,get) => ({
         assetHTMLData: filteredResponse,
         versionList: assetVersions || [],
         versionUniqueStatuses : uniqueStatuses,
-        selectedVersionID : selectedVersionID.length ? selectedVersionID : assetVersions[0]?.assetVersionID 
+        selectedVersionID : assetVersions[0]?.assetVersionID 
       });
   },
 
