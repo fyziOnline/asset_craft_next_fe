@@ -66,8 +66,9 @@ const Page = () => {
     const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
     const updateVersionField = useEditAssetStoreSelector.use.updateVersionField()
 
-    // const selectedVersion = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
-    const selectedVersion = versionList[0] as AssetVersionProps
+    const selectedVersion = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+    
+    // const selectedVersion = versionList[0] as AssetVersionProps
 
     const handleDownloadFile = (fileUrl: string) => {
         const link = document.createElement('a');
