@@ -219,7 +219,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
             if (versionSelected && versionSelected.templateID) {
                 fetchTemplateData();
             }
-        }, [versionSelected]);
+        }, [versionSelected?.templateID]);
 
         useEffect(() => {
             if (existingAssetDetails && existingAssetDetails.asset_id) {
@@ -229,7 +229,7 @@ const ToggleAsideSection: FC<ToggleAsideSectionProps> = memo(
             if (existingAssetDetails && existingAssetDetails.campaign_id) { 
                 fetchAiPromptCampaign();
             }
-        }, [existingAssetDetails]);
+        }, [existingAssetDetails?.asset_id,existingAssetDetails?.campaign_id]);
 
         if (!versionSelected || !existingAssetDetails) {
             return null;
