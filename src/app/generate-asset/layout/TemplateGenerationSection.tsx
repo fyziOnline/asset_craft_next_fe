@@ -49,27 +49,6 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                     width="267"
                     height="360"
                 />
-                {params.type_page === 'Email' ?
-                    <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
-                        {content("Section 1: Event Overview", "Overview of essential details: title, date, location, purpose, and a CTA to attract attendees.")}
-                        {content("Section 2: Event Agenda", "Detailed event schedule: session timings, key activities, speakers, and closing plans.")}
-                        {content("Section 3: Key Benefits and Highlights", "Event value summary: main benefits, featured technologies, and the target audience.")}
-                        {content("Section 4: Partnership and Sponsorship", "Sponsor recognition: list of sponsors by level with logos and optional sponsor descriptions.")}
-                    </p> :
-                    params.type_page === 'Landing Page' ?
-                        <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
-                            {content("Section 1: Hero Section", "Headline: Generate a powerful headline that captures attention and highlights the core message. Subheading: Briefly elaborate on the core offering with a supporting statement. Call-to-Action (CTA): Clearly instruct users on what action to take.")}
-                            {content("Section 2: Feature Highlights", "Key features or benefits of the product/service.")}
-                            {content("Section 3: Closing CTA", "Closing CTA Encourage users to take the final action.")}
-                        </p> :
-                        params.type_page === 'LinkedIn' ?
-                            <p className="w-[275px] mt-[16px] [font-family:'Inter-SemiBold',Helvetica] font-normal text-black text-[11px] tracking-[0] leading-[normal]">
-                                {content("Hook/Headline & Introduction", "Create a compelling headline and brief introduction that captures attention and interest.")}
-                                {content("Main Message & Call-to-Action (CTA)", "Value Proposition and provide a clear call-to-action with event details.")}
-                                {content("Hashtags & Keywords", "Increase post visibility and SEO optimisation using relevant hashtags.")}
-                            </p> :
-                            null
-                }
                 <div className='h-7' />
             </div>
         )
