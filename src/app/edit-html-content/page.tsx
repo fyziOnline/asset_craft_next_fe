@@ -346,13 +346,13 @@ const Page = () => {
                     isOpen={toggleStateAsideSection}
                     setIsOpen={setToggleSideAsideSection}
                     versionSelected={selectedVersion}
-                    existingAssetDetails={{
+                    existingAssetDetails={useMemo(() => ({
                         project_name: project_name,
                         campaign_name: campaign_name,
                         asset_name: assetHTMLData.assetName,
                         campaign_id: assetHTMLData.campaignID,
                         asset_id: assetHTMLData.assetID
-                    }}
+                    }), [project_name, campaign_name, assetHTMLData.assetName, assetHTMLData.campaignID, assetHTMLData.assetID])}
                     isEditMode={true}
                 />
 
