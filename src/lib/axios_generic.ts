@@ -177,7 +177,7 @@ const getTimeoutForRequest = (url: string, configTimeout?: number): number => {
   
   // Use extended timeout for AI-related operations
   if (url.includes('getDataUsingAI') || 
-      url.includes('generateMultipleVersion') || 
+      url.includes('VersionUsingAI') || 
       url.includes('baseRawAIPrompt')) {
     return EXTENDED_TIMEOUT;
   }
