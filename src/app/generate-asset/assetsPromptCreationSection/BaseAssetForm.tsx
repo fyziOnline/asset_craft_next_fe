@@ -274,7 +274,7 @@ const BaseAssetForm = ({
 
         if (res?.isSuccess) {
           router.replace(
-            `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${projectDetails.project_name || ""}&campaignName=${projectDetails.campaignID || ""}&assetTypeIcon=${assetType || ""}`
+            `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${projectDetails.project_name || ""}&campaignName=${projectDetails.campaign_name || ""}&assetName=${projectDetails.asset_name || ""}&assetTypeIcon=${assetType || ""}`
           );                    
         }
         else {
