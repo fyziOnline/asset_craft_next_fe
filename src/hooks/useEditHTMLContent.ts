@@ -43,8 +43,7 @@ export const useEditHTMLContent = () => {
     const generateMissingHTML = async () => {
     // Get fresh state from store instead of stale closure
     const { versionList, selectedVersionID } = useEditAssetStore.getState();
-    console.log("loading...");
-    console.log(versionList, selectedVersionID);
+    
     
     const selectedVersion = versionList.find(v => v.assetVersionID === selectedVersionID);
     let needsGeneration = false;

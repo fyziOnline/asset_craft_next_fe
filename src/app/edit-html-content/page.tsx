@@ -1,30 +1,30 @@
 'use client';
 
-import React, { Suspense, useMemo, useState, useEffect } from 'react';
-import { formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
-import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
-import { useEditHTMLContent, 
-    // generateMissingHTML, 
-    // handleAndRefreshAfterGeneration 
-} from '@/hooks/useEditHTMLContent';
-import { useOverflowHidden } from '@/hooks/useOverflowHidden';
-import { useAssetApproval } from '@/hooks/useAssetApproval';
-import { useSearchParams } from 'next/navigation';
-import AddVersionModel from './components/AddVersionModel';
-import EditContentModel from './components/EditContentModel';
-import SubmitVersionModel from './components/SubmitVersionModel';
 import FeedBackCard from '@/components/cards/FeedBackCard';
 import ConfirmationModal from '@/components/global/ConfirmationModal';
-import VersionManager from './components/VersionManager';
+import LoadingIndicator from '@/components/global/LoadingIndicator';
+import NotFound from '@/components/global/NotFound';
+import { useAssetApproval } from '@/hooks/useAssetApproval';
+import {
+    useEditHTMLContent,
+} from '@/hooks/useEditHTMLContent';
+import { useOverflowHidden } from '@/hooks/useOverflowHidden';
+import { useEditAssetStoreSelector } from '@/store/editAssetStore';
+import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
+import { useSearchParams } from 'next/navigation';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import AddVersionModel from './components/AddVersionModel';
+import AssetToggleAside from './components/AssetTogglAsideSection';
+import EditContentModel from './components/EditContentModel';
 import EditHeader from './components/EditHeader';
-import GlobalEditButton from './components/GlobalEditButton';
 import EnhancedShadowDomContainer from './components/EnhancedShadowDomContainer';
 import FallbackBlockControls from './components/FallbackBlockControls';
-import NotFound from '@/components/global/NotFound'
-import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 import FeedbackPanel from './components/FeedbackPanel';
-import AssetToggleAside from './components/AssetTogglAsideSection';
-import LoadingIndicator from '@/components/global/LoadingIndicator';
+import GlobalEditButton from './components/GlobalEditButton';
+import { formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
+import SubmitVersionModel from './components/SubmitVersionModel';
+import VersionManager from './components/VersionManager';
+import Preloader from '../../../Preloader';
 
 // Add a new interface for the version to delete
 interface VersionToDelete {
@@ -63,6 +63,7 @@ const Page = () => {
     const [unmatchedBlocks, setUnmatchedBlocks] = useState<string[]>([]);
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
     const [toggleStateAsideSection, setToggleSideAsideSection] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState(true);
 
     const {
         sectionEdit,
@@ -94,8 +95,8 @@ const Page = () => {
     const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
     const updateVersionField = useEditAssetStoreSelector.use.updateVersionField()
 
-    const selectedVersion = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
-    
+    const selectedVersion = versionList.find(v => v.assetVersionID === selectedVersionID) as AssetVersionProps
+
     // const selectedVersion = versionList[0] as AssetVersionProps
 
     // useEffect(() => {
@@ -117,7 +118,7 @@ const Page = () => {
     };
 
     useOverflowHidden();
-    
+
 
     const {
         approvalDetails,
@@ -237,11 +238,22 @@ const Page = () => {
             <FallbackBlockControls
                 blocks={selectedVersion?.assetVersionBlocks || []}
                 onEditBlock={handleEditBlock}
-                onToggleBlockVisibility= {handleBlockVisibilityToggle}
+                onToggleBlockVisibility={handleBlockVisibilityToggle}
                 unmatchedBlocks={trulyUnmatchedBlocks}
             />
         );
     }, [unmatchedBlocks, selectedVersion?.assetVersionBlocks]);
+
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            // Simulate data fetching
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Replace with actual data fetching logic
+            setIsLoading(false);
+        };
+        fetchData();
+    }, []);
 
     // Update the renderHTMLSelect function to accept assetTypeIcon as a parameter
     const renderHTMLSelect = (assetTypeIcon: string | null) => {
@@ -261,14 +273,24 @@ const Page = () => {
                 {/* linkedin center issue fixed */}
                 <div className={`relative w-full max-w-6xl mx-auto px-4 md:px-8 flex-grow 
                 ${assetTypeIcon === 'LinkedIn' ? 'flex items-center justify-center' : ''}`}>
-                    <EnhancedShadowDomContainer
-                        htmlContent={htmlContent}
-                        blocks={selectedVersion.assetVersionBlocks}
-                        onEditBlock={handleEditBlock}
-                        onToggleBlockVisibility= {handleBlockVisibilityToggle}
-                        onUnmatchedBlocks={handleUnmatchedBlocks}
-                        assetTypeIcon={assetTypeIcon}
-                    />
+
+                     {/* Section-specific preloader container */}
+                <div className="relative min-h-[400px]">
+                    {isLoading ? (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70">
+                           <Preloader forEnhancedShadowDom/>
+                        </div>
+                    ) : (
+                        <EnhancedShadowDomContainer
+                            htmlContent={htmlContent}
+                            blocks={selectedVersion.assetVersionBlocks}
+                            onEditBlock={handleEditBlock}
+                            onToggleBlockVisibility={handleBlockVisibilityToggle}
+                            onUnmatchedBlocks={handleUnmatchedBlocks}
+                            assetTypeIcon={assetTypeIcon}
+                        />
+                    )}
+                </div>
 
                     {globalBlock && (
                         <div className="absolute top-0 left-0">
@@ -403,13 +425,14 @@ const Page = () => {
     };
 
     return (
-        <div className='overflow-hidden'>
+        <div className='overflow-hidden min-h-screen bg-white'>
             <Suspense fallback={<LoadingIndicator />}>
                     <SearchParamsHandler>
                         {(params) => renderPageContent(params)}
                     </SearchParamsHandler>
             </Suspense>
         </div>
+        
     );
 };
 
