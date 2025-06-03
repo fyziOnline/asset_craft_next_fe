@@ -56,6 +56,7 @@ const DEFAULT_TIMEOUT = 120000;
 
 // Extended timeout for AI operations (5 minutes)
 const EXTENDED_TIMEOUT = 300000;
+// const EXTENDED_TIMEOUT = 3000;
 
 // Create axios instance with base configuration
 const apiClient: AxiosInstance = axios.create({

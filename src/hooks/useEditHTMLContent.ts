@@ -30,6 +30,7 @@ export const useEditHTMLContent = () => {
     const versionList = useEditAssetStore.getState().versionList
     const assetHTMLData = useEditAssetStore.getState().assetHTMLData
     const selectedVersionID = useEditAssetStore.getState().selectedVersionID
+
     
     const setAssetHTMLData = useEditAssetStore.getState().setAssetHTMLData
     const updateVersionField = useEditAssetStore.getState().updateVersionField
@@ -39,7 +40,76 @@ export const useEditHTMLContent = () => {
     const updateUniqueStatusList = useEditAssetStore.getState().updateUniqueStatusList
     const setAssetHTMLFromSingleVersion = useEditAssetStore.getState().setAssetHTMLFromSingleVersion
     
+    const generateMissingHTML = async () => {
+    // Get fresh state from store instead of stale closure
+    const { versionList, selectedVersionID } = useEditAssetStore.getState();
+    console.log("loading...");
+    console.log(versionList, selectedVersionID);
+    
+    const selectedVersion = versionList.find(v => v.assetVersionID === selectedVersionID);
+    let needsGeneration = false;
+    const apiPromises: Promise<any>[] = [];
 
+    if (selectedVersion) {
+        for (const block of selectedVersion.assetVersionBlocks) {
+            if (
+                (!block.blockHTMLGenerated || block.blockHTMLGenerated.trim() === '') &&
+                !block.blockName.includes('_global')
+            ) {
+                needsGeneration = true;
+                break;
+            }
+        }
+    }
+
+    if (needsGeneration) {
+        versionList.forEach(version => {
+            const promise = ApiService.get(
+                `${urls.asset_generate}?assetID=${version.assetID}&assetVersionID=${version.assetVersionID}`
+            );
+            apiPromises.push(promise);
+        });
+    }
+
+    return {
+        hasPendingApiCalls: apiPromises.length > 0,
+        apiPromises,
+    };
+    };
+
+    const handleAndRefreshAfterGeneration = async (apiPromises: Promise<any>[]) => {
+        if (!apiPromises || apiPromises.length === 0) {
+            return;
+        }
+
+        const results = await Promise.allSettled(apiPromises);
+        let allSucceeded = true;
+
+        results.forEach(result => {
+            if (result.status === 'rejected') {
+                allSucceeded = false;
+                console.error("Failed to generate HTML for a version:", result.reason);
+                // Optional: Use setError to display a more user-friendly message
+                // setError({
+                //     status: (result.reason as any)?.response?.status || 500,
+                //     message: `Failed to generate HTML. Error: ${(result.reason as any)?.message || 'Unknown error'}`,
+                //     showError: true,
+                // });
+            }
+        });
+
+        if (allSucceeded) {
+            if (typeof window !== "undefined") {
+                window.location.reload();
+            }
+        } else {
+            setError({ // Using setError as per the optional instruction if any promise rejected
+                status: 500, // Generic server error status
+                message: "One or more HTML generation tasks failed. Please check the console for details and try again.",
+                showError: true,
+            });
+        }
+    };
 
     useEffect(() => {
         resAssetHtml()
@@ -47,68 +117,81 @@ export const useEditHTMLContent = () => {
     }, [])
 
     const resAssetHtml = async () => {
-        try {
-            let assetID = ""
-            if (typeof window !== "undefined") {
-                const params = new URLSearchParams(window.location.search);
-                assetID = params.get("assetID") as string
-            }
-            if (!assetID) {
-                return await resAssetVersion()
-            }
-
-            setShowLoading(true)
-
-            assetIDTemplateRef.current = assetID
-            const res = await getAssetHTML()
-            if (res.isSuccess) {
-
-                const AssetHtml = res as AssetHtmlProps
-                setAssetHTMLData(AssetHtml)
-            } else {
-                alert("An error occurred, please try again later.")
-            }
-        } catch (error) {
-            const apiError = ApiService.handleError(error)
-            setError({
-                status: apiError.statusCode,
-                message: apiError.message,
-                showError: true
-            })
-        } finally {
-            setShowLoading(false)
+    try {
+        let assetID = ""
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            assetID = params.get("assetID") as string
         }
+        if (!assetID) {
+            return await resAssetVersion()
+        }
+
+        setShowLoading(true)
+
+        assetIDTemplateRef.current = assetID
+        const res = await getAssetHTML()
+        if (res.isSuccess) {
+            const AssetHtml = res as AssetHtmlProps
+            setAssetHTMLData(AssetHtml)
+            
+            // Call HTML generation after store is populated
+            await initiateHTMLGeneration()
+        } else {
+            alert("An error occurred, please try again later.")
+        }
+    } catch (error) {
+        const apiError = ApiService.handleError(error)
+        setError({
+            status: apiError.statusCode,
+            message: apiError.message,
+            showError: true
+        })
+    } finally {
+        setShowLoading(false)
     }
+}
 
     const resAssetVersion = async () => {
-        try {
-            setShowLoading(true)
-            let assetVersionID = ""
-            let assetName = ""
-            let layoutName = ""
-            if (typeof window !== "undefined") {
-                const params = new URLSearchParams(window.location.search);
-                assetVersionID = params.get("assetVersionID") as string
-                assetName = params.get("assetName") as string
-                layoutName = params.get("layoutName") as string
-            }
-            const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersionID}`)
-
-            if (resSelect.isSuccess) {
-                setAssetHTMLFromSingleVersion(resSelect)
-            }
-        } catch (error) {
-            
-            const apiError = ApiService.handleError(error)
-            setError({
-                status: apiError.statusCode,
-                message: apiError.message,
-                showError: true
-            })
-        } finally {
-            setShowLoading(false)
+    try {
+        setShowLoading(true)
+        let assetVersionID = ""
+        let assetName = ""
+        let layoutName = ""
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            assetVersionID = params.get("assetVersionID") as string
+            assetName = params.get("assetName") as string
+            layoutName = params.get("layoutName") as string
         }
+        const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersionID}`)
+
+        if (resSelect.isSuccess) {
+            setAssetHTMLFromSingleVersion(resSelect)
+            
+            // Call HTML generation after store is populated
+            await initiateHTMLGeneration()
+        }
+    } catch (error) {
+        const apiError = ApiService.handleError(error)
+        setError({
+            status: apiError.statusCode,
+            message: apiError.message,
+            showError: true
+        })
+    } finally {
+        setShowLoading(false)
     }
+    }
+
+    const initiateHTMLGeneration = async () => {
+        
+        const { hasPendingApiCalls, apiPromises } = await generateMissingHTML();
+        if (hasPendingApiCalls) {
+            await handleAndRefreshAfterGeneration(apiPromises);
+        }
+    };
+
 
     const getListApprovers = async () => {
         try {
@@ -378,6 +461,8 @@ export const useEditHTMLContent = () => {
         editingVersionId,
         setEditingVersionId,
         handleUpdateVersionName,
+        generateMissingHTML,
+        handleAndRefreshAfterGeneration,
     };
 
 }

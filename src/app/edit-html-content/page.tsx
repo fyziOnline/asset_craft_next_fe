@@ -1,9 +1,12 @@
 'use client';
 
-import React, { Suspense, useMemo, useState } from 'react';
+import React, { Suspense, useMemo, useState, useEffect } from 'react';
 import { formatContentWithBlocks, processBlockHTML } from './components/htmlUtils';
 import { AssetBlockProps, AssetVersionProps } from '@/types/templates';
-import { useEditHTMLContent } from '@/hooks/useEditHTMLContent';
+import { useEditHTMLContent, 
+    // generateMissingHTML, 
+    // handleAndRefreshAfterGeneration 
+} from '@/hooks/useEditHTMLContent';
 import { useOverflowHidden } from '@/hooks/useOverflowHidden';
 import { useAssetApproval } from '@/hooks/useAssetApproval';
 import { useSearchParams } from 'next/navigation';
@@ -61,23 +64,6 @@ const Page = () => {
     const [isShowModelEdit, setIsShowModelEdit] = useState(false)
     const [toggleStateAsideSection, setToggleSideAsideSection] = useState<boolean>(false)
 
-    const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
-    const versionList = useEditAssetStoreSelector.use.versionList()
-    const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
-    const updateVersionField = useEditAssetStoreSelector.use.updateVersionField()
-
-    const selectedVersion = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
-    
-    // const selectedVersion = versionList[0] as AssetVersionProps
-
-    const handleDownloadFile = (fileUrl: string) => {
-        const link = document.createElement('a');
-        link.href = fileUrl || approvalDetails?.fileUrl || '';
-        link.download = 'feedback-attachment';
-        link.click();
-    };
-
-    useOverflowHidden();
     const {
         sectionEdit,
         isShowAddVer,
@@ -97,8 +83,41 @@ const Page = () => {
         handleDelete,
         editingVersionId,
         setEditingVersionId,
-        handleUpdateVersionName
+        handleUpdateVersionName,
+        generateMissingHTML,
+        handleAndRefreshAfterGeneration
     } = useEditHTMLContent();
+
+
+    const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
+    const versionList = useEditAssetStoreSelector.use.versionList()
+    const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
+    const updateVersionField = useEditAssetStoreSelector.use.updateVersionField()
+
+    const selectedVersion = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+    
+    // const selectedVersion = versionList[0] as AssetVersionProps
+
+    // useEffect(() => {
+    //     const initiateHTMLGeneration = async () => {
+    //         const { hasPendingApiCalls, apiPromises } = await generateMissingHTML();
+    //         if (hasPendingApiCalls) {
+    //             await handleAndRefreshAfterGeneration(apiPromises);
+    //         }
+    //     };
+    //     initiateHTMLGeneration();
+    // }, []);
+
+
+    const handleDownloadFile = (fileUrl: string) => {
+        const link = document.createElement('a');
+        link.href = fileUrl || approvalDetails?.fileUrl || '';
+        link.download = 'feedback-attachment';
+        link.click();
+    };
+
+    useOverflowHidden();
+    
 
     const {
         approvalDetails,
