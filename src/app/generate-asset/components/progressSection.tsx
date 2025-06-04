@@ -8,6 +8,7 @@ import TemplateSelectionContainer from '../layout/TemplateSelectionContainer'
 import TemplateGenerationSection from '../layout/TemplateGenerationSection'
 import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore'
 import { AssetType } from '@/types/assetTypes'
+import { useAppData } from '@/context/AppContext'
 
 type ProgressComponent = ReactNode;
 interface ProjectAssetProp {
@@ -19,15 +20,21 @@ interface ProjectAssetProp {
 
 const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const total_steps: number = 2
-  const { listTemplates,getTemplateById } = useGetTemplates({ type_page: params.type_page })
+  const { listTemplates, getTemplateById } = useGetTemplates({ type_page: params.type_page })
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
 
   const updatedProgressionStep = useGenerateAssetStoreSelector.use.updateProgressionStep()
   const progressionStep = useGenerateAssetStoreSelector.use.progressionStep()
 
+  const { setContextData } = useAppData()
+
   const handleNext = async (selectedTemplate: Template) => {
+    // console.log("handleNext", selectedTemplate);
+
     if (progressionStep < total_steps) {
+
+      setContextData({ stepGenerate: 1 })
       try {
         setShowLoading(true)
         if (!selectedTemplate.templateID) {
@@ -37,7 +44,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         const res_Template = await getTemplateById(selectedTemplate.templateID)
         selectedTemplateRef.current = res_Template as Template
         updatedProgressionStep('inc')
-          // setContextData({ assetGenerateStatus: 1, assetTemplateShow: true })
+        // setContextData({ assetGenerateStatus: 1, assetTemplateShow: true })
       } catch (error) {
         alert(ApiService.handleError(error));
       } finally {
@@ -61,7 +68,7 @@ const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
         }}
       />
     )
-  } 
+  }
 
   return pageProgressComponents[progressionStep]
 }

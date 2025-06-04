@@ -332,7 +332,7 @@ const ProfilePage: React.FC = () => {
                                 company: formValues.company,
                                 timeZone: formValues.timeZone,
                                 isActive: formValues.isActive,
-                                preferredLLMModelID: formValues.preferredLLMModelID
+                                preferredLLMModelID: formValues.preferredLLMModelID || undefined
                             })}
                         />
                     </div>
