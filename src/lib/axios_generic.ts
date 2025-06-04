@@ -63,7 +63,7 @@ const apiClient: AxiosInstance = axios.create({
   baseURL: process.env.API_URL,
   headers: {
     'Content-Type': 'application/json',
-  },
+  }, 
   timeout: DEFAULT_TIMEOUT,
 });
 
@@ -175,14 +175,18 @@ const getTimeoutForRequest = (url: string, configTimeout?: number): number => {
   if (configTimeout !== undefined) {
     return configTimeout;
   }
-  
-  // Use extended timeout for AI-related operations
-  if (url.includes('getDataUsingAI') || 
-      url.includes('VersionUsingAI') || 
-      url.includes('baseRawAIPrompt')) {
-    return EXTENDED_TIMEOUT;
+
+  // Disable timeout for AI-related operations
+  if (
+    url.includes('getDataUsingAI') ||
+    url.includes('VersionUsingAI') ||
+    url.includes('baseRawAIPrompt')
+  ) {
+    console.log('return timeout null');
+    
+    return 0; // No timeout
   }
-  
+
   return DEFAULT_TIMEOUT;
 };
 
