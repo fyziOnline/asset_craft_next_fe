@@ -84,8 +84,6 @@ const Page = () => {
         editingVersionId,
         setEditingVersionId,
         handleUpdateVersionName,
-        generateMissingHTML,
-        handleAndRefreshAfterGeneration
     } = useEditHTMLContent();
 
 
@@ -96,18 +94,6 @@ const Page = () => {
 
     const selectedVersion = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
     
-    // const selectedVersion = versionList[0] as AssetVersionProps
-
-    // useEffect(() => {
-    //     const initiateHTMLGeneration = async () => {
-    //         const { hasPendingApiCalls, apiPromises } = await generateMissingHTML();
-    //         if (hasPendingApiCalls) {
-    //             await handleAndRefreshAfterGeneration(apiPromises);
-    //         }
-    //     };
-    //     initiateHTMLGeneration();
-    // }, []);
-
 
     const handleDownloadFile = (fileUrl: string) => {
         const link = document.createElement('a');
