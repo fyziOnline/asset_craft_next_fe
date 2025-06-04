@@ -274,23 +274,23 @@ const Page = () => {
                 <div className={`relative w-full max-w-6xl mx-auto px-4 md:px-8 flex-grow 
                 ${assetTypeIcon === 'LinkedIn' ? 'flex items-center justify-center' : ''}`}>
 
-                     {/* Section-specific preloader container */}
-                <div className="relative min-h-[400px]">
-                    {isLoading ? (
-                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70">
-                           <Preloader forEnhancedShadowDom/>
-                        </div>
-                    ) : (
-                        <EnhancedShadowDomContainer
-                            htmlContent={htmlContent}
-                            blocks={selectedVersion.assetVersionBlocks}
-                            onEditBlock={handleEditBlock}
-                            onToggleBlockVisibility={handleBlockVisibilityToggle}
-                            onUnmatchedBlocks={handleUnmatchedBlocks}
-                            assetTypeIcon={assetTypeIcon}
-                        />
-                    )}
-                </div>
+                    {/* Section-specific preloader container */}
+                    <div className="relative min-h-screen">
+                        {isLoading ? (
+                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70">
+                                <Preloader forEnhancedShadowDom />
+                            </div>
+                        ) : (
+                            <EnhancedShadowDomContainer
+                                htmlContent={htmlContent}
+                                blocks={selectedVersion.assetVersionBlocks}
+                                onEditBlock={handleEditBlock}
+                                onToggleBlockVisibility={handleBlockVisibilityToggle}
+                                onUnmatchedBlocks={handleUnmatchedBlocks}
+                                assetTypeIcon={assetTypeIcon}
+                            />
+                        )}
+                    </div>
 
                     {globalBlock && (
                         <div className="absolute top-0 left-0">
@@ -326,33 +326,37 @@ const Page = () => {
                 </div>
 
                 <div className="min-h-[82vh] border-t border-solid">
-                    <EditHeader
-                        isShowSave={isShowSave}
-                        setShowSave={setShowSave}
-                        handleSave={handleSave}
-                        setIsShowSubmitVer={setIsShowSubmitVer}
-                    />
+                    {!isLoading && (
+                        <>
+                            <EditHeader
+                                isShowSave={isShowSave}
+                                setShowSave={setShowSave}
+                                handleSave={handleSave}
+                                setIsShowSubmitVer={setIsShowSubmitVer}
+                            />
 
-                    <div className='flex justify-between pr-16 items-center'>
-                        <VersionManager
-                            versionList={versionList}
-                            selectedVersionID={selectedVersionID}
-                            handleSave={handleSave}
-                            editingVersionId={editingVersionId}
-                            setEditingVersionId={setEditingVersionId}
-                            handleUpdateVersionName={handleUpdateVersionName}
-                            openConfirmationModal={openConfirmationModal}
-                        />
-
-                        {(comments && comments?.length > 0) && (
-                            <div>
-                                <FeedBackCard
-                                    isFeedbackOpen={isFeedbackOpen}
-                                    setIsFeedbackOpen={setIsFeedbackOpen}
+                            <div className='flex justify-between pr-16 items-center'>
+                                <VersionManager
+                                    versionList={versionList}
+                                    selectedVersionID={selectedVersionID}
+                                    handleSave={handleSave}
+                                    editingVersionId={editingVersionId}
+                                    setEditingVersionId={setEditingVersionId}
+                                    handleUpdateVersionName={handleUpdateVersionName}
+                                    openConfirmationModal={openConfirmationModal}
                                 />
+
+                                {(comments && comments?.length > 0) && (
+                                    <div>
+                                        <FeedBackCard
+                                            isFeedbackOpen={isFeedbackOpen}
+                                            setIsFeedbackOpen={setIsFeedbackOpen}
+                                        />
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
+                        </>
+                    )}
 
                     <div className="flex h-[92vh] relative border-red-500 border-solid">
                         <div className="flex flex-col bg-[#e4e4e4] flex-grow pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative mx-14">
@@ -427,12 +431,12 @@ const Page = () => {
     return (
         <div className='overflow-hidden min-h-screen bg-white'>
             <Suspense fallback={<LoadingIndicator />}>
-                    <SearchParamsHandler>
-                        {(params) => renderPageContent(params)}
-                    </SearchParamsHandler>
+                <SearchParamsHandler>
+                    {(params) => renderPageContent(params)}
+                </SearchParamsHandler>
             </Suspense>
         </div>
-        
+
     );
 };
 
