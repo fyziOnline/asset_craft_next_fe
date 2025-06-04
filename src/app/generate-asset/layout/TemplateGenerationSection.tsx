@@ -97,7 +97,7 @@ const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
                             </div>
                         </div>
                     }
-                    <div className={`bg-[#F5F5F7] h-[90vh] flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${ isOpen ? (assetGenerateSteps === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
+                    <div className={`bg-[#F5F5F7] min-h-screen flex items-center justify-center overflow-y-scroll scrollbar-hide transition-all duration-300 ease-in-out ${ isOpen ? (assetGenerateSteps === 1 ? 'w-[320px]' : 'w-[525px]') : 'w-[0px]'}`}>
                         {assetGenerateSteps === 1 && sidebarStep1()}
                         {assetGenerateSteps === 2 && sidebarStep2()}
                         {/* {assetGenerateSteps === 3 && sidebarStep3()} */}
