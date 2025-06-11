@@ -273,9 +273,14 @@ const BaseAssetForm = ({
         setShowLoading(false);
 
         if (res?.isSuccess) {
+          // router.replace(
+          //   `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${projectDetails.project_name || ""}&campaignName=${projectDetails.campaign_name || ""}&assetName=${projectDetails.asset_name || ""}&assetTypeIcon=${assetType || ""}`
+          // );         
+          
           router.replace(
-            `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${projectDetails.project_name || ""}&campaignName=${projectDetails.campaign_name || ""}&assetName=${projectDetails.asset_name || ""}&assetTypeIcon=${assetType || ""}`
-          );                    
+          `/edit-html-content?assetID=${encodeURIComponent(assetIDTemplateRef.current || "")}&projectName=${encodeURIComponent(projectDetails.project_name || "")}&campaignName=${encodeURIComponent(projectDetails.campaign_name || "")}&assetName=${encodeURIComponent(projectDetails.asset_name || "")}&assetTypeIcon=${encodeURIComponent(assetType || "")}`
+        );
+
         }
         else {
           setGenerateStep(1);

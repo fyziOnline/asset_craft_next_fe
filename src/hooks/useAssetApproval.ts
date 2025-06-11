@@ -51,6 +51,8 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
         fileName: "",
         comment: ""
     })
+    const [shouldRefetchComments, setShouldRefetchComments] = useState<boolean>(false)
+
 
     type Comment = {
         comment: string;
@@ -66,11 +68,15 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
         if (assetData.assetVersionID) {
             init_hook()
         }
-    }, [assetData.assetVersionID])
+    }, [assetData.assetVersionID, shouldRefetchComments])
 
     const init_hook = async () => {
         if (assetData.versionStatus === STATUS.ON_REVIEW || assetData.versionStatus === STATUS.IN_PROGRESS) {
             await getApprovalDetails()
+        }
+
+        if (shouldRefetchComments) {
+            setShouldRefetchComments(false)
         }
     }
 
@@ -124,6 +130,7 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
                 setApprovalDetails(initStateApprovalDetails)
                 setComments(null)
             }
+            
         } catch (error) {
             const apiError = ApiService.handleError(error)
             setIsReAssignSuccessFull(false)
@@ -145,10 +152,19 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
             setCanReassign(false)
 
             const resRemoteFileUpload = await uploadReAssignFile(approvalDetails)
-            if(!resRemoteFileUpload?.status) {
+            console.log('resRemoteFileUpload', resRemoteFileUpload);
+
+            if (!resRemoteFileUpload?.status) {
                 throw new ApiError('Uploading file failed', 500, {});
             }
-            
+
+            setReAssignAssetDetails({
+                fileInBase64: "",
+                fileName: "",
+                comment: ""
+            })
+
+            setIsReAssignSuccessFull(true)
         }
         catch (error) {
             const apiError = ApiService.handleError(error)
@@ -175,6 +191,7 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
                 "comments": reAssignAssetDetails.comment
             })
             if (res_updateAssetReAssignComment.isSuccess) {
+                setShouldRefetchComments(true)
                 return { status: true }
             }
             if (res_updateAssetReAssignComment.errorOnFailure.length > 0) {

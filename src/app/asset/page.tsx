@@ -63,7 +63,19 @@ const Page: FC = () => {
   const hiddenFields = ["dataItem", "assetID"]
 
   const handleClick = (item: AssetClickItem) => {
-    router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&campaignID=${item.campaignID || ''}&assetTypeIcon=${item.assetTypeIcon}&assetName=${item.assetName}`)
+    // router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&campaignID=${item.campaignID || ''}&assetTypeIcon=${item.assetTypeIcon}&assetName=${item.assetName}`)
+
+    const params = new URLSearchParams({
+      assetID: item.assetID,
+      status: item.currentStatus,
+      projectName: item.projectName,
+      campaignName: item.campaignName,
+      campaignID: item.campaignID || '',
+      assetTypeIcon: item.assetTypeIcon,
+      assetName: item.assetName
+    })
+
+    router.push(`/edit-html-content?${params.toString()}`)
   }
 
   return (

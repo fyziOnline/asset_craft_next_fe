@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
             component: <LuFolderSearch size={22} />,
             id: 'asset-under'
         },
-        ...(userRole === 'Approver'
+        ...(userRole === 'Approver' || userRole === 'Admin'
             ? [
                 {
                     label: 'Assets to Approve',
