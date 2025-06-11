@@ -19,32 +19,36 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 import FeedbackPanel from '../edit-html-content/components/FeedbackPanel';
 import LoadingIndicator from '@/components/global/LoadingIndicator';
+import { useAppData } from '@/context/AppContext';
 
 
 const Page: FC = () => {
     const [showUploadPopup, setShowUploadPopup] = useState(false);
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false); // State to toggle feedback visibility
-    
+
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-    const [isShowModelEdit,setIsShowModelEdit] = useState<boolean>(false)
+    const [isShowModelEdit, setIsShowModelEdit] = useState<boolean>(false)
 
     const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
     const versionList = useEditAssetStoreSelector.use.versionList()
     const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
-    
-    const versionSelected = versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+
+    const versionSelected = versionList.find(v => v.assetVersionID === selectedVersionID) as AssetVersionProps
 
     const handleDownloadFile = (fileUrl: string) => {
         const link = document.createElement('a');
         link.href = fileUrl || approvalDetails?.fileUrl || '';
         link.download = 'feedback-attachment';
         link.click();
-      };
+    };
 
     const handleShowPopUp = () => {
         setShowUploadPopup((prev) => !prev)
         setIsReAssignSuccessFull(false)
     }
+
+    const { userDetails } = useAppData()
+    const userId = userDetails?.userID
 
     useOverflowHidden()
     const {
@@ -268,7 +272,10 @@ const Page: FC = () => {
                                     </div>
                                     <div className='h-full w-[1.5px] bg-sectionGrey'></div>
                                     <Button handleClick={handleShowPopUp} buttonText='Upload' showIcon={false} iconComponentEnd={<MdOutlineFileUpload size={22} />} customClass='px-10 py-1 border border-green-300' backgroundColor='bg-transparent' textColor='text-green-300' textStyle="font-semibold" />
-                                    <Button buttonText='Approve' handleClick={approveAsset} showIcon={false} customClass='px-10 py-1' />
+                                    {
+                                        approvalDetails.approverID === userId &&
+                                        <Button buttonText='Approve' handleClick={approveAsset} showIcon={false} customClass='px-10 py-1' />
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -316,10 +323,10 @@ const Page: FC = () => {
                             </div>
 
                             {/* Feedback Panel */}
-                            <FeedbackPanel 
+                            <FeedbackPanel
                                 comments={comments || []}
-                                isOpen ={isFeedbackOpen}
-                                onClose={()=>setIsFeedbackOpen(false)}
+                                isOpen={isFeedbackOpen}
+                                onClose={() => setIsFeedbackOpen(false)}
                                 onDownloadFile={handleDownloadFile}
                             />
                             {/* {isFeedbackOpen && (

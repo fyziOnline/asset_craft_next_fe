@@ -120,7 +120,18 @@ const Dashboard: FC = () => {
                 <Table
                   hiddenFields={["assetID"]}
                   handleClick={(item) => {
-                    router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&assetTypeIcon=${item.assetTypeIcon}&assetName=${item.assetName}`)
+                    // router.push(`/edit-html-content?assetID=${item.assetID}&status=${item.currentStatus}&projectName=${item.projectName}&campaignName=${item.campaignName}&assetTypeIcon=${item.assetTypeIcon}&assetName=${item.assetName}`)
+
+                    const params = new URLSearchParams({
+                      assetID: item.assetID,
+                      status: item.currentStatus,
+                      projectName: item.projectName,
+                      campaignName: item.campaignName,
+                      assetTypeIcon: item.assetTypeIcon,
+                      assetName: item.assetName
+                    })
+
+                    router.push(`/edit-html-content?${params.toString()}`)
                   }}
                   listItems={assetsDisplayTable}
                   tableHeadings={tableHeading}
@@ -148,7 +159,17 @@ const Dashboard: FC = () => {
                         setActiveIndex(index); // Set the active index to apply the scale effect
                         setTimeout(() => setActiveIndex(null), 500); // Reset after 500ms
 
-                        router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`)
+                        // router.push(`/approver-page?assetVersionID=${data.assetVersionID}&assetName=${data.assetName}&layoutName=${data.assetTypeName}&status=${data.status}&campaignName=${data.campaignName}&projectName=${data.projectName}`)
+                        const params = new URLSearchParams({
+                          assetVersionID: data.assetVersionID,
+                          assetName: data.assetName,
+                          layoutName: data.assetTypeName,
+                          status: data.status,
+                          campaignName: data.campaignName,
+                          projectName: data.projectName
+                        })
+
+                        router.push(`/approver-page?${params.toString()}`)
                       }}
                       key={index} className={`rounded-[15px] border p-3 mt-2 cursor-pointer transition-all duration-300 ease-in-out
                       ${activeIndex === index ? ' scale-[.98] bg-green-50 border-green-100' : 'scale-100'}
