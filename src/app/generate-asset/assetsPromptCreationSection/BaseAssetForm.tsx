@@ -94,6 +94,8 @@ const BaseAssetForm = ({
   const [isSaving, setIsSaving] = useState(false);
   const [section4Interacted, setSection4Interacted] = useState(false);
   const [isValidUrl, setIsValidUrl] = useState<boolean>(false);
+  const [isSaveSuccessful, setIsSaveSuccessful] = useState(false);
+const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
   const [projectDetails,setProjectDetails] = useState<ProjectDetails>({
     project_name: "",
     campaign_name: "",
@@ -222,6 +224,8 @@ const BaseAssetForm = ({
         throw new Error("Failed to generate HTML for version.");
       }
 
+        setIsRegenerateSuccessful(true); 
+
       if (setIsOpen) {
         setIsOpen(false);
       }
@@ -235,6 +239,7 @@ const BaseAssetForm = ({
       //   message: apiError.message || "Failed to regenerate asset version.",
       //   showError: true
       // });
+       setIsRegenerateSuccessful(false); 
       setGenerateStep(1);
     } finally {
       setShowLoading(false);
@@ -300,11 +305,13 @@ const BaseAssetForm = ({
 
   const handleInputChange = useCallback((field: string, value: string | number | File | null) => {
     const trimmedValue = typeof value === 'string' ? value.trim() : value;
+     console.log(`DropDown changed: field=${field}, value=${value}`);
     setFormData(prev => ({
       ...prev,
       [field]: trimmedValue
     }));
-    if (isEditMode) setIsDirty(true);
+    // if (isEditMode) setIsDirty(true);
+    setIsDirty(false);
   }, [isEditMode]);
 
   const handleInputTextChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, field: string) => {
@@ -338,7 +345,8 @@ const BaseAssetForm = ({
       }
       return newSections;
     });
-    if (isEditMode) setIsDirty(true);
+    // if (isEditMode) setIsDirty(true);
+      setIsDirty(false);
   }, [isEditMode, setSectionsData]);
 
   const handleValidationChange = useCallback((isValid: boolean) => {
@@ -360,7 +368,7 @@ const BaseAssetForm = ({
   }, [section4Interacted]); // Add dependency
 
   const handleSaveChanges = useCallback(async () => {
-    if (!isEditMode || !isDirty || isSaving || !aiPromptAssetUpsert || !aiPromptCampaignUpsert || !existingAssetDetails) {
+    if (!isEditMode || isDirty || isSaving || !aiPromptAssetUpsert || !aiPromptCampaignUpsert || !existingAssetDetails) {
       return;
     }
 
@@ -400,7 +408,8 @@ const BaseAssetForm = ({
         throw new Error("Failed to save asset prompt details.");
       }
 
-      setIsDirty(false);
+       setIsDirty(true);
+      setIsSaveSuccessful(true);
 
       if (aiPromptGenerateForAsset) {
         try {
@@ -451,9 +460,9 @@ const BaseAssetForm = ({
   // const generateButtonLabel = generateStep === 1 ? "Generate" : "Regenerate";
   // Button disabled logic based on mode and validity
   const isGenerateDisabled = showLoading || isEditMode || generateStep === 2 || !allSectionsValidForCreate;
-  const isSaveDisabled = showLoading || !isEditMode || !isDirty || isSaving || !allSectionsValidForEdit;
+  const isSaveDisabled = showLoading || !isEditMode || isDirty || isSaving || !allSectionsValidForEdit;
   // Disable Regenerate in Edit mode if sections aren't valid or already generating
-  const isRegenerateDisabledInEdit = showLoading || generateStep === 2 || !canRegenerateInEditMode;
+  const isRegenerateDisabledInEdit = showLoading || generateStep === 2 || !canRegenerateInEditMode || isDirty || !isRegenerateSuccessful;
 
   // Effect to initialize sectionsData in CREATE mode
   useEffect(() => {
@@ -627,7 +636,7 @@ const BaseAssetForm = ({
             {/* Regenerate button for edit mode */}
             <Button
               handleClick={handleRegenerate}
-              disabled={isRegenerateDisabledInEdit}
+              disabled={!isSaveSuccessful}
               customClass="px-6 py-2"
               buttonText="Regenerate"
             />
