@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { AssetBlockProps } from "@/types/templates";
+import { usePathname } from "next/navigation";
 
 interface EnhancedShadowDomContainerProps {
   htmlContent: string;
@@ -22,6 +23,10 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const shadowRootRef = useRef<ShadowRoot | null>(null);
+
+  const getPathName = usePathname();  
+
+  const isApproverPage = getPathName === "/approver-page"
 
   // Filter blocks that should be editable
   const editableBlocks = useMemo(() => {
@@ -67,7 +72,7 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
         border: 1px solid #666;
         border-radius: 6px;
         padding: 8px 10px;
-        display: flex;
+        display: ${isApproverPage ? 'none' : 'flex'}; /* Hide on approver page */
         align-items: center;
         gap: 12px; /* More space between buttons */
         z-index: 10000;

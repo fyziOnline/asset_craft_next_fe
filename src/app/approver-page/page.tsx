@@ -11,9 +11,10 @@ import Button from '@/components/global/Button';
 import DragAndDrop from '@/components/global/DragAndDrop';
 import AddVersionModel from '../edit-html-content/components/AddVersionModel';
 import EditContentModel from '../edit-html-content/components/EditContentModel';
-import ShadowDomContainer from '../edit-html-content/components/ShadowDomContainer';
 import FeedBackCard from '@/components/cards/FeedBackCard';
 import { PeopleIcon } from '@/assets/icons/AppIcons';
+import EnhancedShadowDomContainer from '../edit-html-content/components/EnhancedShadowDomContainer';
+import { formatContentWithBlocks, processBlockHTML } from '../edit-html-content/components/htmlUtils';
 import PopupCard from '@/components/global/Popup/PopupCard';
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
@@ -29,11 +30,15 @@ const Page: FC = () => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [isShowModelEdit, setIsShowModelEdit] = useState<boolean>(false)
 
+
     const selectedVersionID = useEditAssetStoreSelector.use.selectedVersionID()
     const versionList = useEditAssetStoreSelector.use.versionList()
     const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData()
 
     const versionSelected = versionList.find(v => v.assetVersionID === selectedVersionID) as AssetVersionProps
+
+    const { userDetails } = useAppData()
+    const userId = userDetails?.userID
 
     const handleDownloadFile = (fileUrl: string) => {
         const link = document.createElement('a');
@@ -46,9 +51,6 @@ const Page: FC = () => {
         setShowUploadPopup((prev) => !prev)
         setIsReAssignSuccessFull(false)
     }
-
-    const { userDetails } = useAppData()
-    const userId = userDetails?.userID
 
     useOverflowHidden()
     const {
@@ -102,28 +104,38 @@ const Page: FC = () => {
         }
     };
 
-    const htmlOtherAsset = () => {
-        let htmlContent = ''
-        versionSelected.assetVersionBlocks.forEach((item) => {
-            if ((item.blockData !== "{}" && item.blockData !== "" && item.blockHTMLGenerated)) {
-                htmlContent += (item.ignoreBlock === 0 ? `
-                    <div style="position:relative;">
-                        ${item.blockHTMLGenerated}
-                    </div>\n`
-                    : `
-                    <div style="position:relative;">
-                        <div style="height:40px;"></div>
-                    </div>\n`
-                )
-            } else {
-                htmlContent += item.blockHTMLGenerated ?? ""
-            }
-        })
+    // Update the generateHTMLContent function to properly handle hidden blocks
+    const generateHTMLContent = () => {
+        if (!versionSelected?.assetVersionBlocks) {
+            return '<div>No content available</div>';
+        }
+        let blocksHTML = '';
+        // Process each block
+        versionSelected.assetVersionBlocks.forEach((block) => {
+            // Process both visible and hidden blocks, but mark hidden ones
+            const processedBlockHTML = processBlockHTML(
+                block.blockHTMLGenerated || '',
+                block.blockName,
+                block.assetVersionBlockID,
+                block.ignoreBlock // Pass the ignoreBlock value to mark hidden blocks
+            );
 
-        return versionSelected.layoutHTMLGenerated?.replace("[(blocks)]", htmlContent) || '<div>An error occurred, please try again later.</div>'
-    }
+            // Add the block HTML to the output
+            blocksHTML += processedBlockHTML + '\n';
+        });
+        // Combine layout with blocks
+        return formatContentWithBlocks(versionSelected.layoutHTMLGenerated || '', blocksHTML);
+    };
 
-    const handleClickEdit = (event: Event) => {
+    const handleClickEdit = (event: Event | AssetBlockProps) => {
+        // Check if the event is an AssetBlockProps object or an Event object
+        if ('assetVersionBlockID' in event) {
+            // It's an AssetBlockProps object, handle direct block edit
+            setSectionEdit(event);
+            setIsShowModelEdit(true);
+            return;
+        }
+        // It's an Event object, handle event-based edit
         const target = event.target as HTMLElement;
 
         const container = target.id === "handle-button"
@@ -143,9 +155,18 @@ const Page: FC = () => {
                 }
             } else if (typeDiv === "hidden-block") {
                 const ignoreBlock = container.dataset.ignoreBlock
-                handleHideBlock(assetVersionBlockID || "", ignoreBlock as unknown as number)
+                handleHideBlock(assetVersionBlockID || "", parseInt(ignoreBlock || "0", 10))
             }
         }
+    };
+
+    const htmlContent = useMemo(() => {
+        return generateHTMLContent();
+    }, [versionSelected]);
+
+    const handleUnmatchedBlocks = (blockIds: string[]) => {
+        // For now, we can just log these. In the future, we might want to display FallbackBlockControls
+        console.log("Unmatched blocks in approver page:", blockIds);
     };
 
     const renderHTMLSelect = useMemo(() => {
@@ -153,37 +174,18 @@ const Page: FC = () => {
             return null;
         }
 
-        // render other layout 
-        const listLayout = ["landing", "linkedin", "callscript"]
-        const hasMatchLayoutName = listLayout.some(substring => assetHTMLData.layoutName?.toLowerCase().includes(substring.toLowerCase()));
-        if (hasMatchLayoutName) {
-            return <div className='flex justify-center'>
-                <ShadowDomContainer onClick={handleClickEdit} htmlContent={htmlOtherAsset()}></ShadowDomContainer>
+        return (
+            <div className='flex justify-center'>
+                <EnhancedShadowDomContainer
+                    htmlContent={htmlContent}
+                    blocks={versionSelected.assetVersionBlocks}
+                    onEditBlock={handleClickEdit}
+                    onToggleBlockVisibility={handleHideBlock}
+                    onUnmatchedBlocks={handleUnmatchedBlocks}
+                />
             </div>
-        }
-
-        // render email layout
-        return (versionSelected.assetVersionBlocks.map((item, idx) => {
-            return (
-                <div key={idx} >
-                    {item.ignoreBlock === 0 ? <ShadowDomContainer htmlContent={item.blockHTMLGenerated || ""}></ShadowDomContainer> :
-                        <div>
-                            <div className={`flex w-[100%] justify-center absolute ml-[275px] mt-[-5px]`} >
-                                <div onClick={() => { handleHideBlock(item.assetVersionBlockID, item.ignoreBlock) }}>
-                                    <svg clipRule="evenodd" width="46" height="46" fillRule="evenodd" strokeLinejoin="round" strokeMiterlimit="2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="m-960-256h1280v800h-1280z" fill="none" /><path d="m13.673 10.345-3.097 3.096 39.853 39.854 3.097-3.097z" />
-                                        <path d="m17.119 19.984 2.915 2.915c-3.191 2.717-5.732 6.099-7.374 9.058l-.005.01c4.573 7.646 11.829 14.872 20.987 13.776 2.472-.296 4.778-1.141 6.885-2.35l2.951 2.95c-4.107 2.636-8.815 4.032-13.916 3.342-9.198-1.244-16.719-8.788-21.46-17.648 2.226-4.479 5.271-8.764 9.017-12.053zm6.63-4.32c2.572-1.146 5.355-1.82 8.327-1.868.165-.001 2.124.092 3.012.238.557.092 1.112.207 1.659.35 8.725 2.273 15.189 10.054 19.253 17.653-1.705 3.443-3.938 6.398-6.601 9.277l-2.827-2.827c1.967-2.12 3.622-4.161 4.885-6.45 0 0-1.285-2.361-2.248-3.643-.619-.824-1.27-1.624-1.954-2.395-.54-.608-2.637-2.673-3.136-3.103-3.348-2.879-7.279-5.138-11.994-5.1-1.826.029-3.582.389-5.249.995z" fillRule="nonzero" />
-                                        <path d="m25.054 27.92 2.399 2.398c-.157.477-.243.987-.243 1.516 0 2.672 2.169 4.841 4.841 4.841.529 0 1.039-.085 1.516-.243l2.399 2.399c-1.158.65-2.494 1.02-3.915 1.02-4.425 0-8.017-3.592-8.017-8.017 0-1.421.371-2.756 1.02-3.914zm6.849-4.101c.049-.001.099-.002.148-.002 4.425 0 8.017 3.593 8.017 8.017 0 .05 0 .099-.001.148z" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div className='h-10' />
-                        </div>
-                    }
-                </div>
-            )
-        }))
-    }, [versionSelected])
+        );
+    }, [versionSelected, htmlContent, handleClickEdit, handleHideBlock]);
 
     const useClickOutside = (handler: () => void) => {
         const ref = useRef<HTMLDivElement | null>(null);
