@@ -58,7 +58,7 @@ const DEFAULT_TIMEOUT = 120000;
 // Extended timeout for AI operations (5 minutes)
 const EXTENDED_TIMEOUT = 300000;
 const RETRY_ATTEMPT = 3
-const RETRY_DELAY = 3000
+const RETRY_DELAY = 30000
 // const EXTENDED_TIMEOUT = 3000;
 
 const delay = (ms:number) => new Promise(resolve => setTimeout(resolve,ms))
