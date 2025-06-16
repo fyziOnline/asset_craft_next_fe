@@ -51,7 +51,7 @@ const ProfilePage: React.FC = () => {
 
     const { updateUserDetails, changeProfilePhoto, updatingUserDetails } = useProfile()
     const { userDetails, setError } = useAppData();
-
+const { setUserDetails } = useAppData();
     const [logoutFromAll, setLogoutFromAll] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -96,6 +96,7 @@ const ProfilePage: React.FC = () => {
             try {
                 const response = await ApiService.get<LLMModelsResponse>(urls.get_llm_models);
                 if (response.isSuccess) {
+                    
                     setAvailableModels(response.models);
                 }
             } catch (error) {
@@ -137,15 +138,16 @@ const ProfilePage: React.FC = () => {
             if (response.isSuccess) {
                 // Clear cookies based on logout type
                 CookieManager.clearAuthCookies(!logoutFromAll);
+                 setUserDetails(null);
                 router.push('/');
             }
         } catch (error) {
-            const apiError = ApiService.handleError(error);
-            setError({
-                status: apiError.statusCode,
-                message: apiError.message,
-                showError: true
-            });
+            // const apiError = ApiService.handleError(error);
+            // setError({
+            //     status: apiError.statusCode,
+            //     message: apiError.message,
+            //     showError: true
+            // });
         } finally {
             setIsLoggingOut(false);
         }
@@ -163,7 +165,7 @@ const ProfilePage: React.FC = () => {
             const base64Image = await convertImageToBase64(file as File);
 
             const data = {
-                userID: userDetails?.userID,
+                userID: userDetails!.userID,
                 originalImageName: "Name.png",
                 imageAsBase64String: base64Image
             }
