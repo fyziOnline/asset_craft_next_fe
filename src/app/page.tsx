@@ -130,7 +130,7 @@ const Home: FC = () => {
   <p className="text-red-500 text-sm mb-4 text-center">{errorMessage}</p>
 )}
 
-            <p className="text-base text-white mb-2 tracking-wider">Didn't receive the OTP?</p>
+            <p className="text-base text-white mb-2 tracking-wider">Request new OTP in</p>
 
             <p
               onClick={!isResending ? handleResendOtp : undefined}
