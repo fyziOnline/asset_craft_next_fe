@@ -35,8 +35,8 @@ export interface AppDataContextType {
     setContextData: (data: Partial<AppData>) => void;
     error: ErrorData;
     setError: (data: ErrorData) => void;
-    userDetails: UserDetailsProps;
-    setUserDetails: (data: UserDetailsProps) => void;
+    userDetails: UserDetailsProps | null;
+    setUserDetails: (data: UserDetailsProps| null) => void;
 }
 
 
