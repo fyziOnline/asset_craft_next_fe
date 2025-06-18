@@ -28,7 +28,17 @@ const AssetsToApprove: React.FC = () => {
     }))
 
     const handleClick = (item: any) => {
-        router.push(`/approver-page?assetVersionID=${item.assetVersionID}&assetName=${item.assetName}&layoutName=${item.layoutName}&status=${item.status}&campaignName=${item.campaignName}&projectName=${item.projectName}`)
+        // router.push(`/approver-page?assetVersionID=${item.assetVersionID}&assetName=${item.assetName}&layoutName=${item.layoutName}&status=${item.status}&campaignName=${item.campaignName}&projectName=${item.projectName}`)
+        const params = new URLSearchParams({
+            assetVersionID: item.assetVersionID,
+            assetName: item.assetName,
+            layoutName: item.layoutName,
+            status: item.status,
+            campaignName: item.campaignName,
+            projectName: item.projectName
+        })
+
+        router.push(`/approver-page?${params.toString()}`)
     }
 
     return (

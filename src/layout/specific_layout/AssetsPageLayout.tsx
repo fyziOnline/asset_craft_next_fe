@@ -156,7 +156,7 @@ const AssetsPageLayout: FC<AssetsPageProps> = ({ campaign_data, tableHeadings, h
           </div>
         ) : !isList ? (
           <>
-            <div className="asset-grid-layout mt-4 justify-center overflow-auto">
+            <div className="grid grid-cols-1 md:gridcol2 lg:grid-cols-3 gap-4 mt-4 justify-center overflow-auto">
               {paginatedGridData.map((data, index) => (
                 <div key={index}>
                   <AssetCard data={data} handleClick={handleClick} />

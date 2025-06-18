@@ -34,12 +34,20 @@ const AssetInProgress: FC = () => {
   }));
 
   const handleClick = (item: any) => {  
-    router.push(`/edit-html-content?assetID=${item.assetID}`)
-    router.push(`/edit-html-content?assetID=${item.assetID}&campaignName=${item.campaignName}&projectName=${item.projectName}&assetTypeIcon=${item.assetTypeIcon}&assetName=${item.assetName}`)
+    // router.push(`/edit-html-content?assetID=${item.assetID}&campaignName=${item.campaignName}&projectName=${item.projectName}&assetTypeIcon=${item.assetTypeIcon}&assetName=${item.assetName}`)
+    const params = new URLSearchParams({
+      assetID: item.assetID,
+      campaignName: item.campaignName,
+      projectName: item.projectName,
+      assetTypeIcon: item.assetTypeIcon,
+      assetName: item.assetName
+    })
+
+    router.push(`/edit-html-content?${params.toString()}`)
   }
 
   return (
-    <>
+    <div className="overflow-y-scroll">
       <AssetsPageLayout
         hiddenFields={hiddenFields}
         campaign_data={assetsDisplayTable}
@@ -49,7 +57,7 @@ const AssetInProgress: FC = () => {
         handleClick={handleClick}
         page=""
       />
-    </>
+    </div>
   )
 }
 
