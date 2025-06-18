@@ -88,7 +88,9 @@ const Dashboard: FC = () => {
             <div className="flex w-full overflow-x-auto gap-4 my-5 scrollbar-hide overflow-y-hidden">
               {clientAssetTypes
                 .filter(item => 
-                  item.assetTypeName !== "All in One"                  
+                  item.assetTypeName !== "All in One"  
+                  && item.isEnabled === true
+                  && item.isActive
                 )
                 .map((item, index) => (
                 <Button
