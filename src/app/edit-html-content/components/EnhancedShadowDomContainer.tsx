@@ -143,7 +143,6 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
         display: flex;
         align-items: center;
         justify-content: center;
-        pointer-events: none;
         z-index: 9000;
         font-family: Arial, sans-serif;
       }
@@ -160,6 +159,7 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
         max-width: 80%;
         line-height: 1.3;
         border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle white border */
+         pointer-events: auto;
       }
       
       /* Special treatment for blocks that are hidden */
