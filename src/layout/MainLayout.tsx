@@ -18,7 +18,7 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
       <Header />
     </Suspense>
       <Navbar />
-      <main className={`${pathname === "/Profile" ? 'ml-[2.5rem]' : 'ml-[5.5rem]'} mt-[2.5rem] pb-[2rem] overflow-auto`}>
+      <main className={`${pathname === "/Profile" ? 'ml-[2.5rem]' : 'ml-[5.5rem]'} pt-[2.5rem]  pb-[2rem] overflow-auto`}>
         {children}
       </main>
       <Footer />

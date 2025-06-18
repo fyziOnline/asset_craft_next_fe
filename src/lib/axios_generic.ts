@@ -1,14 +1,14 @@
 import { nkey } from '@/data/keyStore';
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, InternalAxiosRequestConfig, isAxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import { urls } from '@/apis/urls';
 
 // Custom error class for API errors
 class ApiError extends Error {
-  status?: number;
+  status?: number | null;
   data?: unknown;
 
-  constructor(message: string, status?: number, data?: unknown) {
+  constructor(message: string, status?: number | null, data?: unknown) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
@@ -36,7 +36,8 @@ interface TokenErrorResponse {
 // Create a flag to prevent multiple refresh requests
 let isRefreshing = false;
 let failedQueue: Array<{
-  resolve: (token: string) => void;
+  resolve: (token: string) =>
+     void;
   reject: (error: unknown) => void;
 }> = [];
 
@@ -56,7 +57,28 @@ const DEFAULT_TIMEOUT = 120000;
 
 // Extended timeout for AI operations (5 minutes)
 const EXTENDED_TIMEOUT = 300000;
+const RETRY_ATTEMPT = 3
+const RETRY_DELAY = 30000
 // const EXTENDED_TIMEOUT = 3000;
+
+const delay = (ms:number) => new Promise(resolve => setTimeout(resolve,ms))
+
+const shouldRetry = (error: ApiError): boolean => {
+  if (!error.message) return true
+  const status = error.status 
+  return !status ||status >= 500 && status < 600 
+}
+  
+function convertToApiError(error: unknown): ApiError {
+  if (error instanceof ApiError) return error
+
+  if (isAxiosError(error)) {
+    const message = error.response?.data?.message || error.message || 'Request failed'
+    const status = error.response?.status ?? null
+    return new ApiError(message, status, error.response?.data)
+  }
+  return new ApiError('Unknown error occurred', null)
+}
 
 // Create axios instance with base configuration
 const apiClient: AxiosInstance = axios.create({
@@ -163,9 +185,9 @@ apiClient.interceptors.response.use(
         error.response.data
       );
     } else if (error.request) {
-      throw new ApiError('No response received from server', 0);
+      throw new ApiError('No response received from server', null);
     } else {
-      throw new ApiError('Error setting up the request', 0);
+      throw new ApiError('Error setting up the request', null);
     }
   }
 );
@@ -204,7 +226,9 @@ export const ApiService = {
     data?: D,
     config: AxiosRequestConfig = {}
   ): Promise<T> {
-    try {
+    let lastError:any = null 
+    for (let retry_attempt = 0; retry_attempt < RETRY_ATTEMPT; retry_attempt++) {
+      try {
       // Set appropriate timeout for this request
       const requestConfig = {
         ...config,
@@ -229,10 +253,20 @@ export const ApiService = {
       }
       
       return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) throw error;
-      throw new ApiError('An unexpected error occurred', 500);
+      } catch (error) {
+        lastError = convertToApiError(error)
+        if (!shouldRetry(lastError)) break
+        console.warn(`Retrying ${method.toUpperCase()} ${url} — attempt ${retry_attempt + 1}`);
+        await delay(RETRY_DELAY)
+        continue
+        
+      }
     }
+    if (lastError instanceof ApiError) throw lastError
+    if (lastError?.response) {
+        throw new ApiError(lastError.response.status, lastError.response.data?.message || 'Server error')
+    }
+    throw new ApiError(lastError?.message || "Unknown Error !",500)
   },
 
   /**

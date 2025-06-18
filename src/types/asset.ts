@@ -6,7 +6,8 @@ export interface ClientAssetTypeProps {
     assetTypeID?: string,
     isEnabled?: boolean,
     assetTypeName: string,
-    description?: string
+    description?: string,
+    isActive?: number
 }
 
 export interface CampaignsProps {
