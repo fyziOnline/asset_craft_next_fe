@@ -15,6 +15,8 @@ import LayoutWrapper from '@/layout/LayoutWrapper'
 import Button from '@/components/global/Button'
 import GoBackButton from '@/components/global/GoBackButton';
 import LoadingIndicator from '@/components/global/LoadingIndicator';
+import { UserDetailsProps } from '@/types/asset';
+import useHeader from '@/hooks/useHeader';
 
 interface LLMModel {
     modelID: string;
@@ -49,9 +51,11 @@ interface FormValues {
 const ProfilePage: React.FC = () => {
     const router = useRouter()
 
-    const { updateUserDetails, changeProfilePhoto, updatingUserDetails } = useProfile()
+    const { updateUserDetails, changeProfilePhoto, updatingUserDetails, } = useProfile()
+    
     const { userDetails, setError } = useAppData();
 const { setUserDetails } = useAppData();
+const { getUserDetails } = useHeader();
     const [logoutFromAll, setLogoutFromAll] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -122,6 +126,12 @@ const { setUserDetails } = useAppData();
         }));
     };
 
+
+useEffect(() => {
+  if (!userDetails?.userID) {
+    getUserDetails();
+  }
+}, []);
 
     const handleLogout = async () => {
         try {
@@ -326,16 +336,33 @@ const { setUserDetails } = useAppData();
                             iconColor='#01A982'
                             IconComponent={<UserDetailsIcon />}
                             showIcon={false}
-                            handleClick={() => updateUserDetails({
-                                userID: formValues.userID,
-                                name: formValues.name,
-                                userRole: formValues.userRole,
-                                country: formValues.country,
-                                company: formValues.company,
-                                timeZone: formValues.timeZone,
-                                isActive: formValues.isActive,
-                                preferredLLMModelID: formValues.preferredLLMModelID || undefined
-                            })}
+                            handleClick={async () => {
+    const success = await updateUserDetails({
+        userID: formValues.userID,
+        name: formValues.name,
+        userRole: formValues.userRole,
+        country: formValues.country,
+        company: formValues.company,
+        timeZone: formValues.timeZone,
+        isActive: formValues.isActive,
+        preferredLLMModelID: formValues.preferredLLMModelID || undefined
+    });
+
+    if (success) {
+  await getUserDetails(); // ✅ Correct usage now
+}
+}}
+                     
+                            // handleClick={() => updateUserDetails({
+                            //     userID: formValues.userID,
+                            //     name: formValues.name,
+                            //     userRole: formValues.userRole,
+                            //     country: formValues.country,
+                            //     company: formValues.company,
+                            //     timeZone: formValues.timeZone,
+                            //     isActive: formValues.isActive,
+                            //     preferredLLMModelID: formValues.preferredLLMModelID || undefined
+                            // })}
                         />
                     </div>
 

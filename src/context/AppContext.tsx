@@ -45,14 +45,8 @@ export const AppDataContext = createContext<AppDataContextType | undefined>(unde
 
 export const AppDataProvider: FC<AppDataProviderProps> = ({ children }) => {
     const [contextData, setContextData] = useState<AppData>(INITIAL_APP_DATA);
-    // const [userDetails, setUserDetails] = useState<UserDetailsProps | null>(INITIAL_USER_DETAILS);
-    const [userDetails, setUserDetailsState] = useState<UserDetailsProps | null>(() => {
-    if (typeof window !== 'undefined') {
-        const saved = localStorage.getItem('userDetails');
-        return saved ? JSON.parse(saved) : INITIAL_USER_DETAILS;
-    }
-    return INITIAL_USER_DETAILS;
-});
+    const [userDetails, setUserDetails] = useState<UserDetailsProps | null>(INITIAL_USER_DETAILS);
+
     const [error, setError] = useState<ErrorData>(INITIAL_ERROR)
 
     // Update context data, ensuring all fields are available
@@ -64,17 +58,7 @@ export const AppDataProvider: FC<AppDataProviderProps> = ({ children }) => {
     };
 
     const updateErrorData = (update: ErrorData) => setError(update);
-    // const updateUserDetails = (update: UserDetailsProps| null) => setUserDetails(update);
-    const updateUserDetails = (update: UserDetailsProps | null) => {
-    setUserDetailsState(update);
-    if (typeof window !== 'undefined') {
-        if (update) {
-            localStorage.setItem('userDetails', JSON.stringify(update));
-        } else {
-            localStorage.removeItem('userDetails');
-        }
-    }
-};
+    const updateUserDetails = (update: UserDetailsProps| null) => setUserDetails(update);
 
     return (
         <AppDataContext.Provider

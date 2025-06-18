@@ -12,9 +12,12 @@ import { useGenerateTemplate } from "./useGenerateTemplate";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import useEditAssetStore from '@/store/editAssetStore';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+
 
 export const useEditHTMLContent = () => {
-    const {  setError } = useAppData();
+    const { setError } = useAppData();
     const [isShowSave, setShowSave] = useState(false)
     const [isShowAddVer, setIsShowAddVer] = useState(false)
     const [isShowSubmitVer, setIsShowSubmitVer] = useState(false)
@@ -26,12 +29,26 @@ export const useEditHTMLContent = () => {
     const refVersion = useRef('')
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [editingVersionId, setEditingVersionId] = useState<string | null>(null);
+    const { contextData } = useAppData();
 
     const versionList = useEditAssetStore.getState().versionList
     const assetHTMLData = useEditAssetStore.getState().assetHTMLData
     const selectedVersionID = useEditAssetStore.getState().selectedVersionID
 
-    
+//    const campaignName = assetHTMLData?.campaignName || contextData?.ProjectDetails?.campaign_name || 'Campaign Name';
+let campaignName = 'Campaign Name';
+
+if (typeof window !== 'undefined') {
+  const params = new URLSearchParams(window.location.search);
+  campaignName =
+    params.get('campaignName') ||
+    assetHTMLData?.campaignName ||
+    contextData?.ProjectDetails?.campaign_name ||
+    'Campaign Name';
+}
+//    console.log("Campaign Name:", campaignName); // Log the campaign name
+//    console.log("contextData:", contextData); // Log the contextData
+
     const setAssetHTMLData = useEditAssetStore.getState().setAssetHTMLData
     const updateVersionField = useEditAssetStore.getState().updateVersionField
     const deleteVersionFromTheList = useEditAssetStore.getState().deleteVersionFromTheList
@@ -39,41 +56,41 @@ export const useEditHTMLContent = () => {
     const updateEntireVersionList = useEditAssetStore.getState().updateEntireVersionList
     const updateUniqueStatusList = useEditAssetStore.getState().updateUniqueStatusList
     const setAssetHTMLFromSingleVersion = useEditAssetStore.getState().setAssetHTMLFromSingleVersion
-    
-    const generateMissingHTML = async () => {
-    // Get fresh state from store instead of stale closure
-    const { versionList, selectedVersionID } = useEditAssetStore.getState();
-    
-    
-    const selectedVersion = versionList.find(v => v.assetVersionID === selectedVersionID);
-    let needsGeneration = false;
-    const apiPromises: Promise<any>[] = [];
 
-    if (selectedVersion) {
-        for (const block of selectedVersion.assetVersionBlocks) {
-            if (
-                (!block.blockHTMLGenerated || block.blockHTMLGenerated.trim() === '') &&
-                !block.blockName.includes('_global')
-            ) {
-                needsGeneration = true;
-                break;
+    const generateMissingHTML = async () => {
+        // Get fresh state from store instead of stale closure
+        const { versionList, selectedVersionID } = useEditAssetStore.getState();
+
+
+        const selectedVersion = versionList.find(v => v.assetVersionID === selectedVersionID);
+        let needsGeneration = false;
+        const apiPromises: Promise<any>[] = [];
+
+        if (selectedVersion) {
+            for (const block of selectedVersion.assetVersionBlocks) {
+                if (
+                    (!block.blockHTMLGenerated || block.blockHTMLGenerated.trim() === '') &&
+                    !block.blockName.includes('_global')
+                ) {
+                    needsGeneration = true;
+                    break;
+                }
             }
         }
-    }
 
-    if (needsGeneration) {
-        versionList.forEach(version => {
-            const promise = ApiService.get(
-                `${urls.asset_generate}?assetID=${version.assetID}&assetVersionID=${version.assetVersionID}`
-            );
-            apiPromises.push(promise);
-        });
-    }
+        if (needsGeneration) {
+            versionList.forEach(version => {
+                const promise = ApiService.get(
+                    `${urls.asset_generate}?assetID=${version.assetID}&assetVersionID=${version.assetVersionID}`
+                );
+                apiPromises.push(promise);
+            });
+        }
 
-    return {
-        hasPendingApiCalls: apiPromises.length > 0,
-        apiPromises,
-    };
+        return {
+            hasPendingApiCalls: apiPromises.length > 0,
+            apiPromises,
+        };
     };
 
     const handleAndRefreshAfterGeneration = async (apiPromises: Promise<any>[]) => {
@@ -116,75 +133,75 @@ export const useEditHTMLContent = () => {
     }, [])
 
     const resAssetHtml = async () => {
-    try {
-        let assetID = ""
-        if (typeof window !== "undefined") {
-            const params = new URLSearchParams(window.location.search);
-            assetID = params.get("assetID") as string
-        }
-        if (!assetID) {
-            return await resAssetVersion()
-        }
+        try {
+            let assetID = ""
+            if (typeof window !== "undefined") {
+                const params = new URLSearchParams(window.location.search);
+                assetID = params.get("assetID") as string
+            }
+            if (!assetID) {
+                return await resAssetVersion()
+            }
 
-        setShowLoading(true)
+            setShowLoading(true)
 
-        assetIDTemplateRef.current = assetID
-        const res = await getAssetHTML()
-        if (res.isSuccess) {
-            const AssetHtml = res as AssetHtmlProps
-            setAssetHTMLData(AssetHtml)
-            
-            // Call HTML generation after store is populated
-            await initiateHTMLGeneration()
-        } else {
-            alert("An error occurred, please try again later.")
+            assetIDTemplateRef.current = assetID
+            const res = await getAssetHTML()
+            if (res.isSuccess) {
+                const AssetHtml = res as AssetHtmlProps
+                setAssetHTMLData(AssetHtml)
+
+                // Call HTML generation after store is populated
+                await initiateHTMLGeneration()
+            } else {
+                alert("An error occurred, please try again later.")
+            }
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        } finally {
+            setShowLoading(false)
         }
-    } catch (error) {
-        const apiError = ApiService.handleError(error)
-        setError({
-            status: apiError.statusCode,
-            message: apiError.message,
-            showError: true
-        })
-    } finally {
-        setShowLoading(false)
     }
-}
 
     const resAssetVersion = async () => {
-    try {
-        setShowLoading(true)
-        let assetVersionID = ""
-        let assetName = ""
-        let layoutName = ""
-        if (typeof window !== "undefined") {
-            const params = new URLSearchParams(window.location.search);
-            assetVersionID = params.get("assetVersionID") as string
-            assetName = params.get("assetName") as string
-            layoutName = params.get("layoutName") as string
-        }
-        const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersionID}`)
+        try {
+            setShowLoading(true)
+            let assetVersionID = ""
+            let assetName = ""
+            let layoutName = ""
+            if (typeof window !== "undefined") {
+                const params = new URLSearchParams(window.location.search);
+                assetVersionID = params.get("assetVersionID") as string
+                assetName = params.get("assetName") as string
+                layoutName = params.get("layoutName") as string
+            }
+            const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersionID}`)
 
-        if (resSelect.isSuccess) {
-            setAssetHTMLFromSingleVersion(resSelect)
-            
-            // Call HTML generation after store is populated
-            await initiateHTMLGeneration()
+            if (resSelect.isSuccess) {
+                setAssetHTMLFromSingleVersion(resSelect)
+
+                // Call HTML generation after store is populated
+                await initiateHTMLGeneration()
+            }
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+        } finally {
+            setShowLoading(false)
         }
-    } catch (error) {
-        const apiError = ApiService.handleError(error)
-        setError({
-            status: apiError.statusCode,
-            message: apiError.message,
-            showError: true
-        })
-    } finally {
-        setShowLoading(false)
-    }
     }
 
     const initiateHTMLGeneration = async () => {
-        
+
         const { hasPendingApiCalls, apiPromises } = await generateMissingHTML();
         if (hasPendingApiCalls) {
             await handleAndRefreshAfterGeneration(apiPromises);
@@ -208,54 +225,87 @@ export const useEditHTMLContent = () => {
             })
         }
     }
-    
+
     const handleSave = async (type: number) => {
         if (type === 1) {
             setIsShowAddVer(true)
         } else {
-            const selectedVersion= versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+            const selectedVersion = versionList.find(v => v.assetVersionID === selectedVersionID) as AssetVersionProps
             if (typeof window !== 'undefined') {
-                if (type === 2) {
-                    window.open(selectedVersion?.htmlFileURL, '_blank', 'noopener,noreferrer');
-                } else if (type === 3) {
-                    window.open(selectedVersion?.zipFileURL, '_blank', 'noopener,noreferrer');
-                }  else if (type === 4) {
+                        if (type === 2) {
+                            // window.open(selectedVersion?.htmlFileURL, '_blank', 'noopener,noreferrer');
+                            try {
+                const blob = new Blob(
+                    [selectedVersion?.htmlGenerated || "<html><body><h1>No HTML content</h1></body></html>"],
+                    { type: "text/html;charset=utf-8" }
+                );
+                saveAs(blob, `${campaignName }-${assetHTMLData.assetName} - ${selectedVersion.versionName}.html`);
+                 
+            } catch (err) {
+                console.error("Error downloading HTML file:", err);
+            }
+                }
+                // else if (type === 3) {
+                //     window.open(selectedVersion?.zipFileURL, '_blank', 'noopener,noreferrer');
+                // } 
+                else if (type === 3) {
+                    try {
+                        const zip = new JSZip();
+
+                        // Add HTML content as a file in the ZIP
+                        zip.file(
+                            "index.html",
+                            selectedVersion?.htmlGenerated || "<html><body><h1>No HTML content</h1></body></html>"
+                        );
+
+                        // Optionally, add other metadata files (e.g., readme)
+                        zip.file("readme.txt", `Asset: ${assetHTMLData.assetName}\nVersion: ${selectedVersion.versionName}`);
+
+                        const blob = await zip.generateAsync({ type: "blob" });
+
+                        saveAs(blob, `${campaignName }-${assetHTMLData.assetName} - ${selectedVersion.versionName}.zip`);
+                    } catch (err) {
+                        console.error("Error generating ZIP:", err);
+                    }
+                }
+                else if (type === 4) {
                     const element = document.createElement('div')
                     element.innerHTML = selectedVersion?.htmlGenerated
                     document.body.appendChild(element)
                     try {
-                        await new Promise(resolve => setTimeout(resolve,1000))
-                        const canvas = await html2canvas(element,{
-                            scale : 2,
-                            useCORS : true,
-                            logging : true
+                        await new Promise(resolve => setTimeout(resolve, 1000))
+                        const canvas = await html2canvas(element, {
+                            scale: 2,
+                            useCORS: true,
+                            logging: true
                         })
-                        const pdf = new jsPDF('p','mm','a4')
+                        const pdf = new jsPDF('p', 'mm', 'a4')
                         const imgData = canvas.toDataURL('image/png')
                         const pdfWidth = pdf.internal.pageSize.getWidth()
                         const pdfHeight = (canvas.height * pdfWidth) / canvas.width
 
                         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-                        pdf.save(`${assetHTMLData.assetName} - ${selectedVersion.versionName}.pdf`)
+                        pdf.save(`${campaignName }-${assetHTMLData.assetName} - ${selectedVersion.versionName}.pdf`)
                     } catch (err) {
-                      console.error('Error generating PDF:', err)
+                        console.error('Error generating PDF:', err)
                     } finally {
-                      if (element.parentNode) {
-                        element.parentNode.removeChild(element)
-                      }
-                    
-                     }
+                        if (element.parentNode) {
+                            element.parentNode.removeChild(element)
+                        }
+
+                    }
+                }
             }
+            setShowSave(false)
         }
-        setShowSave(false)
-    }}
+    }
 
     const handleChangeTextVersion = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         refVersion.current = event.target.value;
     };
 
     const handleAddVersion = async () => {
-        const selectedVersion= versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+        const selectedVersion = versionList.find(v => v.assetVersionID === selectedVersionID) as AssetVersionProps
         try {
             if (refVersion.current !== "") {
                 setShowErrorMessage(false)
@@ -300,7 +350,7 @@ export const useEditHTMLContent = () => {
     };
 
     const onGenerateWithAI = async () => {
-        const selectedVersion= versionList.find(v=>v.assetID===selectedVersionID) as AssetVersionProps
+        const selectedVersion = versionList.find(v => v.assetID === selectedVersionID) as AssetVersionProps
         try {
             setIsLoadingGenerate(true)
             const resGenerateWithAI = await ApiService.get<any>(`${urls.asset_version_getDataUsingAI}?assetVersionID=${selectedVersion.assetVersionID}`)
@@ -309,7 +359,7 @@ export const useEditHTMLContent = () => {
                 if (resGenerate.isSuccess) {
                     const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${selectedVersion.assetVersionID}`)
                     if (resSelect.isSuccess) {
-                        const {isSuccess,errorOnFailure,...updatedVersion} = resSelect
+                        const { isSuccess, errorOnFailure, ...updatedVersion } = resSelect
 
                         const indexAssetVersion = versionList.findIndex((item) => item.assetVersionID === selectedVersion.assetVersionID)
                         const newVersionList = versionList[indexAssetVersion] = updatedVersion
@@ -329,8 +379,8 @@ export const useEditHTMLContent = () => {
         }
     }
 
-    const onSubmit = async (itemSelected: Option , isComments : string) => {
-        const selectedVersion= versionList.find(v=>v.assetVersionID===selectedVersionID) as AssetVersionProps
+    const onSubmit = async (itemSelected: Option, isComments: string) => {
+        const selectedVersion = versionList.find(v => v.assetVersionID === selectedVersionID) as AssetVersionProps
         try {
             const resSubmit = await ApiService.post<any>(urls.approval_assetApproval_SubmitForApproval, {
                 "assetID": selectedVersion.assetID,
@@ -340,7 +390,7 @@ export const useEditHTMLContent = () => {
             })
 
             if (resSubmit.isSuccess) {
-                updateVersionField(selectedVersionID,{status:'On Review'})
+                updateVersionField(selectedVersionID, { status: 'On Review' })
                 updateUniqueStatusList()
                 // Delay closing the modal for 1 seconds
                 setTimeout(() => {
@@ -363,7 +413,7 @@ export const useEditHTMLContent = () => {
     }
 
     const handleHideBlock = async (assetVersionBlockID: string, ignoreBlock: number) => {
-        const selectedVersion= versionList.find(v=>v.assetID===selectedVersionID) as AssetVersionProps
+        const selectedVersion = versionList.find(v => v.assetID === selectedVersionID) as AssetVersionProps
         try {
             setShowLoading(true)
             const resUpdateIgnoreStatus = await ApiService.put<any>(urls.assetVersionBlock_updateIgnoreStatus, {
@@ -375,7 +425,7 @@ export const useEditHTMLContent = () => {
                 if (resGenerate.isSuccess) {
                     const resSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${selectedVersion.assetVersionID}`)
                     if (resSelect.isSuccess) {
-                        const {isSuccess,errorOnFailure,...updatedVersion} = resSelect
+                        const { isSuccess, errorOnFailure, ...updatedVersion } = resSelect
 
                         const indexAssetVersion = versionList.findIndex((item) => item.assetVersionID === selectedVersion.assetVersionID)
                         const newVersionList = versionList[indexAssetVersion] = updatedVersion
@@ -400,7 +450,7 @@ export const useEditHTMLContent = () => {
         try {
             const res = await ApiService.delete<any>(`${urls.asset_verdion_delete}?assetVersionID=${assetVersionID}`)
 
-            if(res.isSuccess) {
+            if (res.isSuccess) {
                 deleteVersionFromTheList(assetVersionID)
                 updateUniqueStatusList()
             }
@@ -424,7 +474,7 @@ export const useEditHTMLContent = () => {
             });
 
             if (res.isSuccess) {
-                updateVersionField(assetVersionID,{versionName:newName})
+                updateVersionField(assetVersionID, { versionName: newName })
             }
         } catch (error) {
             const apiError = ApiService.handleError(error);
