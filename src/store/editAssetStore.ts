@@ -94,7 +94,10 @@ const useEditAssetStore = create<EditAssetStore>((set,get) => ({
     })
   },
 
-  updateEntireVersionList : (newList) => {
+  updateEntireVersionList : (newList) => {    
+    if (!Array.isArray(newList)) {
+      return; 
+    }
     const uniqueStatuses = Array.from(
       new Set(newList.map(version => version.status).filter(Boolean))
     ) as string[];
