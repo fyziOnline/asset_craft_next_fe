@@ -15,12 +15,8 @@ interface ResLoginProps {
 
 export const useLogin = () => {
     const router = useRouter();
-
     const loginRef = useRef<ResLoginProps>();
     const otpRef = useRef("");
-
-    const { setError } = useAppData()
-
     const [email, setEmail] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isOtpVisible, setIsOtpVisible] = useState(false);
@@ -28,6 +24,8 @@ export const useLogin = () => {
     const [otpTimer, setOtpTimer] = useState(60)
     const [isResending, setIsResending] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("")
+    const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
+    const [otpErrorMessage, setOtpErrorMessage] = useState<string>("");
 
     useEffect(() => {
         const email_login = Cookies.get(nkey.email_login);
@@ -53,7 +51,7 @@ export const useLogin = () => {
 
     const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
-        setErrorMessage("")
+        setEmailErrorMessage("")
     };
 
     const handleResendOtp = async () => {
@@ -62,19 +60,21 @@ export const useLogin = () => {
 
     const handleLogin = async (skipLoading = false) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
+
         try {
+            setEmailErrorMessage("Validating email…");
             if (email.length === 0) {
-                setErrorMessage("Email is required")
+                setEmailErrorMessage("Email is required")
                 return
             }
 
             if (!emailRegex.test(email)) {
-                setErrorMessage("Please enter a valid email address");
+                setEmailErrorMessage("Please enter a valid email address");
                 return
             }
 
             setErrorMessage("");
+            // setEmailErrorMessage("");
 
             if (!skipLoading) {
                 setIsLoading(true);
@@ -85,6 +85,7 @@ export const useLogin = () => {
             });
 
             if (resLogin.isSuccess) {
+                setEmailErrorMessage("");
                 Cookies.set(nkey.email_login, email, { expires: 180 });
                 loginRef.current = resLogin
                 setIsOtpVisible(true);
@@ -93,7 +94,7 @@ export const useLogin = () => {
             }
         } catch (error) {
             const apiError = ApiService.handleError(error)
-            setErrorMessage(apiError.message || "An error occurred while logging in");
+        setEmailErrorMessage(apiError.message || "An error occurred while logging in");
             console.error("Error:", apiError)
         } finally {
             if (!skipLoading) {
@@ -103,18 +104,31 @@ export const useLogin = () => {
     }
 
     const handleOtpSubmit = async () => {
+
+        let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
         if (otpRef.current.trim().length === 0) {
-            alert("Please enter OTP code.");
+            setOtpErrorMessage("Please enter OTP code.");
             return;
         }
 
         try {
             setIsVerifyingOtp(true);
+            setOtpErrorMessage(""); // Clear previous error
+
+            // Set a timeout fallback after 1s if no response
+            timeoutId = setTimeout(() => {
+                setOtpErrorMessage((prev) => {
+                    // Only show fallback if no error was already set
+                    return prev ? prev : "OTP code is incorrect!";
+                });
+            }, 1000);
 
             const resToken = await ApiService.post<any>(urls.finalise, {
                 "twoFactorToken": loginRef.current?.twoFactorToken,
                 "otp": otpRef.current
             });
+            if (timeoutId) clearTimeout(timeoutId); // Clear timeout if API responds in time
 
             if (resToken.isSuccess) {
                 const decodedToken: any = jwtDecode(resToken.accessToken);
@@ -139,18 +153,18 @@ export const useLogin = () => {
                 }
             } else {
                 // alert("OTP code is incorrect!");
-                setErrorMessage("OTP code is incorrect!");
+                setOtpErrorMessage("OTP code is incorrect!");
             }
         } catch (error) {
-            console.error("OTP Error:", error);
-        setErrorMessage("Please enter the correct OTP");
-            // const apiError = ApiService.handleError(error)
-            // setErrorMessage(apiError.message || "Something went wrong while verifying OTP");
-            // setError({
-            //     status: apiError.statusCode,
-            //     message: apiError.message,
-            //     showError: true
-            // })
+            if (timeoutId) clearTimeout(timeoutId);
+            const apiError = ApiService.handleError(error);
+
+            if (apiError?.statusCode === 500 || apiError?.message?.toLowerCase().includes("otp")) {
+                setOtpErrorMessage("OTP code is incorrect!");
+            } else {
+                setOtpErrorMessage(apiError.message || "Something went wrong while verifying OTP");
+            }
+
         } finally {
             setIsVerifyingOtp(false);
         }
@@ -158,7 +172,7 @@ export const useLogin = () => {
 
     const onChangeOtp = (e: ChangeEvent<HTMLInputElement>) => {
         otpRef.current = e.target.value;
-        setErrorMessage("");
+        setOtpErrorMessage("");
     }
 
     const handleCancelOtp = () => {
@@ -185,6 +199,8 @@ export const useLogin = () => {
         handleCancelOtp,
         checkIsUserAuthorized,
         otpTimer,
+        emailErrorMessage,
+        otpErrorMessage,
         errorMessage
     };
 };
