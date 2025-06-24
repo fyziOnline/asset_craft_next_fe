@@ -52,7 +52,8 @@ const Home: FC = () => {
     handleCancelOtp,
     checkIsUserAuthorized,
     otpTimer,
-    errorMessage
+    emailErrorMessage,
+    otpErrorMessage,
   } = useLogin();
 
 
@@ -60,11 +61,11 @@ const Home: FC = () => {
     setShowLoading(true); // Show loading overlay while checking authorization
     const authorized = checkIsUserAuthorized();
     setIsAuthorized(authorized);
-    
+
     if (authorized) {
 
       router.push('/dashboard');
-      
+
     } else {
       setShowLoading(false); // Hide loading overlay if not authorized
     }
@@ -72,7 +73,7 @@ const Home: FC = () => {
 
   // If the user is authorized, do not render the login screen
   if (isAuthorized) {
-    return <div className="w-100 h-screen bg-white z-50 scrollbar-hide"></div>; 
+    return <div className="w-100 h-screen bg-white z-50 scrollbar-hide"></div>;
   }
 
   return (
@@ -97,7 +98,10 @@ const Home: FC = () => {
               type="text"
             />
 
-            <p className="text-red-500 text-sm pt-2">{errorMessage}</p>
+            {/* <p className="text-red-500 text-sm pt-2">{errorMessage}</p> */}
+            {emailErrorMessage && (
+              <p className="text-red-500 text-sm mt-1">{emailErrorMessage}</p>
+            )}
 
             <button disabled={isLoading} onClick={() => handleLogin(true)} className={`my-[1rem] text-sm home-box-element px-[1rem] py-[0.85rem] w-[34ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
           </div>
@@ -124,11 +128,11 @@ const Home: FC = () => {
               placeholder:text-white rounded-full outline-none text-center text-lg 
               tracking-widest placeholder:tracking-wide focus:placeholder:text-gray-300
               w-[34ch] p-4 mb-1 bg-transparent text-white border 
-    ${errorMessage ? "border-red-500" : "border-white"} `}
+    ${otpErrorMessage ? "border-red-500" : "border-white"} `}
             />
-            {errorMessage && (
-  <p className="text-red-500 text-sm mb-4 text-center">{errorMessage}</p>
-)}
+            {otpErrorMessage && (
+              <p className="text-red-500 text-sm mt-1">{otpErrorMessage}</p>
+            )}
 
             <p className="text-base text-white mb-2 tracking-wider">Request new OTP in</p>
 
@@ -138,10 +142,10 @@ const Home: FC = () => {
                 }`}
             >
               {isResending ? (
-              <>
-                <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></span>
-                <span>{otpTimer}s</span>
-              </>
+                <>
+                  <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></span>
+                  <span>{otpTimer}s</span>
+                </>
               ) : (
                 "Resend OTP"
               )}
@@ -151,8 +155,13 @@ const Home: FC = () => {
             <div className="flex justify-between px-[1rem] py-[.75rem]">
 
               <Button
-                buttonText={isVerifyingOtp ? "Verifying OTP..." : "Submit OTP"}
-                showIcon={false}
+buttonText={
+  otpErrorMessage
+    ? "Submit OTP"
+    : isVerifyingOtp
+    ? "Verifying OTP..."
+    : "Submit OTP"
+}             showIcon={false}
                 textStyle='text-[1.1rem] font-medium text-[#00A881] tracking-wide'
                 backgroundColor={"bg-custom-gradient-green"}
                 handleClick={handleOtpSubmit}

@@ -52,16 +52,19 @@ const ProfilePage: React.FC = () => {
     const router = useRouter()
 
     const { updateUserDetails, changeProfilePhoto, updatingUserDetails, } = useProfile()
-    
+
     const { userDetails, setError } = useAppData();
-const { setUserDetails } = useAppData();
-const { getUserDetails } = useHeader();
+    const { setUserDetails } = useAppData();
+    const { getUserDetails } = useHeader();
     const [logoutFromAll, setLogoutFromAll] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [availableModels, setAvailableModels] = useState<LLMModel[]>([]);
     const [loadingModels, setLoadingModels] = useState<boolean>(false);
+    const [nameError, setNameError] = useState<string | null>(null);
+    const [fileError, setFileError] = useState<string | null>(null);
+
     const [formValues, setFormValues] = useState<FormValues>({
         name: '',
         email: '',
@@ -100,7 +103,7 @@ const { getUserDetails } = useHeader();
             try {
                 const response = await ApiService.get<LLMModelsResponse>(urls.get_llm_models);
                 if (response.isSuccess) {
-                    
+
                     setAvailableModels(response.models);
                 }
             } catch (error) {
@@ -127,11 +130,11 @@ const { getUserDetails } = useHeader();
     };
 
 
-useEffect(() => {
-  if (!userDetails?.userID) {
-    getUserDetails();
-  }
-}, []);
+    useEffect(() => {
+        if (!userDetails?.userID) {
+            getUserDetails();
+        }
+    }, []);
 
     const handleLogout = async () => {
         try {
@@ -148,7 +151,7 @@ useEffect(() => {
             if (response.isSuccess) {
                 // Clear cookies based on logout type
                 CookieManager.clearAuthCookies(!logoutFromAll);
-                 setUserDetails(null);
+                setUserDetails(null);
                 router.push('/');
             }
         } catch (error) {
@@ -168,22 +171,52 @@ useEffect(() => {
         fileInputRef.current?.click();
     };
 
+    // const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = event.target.files?.[0];
+
+    //     if (file) {
+    //         const base64Image = await convertImageToBase64(file as File);
+
+    //         const data = {
+    //             userID: userDetails!.userID,
+    //             originalImageName: "Name.png",
+    //             imageAsBase64String: base64Image
+    //         }
+
+    //         await changeProfilePhoto(data);
+    //     }
+
+    // };
+
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+    const file = event.target.files?.[0];
 
-        if (file) {
-            const base64Image = await convertImageToBase64(file as File);
+    if (!file) return;
 
-            const data = {
-                userID: userDetails!.userID,
-                originalImageName: "Name.png",
-                imageAsBase64String: base64Image
-            }
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
-            await changeProfilePhoto(data);
-        }
+    if (!allowedTypes.includes(file.type)) {
+        setFileError("Please upload a PNG image");
+        return;
+    }
 
-    };
+    setFileError(null); // clear error if file is valid
+
+    try {
+        const base64Image = await convertImageToBase64(file);
+
+        const data = {
+            userID: userDetails!.userID,
+            originalImageName: file.name,
+            imageAsBase64String: base64Image
+        };
+
+        await changeProfilePhoto(data);
+    } catch (err) {
+        setFileError("Failed to upload image. Please try again.");
+    }
+};
+
 
     return (
         <LayoutWrapper layout='main'>
@@ -210,7 +243,7 @@ useEffect(() => {
                     <p className="text-white text-3xl font-semibold text-end absolute bottom-4 right-5">Access Level: {userDetails?.userRole}</p>
                     <div className="absolute bottom-[-50px] flex items-center justify-between">
                         <div className="flex relative items-center gap-4">
-                            <div
+                            {/* <div
                                 className="relative w-[100px] h-[100px] rounded-full overflow-hidden"
                                 onMouseEnter={() => setIsHovered(true)}
                                 onMouseLeave={() => setIsHovered(false)}
@@ -234,14 +267,54 @@ useEffect(() => {
                                     accept="image/*"
                                     onChange={handleFileChange}
                                 />
-                            </div>
+                            </div> */}
 
+                              <div
+ className="relative w-[100px] h-[100px] rounded-full flex items-center justify-center cursor-pointer bg-gray-300"
+  onMouseEnter={() => setIsHovered(true)}
+  onMouseLeave={() => setIsHovered(false)}
+  onClick={handleFileSelect}
+>
+  {userDetails?.fileUrl ? (
+    <img
+      src={userDetails.fileUrl}
+      alt=""
+      className="w-full h-full object-cover rounded-full"
 
+    />
+  ) : (
+    <span className="text-white text-xl font-semibold">
+      {userDetails?.name?.[0]?.toUpperCase() || 'P'}
+    </span>
+  )}
+
+  {isHovered && (
+    <div className="absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity duration-200 rounded-full">
+      <CiCamera className="text-white" size={24} />
+    </div>
+  )}
+
+ 
+
+  <input
+    ref={fileInputRef}
+    type="file"
+    className="hidden"
+    accept="image/*"
+    onChange={handleFileChange}
+  />
+</div>
+{fileError && (
+        <p className="text-red-500 text-sm mt-4 whitespace-nowrap overflow-hidden text-ellipsis">
+            {fileError}
+        </p>
+    )}
                             <div className="absolute bottom-0 top-16 left-[112px]">
                                 <p className="text-gray-500 text-base w-[400px]">
                                     {userDetails?.email}
                                 </p>
                             </div>
+   
                         </div>
                     </div>
                 </div>
@@ -259,6 +332,9 @@ useEffect(() => {
                                 onChange={handleInputChange}
                             />
                         </div>
+                        {nameError && (
+                            <p className="text-red-500 text-sm mt-1">{nameError}</p>
+                        )}
                     </div>
                     <div className='flex flex-col flex-1'>
                         <label className='text-base font-light text-black' htmlFor="">Email</label>
@@ -337,32 +413,40 @@ useEffect(() => {
                             IconComponent={<UserDetailsIcon />}
                             showIcon={false}
                             handleClick={async () => {
-    const success = await updateUserDetails({
-        userID: formValues.userID,
-        name: formValues.name,
-        userRole: formValues.userRole,
-        country: formValues.country,
-        company: formValues.company,
-        timeZone: formValues.timeZone,
-        isActive: formValues.isActive,
-        preferredLLMModelID: formValues.preferredLLMModelID || undefined
-    });
+                                // Validate Full Name
+                                if (formValues.name.length < 3) {
+                                    setNameError(' Name must be at least 3 characters.');
+                                    return;
+                                } else {
+                                    setNameError(null);
+                                }
 
-    if (success) {
-  await getUserDetails(); // ✅ Correct usage now
-}
-}}
-                     
-                            // handleClick={() => updateUserDetails({
-                            //     userID: formValues.userID,
-                            //     name: formValues.name,
-                            //     userRole: formValues.userRole,
-                            //     country: formValues.country,
-                            //     company: formValues.company,
-                            //     timeZone: formValues.timeZone,
-                            //     isActive: formValues.isActive,
-                            //     preferredLLMModelID: formValues.preferredLLMModelID || undefined
-                            // })}
+                                const success = await updateUserDetails({
+                                    userID: formValues.userID,
+                                    name: formValues.name,
+                                    userRole: formValues.userRole,
+                                    country: formValues.country,
+                                    company: formValues.company,
+                                    timeZone: formValues.timeZone,
+                                    isActive: formValues.isActive,
+                                    preferredLLMModelID: formValues.preferredLLMModelID || undefined
+                                });
+
+                                if (success) {
+                                    await getUserDetails(); 
+                                }
+                            }}
+
+                        // handleClick={() => updateUserDetails({
+                        //     userID: formValues.userID,
+                        //     name: formValues.name,
+                        //     userRole: formValues.userRole,
+                        //     country: formValues.country,
+                        //     company: formValues.company,
+                        //     timeZone: formValues.timeZone,
+                        //     isActive: formValues.isActive,
+                        //     preferredLLMModelID: formValues.preferredLLMModelID || undefined
+                        // })}
                         />
                     </div>
 
@@ -377,16 +461,17 @@ useEffect(() => {
                                     onChange={(e) => setLogoutFromAll(e.target.checked)}
                                     className="form-checkbox h-4 w-4 text-green-300 rounded border-gray-300 focus:ring-green-300 cursor-pointer"
                                 />
-                                <span>Logout from all devices</span>
-                                <div className="group relative inline-block">
-                                    <IoMdInformationCircleOutline className="text-gray-400 hover:text-gray-600 cursor-help" size={18} />
-                                    <div className="invisible group-hover:visible absolute left-0 bottom-full mb-2 w-72 bg-gray-800 text-white text-xs rounded p-2 shadow-lg">
-                                        When enabled, this will terminate all active sessions across all devices where you&apos;re currently logged in.
-                                        This is useful if you suspect unauthorized access or want to ensure complete security across all devices.
-                                        Your email will also be removed from the login screen.
-                                    </div>
-                                </div>
                             </label>
+                            <span>Logout from all devices</span>
+                            <div className="group relative inline-block">
+                                <IoMdInformationCircleOutline className="text-gray-400 hover:text-gray-600 cursor-help" size={18} />
+                                <div className="invisible group-hover:visible absolute left-0 bottom-full mb-2 w-72 bg-gray-800 text-white text-xs rounded p-2 shadow-lg">
+                                    When enabled, this will terminate all active sessions across all devices where you&apos;re currently logged in.
+                                    This is useful if you suspect unauthorized access or want to ensure complete security across all devices.
+                                    Your email will also be removed from the login screen.
+                                </div>
+                            </div>
+
                         </div>
 
                         <Button
