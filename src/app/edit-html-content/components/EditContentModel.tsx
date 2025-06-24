@@ -246,13 +246,14 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion }: Edit
                 const resGenerate = await ApiService.get<any>(`${urls.asset_generate}?assetID=${assetVersion.assetID}&assetVersionID=${assetVersion.assetVersionID}`);
                 if (resGenerate.isSuccess) {
                     const resAssetSelect = await ApiService.get<any>(`${urls.asset_version_select}?assetVersionID=${assetVersion.assetVersionID}`);
+                                      
                     if (resAssetSelect.isSuccess) {
                         const {isSuccess,errorOnFailure,...updatedVersion} = resAssetSelect
                         
                         const indexAssetVersion = versionList.findIndex((item) => item.assetVersionID === assetVersion.assetVersionID)
                         const newVersionList = versionList[indexAssetVersion] = updatedVersion
                         updateEntireVersionList(newVersionList)
-                        setIsShowModelEdit(false);
+                        // setIsShowModelEdit(false);
                     }
 
                     if(assetVersion.status === STATUS.ON_REVIEW) {
@@ -271,6 +272,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion }: Edit
             setIsLoading(false);
             setShowLoading(false)
             setIsUpdatingPreview(false);
+            setIsShowModelEdit(false);
         }
     };
 

@@ -311,7 +311,8 @@ const Page = () => {
                     <div className='flex-1'></div>
                 </div>
 
-                <div className="min-h-[82vh] border-t border-solid">
+                {/* <div className="min-h-[82vh] border-t border-solid"> */}
+                <div className="min-h-[calc(100vh-64px)] border-solid mt-4">
                     {!isLoading && (
                         <>
                             <EditHeader
@@ -344,7 +345,8 @@ const Page = () => {
                         </>
                     )}
 
-                    <div className="flex h-[92vh] relative border-red-500 border-solid">
+                    {/* <div className="flex h-[92vh] relative border-red-500 border-solid"> */}
+                    <div className="flex h-[calc(100vh-64px)] relative border-red-500 border-solid">
                         <div className="flex flex-col bg-[#e4e4e4] flex-grow pb-10 overflow-x-hidden overflow-y-scroll scrollbar-hide relative mx-14">
                             <div className='px-[6rem] overflow-y-scroll thin-scrollbar'>
                                 <div id="container">

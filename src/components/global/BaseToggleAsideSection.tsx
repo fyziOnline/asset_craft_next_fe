@@ -53,7 +53,7 @@ const BaseToggleAside: FC<BaseToggleAsideProps> = ({
 
             <div
                 onClick={toggleAside}
-                className={`absolute top-10 transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300 border-t-2 border-l-2 border-b-2`}
+                className={`absolute top-[2.9rem] transform -translate-y-1/2 flex items-center w-[25px] h-14 gap-2.5 px-2 py-[18px] bg-[#00b188] rounded-[10px_0px_0px_10px] cursor-pointer transition-all duration-300 border-t-2 border-l-2 border-b-2`}
                 style={{
                     right: isOpen ? '100%' : '0px', // Move the button off-screen when open
                     zIndex: 20,
