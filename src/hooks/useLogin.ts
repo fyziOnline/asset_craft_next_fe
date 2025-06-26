@@ -1,12 +1,11 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { urls } from '@/apis/urls';
+import { nkey } from '@/data/keyStore';
+import { ApiService } from '@/lib/axios_generic';
+import { CookieManager } from '@/utils/cookieManager';
 import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode";
-import { ApiService } from '@/lib/axios_generic';
-import { nkey } from '@/data/keyStore';
-import { urls } from '@/apis/urls';
-import { useAppData } from '@/context/AppContext';
-import { CookieManager } from '@/utils/cookieManager';
+import { useRouter } from 'next/navigation';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 interface ResLoginProps {
     isSuccess: boolean,
@@ -26,6 +25,9 @@ export const useLogin = () => {
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
     const [otpErrorMessage, setOtpErrorMessage] = useState<string>("");
+    const [otpGeneratedAt, setOtpGeneratedAt] = useState<number | null>(null);
+const [otpEmail, setOtpEmail] = useState<string | null>(null);
+
 
     useEffect(() => {
         const email_login = Cookies.get(nkey.email_login);
@@ -58,56 +60,182 @@ export const useLogin = () => {
         await handleLogin(true);
     };
 
-    const handleLogin = async (skipLoading = false) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     const handleLogin = async (skipLoading = false) => {
+//         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// setEmailErrorMessage("Validating email…");
+//         try {
 
-        try {
-            setEmailErrorMessage("Validating email…");
-            if (email.length === 0) {
-                setEmailErrorMessage("Email is required")
-                return
-            }
+//             if (email.length === 0) {
+//                 setEmailErrorMessage("Email is required")
+//                 return
+//             }
 
-            if (!emailRegex.test(email)) {
-                setEmailErrorMessage("Please enter a valid email address");
-                return
-            }
+//             if (!emailRegex.test(email)) {
+//                 setEmailErrorMessage("Please enter a valid email address");
+//                 return
+//             }
 
-            setErrorMessage("");
-            // setEmailErrorMessage("");
+//             setErrorMessage("");
+//             setEmailErrorMessage("");
 
-            if (!skipLoading) {
-                setIsLoading(true);
-            }
+//             if (!skipLoading) {
+//                 setIsLoading(true);
+//             }
 
-            const resLogin = await ApiService.post<any>(urls.login, {
-                "email": email
-            });
+//             const resLogin = await ApiService.post<any>(urls.login, {
+//                 "email": email
+//             });
 
-            if (resLogin.isSuccess) {
-                setEmailErrorMessage("");
-                Cookies.set(nkey.email_login, email, { expires: 180 });
-                loginRef.current = resLogin
-                setIsOtpVisible(true);
-                setIsResending(true);
-                setOtpTimer(60)
-            }
-        } catch (error) {
-            const apiError = ApiService.handleError(error)
-        setEmailErrorMessage(apiError.message || "An error occurred while logging in");
-            console.error("Error:", apiError)
-        } finally {
-            if (!skipLoading) {
-                setIsLoading(false);
-            }
+//             if (resLogin.isSuccess) {
+//                 setEmailErrorMessage("");
+//                  setOtpErrorMessage("");
+//                 Cookies.set(nkey.email_login, email, { expires: 180 });
+
+//                 loginRef.current = resLogin
+//                 setOtpEmail(email);
+//                 setIsOtpVisible(true);
+//                 setEmailErrorMessage("");
+
+//                 setIsResending(true);
+//                 setOtpTimer(60);
+//                 otpRef.current = "";
+//                 setOtpGeneratedAt(Date.now());
+//             }
+
+//         } 
+
+//         catch (error) {
+//   setIsLoading(false);
+
+//   const apiError = ApiService.handleError(error);
+//   const serverErrorMessage = apiError.message || "An error occurred while logging in";
+
+//   // Determine if OTP was actually triggered (login was successful earlier)
+//   const isOtpInProgress = isOtpVisible && otpGeneratedAt && otpEmail === email;
+
+//   // Only suppress if OTP is in progress AND within grace period
+//   const FIVE_MINUTES = 5 * 60 * 1000;
+//   const now = Date.now();
+//   const isSameOtpEmail = otpEmail && email === otpEmail;
+//   const isWithinGracePeriod = isOtpInProgress  && isSameOtpEmail &&  now - otpGeneratedAt < FIVE_MINUTES;
+
+//   if (!isWithinGracePeriod) {
+//   // Show login error immediately
+//   setEmailErrorMessage(serverErrorMessage);
+// } else {
+//   console.warn("Email error suppressed during OTP grace period");
+// }
+
+//   console.error("Login Error:", apiError);
+// }
+        
+// //         catch (error) {
+// //              setIsLoading(false);
+// //           const apiError = ApiService.handleError(error);
+// //         const FIVE_MINUTES = 5 * 60 * 1000;
+// //         const now = Date.now();
+
+// //         const isWithinGracePeriod =
+// //             otpGeneratedAt !== null && now - otpGeneratedAt < FIVE_MINUTES;
+// // const isSameOtpEmail = otpEmail && email === otpEmail;
+// //         const shouldSuppressError = isOtpVisible && isSameOtpEmail && isWithinGracePeriod;
+
+// //   if (!shouldSuppressError) {
+// //     setEmailErrorMessage(apiError.message || "An error occurred while logging in");
+// //   } else {
+// //     console.warn("Email error suppressed after OTP generation or within grace period");
+// //   }
+
+// //   console.error("Error:", apiError);
+
+// //         } 
+//         finally {
+//             if (!skipLoading) {
+//                 setIsLoading(false);
+//             }
+//         }
+//     }
+
+const handleLogin = async (skipLoading = false) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailErrorMessage("Validating email…");
+
+    try {
+        if (email.length === 0) {
+            setEmailErrorMessage("Email is required");
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            setEmailErrorMessage("Please enter a valid email address");
+            return;
+        }
+
+        setErrorMessage("");
+        setEmailErrorMessage("");
+
+        if (!skipLoading) {
+            setIsLoading(true);
+        }
+
+        // ⏱️ 5 second timeout promise
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Server took too long to respond. Please try again.")), 5000)
+        );
+
+        // 📨 Call API with timeout
+        const resLogin = await Promise.race([
+            ApiService.post<any>(urls.login, { email }),
+            timeoutPromise
+        ]);
+
+        if (resLogin?.isSuccess) {
+            setEmailErrorMessage("");
+            setOtpErrorMessage("");
+            Cookies.set(nkey.email_login, email, { expires: 180 });
+
+            loginRef.current = resLogin;
+            setOtpEmail(email);
+            setIsOtpVisible(true);
+            setEmailErrorMessage("");
+
+            setIsResending(true);
+            setOtpTimer(60);
+            otpRef.current = "";
+            setOtpGeneratedAt(Date.now());
+        }
+    } catch (error: any) {
+        setIsLoading(false);
+
+        const apiError = ApiService.handleError(error);
+        const serverErrorMessage = error?.message || apiError?.message || "An error occurred while logging in";
+
+        const now = Date.now();
+        const isSameOtpEmail = otpEmail && email === otpEmail;
+        const isOtpInProgress = isOtpVisible && otpGeneratedAt && isSameOtpEmail;
+        const isWithinGracePeriod = isOtpInProgress && now - otpGeneratedAt < 5 * 60 * 1000;
+
+        if (!isWithinGracePeriod) {
+            setEmailErrorMessage(serverErrorMessage);
+        } else {
+            console.warn("Email error suppressed during OTP grace period");
+        }
+
+        console.error("Login Error:", apiError || error);
+    } finally {
+        if (!skipLoading) {
+            setIsLoading(false);
         }
     }
+};
+
 
     const handleOtpSubmit = async () => {
-
+        setEmailErrorMessage("");
         let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
         if (otpRef.current.trim().length === 0) {
+            setEmailErrorMessage("");
             setOtpErrorMessage("Please enter OTP code.");
             return;
         }
@@ -133,6 +261,7 @@ export const useLogin = () => {
             if (resToken.isSuccess) {
                 const decodedToken: any = jwtDecode(resToken.accessToken);
                 const { UserID, UserRole } = decodedToken;
+                setEmailErrorMessage("");
 
                 CookieManager.setUserId(UserID);
                 CookieManager.setUserRole(UserRole);
@@ -178,6 +307,7 @@ export const useLogin = () => {
     const handleCancelOtp = () => {
         setIsOtpVisible(false);
         otpRef.current = ""
+         setEmailErrorMessage("");
     }
 
     const checkIsUserAuthorized = (): boolean => {
@@ -201,6 +331,7 @@ export const useLogin = () => {
         otpTimer,
         emailErrorMessage,
         otpErrorMessage,
-        errorMessage
+        errorMessage,
+        // otpGeneratedAt,
     };
 };

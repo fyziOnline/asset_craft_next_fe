@@ -151,7 +151,7 @@ const ProfilePage: React.FC = () => {
             if (response.isSuccess) {
                 // Clear cookies based on logout type
                 CookieManager.clearAuthCookies(!logoutFromAll);
-                setUserDetails(null);
+                // setUserDetails(null);
                 router.push('/');
             }
         } catch (error) {
