@@ -99,9 +99,12 @@ const Home: FC = () => {
             />
 
             {/* <p className="text-red-500 text-sm pt-2">{errorMessage}</p> */}
-            {emailErrorMessage && (
+            {/* {emailErrorMessage && (
               <p className="text-red-500 text-sm mt-1">{emailErrorMessage}</p>
-            )}
+            )} */}
+            {emailErrorMessage && !isOtpVisible && (
+  <p className="text-red-500 text-sm mt-1">{emailErrorMessage}</p>
+)}
 
             <button disabled={isLoading} onClick={() => handleLogin(true)} className={`my-[1rem] text-sm home-box-element px-[1rem] py-[0.85rem] w-[34ch] Light rounded-full ${isLoading ? "" : "bg-custom-gradient-green"}`}>{isLoading ? 'Loading...' : 'Get your OTP'}</button>
           </div>
