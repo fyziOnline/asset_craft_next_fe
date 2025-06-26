@@ -78,6 +78,7 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion }: Edit
     const [isEditPrompt, setIsEditPrompt] = useState(false);
     const [assetBlockSelected, setAssetBlockSelected] = useState<AssetBlockProps>(assetBlock);
     const [blockData, setBlockData] = useState(JSON.parse(assetBlock.blockData as string));
+    // console.log("blockData :",blockData.schema)
     const refAiPromptCurrent = useRef(assetBlock.aiPrompt);
     const { setShowLoading } = useLoading();
     
@@ -90,6 +91,11 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion }: Edit
     const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData() as AssetHTMLData
+    // console.log('assetHTMLDATA :',assetHTMLData);
+    const decision = assetHTMLData.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined
+    // console.log('decision :',decision);
+    // console.log('assetBlock.schema :',assetBlock.schema);
+    
     const updateEntireVersionList = useEditAssetStoreSelector.use.updateEntireVersionList()
     const versionList = useEditAssetStoreSelector.use.versionList() as AssetVersionProps[]
     
