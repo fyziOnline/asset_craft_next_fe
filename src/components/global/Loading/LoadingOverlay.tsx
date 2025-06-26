@@ -6,14 +6,7 @@ import loadingAnimation from '../../../../public/loadingIcon.json';
 // Dynamically import
 const DynamicPlayer = dynamic(
     () => import('@lottiefiles/react-lottie-player').then(mod => ({ default: mod.Player })),
-    { 
-        ssr: false,
-        loading: () => (
-            <div className="flex justify-center items-center">
-                <div className="animate-pulse bg-gray-200 rounded-full h-[400px] w-[400px]" />
-            </div>
-        )
-    }
+    { ssr: false }
 );
 
 interface LoadingOverlayProps {
