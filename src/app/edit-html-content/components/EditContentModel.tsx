@@ -11,7 +11,7 @@ import ShadowDomContainer from './ShadowDomContainer';
 import { useLoading } from '@/components/global/Loading/LoadingContext';
 import CloseIcon from '@mui/icons-material/Close';
 import { CustomTextArea, CustomTextTester } from './CustomTextArea';
-import { linkedIn_noImage_Uischema, linkedIn_Uischema } from './schema';
+import { UiSchema } from './schema';
 import { ImagePickerTester } from './Controller/test/ImageController';
 import { ImagePickerController } from './Controller/ImagePickerController';
 import { STATUS } from '@/constants';
@@ -91,14 +91,24 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion }: Edit
     const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     const assetHTMLData = useEditAssetStoreSelector.use.assetHTMLData() as AssetHTMLData
-    // console.log('assetHTMLDATA :',assetHTMLData);
-    const decision = assetHTMLData.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined
-    // console.log('decision :',decision);
-    // console.log('assetBlock.schema :',assetBlock.schema);
+    console.log('assetHTMLDATA :',assetHTMLData);
+    
+    console.log('assetBlock.schema :',assetBlock.schema);
+    console.log('assetBlock.uischema :',assetBlock.uiSchema);
     
     const updateEntireVersionList = useEditAssetStoreSelector.use.updateEntireVersionList()
     const versionList = useEditAssetStoreSelector.use.versionList() as AssetVersionProps[]
     
+    const isUISchemaEmpty = (uiSchema: string): boolean => {
+        try {
+            const parsed = JSON.parse(uiSchema);
+            return Object.keys(parsed).length === 0;
+        } catch (error) {
+            return true;
+        }
+    };
+
+
     // Function to refresh preview HTML
     const refreshPreview = useCallback(async () => {
         if (!hasChanges) return;
@@ -388,18 +398,21 @@ const EditContentModel = ({ setIsShowModelEdit, assetBlock, assetVersion }: Edit
                                         Preview will update automatically in 3 seconds
                                     </div>
                                 )}
-                                <JsonForms
-                                    schema = {JSON.parse(assetBlock.schema as string)}
-                                    data={blockData}
-                                    renderers={[
-                                        ...materialRenderers,
-                                        { tester: CustomTextTester, renderer: CustomTextArea },
-                                        {tester : ImagePickerTester, renderer : ImagePickerController }
-                                    ]}
-                                    uischema={assetHTMLData.layoutName.toLowerCase().includes("linkedin") ? (assetBlock.schema.includes("image_url") ? linkedIn_Uischema : linkedIn_noImage_Uischema) : undefined }
-                                    cells={materialCells}
-                                    onChange={onHandleEditData}
-                                />
+                                {/* { */}
+                                    {/* // blockData.schema && */}
+                                    <JsonForms
+                                        schema = {JSON.parse(assetBlock.schema as string)}
+                                        data={blockData}
+                                        renderers={[
+                                            ...materialRenderers,
+                                            { tester: CustomTextTester, renderer: CustomTextArea },
+                                            {tester : ImagePickerTester, renderer : ImagePickerController }
+                                        ]}
+                                        uischema={isUISchemaEmpty(assetBlock?.uiSchema) ? undefined : JSON.parse(assetBlock.uiSchema as string) }
+                                        cells={materialCells}
+                                        onChange={onHandleEditData}
+                                    />
+                                {/* } */}
                             </div>
                         </div>
                     </div>
