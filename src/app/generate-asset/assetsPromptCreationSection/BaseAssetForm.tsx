@@ -18,6 +18,7 @@ import { AssetSectionConfig } from '@/app/generate-asset/config/assetConfig';
 import { AssetPromptResponse } from '@/types/apiResponses';
 import { ApiService } from '@/lib/axios_generic';
 import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore';
+import { useEditAssetStoreSelector } from '@/store/editAssetStore';
 
 export interface BaseAssetFormProps {
   params: {
@@ -37,8 +38,8 @@ export interface BaseAssetFormProps {
       outputScale?: string | null;
       tone?: string;
       type?: string;
-      fileName?:string;
-      fileSelected?:File
+      fileName?: string;
+      fileSelected?: File
     };
   };
   assetType: string;
@@ -67,7 +68,7 @@ const initialFormData: Partial<FormDataProps> = {
   tone: '',
   type: '',
   fileSelected: undefined,
-  fileName:''
+  fileName: ''
 };
 
 const BaseAssetForm = ({
@@ -82,7 +83,7 @@ const BaseAssetForm = ({
 }: BaseAssetFormProps) => {
   const router = useRouter();
   const [generateStep, setGenerateStep] = useState(1);
-  const { assetIDTemplateRef, generateHTML, aiPromptGenerateForAsset, getVersionDataUsingAI, generateVersionHTML, getAssetByVersionId,uploadImage } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
+  const { assetIDTemplateRef, generateHTML, aiPromptGenerateForAsset, getVersionDataUsingAI, generateVersionHTML, getAssetByVersionId, uploadImage } = useGenerateTemplate({ params: { templateID: params.template?.templateID ?? '' } });
   const [formData, setFormData] = useState<Partial<FormDataProps>>(initialFormData);
   const [sectionsData, setSectionsData] = useState<SectionProps[]>([]);
   const { setShowLoading, showLoading } = useLoading();
@@ -95,18 +96,19 @@ const BaseAssetForm = ({
   const [section4Interacted, setSection4Interacted] = useState(false);
   const [isValidUrl, setIsValidUrl] = useState<boolean>(false);
   const [isSaveSuccessful, setIsSaveSuccessful] = useState(false);
-const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
-  const [projectDetails,setProjectDetails] = useState<ProjectDetails>({
+  const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
+  const [projectDetails, setProjectDetails] = useState<ProjectDetails>({
     project_name: "",
     campaign_name: "",
     asset_name: "",
     campaignID: ""
   })
-  
+
   const updateAssetGenerateStep = useGenerateAssetStoreSelector.use.updateAssetGenerateStep()
+  const updateVersionField = useEditAssetStoreSelector.use.updateVersionField();
 
   useEffect(() => {
-    if (isEditMode && params.editContextData) {      
+    if (isEditMode && params.editContextData) {
       setFormData(prev => ({
         ...prev,
         product: params.project_name ?? '',
@@ -118,7 +120,7 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
         keyPoints: params.editContextData?.keyPoints ?? '',
         tone: params.editContextData?.tone ?? '',
         type: params.editContextData?.type ?? '',
-        fileName:params.editContextData?.fileName ?? ''
+        fileName: params.editContextData?.fileName ?? ''
       }));
       if (params.template?.templatesBlocks) {
         const initialSections = params.template.templatesBlocks
@@ -190,7 +192,11 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
 
   // Separate function for regenerating in edit mode
   const handleRegenerate = useCallback(async () => {
-    if (showLoading || generateStep !== 1 || !canRegenerateInEditMode || !existingAssetDetails?.asset_id) {
+    if (showLoading || generateStep !== 1 ||
+      !canRegenerateInEditMode ||
+      !existingAssetDetails?.asset_id ||
+      !aiPromptCampaignUpsert
+    ) {
       if (!existingAssetDetails?.asset_id) {
         console.error("Regenerate clicked but existingAssetDetails.asset_id is missing");
         setError({ status: 400, message: "Cannot regenerate, asset details missing.", showError: true });
@@ -202,6 +208,26 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
     setGenerateStep(2);
 
     try {
+
+      const campaignPayload: Partial<FormDataProps> = {
+        product: existingAssetDetails.project_name,
+        campaignGoal: formData.campaignGoal,
+        targetAudience: formData.targetAudience,
+        webUrl: formData.webUrl
+      };
+
+      const getFileId = await uploadImage(formData);
+
+      const campaignRes = await aiPromptCampaignUpsert(
+        campaignPayload as FormDataProps,
+        getFileId,
+        existingAssetDetails.campaign_id
+      );
+
+      if (!campaignRes.isSuccess) {
+        throw new Error("Failed to save campaign details during regenerate.");
+      }
+
       const assetVersionID = params.assetVersionID;
       if (!assetVersionID) {
         throw new Error("Asset Version ID is missing, cannot regenerate.");
@@ -215,16 +241,35 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
 
       const generateHtmlRes = await generateVersionHTML(assetVersionID) as any;
       const updatedVersion = await getAssetByVersionId(assetVersionID)
-      const updatedVersionList: AssetVersionProps[] | any = contextData.AssetHtml.assetVersions.map(version =>
-        version.assetVersionID === assetVersionID ? updatedVersion : version
-      )
-      setContextData({ AssetHtml: { ...contextData.AssetHtml, assetVersions: updatedVersionList } })
+
+      // const updatedVersionList: AssetVersionProps[] | any = contextData.AssetHtml.assetVersions.map(version =>
+      //   version.assetVersionID === assetVersionID ? updatedVersion : version
+      // )
+      const existingVersions = contextData?.AssetHtml?.assetVersions ?? [];
+
+      const updatedVersionList = existingVersions.map(version =>
+        version.assetVersionID === assetVersionID ? { ...updatedVersion } : version
+      );
+
+      // console.log("Is version matched and replaced?", updatedVersionList);
+
+      setContextData({
+        AssetHtml: {
+          ...contextData.AssetHtml,
+          assetVersions: [...updatedVersionList]
+        }
+      });
+
+      updateVersionField(updatedVersion.assetVersionID, updatedVersion);
+
+      // console.log("Updated version after regenerate:", updatedVersion);
+      // setContextData({ AssetHtml: { ...contextData.AssetHtml, assetVersions: updatedVersionList } })
 
       if (!generateHtmlRes?.isSuccess) {
         throw new Error("Failed to generate HTML for version.");
       }
 
-        setIsRegenerateSuccessful(true); 
+      setIsRegenerateSuccessful(true);
 
       if (setIsOpen) {
         setIsOpen(false);
@@ -239,14 +284,15 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
       //   message: apiError.message || "Failed to regenerate asset version.",
       //   showError: true
       // });
-       setIsRegenerateSuccessful(false); 
+      setIsRegenerateSuccessful(false);
       setGenerateStep(1);
     } finally {
       setShowLoading(false);
     }
   }, [
-    showLoading, generateStep, canRegenerateInEditMode, existingAssetDetails, 
-    params.assetVersionID, getVersionDataUsingAI, generateVersionHTML, getAssetByVersionId, 
+    showLoading, generateStep, canRegenerateInEditMode, existingAssetDetails,
+    aiPromptCampaignUpsert, formData, uploadImage,
+    params.assetVersionID, getVersionDataUsingAI, generateVersionHTML, getAssetByVersionId,
     contextData, setContextData, setIsOpen, setError, setShowLoading
   ]);
 
@@ -260,7 +306,7 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
     }
 
     let newStep = generateStep + 1;
-    let generationStepStatus :'inc'|'reset' = 'inc'
+    let generationStepStatus: 'inc' | 'reset' = 'inc'
 
     if (newStep > 3) {
       newStep = 1;
@@ -281,10 +327,10 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
           // router.replace(
           //   `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${projectDetails.project_name || ""}&campaignName=${projectDetails.campaign_name || ""}&assetName=${projectDetails.asset_name || ""}&assetTypeIcon=${assetType || ""}`
           // );         
-          
+
           router.replace(
-          `/edit-html-content?assetID=${encodeURIComponent(assetIDTemplateRef.current || "")}&projectName=${encodeURIComponent(projectDetails.project_name || "")}&campaignName=${encodeURIComponent(projectDetails.campaign_name || "")}&assetName=${encodeURIComponent(projectDetails.asset_name || "")}&assetTypeIcon=${encodeURIComponent(assetType || "")}`
-        );
+            `/edit-html-content?assetID=${encodeURIComponent(assetIDTemplateRef.current || "")}&projectName=${encodeURIComponent(projectDetails.project_name || "")}&campaignName=${encodeURIComponent(projectDetails.campaign_name || "")}&assetName=${encodeURIComponent(projectDetails.asset_name || "")}&assetTypeIcon=${encodeURIComponent(assetType || "")}`
+          );
 
         }
         else {
@@ -305,7 +351,7 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
 
   const handleInputChange = useCallback((field: string, value: string | number | File | null) => {
     const trimmedValue = typeof value === 'string' ? value.trim() : value;
-     console.log(`DropDown changed: field=${field}, value=${value}`);
+    console.log(`DropDown changed: field=${field}, value=${value}`);
     setFormData(prev => ({
       ...prev,
       [field]: trimmedValue
@@ -346,7 +392,7 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
       return newSections;
     });
     // if (isEditMode) setIsDirty(true);
-      setIsDirty(false);
+    setIsDirty(false);
   }, [isEditMode, setSectionsData]);
 
   const handleValidationChange = useCallback((isValid: boolean) => {
@@ -379,7 +425,7 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
 
     setIsSaving(true);
     setShowLoading(true);
-    try {      
+    try {
       const campaignPayload: Partial<FormDataProps> = {
         product: existingAssetDetails.project_name,
         campaignGoal: formData.campaignGoal,
@@ -388,7 +434,7 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
       };
 
       const getFileId = await uploadImage(formData);
-  
+
       const campaignRes = await aiPromptCampaignUpsert!(campaignPayload as FormDataProps, getFileId, existingAssetDetails.campaign_id);
 
       if (!campaignRes.isSuccess) {
@@ -408,12 +454,12 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
         throw new Error("Failed to save asset prompt details.");
       }
 
-       setIsDirty(true);
+      setIsDirty(true);
       setIsSaveSuccessful(true);
 
       if (aiPromptGenerateForAsset) {
         try {
-          assetIDTemplateRef.current = existingAssetDetails.asset_id; 
+          assetIDTemplateRef.current = existingAssetDetails.asset_id;
           const generateRes = await aiPromptGenerateForAsset();
           if (!generateRes?.isSuccess) {
             // Handle potential error during prompt generation if needed
@@ -475,7 +521,7 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
         }));
       setSectionsData(initialSections);
     }
-    
+
   }, [isEditMode, params.template?.templatesBlocks, setSectionsData]);
 
   // Effect to set product name in create mode
@@ -512,7 +558,7 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
         </Accordion>
       </div>
 
-      <div className="mt-[25px] "> 
+      <div className="mt-[25px] ">
         <Accordion
           isRequire={true}
           HeaderTitle="Campaign Overview"
@@ -559,12 +605,12 @@ const [isRegenerateSuccessful, setIsRegenerateSuccessful] = useState(false);
                 isValidUrl && <p className='text-red-500 -mt-2'>Invalid URL</p>
               }
               {/* {isEditMode && ( */}
-                <DragAndDrop
-                  onFileSelect={(file) => {
-                    handleInputChange('fileSelected', file as File);
-                  }}
-                  {...(getCurrentPath === "/edit-html-content" && { uploadedFile:formData.fileName })}
-                />
+              <DragAndDrop
+                onFileSelect={(file) => {
+                  handleInputChange('fileSelected', file as File);
+                }}
+                {...(getCurrentPath === "/edit-html-content" && { uploadedFile: formData.fileName })}
+              />
               {/* )} */}
             </div>
           </div>
