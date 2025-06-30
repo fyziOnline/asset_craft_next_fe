@@ -102,7 +102,7 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
         }
     }
 
-    const eventInputComment = debounce((e: ChangeEvent<HTMLTextAreaElement>) => {
+    const eventInputComment = debounce((e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setReAssignAssetDetails(pre => ({
             ...pre,
             comment: e.target.value
@@ -130,7 +130,7 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
                 setApprovalDetails(initStateApprovalDetails)
                 setComments(null)
             }
-            
+
         } catch (error) {
             const apiError = ApiService.handleError(error)
             setIsReAssignSuccessFull(false)
@@ -152,7 +152,6 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
             setCanReassign(false)
 
             const resRemoteFileUpload = await uploadReAssignFile(approvalDetails)
-            console.log('resRemoteFileUpload', resRemoteFileUpload);
 
             if (!resRemoteFileUpload?.status) {
                 throw new ApiError('Uploading file failed', 500, {});
@@ -241,6 +240,9 @@ export const useAssetApproval = (assetData: AssetApprovalHookArg) => {
         getApprovalDetails,
         reAssignAsset,
         approveAsset,
-        comments
+        comments,
+        setReAssignAssetDetails,
+        reAssignAssetDetails,
+        setCanReassign
     }
 }

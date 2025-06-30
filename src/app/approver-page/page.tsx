@@ -77,7 +77,8 @@ const Page: FC = () => {
         reAssignLoading,
         eventInputComment,
         isReAssignSuccessFull,
-        comments
+        comments,
+        getApprovalDetails
     } = useAssetApproval(
         {
             assetVersionID: versionSelected?.assetVersionID || "",
@@ -330,6 +331,7 @@ const Page: FC = () => {
                                 isOpen={isFeedbackOpen}
                                 onClose={() => setIsFeedbackOpen(false)}
                                 onDownloadFile={handleDownloadFile}
+                                getApprovalDetails={getApprovalDetails}
                             />
                             {/* {isFeedbackOpen && (
                                 <div
