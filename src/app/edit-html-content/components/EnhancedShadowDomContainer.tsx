@@ -237,7 +237,7 @@ const EnhancedShadowDomContainer: React.FC<EnhancedShadowDomContainerProps> = ({
         editBtnContainer.dataset.forBlock = blockId;
 
         const styleMap = {
-          "Landing Page": "-95px",
+          "Landing Page": "-115px",
           "LinkedIn": "-120px",
           "Call Script": "-150px",
           "Email": "-120px"
