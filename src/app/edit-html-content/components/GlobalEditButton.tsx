@@ -9,7 +9,7 @@ interface GlobalEditButtonProps {
 const GlobalEditButton: React.FC<GlobalEditButtonProps> = ({ onClick, assetTypeIcon }) => {
     return (
         <div
-        className={`absolute top-4 ${assetTypeIcon === 'Email' ? 'left-[-3rem]' : assetTypeIcon === 'Landing Page' ? 'left-[-3rem]' : ''} transform group cursor-pointer z-[99]`}            onClick={onClick}
+        className={`absolute top-4 ${assetTypeIcon === 'Email' ? 'left-[5rem]' : assetTypeIcon === 'Landing Page' ? 'left-[-3rem]' : ''} transform group cursor-pointer z-[99]`}            onClick={onClick}
         >
             <div id="global_edit_button" typeof="button">
                 <GlobalEdit />
