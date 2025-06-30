@@ -22,7 +22,7 @@ interface FeedbackPanelProps {
   isOpen: boolean
   onClose: () => void
   onDownloadFile: (fileUrl: string) => void
-  getApprovalDetails: () => void
+  getApprovalDetails?: () => void
 }
 
 const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
@@ -134,7 +134,9 @@ const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
   const handleSendFeedback = async () => {
     try {
       await reAssignAsset();
-      getApprovalDetails();
+      if (getApprovalDetails) {
+        getApprovalDetails()
+      }
 
       if (feedbackInputRef.current) {
         feedbackInputRef.current.value = "";
