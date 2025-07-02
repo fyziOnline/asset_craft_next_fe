@@ -18,12 +18,11 @@ const NotFound = () => {
                     <p className="text-5xl md:text-6xl font-bold text-teal-500 mt-2">404</p>
 
                     <h2 className="text-2xl md:text-3xl font-semibold text-gray-600 mt-8">
-                        You're lost in the void.
+                        Page Not Found
                     </h2>
 
                     <p className="text-md md:text-lg text-gray-500 mt-4 mb-8 max-w-md mx-auto">
-                        The page you are looking for seems to have vanished into thin air.
-                    </p>
+                        The page you're looking for doesn't exist or has been moved. Let's get you back on track.                    </p>
 
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
                         <button
