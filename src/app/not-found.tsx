@@ -1,6 +1,6 @@
 "use client";
 
-import { FaArrowLeft, FaGhost } from "react-icons/fa6";
+import { FaArrowLeft } from "react-icons/fa6";
 import { AiOutlineHome } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 
