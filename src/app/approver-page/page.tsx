@@ -233,7 +233,7 @@ const Page: FC = () => {
                     {/* Edit section  */}
                     <div className="min-h-[82vh] border-t border-solid">
                         {/* Edit section header  */}
-                        <div className='w-full flex items-center  px-14 py-6'>
+                        <div className='w-full flex items-center  px-14 pt-6 pb-0 my-6'>
                             <div className='w-full flex items-center justify-between gap-4'>
 
                                 <div className='flex items-center gap-2'>
