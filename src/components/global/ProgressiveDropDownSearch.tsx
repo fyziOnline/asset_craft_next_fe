@@ -176,7 +176,7 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
           {filteredData.map((item, index) => (
             <div
               key={item.label}
-              className={`px-4 py-2 cursor-pointer ${
+              className={`px-4 py-2 cursor-pointer text-left ${
                 highlightedIndexOnHover !== -1 && highlightedIndexOnHover === index
                 ? 'bg-gray-200'
                 : highlightedIndexOnHover === -1 && highlightedIndex === index
