@@ -50,7 +50,7 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
         }
     }, [])
 
-    const getTemplates = async () => {
+    const getTemplates = async (assetType_id?:string) => {
         try {
             setIsLoading(true);
             const client_ID = Cookies.get(nkey.client_ID)
@@ -67,6 +67,30 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
                 message: apiError.message,
                 showError: true
             })
+        } finally {
+            setIsLoading(false);
+        }
+    } // used with old asset generation page and also in aside section in edit content html 
+
+    const getTemplatesByAssetType = async (assetType_id?:string) => {
+        try {
+            setIsLoading(true);
+            const client_ID = Cookies.get(nkey.client_ID)
+            const assetTypeID = queryParams.get('assetTypeID')
+            const resGetTemplates = await ApiService.get<TemplateSelectAllResponse>(`${urls.template_select_all}?clientID=${client_ID}&assetTypeID=${assetTypeID}`);
+
+            if (resGetTemplates.isSuccess) {
+                return resGetTemplates.templates
+            }
+            return []
+        } catch (error) {
+            const apiError = ApiService.handleError(error)
+            setError({
+                status: apiError.statusCode,
+                message: apiError.message,
+                showError: true
+            })
+            return []
         } finally {
             setIsLoading(false);
         }

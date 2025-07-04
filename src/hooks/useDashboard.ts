@@ -21,6 +21,7 @@ export const useDashboard = () => {
     const { setContextData, setError } = useAppData();
 
     const [clientAssetTypes, setClientAssetTypes] = useState<ClientAssetTypeProps[]>([])
+    // const 
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [isAssetNameExists, setIsAssetNameExists] = useState<boolean>(false);
     const [isProductNameValid, setIsProductNameValid] = useState<boolean>(true)
@@ -91,7 +92,7 @@ export const useDashboard = () => {
 
     const getAssetTypes = async () => {
         try {
-            setShowLoading(true)
+            // setShowLoading(true)
 
             const client_ID = Cookies.get(nkey.client_ID)
             const res = await ApiService.get<any>(`${urls.clientAssetType_select_all}?clientID=${client_ID}`);

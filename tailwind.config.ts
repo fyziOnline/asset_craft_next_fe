@@ -71,6 +71,7 @@ const config: Config = {
         'custom-light-blue': 'rgba(149, 206, 255, 0.32)',
         'custom-light-red': 'rgba(255, 71, 71, 0.32)',
         'custom-green-light': 'rgba(0, 168, 129, 0.15)',
+        'placer-grey':'#e4e4e4',
         'gray-300': '#B1B1B1', // Custom gray color
         'green-mist':'#00B1882E', // ref : used as bg for status label
         'green-100': '#00A881', // Custom light green color

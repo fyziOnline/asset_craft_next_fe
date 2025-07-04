@@ -1,4 +1,4 @@
-import { AssetHTMLData, AssetHtmlProps, AssetVersionProps, AssetVersionPropsExtended } from "@/types/templates"
+import { AssetHTMLData, AssetHtmlProps, AssetVersionProps, AssetVersionPropsExtended, Template } from "@/types/templates"
  
 export type EditAssetStore = {
   // State properties
@@ -31,4 +31,11 @@ export type GenerateAssetStore = {
     updateProgressionStep : (flag:'inc'|'dec'|'reset') => void
     updateAssetGenerateStep : (flag:'inc'|'dec'|'reset') => void
     resetAssetGenerateStore : () => void
+}
+
+export type AssetCraftStore = {
+  template : Template | null
+  assetType : string
+  updateAssetType : (type:string) => void
+  updateTemplate : (template:Template|null) => void
 }

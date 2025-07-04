@@ -24,7 +24,7 @@ const gitLabel = process.env.SHOW_GIT_VERSION === 'true'
 
 const Footer: React.FC<FooterProps> = ({footerPosition = 'fixed'}) => {
   return (
-    <footer className={`${footerPosition} right-0 left-0 bottom-0 z-50 bg-off-white-primary px-16 py-3 padbot15 padfooter`}>
+    <footer id="brand_lab-ftr" className={`${footerPosition} right-0 left-0 bottom-0 z-50 bg-off-white-primary px-16 py-3 padbot15 padfooter`}>
       <div className="md:flex justify-between items-center">
         <p className="text-xs text-center">
           © Copyright 2025 Hewlett Packard Enterprise

@@ -6,6 +6,7 @@ interface ProgressiveDropDownSearchProps {
   placeholder?:string
   messageForNewData?:string
   preSelectedValue ?: string
+  showCreateOption?: boolean;
   onSelect?: (name: string ) => void
 }
 
@@ -15,7 +16,8 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
   placeholder,
   messageForNewData,
   preSelectedValue,
-  onSelect
+  onSelect,
+  showCreateOption = true
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [filteredData, setFilteredData] = useState(data)
@@ -32,18 +34,21 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
 
   // Handle pre-selected value initialization - only run once on data load
   useEffect(() => {
-    if (!preSelectedValue || !preSelectedValue.length || !initialUpdateFlag || !data.length) {
-      return;
-    }
-    
-    setSearchTerm(preSelectedValue);
-    
-    if (onSelect) {
-      onSelect(preSelectedValue);
-    }
-    
-    setInitialUpdateFlag(false);
-  }, [data, preSelectedValue, onSelect, initialUpdateFlag]);
+      prevSearchTermRef.current = searchTerm;
+
+      const filtered = data.filter(item =>
+        item.label.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      setFilteredData(filtered);
+
+      if (filtered.length > 0 && searchTerm.length > 0) {
+        setAutoFillHint(filtered[0].label);
+      } else {
+        setAutoFillHint("");
+      }
+  }, [searchTerm, data]);
+
 
   // Filter data based on search term
   useEffect(() => {
@@ -55,9 +60,8 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
     prevSearchTermRef.current = searchTerm;
     
     const filtered = data.filter(item =>
-      item.value.toLowerCase().includes(searchTerm.toLowerCase())
+      item.label.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    
     setFilteredData(filtered);
     
     if (filtered.length > 0 && searchTerm.length > 0) {
@@ -93,7 +97,7 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
   }, [onSelect]);
 
   const handleItemSelect = useCallback((item: { label: string, value: string }) => {
-    setSearchTerm(item.value);
+    setSearchTerm(item.label);
     setIsDropdownOpen(false);
     
     if (onSelect) {
@@ -184,10 +188,10 @@ const ProgressiveDropDownSearch: FC<ProgressiveDropDownSearchProps> = ({
                 setHighlightedIndexOnHover(index);
               }}
             >
-              {item.value}
+              {item.label}
             </div>
           ))}
-          {filteredData.length < 1 && searchTerm.length > 0 &&
+          {showCreateOption && filteredData.length < 1 && searchTerm.length > 0 &&
             <div className="group px-4 py-2 text-gray-600 hover:bg-green-50 cursor-pointer">
               <p className='italic group-hover:text-green-100'>{`${messageForNewData}"${searchTerm}"`}</p>
             </div>
