@@ -8,7 +8,7 @@ export interface AssetSectionProps {
   existingData: AIPromptAsset | null;
   handleInputChange: (field: string, value: string | number | null) => void;
   onValidationChange: (isValid: boolean) => void;
-  assetType?: string;
+  assetType?: string | null;
   editContextData?: {
     topic?: string;
     keyPoints?: string;
@@ -173,7 +173,7 @@ export function getAssetSectionConfig(assetType: string): AssetSectionConfig {
 /**
  * Helper function to get labels for an asset type
  */
-export function getAssetLabels(assetType?: string): AssetSectionLabels {
+export function getAssetLabels(assetType?: string | null): AssetSectionLabels {
   if (!assetType || !assetLabelsConfig[assetType]) {
     return defaultLabels;
   }

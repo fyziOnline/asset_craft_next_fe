@@ -1,15 +1,16 @@
 import { create } from 'zustand'
 import { createSelectors } from './createStoreSelector'
 import { AssetCraftStore } from './_types'
+import { AssetType } from '@/types/assetTypes'
 
   
 const useAssetCraftStore = create<AssetCraftStore>((set,get) => ({
   // Initial state
   template : null,
-  assetType : "",
+  assetType : null,
 
   // Actions
-  updateAssetType : (type) => {
+  updateAssetType : (type: AssetType | null) => {
     set({
         assetType : type 
     })

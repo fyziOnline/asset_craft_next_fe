@@ -1,3 +1,4 @@
+import { AssetType } from "@/types/assetTypes"
 import { AssetHTMLData, AssetHtmlProps, AssetVersionProps, AssetVersionPropsExtended, Template } from "@/types/templates"
  
 export type EditAssetStore = {
@@ -35,7 +36,7 @@ export type GenerateAssetStore = {
 
 export type AssetCraftStore = {
   template : Template | null
-  assetType : string
-  updateAssetType : (type:string) => void
+  assetType : AssetType | null
+  updateAssetType : (type: AssetType | null) => void
   updateTemplate : (template:Template|null) => void
 }

@@ -4,7 +4,7 @@ import { X } from 'lucide-react'
 import React, { FC, useEffect, useRef } from 'react'
 
 type TemplateSelectionModalProp = {
-        type : string
+        type : string | null
         loading : boolean
         isOpen : boolean
         closeModal : React.Dispatch<React.SetStateAction<boolean>>

@@ -1,4 +1,4 @@
-import Footer from '@/components/Layout/Footer'
+import Footer from '@/components/layout/Footer'
 import { FC, ReactNode } from 'react'
 
 interface LayoutProps {

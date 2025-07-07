@@ -1,7 +1,7 @@
 import LoadingIndicator from "@/components/global/LoadingIndicator";
-import Footer from "@/components/Layout/Footer";
-import Header from "@/components/Layout/Header";
-import Navbar from "@/components/Layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
+import Navbar from "@/components/layout/Navbar";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 

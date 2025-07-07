@@ -10,10 +10,10 @@ import { getAssetLabels } from '@/app/generate-asset/config/assetConfig';
 // import { urls } from '@/apis/urls'; // Remove unused
 
 interface GenericAssetSectionProps {
-  existingData: AIPromptAsset | null;
+  existingData?: AIPromptAsset | null;
   handleInputChange: (field: string, value: string | number | null) => void;
   onValidationChange: (isValid: boolean) => void;
-  assetType?: string; // Optional asset type to get specific labels
+  assetType?: string | null; // Optional asset type to get specific labels
   // Optional editContext data directly passed from a component that has access
   editContextData?: {
     topic?: string;

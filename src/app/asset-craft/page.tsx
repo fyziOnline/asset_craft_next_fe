@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDashboard } from '@/hooks/useDashboard';
@@ -16,6 +16,9 @@ import FieldHeader from '@/components/global/FieldHeader';
 import MultiUrlInput from './component/MultiUrlInput';
 import DragAndDrop from '@/components/global/MultyFileDragAndDrop';
 import { useAssetCraftStoreSelector } from '@/store/assetCraftStore';
+import { assetSectionConfig, getAssetSectionConfig } from '../generate-asset/config/assetConfig';
+import { AIPromptAsset } from '@/types/templates';
+import { AssetType, isValidAssetType } from '@/types/assetTypes';
 
 
 export interface FormDataProps {
@@ -32,7 +35,7 @@ export interface FormDataProps {
     fileName?:string
 }
 
-const AssetDetails = () => {
+const CampaignDetails = () => {
 
   const updateAssetType = useAssetCraftStoreSelector.use.updateAssetType()
   const updateTemplate = useAssetCraftStoreSelector.use.updateTemplate()
@@ -121,7 +124,7 @@ const AssetDetails = () => {
             messageForNewData="Create new campaign : "
             onSelect={(asset_id) => {
               getTemplates(asset_id);
-              updateAssetType(clientAssetTypes.find(type=>type.assetTypeID === asset_id)?.assetTypeName || "")
+              updateAssetType(isValidAssetType(clientAssetTypes.find(type=>type.assetTypeID === asset_id)?.assetTypeName || "") ? clientAssetTypes.find(type=>type.assetTypeID === asset_id)?.assetTypeName as AssetType : null)
             }}
             showCreateOption = {false}
           />
@@ -269,10 +272,42 @@ const AssetDetails = () => {
   );
 };
 
-const CampaignDetails = () => {
+const AssetDetails = () => {
+  const assetType = useAssetCraftStoreSelector.use.assetType();
+  const [existingData, setExistingData] = useState<AIPromptAsset | null>(null);
+  const [isValid, setIsValid] = useState<boolean>(false);
+
+  const handleInputChange = useCallback((field: string, value: string | number | null) => {
+    // This function will handle changes from the dynamically rendered component
+    // For now, it's a placeholder. You'll need to implement the actual logic
+    // to update your form data or state here.
+    console.log(`Field: ${field}, Value: ${value}`);
+  }, []);
+
+  const onValidationChange = useCallback((valid: boolean) => {
+    setIsValid(valid);
+  }, []);
+
+  const assetSection = assetType ? getAssetSectionConfig(assetType) : null;
+  const AssetSpecificComponent = assetSection?.component;
+
+  if (!AssetSpecificComponent) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <h2 className="text-xl font-bold text-gray-800">Please select an Asset Type to view details.</h2>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <h2 className="text-3xl font-bold text-gray-800">Review Section Component</h2>
+      <AssetSpecificComponent
+        existingData={existingData}
+        handleInputChange={handleInputChange}
+        onValidationChange={onValidationChange}
+        assetType={assetType}
+        isEditMode={false} // Assuming this is for new asset creation in asset-craft
+      />
     </div>
   );
 }
@@ -295,7 +330,7 @@ const NestedSlidingSections = ({ setNestedInfoIndex}: { setNestedInfoIndex:(type
       id: 1,
       title: "Campaign Details",
       description : 'Please provide the necessary information about the campaign you are planning',
-      component: <AssetDetails />,
+      component: <CampaignDetails />,
       bgColor: "bg-gradient-to-br from-blue-50 to-indigo-100"
     },
     {

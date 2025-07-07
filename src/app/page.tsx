@@ -6,7 +6,7 @@ import { useLogin } from "@/hooks/useLogin";
 import { useRouter } from "next/navigation";
 import { IoMdClose } from "react-icons/io";
 import Button from "@/components/global/Button";
-import HomeHeader from "@/components/Layout/HomeHeader";
+import HomeHeader from "@/components/layout/HomeHeader";
 import { useLoading } from "@/components/global/Loading/LoadingContext";
 
 type TaglineObj = {
