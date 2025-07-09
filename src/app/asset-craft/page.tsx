@@ -389,7 +389,8 @@ const ReviewSection = () => {
     targetAudience: 'Existing Customers',
     campaignUrls: [
       'https://www.hpe.com/en/us/solutions/private-cloud.html',
-      'https://www.hpe.com/info/pvt-cloud-brief.pdf'
+      'https://www.hpe.com/en/us/solutions/new-solutions/private-cloud.html',
+      'https://www.hpe.com/info/pvt-cloud-brief.in'
     ],
     campaignDocs: [
       'HPE_Private_Cloud_Brief.pdf',
@@ -399,9 +400,9 @@ const ReviewSection = () => {
 
   // Example data for Asset Details section
   const assetDetailsData = {
-    assetName: 'sdsds',
-    primaryMessage: 'dsd',
-    additionalInformation: 'c dcdd',
+    assetName: 'Green Cloud',
+    primaryMessage: 'Green Cloud is a cloud-based platform that offers a range of services for businesses to deploy and manage their applications and data. It is designed to be flexible, scalable, and cost-effective, making it an ideal choice for organizations of all sizes.',
+    additionalInformation: 'Green Cloud is a cloud-based platform that offers a range of services for businesses to deploy and manage their applications and data. It is designed to be flexible, scalable, and cost-effective, making it an ideal choice for organizations of all sizes.',
     creativityLevel: 6,
     assetUrls: [],
     assetDocs: []
@@ -411,7 +412,7 @@ const ReviewSection = () => {
     <div className={`bg-white rounded-lg p-6 shadow-sm border border-gray-200 ${className}`}>
       <div className="flex items-center gap-3 mb-4">
         <div className="p-2 bg-blue-50 rounded-lg">
-          <Icon className="w-5 h-5 text-blue-600" />
+          <Icon className="w-5 h-5 text-green-500" />
         </div>
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
       </div>
@@ -420,9 +421,9 @@ const ReviewSection = () => {
   );
 
   const DataField = ({ label, value, isList = false }) => (
-    <div className="mb-4 last:mb-0">
-      <dt className="text-sm font-medium text-gray-600 mb-1">{label}</dt>
-      <dd className="text-gray-900">
+    <div className="mb-4 last:mb-0 flex items-start gap-2">
+      <dt className="text-base text-gray-600 font-bold min-w-[130px] text-start">{label}&nbsp;:</dt>
+      <dd className="text-gray-900 text-base text-start">
         {isList ? (
           value.length > 0 ? (
             <ul className="space-y-1">
@@ -452,7 +453,7 @@ const ReviewSection = () => {
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div 
-            className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-300"
+            className="bg-gradient-to-r from-green-300 to-green-500 h-2 rounded-full transition-all duration-300"
             style={{ width: `${level * 10}%` }}
           ></div>
         </div>
@@ -461,13 +462,8 @@ const ReviewSection = () => {
   );
 
   return (
-    <div className="w-full h-full flex items-center justify-center bg-gray-50 p-6">
+    <div className="flex items-center justify-center p-6 ">
       <div className="w-full max-w-6xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Review Your Configuration</h1>
-          <p className="text-gray-600">Please review the information below before proceeding</p>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Type and Campaign Section */}
@@ -698,7 +694,7 @@ const ComponentWithSideBySide = () => {
   return (
     <div className="w-full flex overflow-y-clip mt-3" style={{height:`calc(100vh - ${heightOfHeaderAndFooter.hF+heightOfHeaderAndFooter.hH}px`}}>
       {/* Left Section - 4/7 width - Contains nested sliding component */}
-      <div className="w-[60%] h-full bg-gray-50 border-r border-gray-200 flex flex-col">
+      <div className="w-[65%] h-full bg-gray-50 border-r border-gray-200 flex flex-col">
         <div className="p-6 border-b border-gray-200 bg-white">
           <h2 className="text-2xl font-bold text-gray-800">{nestedSlidesInformation[nestedInfoIndex].title}</h2>
           <p className="text-gray-600 mt-2">{nestedSlidesInformation[nestedInfoIndex].description}</p>
@@ -709,7 +705,7 @@ const ComponentWithSideBySide = () => {
       </div>
 
       {/* Right Section - 3/7 width */}
-      <div className="w-[40%] bg-white flex flex-col items-center justify-center p-8 overflow-y-auto">
+      <div className="w-[35%] bg-white flex flex-col items-center justify-center p-8 overflow-y-auto">
         {template ? (
             <div className="max-w-md text-center h-full">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">
