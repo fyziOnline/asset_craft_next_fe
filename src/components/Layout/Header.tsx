@@ -79,7 +79,7 @@ const Header: FC = () => {
 
   if (pathname === "/dashboard") {
     return (
-      <header className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] z-50 border-b shadow-md">
+      <header id="app_header" className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] z-50 border-b shadow-md">
         <div className="w-full flex items-center justify-between px-8">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <UserSection showWelcome={true} />
@@ -91,7 +91,7 @@ const Header: FC = () => {
   const showDetails = pathname === "/approver-page" || pathname === "/edit-html-content";
 
   return (
-    <header className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] px-7 md:px-10 z-50 border-b shadow-sm">
+    <header id="app_header" className="fixed top-0 right-0 left-[5.4rem] bg-white p-[0.6rem] px-7 md:px-10 z-50 border-b shadow-sm">
       <div className="w-full flex justify-between items-center">
         <div className="flex flex-row items-center space-x-3">
           <GoBackButton />

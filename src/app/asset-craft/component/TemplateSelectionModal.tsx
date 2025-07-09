@@ -29,7 +29,7 @@ const TemplateSelectionModal:FC <TemplateSelectionModalProp> = ({type,loading,is
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
-      <div ref={modalRef}  className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+      <div ref={modalRef}  className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[90%] flex flex-col">
         <div className="p-6 border-b flex justify-between items-center">
           <h2 className="text-2xl font-bold text-gray-800">
             Select a Template for {type}
