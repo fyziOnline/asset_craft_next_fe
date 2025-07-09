@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode, FC } from 'react';
 import LoadingOverlay from './LoadingOverlay';
+import { usePathname } from 'next/navigation';
 
 type LoadingContextType = {
     showLoading: boolean;
@@ -12,10 +13,16 @@ const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 
 export const LoadingProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [showLoading, setShowLoading] = useState(false);
+    const pathname = usePathname()
+
+    const hideLoadingRoutes = ['/dashboard', '/asset-in-progress', '/assets-under-review', '/assets-to-approve', '/completed-assets']
+    const shouldHideLoading = hideLoadingRoutes.includes(pathname)
 
     return (
         <LoadingContext.Provider value={{ showLoading, setShowLoading }}>
-            {showLoading && <LoadingOverlay loading={showLoading} />}
+            {!shouldHideLoading && showLoading && (
+                <LoadingOverlay loading={showLoading} />
+            )}
             {children}
         </LoadingContext.Provider>
     );
