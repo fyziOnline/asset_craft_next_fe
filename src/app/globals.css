@@ -448,10 +448,11 @@
 /* Skeleton row background */
 .skeleton-row {
   position: relative;
-  background: linear-gradient(to bottom right, #b2e6d4, #e0f5ec); /* Softer green gradient */
-  border-radius: 8px;
+  /* background: linear-gradient(to bottom right, #b2e6d4, #e0f5ec); */
+  background-color: #eceef1;
   overflow: hidden;
-  height: 48px; /* Fixed height for consistency */
+  height: 75px;
+  border-radius: 15px;
 }
 
 /* Wave animation overlay */

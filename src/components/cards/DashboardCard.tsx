@@ -9,16 +9,17 @@ interface DashboardCardProps {
   inProgress: number;
   customClass?: string;
   completedAssets: number;
+  loading?: boolean;
 }
 
-const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDate, totalAssets, underReview, inProgress, customClass, completedAssets }) => {
+const DashboardCard: React.FC<DashboardCardProps> = ({ projectName, allProjectDate, totalAssets, underReview, inProgress, customClass, completedAssets, loading }) => {
   const router = useRouter()
   const navigateToAssetPage = () => {
     router.push(`/asset?type=${projectName}`)
   }
   return (
     <div
-      className={`w-auto group cursor-pointer bg-[#F6F6F6] hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] p-4 hover:border-none ${customClass}`}
+      className={`w-auto h-[250px] group cursor-pointer ${loading ? "bg-gray-100" : "bg-[#F6F6F6]"} hover:bg-gradient-to-br hover:from-[#00A881] hover:to-[#073634] border border-[#D9D9D9] shadow-sm rounded-[15px] p-4 hover:border-none ${customClass}`}
       onClick={navigateToAssetPage}
     >
       <div className='flex items-center justify-between mb-2'>
