@@ -19,6 +19,7 @@ import { useAssetCraftStoreSelector } from '@/store/assetCraftStore';
 import { assetSectionConfig, getAssetSectionConfig } from '../generate-asset/config/assetConfig';
 import { AIPromptAsset } from '@/types/templates';
 import { AssetType, isValidAssetType } from '@/types/assetTypes';
+import GenericAssetSection from '../generate-asset/assetsPromptCreationSection/GenericAssetSection';
 
 
 export interface FormDataProps {
@@ -360,13 +361,19 @@ const AssetDetails = () => {
 
   return (
     <div className="w-full  flex items-center justify-center text-left mt-16">
-      <AssetSpecificComponent
+      <GenericAssetSection 
+        handleInputChange={handleInputChange}
+        onValidationChange={onValidationChange}
+        assetType={assetType}
+        existingData={existingData}
+      />
+      {/* <AssetSpecificComponent
         existingData={existingData}
         handleInputChange={handleInputChange}
         onValidationChange={onValidationChange}
         assetType={assetType}
         isEditMode={false} // Assuming this is for new asset creation in asset-craft
-      />
+      /> */}
     </div>
   );
 }

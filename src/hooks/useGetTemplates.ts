@@ -156,6 +156,7 @@ export const useGetTemplates = ({ type_page }: GetTemplatesProps) => {
         listTemplates,
         getTemplateById,
         getAiPromptAssetSelect,
+        getTemplatesByAssetType,
         getAiPromptCampaignSelect // Expose the new function
     };
 };
