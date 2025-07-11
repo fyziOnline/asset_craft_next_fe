@@ -19,6 +19,7 @@ import { AssetPromptResponse } from '@/types/apiResponses';
 import { ApiService } from '@/lib/axios_generic';
 import { useGenerateAssetStoreSelector } from '@/store/generatAssetStore';
 import { useEditAssetStoreSelector } from '@/store/editAssetStore';
+import GenericAssetSection from './GenericAssetSection';
 
 export interface BaseAssetFormProps {
   params: {
@@ -242,9 +243,7 @@ const BaseAssetForm = ({
       const generateHtmlRes = await generateVersionHTML(assetVersionID) as any;
       const updatedVersion = await getAssetByVersionId(assetVersionID)
 
-      // const updatedVersionList: AssetVersionProps[] | any = contextData.AssetHtml.assetVersions.map(version =>
-      //   version.assetVersionID === assetVersionID ? updatedVersion : version
-      // )
+      
       const existingVersions = contextData?.AssetHtml?.assetVersions ?? [];
 
       const updatedVersionList = existingVersions.map(version =>
@@ -262,8 +261,6 @@ const BaseAssetForm = ({
 
       updateVersionField(updatedVersion.assetVersionID, updatedVersion);
 
-      // console.log("Updated version after regenerate:", updatedVersion);
-      // setContextData({ AssetHtml: { ...contextData.AssetHtml, assetVersions: updatedVersionList } })
 
       if (!generateHtmlRes?.isSuccess) {
         throw new Error("Failed to generate HTML for version.");
@@ -278,12 +275,7 @@ const BaseAssetForm = ({
 
     } catch (error) {
       console.error("Error during regeneration:", error);
-      // const apiError = ApiService.handleError(error);
-      // setError({
-      //   status: apiError.statusCode ?? 500,
-      //   message: apiError.message || "Failed to regenerate asset version.",
-      //   showError: true
-      // });
+      
       setIsRegenerateSuccessful(false);
       setGenerateStep(1);
     } finally {
@@ -323,10 +315,7 @@ const BaseAssetForm = ({
         );
         setShowLoading(false);
 
-        if (res?.isSuccess) {
-          // router.replace(
-          //   `/edit-html-content?assetID=${assetIDTemplateRef.current || ""}&projectName=${projectDetails.project_name || ""}&campaignName=${projectDetails.campaign_name || ""}&assetName=${projectDetails.asset_name || ""}&assetTypeIcon=${assetType || ""}`
-          // );         
+        if (res?.isSuccess) {      
 
           router.replace(
             `/edit-html-content?assetID=${encodeURIComponent(assetIDTemplateRef.current || "")}&projectName=${encodeURIComponent(projectDetails.project_name || "")}&campaignName=${encodeURIComponent(projectDetails.campaign_name || "")}&assetName=${encodeURIComponent(projectDetails.asset_name || "")}&assetTypeIcon=${encodeURIComponent(assetType || "")}`
@@ -624,7 +613,7 @@ const BaseAssetForm = ({
           checked={assetSpecificSectionValid}
           {...(getCurrentPath === "/edit-html-content" && { isShowContent: true })}
         >
-          <assetSpecificSection.component
+          <GenericAssetSection
             existingData={null}
             editContextData={isEditMode ? {
               topic: formData?.topic ?? "",

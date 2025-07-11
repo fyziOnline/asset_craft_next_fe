@@ -21,6 +21,8 @@ interface ProjectAssetProp {
 const ProgressSection: FC<ProjectAssetProp> = ({ params }) => {
   const total_steps: number = 2
   const { listTemplates, getTemplateById } = useGetTemplates({ type_page: params.type_page })
+  console.log('list templates :',listTemplates);
+  
   const selectedTemplateRef = useRef<Template>()
   const { setShowLoading } = useLoading()
 

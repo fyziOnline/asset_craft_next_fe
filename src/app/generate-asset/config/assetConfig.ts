@@ -1,7 +1,7 @@
 import { AssetType } from '@/types/assetTypes';
-import GenericAssetSection from '@/app/generate-asset/assetsPromptCreationSection/GenericAssetSection';
 import { FC } from 'react';
 import { AIPromptAsset } from '@/types/templates';
+import GenericAssetSection from '../assetsPromptCreationSection/GenericAssetSection';
 
 // GenericAssetSection Props Interface
 export interface AssetSectionProps {
@@ -38,7 +38,7 @@ export interface AssetSectionLabels {
 export interface AssetSectionConfig {
   title: string;
   requiredFields: string[];
-  component: FC<AssetSectionProps>;
+  component?: FC<AssetSectionProps>;
 }
 
 // AssetTypeConfig for compatibility with existing code
@@ -130,27 +130,27 @@ export const assetSectionConfig: Record<AssetType, AssetSectionConfig> = {
   [AssetType.EMAIL]: {
     title: 'Email - Key Messages & Content',
     requiredFields: ['topic'],
-    component: GenericAssetSection
+    // component: GenericAssetSection
   },
   [AssetType.LINKEDIN]: {
     title: 'LinkedIn - Key Messages & Content',
     requiredFields: ['topic'],
-    component: GenericAssetSection
+    // component: GenericAssetSection
   },
   [AssetType.LANDING_PAGE]: {
     title: 'Landing Page - Key Messages & Content',
     requiredFields: ['topic'],
-    component: GenericAssetSection
+    // component: GenericAssetSection
   },
   [AssetType.CALL_SCRIPT]: {
     title: 'Call Script - Tone, Style, and Objections',
     requiredFields: ['topic'],
-    component: GenericAssetSection
+    // component: GenericAssetSection
   },
   [AssetType.PDF_SUMMARY]: {
     title: 'PDF Summary - Key Messages & Content',
     requiredFields: ['topic'],
-    component: GenericAssetSection
+    // component: GenericAssetSection
   }
 };
 

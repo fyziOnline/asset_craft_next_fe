@@ -5,10 +5,6 @@ import TextField from '@/components/global/TextField';
 import RangeSlider from '@/components/global/RangeSlider';
 import { AIPromptAsset } from '@/types/templates';
 import { getAssetLabels } from '@/app/generate-asset/config/assetConfig';
-// import { useAppData } from '@/context/AppContext'; // Remove unused
-// import { ApiService } from '@/lib/axios_generic'; // Remove unused
-// import { urls } from '@/apis/urls'; // Remove unused
-
 interface GenericAssetSectionProps {
   existingData?: AIPromptAsset | null;
   handleInputChange: (field: string, value: string | number | null) => void;
@@ -28,11 +24,6 @@ interface GenericAssetSectionProps {
   isEditMode?: boolean; // Keep in props for type checking with parent, but remove from destructuring if unused
 }
 
-// Remove unused interface
-// interface AssetSaveResponse {
-//   isSuccess: boolean;
-//   errorOnFailure: string;
-// }
 
 const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
   existingData,
@@ -42,24 +33,18 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
   editContextData,
   // isEditMode // Remove isEditMode from destructuring if unused
 }) => {
-  // const { setError } = useAppData(); // Remove unused
-
-  // Get labels for this asset type or use default
   const labels = useMemo(() => {
     return getAssetLabels(assetType);
   }, [assetType]);
 
-  // Use memo to initialize form data, mapping topic -> primaryMessage and keyPoints -> additionalInfo
   const initialFormData = useMemo(() => ({
     primaryMessage: existingData?.topic || '',
     additionalInfo: existingData?.keyPoints || ''
   }), [existingData]);
 
-  // Use memoized initial data
   const [formData, setFormData] = useState(initialFormData);
   const [validationState, setValidationState] = useState<boolean>(false);
 
-  // Read initial outputScale from props (prefer editContextData, fallback to existingData, default 5)
   const initialOutputScale = useMemo(() => {
     let scaleValue = 5; // Default
     if (editContextData?.outputScale) {
@@ -90,11 +75,8 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
     const isValid = Boolean(initialTopic && initialTopic.trim() !== '');
     setValidationState(isValid);
     onValidationChange(isValid);
-    // Run only once on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, []); // Remove existingData/onValidationChange, add editContextData if needed? No, run once.
 
-  // Update form data based on props (existingData or editContextData)
   useEffect(() => {
     if (editContextData) {
       setFormData({

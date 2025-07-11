@@ -14,7 +14,8 @@ interface TemplateViewerProps {
 }
 
 const TemplateGenerationSection: FC<TemplateViewerProps> = ({ params }) => {
-
+    console.log('params in template generation section :',params);
+    
     const assetGenerateSteps = useGenerateAssetStoreSelector.use.assetGenerateSteps()
 
     const [isOpen, setIsOpen] = useState(true);
