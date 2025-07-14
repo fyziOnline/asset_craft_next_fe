@@ -4,13 +4,16 @@ import { AIPromptAsset } from "@/types/templates";
 import { useCallback, useEffect, useState } from "react";
 import Section from "../blocks/Section";
 import GenericAssetSection from "@/app/generate-asset/assetsPromptCreationSection/GenericAssetSection";
-import ChildrenTitle from "@/components/global/ChildrenTitle";
-import TextField from "@/components/global/TextField";
+// import ChildrenTitle from "@/components/global/ChildrenTitle";
+// import TextField from "@/components/global/TextField";
 
 const AssetDetails = () => {
   const assetType = useAssetCraftStoreSelector.use.assetType();
   const template = useAssetCraftStoreSelector.use.template();
-  console.log('template :',template);
+  // const assetInformation = useAssetCraftStoreSelector.use.assetInformation()
+  // const campaignInformation = useAssetCraftStoreSelector.use.campaignInformation()
+  // console.log('assetInformation :',assetInformation);
+  // console.log('campaignInformation :',campaignInformation);
   
   const [existingData, setExistingData] = useState<AIPromptAsset | null>(null);
   const [isValid, setIsValid] = useState<boolean>(false);
@@ -45,7 +48,7 @@ const AssetDetails = () => {
 
   return (
     <div className="w-full  block items-center justify-center text-left px-12 pt-4 pb-16">
-      <Section title='General Asset Details'>
+      <Section title='General Asset Details' defaultOpen >
         <GenericAssetSection 
           handleInputChange={handleInputChange}
           onValidationChange={onValidationChange}

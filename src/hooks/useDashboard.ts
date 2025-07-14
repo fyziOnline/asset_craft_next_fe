@@ -99,6 +99,9 @@ export const useDashboard = () => {
             if (res.isSuccess) {
                 setClientAssetTypes([{ assetTypeName: "All in One" }, ...res.clientAssetTypes])
             }
+            console.log('====================================');
+            console.log('response fehcing asset types :',res);
+            console.log('====================================');
         } catch (error) {
             const apiError = ApiService.handleError(error)
             setError({

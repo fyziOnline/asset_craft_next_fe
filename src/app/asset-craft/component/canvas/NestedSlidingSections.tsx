@@ -45,10 +45,10 @@ const NestedSlidingSections = ({ setNestedInfoIndex,hObj}: { setNestedInfoIndex:
   };
 
   return (
-    <div className="relative w-full overflow-y-auto overflow-x-clip scroll-smooth rounded-lg">
+    <div className="relative w-full overflow-y-auto overflow-x-clip scroll-smooth rounded-lg ">
       {/* Sliding Container */}
       <div 
-        className="flex h-full transition-transform duration-500 ease-in-out"
+        className="flex h-full transition-transform duration-500 ease-in-out relative z-[1]"
         style={{ transform: `translateX(-${currentSection * 100}%)` }}
       >
         {nestedSections.map((section, index) => (
@@ -61,7 +61,7 @@ const NestedSlidingSections = ({ setNestedInfoIndex,hObj}: { setNestedInfoIndex:
           >
             {/* Section component */}
             <div className="w-full mx-auto px-10 text-center h-[90%]">
-              <div className="text-lg text-gray-600 leading-relaxed mb-6 bg-white mt-4 rounded-3xl overflow-y-auto"
+              <div className="scrollbar-hide text-lg text-gray-600 leading-relaxed mb-6 bg-white mt-4 rounded-3xl overflow-y-auto"
                    style={{height:'inherit'}}
               >
                 {section.component}
@@ -72,7 +72,7 @@ const NestedSlidingSections = ({ setNestedInfoIndex,hObj}: { setNestedInfoIndex:
       </div>
 
       {/* Fixed Navigation Buttons - Outside sliding container */}
-      <div className='absolute bottom-[4%] flex w-full justify-between px-12 items-center flex-row-reverse'>
+      <div className='absolute bottom-[4%] flex w-full justify-between px-12 items-center flex-row-reverse z-0'>
         <div className="transform -translate-x-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 transition-all duration-200 hover:scale-110 z-10 flex">
           <button 
             onClick={goToPrevious}

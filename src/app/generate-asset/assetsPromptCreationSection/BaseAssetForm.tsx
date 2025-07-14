@@ -219,6 +219,7 @@ const BaseAssetForm = ({
 
       const getFileId = await uploadImage(formData);
 
+
       const campaignRes = await aiPromptCampaignUpsert(
         campaignPayload as FormDataProps,
         getFileId,

@@ -5,6 +5,9 @@ import TextField from '@/components/global/TextField';
 import RangeSlider from '@/components/global/RangeSlider';
 import { AIPromptAsset } from '@/types/templates';
 import { getAssetLabels } from '@/app/generate-asset/config/assetConfig';
+import { useAssetCraftStoreSelector } from '@/store/assetCraftStore';
+import FieldHeader from '@/components/global/FieldHeader';
+import { useProjectFormData } from '@/hooks/useProjectFormData';
 interface GenericAssetSectionProps {
   existingData?: AIPromptAsset | null;
   handleInputChange: (field: string, value: string | number | null) => void;
@@ -44,6 +47,10 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
 
   const [formData, setFormData] = useState(initialFormData);
   const [validationState, setValidationState] = useState<boolean>(false);
+  const assetInformation = useAssetCraftStoreSelector.use.assetInformation()
+  const updateAssetInformation = useAssetCraftStoreSelector.use.updateAssetInformation()
+  const updateCampaignInformation = useAssetCraftStoreSelector.use.updateCampaignInformation()
+  const {onChangeAssetDetails,isAssetNameExists} = useProjectFormData()
 
   const initialOutputScale = useMemo(() => {
     let scaleValue = 5; // Default
@@ -103,8 +110,38 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
     }
   }, [handleInputChange]);
 
+  // <div className='mt-5'>
+  //               <FieldHeader 
+  //                 header='Digital Marketing Asset Name'
+  //                 isMandatory
+  //               />
+  //               <TextField
+  //                 customClass='h-12' 
+  //                 placeholder='Type the name of your Digital Marketing Assets here, E.g. Email_1, Linkedin_1 etc' 
+  //                 name="asset_name" 
+  //                 handleChange={(e)=>{
+  //                   onChangeAssetDetails(e)
+  //                 }} 
+  //                 // defaultValue={existingAssetMeta?.asset_name}  
+  //               />
+  //               {isAssetNameExists ? <p className='text-red-500 text-[12px] mt-[-10px]'>Asset name already exists, please enter another asset name.</p> : null}
+  //             </div>
+
   return (
     <div className="max-w-[90%]">
+      <FieldHeader
+        header='Digital Marketing Asset Name'
+        isMandatory
+      />
+      <TextField
+        placeholder='Type the name of your Digital Marketing Assets here, E.g. Email_1, Linkedin_1 etc' 
+        name="asset_name" 
+        handleChange={(e)=>{
+          onChangeAssetDetails(e)
+        }} 
+      />
+     {isAssetNameExists ? <p className='text-red-500 text-[12px] mt-[-10px]'>Asset name already exists, please enter another asset name.</p> : null}
+
       <ChildrenTitle
         showStar={true}
         customClass="mt-5"
@@ -113,6 +150,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
       <TextField
         handleChange={(e) => {
           updateFormData('primaryMessage', e.target.value);
+          updateAssetInformation({primaryMessage:e.target.value})
         }}
         defaultValue={formData.primaryMessage}
         rows={4}
@@ -128,6 +166,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
       <TextField
         handleChange={(e) => {
           updateFormData('additionalInfo', e.target.value);
+          updateAssetInformation({additionalInfo : e.target.value})
         }}
         defaultValue={formData.additionalInfo}
         rows={4}
@@ -142,6 +181,7 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
           onSelectValue={(value) => {
             // Ensure value is passed correctly (as number)
             handleInputChange('outputScale', value);
+            updateCampaignInformation({outputScale:value})
           }}
           // Use the determined initial value
           defaultValue={initialOutputScale}

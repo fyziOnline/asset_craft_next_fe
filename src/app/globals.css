@@ -493,6 +493,12 @@
 }
 
 /* Hide scrollbar completely across browsers including arrows */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   width: 0px;
   background: transparent;
@@ -507,8 +513,4 @@
   width: 0;
 }
 
-.scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
-}
 

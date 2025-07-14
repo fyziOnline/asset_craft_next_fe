@@ -34,9 +34,34 @@ export type GenerateAssetStore = {
     resetAssetGenerateStore : () => void
 }
 
+type CampaignInfoType = {
+  product : string 
+  campaignName: string
+  campaignGoal : string 
+  targetAudience : string 
+  webUrl :string[]
+  outputScale  : number
+  keyPoints :string
+  tone :string 
+  type :string
+  fileName :string[]
+}
+
+type AssetInfoType = {
+  assetName : string
+  assetSpecificUrls :string[]
+  assetSpecificFiles : string[]
+  primaryMessage:string
+  additionalInfo : string
+}
+
 export type AssetCraftStore = {
   template : Template | null
   assetType : AssetType | null
+  campaignInformation : CampaignInfoType
+  assetInformation : AssetInfoType
   updateAssetType : (type: AssetType | null) => void
   updateTemplate : (template:Template|null) => void
+  updateCampaignInformation: (update: Partial<CampaignInfoType>) => void
+  updateAssetInformation : (update:Partial<AssetInfoType>)=>void
 }

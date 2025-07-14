@@ -7,6 +7,7 @@ interface SectionProps {
   componentStyle?: React.CSSProperties
   defaultOpen?: boolean
   disabled?: boolean
+  message ?: string
 }
 
 const Section: FC<SectionProps> = ({
@@ -14,7 +15,8 @@ const Section: FC<SectionProps> = ({
   children,
   componentStyle,
   defaultOpen = false,
-  disabled = false
+  disabled = false,
+  message = ""
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
@@ -24,9 +26,12 @@ const Section: FC<SectionProps> = ({
         className="flex items-center justify-between group cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h3 className="text-lg font-semibold text-gray-800 group-hover:text-gray-900 transition-colors duration-200">
-          {title}
-        </h3>
+        <div className='flex align-baseline gap-9'>
+            <h3 className="text-lg font-semibold text-gray-800 group-hover:text-gray-900 transition-colors duration-200">
+            {title}
+            </h3>
+            {disabled && <p className='text-sm italic'>*{message}</p>}
+        </div>
         <button
           className="p-2 rounded-full hover:bg-gray-100 transition-all duration-200 ease-in-out transform hover:scale-105"
           aria-label={isOpen ? 'Collapse section' : 'Expand section'}

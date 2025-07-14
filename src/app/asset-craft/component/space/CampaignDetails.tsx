@@ -16,11 +16,14 @@ import DragAndDrop from "@/components/global/MultyFileDragAndDrop";
 import { useProjectFormData } from "@/hooks/useProjectFormData";
 import { Blocks } from "../blocks/_index";
 import { Elements } from "../elements/_index";
+// import { Global } from "@/components/global/_index";
 
 const CampaignDetails = () => {
 
   const updateAssetType = useAssetCraftStoreSelector.use.updateAssetType()
   const updateTemplate = useAssetCraftStoreSelector.use.updateTemplate()
+  const updateCampaignInformation = useAssetCraftStoreSelector.use.updateCampaignInformation()
+  const campaignInformation = useAssetCraftStoreSelector.use.campaignInformation()
   const assetType = useAssetCraftStoreSelector.use.assetType()
   const {getTemplateById} = useGetTemplates()
   // const selectedTemplate = useAssetCraftStoreSelector.use.template()
@@ -30,6 +33,7 @@ const CampaignDetails = () => {
   const {listProjects,listCampaigns,assetDetails,handleChangeAssetDetails,onChangeAssetDetails,isAssetNameExists} = useProjectFormData()
   const {getTemplatesByAssetType} = useGetTemplates()
   const [templates,setTemplates] = useState<Template[]|null>([])
+  const [isTemplateSelected,setIsTemplateSelected] = useState<boolean>(false)
   const [fetchErrors,setFetchErrors] = 
               useState<Record<string,unknown>>(
                       {
@@ -42,12 +46,11 @@ const CampaignDetails = () => {
     template_id : "",
     template_name : ""
   })
-  const campaignRef = useRef<{campaign_goal:string,target_audience:string}>({
-    campaign_goal:"",
-    target_audience : ""
-  })
-
-  const [urls,setUrls] = useState<string[]>([])
+  // const campaignRef = useRef<{campaign_goal:string,target_audience:string}>({
+  //   campaign_goal:"",
+  //   target_audience : ""
+  // })
+  // const [urls,setUrls] = useState<string[]>([])
 
   
   
@@ -58,7 +61,7 @@ const CampaignDetails = () => {
       template_name : name
     }
     const selectedTemplate = await getTemplateById(templateRef.current.template_id)
-    
+    !isTemplateSelected && setIsTemplateSelected(true)
     //  const selected = templates?.find(t => t.templateID === id);
     if (selectedTemplate) {
         updateTemplate(selectedTemplate);
@@ -90,7 +93,8 @@ const CampaignDetails = () => {
   ))
 
   return (
-    <div className="m-auto bg-white p-14 rounded-xl overflow-y-auto pb-24">
+    <div  className="scrollbar-hide shadow m-auto bg-white p-14 rounded-xl overflow-y-auto pb-24">
+      {/* <Global.ScrollPill /> */}
       <h2 className="text-2xl font-bold text-gray-800 text-left">1. Select Your Asset</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-3">
         <div className="space-y-1">
@@ -135,7 +139,8 @@ const CampaignDetails = () => {
           Template
         </label>
         {/* {selectedTemplateDetails ? ( */}
-        {templates && templates.length ? (
+
+        {isTemplateSelected ? (
           <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
             <div className="flex items-center gap-3">
               {/* <CheckCircle className="h-6 w-6 text-[#01A982]" /> */}
@@ -150,15 +155,15 @@ const CampaignDetails = () => {
               Change
             </button>
           </div>
-        ) : (
-          <button
-            onClick={() => setTemplateModalOpen(true)}
-            // disabled={!assetType}
-            className="w-full text-center p-3 bg-white rounded-lg border-2 border-dashed hover:border-[#01A982] disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Choose a Template
-          </button>
-        )}
+        ) :
+            <button
+                onClick={() => setTemplateModalOpen(true)}
+                // disabled={!assetType}
+                className="w-full text-center p-3 bg-white rounded-lg border-2 border-dashed hover:border-[#01A982] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                Choose a Template
+            </button>
+        }
         
       </div>
       {templateModalOpen && <Blocks.TemplateSelectionModal
@@ -170,9 +175,9 @@ const CampaignDetails = () => {
         handelTemplateSelection={handleSelectTemplate}
       />}
 
-      {assetDetails.project_name && (
+      {/* {assetDetails.project_name && ( */}
         <div className="transition-opacity duration-500 ease-in-out opacity-100 text-left">
-          <Blocks.Section title="Campaign Information" defaultOpen  disabled={true}>
+          <Blocks.Section title="Campaign Information" defaultOpen  disabled={!(assetDetails.project_name.length > 0)} message="Please select product to make the section available to update">
             <ProgressiveDropDownSearch
               data={listofcampaigns}
               placeholder="Search campaign name"
@@ -192,7 +197,9 @@ const CampaignDetails = () => {
                   customClass='h-12' 
                   placeholder='Type the name of your Digital Marketing Assets here, E.g. Email_1, Linkedin_1 etc' 
                   name="asset_name" 
-                  handleChange={onChangeAssetDetails} 
+                  handleChange={(e)=>{
+                    onChangeAssetDetails(e)
+                  }} 
                   // defaultValue={existingAssetMeta?.asset_name}  
                 />
                 {isAssetNameExists ? <p className='text-red-500 text-[12px] mt-[-10px]'>Asset name already exists, please enter another asset name.</p> : null}
@@ -207,12 +214,13 @@ const CampaignDetails = () => {
                   <ProgressiveDropDownSearch 
                     data={listofcampains}
                     placeholder="Select Campaign Goal"
-                    onSelect={(name)=>{
-                      campaignRef.current = {
-                        ...campaignRef.current,
-                        campaign_goal : name
-                      }
-                    }}
+                    onSelect={(value)=>updateCampaignInformation({campaignGoal:value})}
+                    // onSelect={(name)=>{
+                    //   campaignRef.current = {
+                    //     ...campaignRef.current,
+                    //     campaign_goal : name
+                    //   }
+                    // }}
                     showCreateOption = {false}
                   />
                 </div>
@@ -224,12 +232,13 @@ const CampaignDetails = () => {
                   <ProgressiveDropDownSearch 
                     data={ListTargetAudience}
                     placeholder="Select Target Audience"
-                    onSelect={(name)=>{
-                      campaignRef.current = {
-                        ...campaignRef.current,
-                        target_audience : name
-                      }
-                    }}
+                    onSelect={(value)=>updateCampaignInformation({targetAudience:value})}
+                    // onSelect={(name)=>{
+                    //   campaignRef.current = {
+                    //     ...campaignRef.current,
+                    //     target_audience : name
+                    //   }
+                    // }}
                     showCreateOption = {false}
                   />
                 </div>
@@ -237,13 +246,14 @@ const CampaignDetails = () => {
 
             </div>
           </Blocks.Section>
-          <Blocks.Section title='Additional Campaign References' defaultOpen disabled={true}>
+          <Blocks.Section title='Additional Campaign References' defaultOpen disabled={!(assetDetails.project_name.length>0)}>
               <div className='mt-5'>
                 <Elements.MultiUrlInput
                   label="Campaign URLs"
-                  urls={urls}
+                  urls={campaignInformation.webUrl}
                   setUrls={(urls:string[])=>{
-                    setUrls(urls)
+                    // setUrls(urls)
+                    updateCampaignInformation({webUrl:urls})
                   }}
                 />
               </div>
@@ -252,7 +262,7 @@ const CampaignDetails = () => {
               </div>
           </Blocks.Section>
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 };

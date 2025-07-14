@@ -8,6 +8,25 @@ const useAssetCraftStore = create<AssetCraftStore>((set,get) => ({
   // Initial state
   template : null,
   assetType : null,
+  campaignInformation:{
+    product : "", 
+    campaignName:"",
+    campaignGoal : "", 
+    targetAudience : "", 
+    webUrl :[],
+    outputScale : 0,
+    keyPoints :"",
+    tone :"", 
+    type :"",
+    fileName :[]
+  },
+  assetInformation : {
+    assetName : "",
+    assetSpecificUrls :[],
+    assetSpecificFiles : [],
+    primaryMessage:"",
+    additionalInfo : ""
+  },
 
   // Actions
   updateAssetType : (type: AssetType | null) => {
@@ -20,28 +39,25 @@ const useAssetCraftStore = create<AssetCraftStore>((set,get) => ({
     set({
         template : template
     })
+  },
+
+  updateCampaignInformation : (update) => {
+    set((state)=>({
+      campaignInformation:{
+        ...state.campaignInformation,
+        ...update
+      }
+    }))
+  },
+
+  updateAssetInformation : (update) => {
+    set((state)=>({
+      assetInformation :{
+        ...state.assetInformation,
+        ...update
+      }
+    }))
   }
-//   setAssetHTMLData: (assetHTMLRecord) => {
-//     const {selectedVersionID} = get()
-//     const {
-//       isSuccess,
-//       errorOnFailure,
-//       assetVersions,
-//       ...filteredResponse
-//     } = assetHTMLRecord;
-
-//     const uniqueStatuses = Array.from(
-//         new Set(assetVersions?.map(version => version.status).filter(Boolean))
-//     ) as string[];
-
-
-//     set({
-//         assetHTMLData: filteredResponse,
-//         versionList: assetVersions || [],
-//         versionUniqueStatuses : uniqueStatuses,
-//         selectedVersionID : assetVersions[0]?.assetVersionID 
-//       });
-//   },
 
 
 }))

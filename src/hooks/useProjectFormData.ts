@@ -7,6 +7,7 @@ import { nkey } from "@/data/keyStore";
 import { DropDownOptions } from "@/components/global/DropDown";
 import { useAppData } from "@/context/AppContext";
 import { CampaignSelectResponse } from "@/types/templates";
+import useAssetCraftStore from "@/store/assetCraftStore";
 
 interface CampaignsProps {
     campaignID: string,
@@ -46,6 +47,8 @@ export const useProjectFormData = () => {
     const [listAssets, setListAssets] = useState<AssetsProps[]>([]);
     const [existingCampaignDetails, setExistingCampaignDetails] = useState<CampaignSelectResponse | null>(null)
 
+    const updateCampaignInformation = useAssetCraftStore.getState().updateCampaignInformation
+    const updateAssetInformation = useAssetCraftStore.getState().updateAssetInformation
     // const campaignIDRef = useRef("")
     const isCampaignSelect = useRef(false)
     const { setError } = useAppData()
@@ -130,11 +133,13 @@ export const useProjectFormData = () => {
                     [key]: ''
                 }));
             } else {
+                updateCampaignInformation({'product':value})
                 setIsProductNameValid(true);
             }
             getListCampaign(value, label || "");
         } else if (key === "campaign_name") {
             handleCheckCampNameExists(listCampaigns, value);
+            updateCampaignInformation({campaignName:value})
         } else if (key === "asset_name") {
             const checkAssetNameExists = listAssets.filter((item) => item.assetName.trim().toLowerCase() === value.toLowerCase());
             if (checkAssetNameExists.length > 0) {
@@ -145,6 +150,7 @@ export const useProjectFormData = () => {
                 setIsAssetNameExists(true);
             } else {
                 setIsAssetNameExists(false);
+                updateAssetInformation({assetName:value})
             }
         }
 
