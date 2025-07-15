@@ -48,7 +48,7 @@ const Section: FC<SectionProps> = ({
 
       <div
         className={`relative overflow-hidden transition-all duration-500 ease-out ${
-          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          isOpen ? 'max-h-100 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         {/* Content */}

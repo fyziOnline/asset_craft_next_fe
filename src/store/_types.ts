@@ -42,6 +42,7 @@ type CampaignInfoType = {
   webUrl :string[]
   outputScale  : number
   keyPoints :string
+  topic : string
   tone :string 
   type :string
   fileName :string[]
@@ -51,13 +52,14 @@ type AssetInfoType = {
   assetName : string
   assetSpecificUrls :string[]
   assetSpecificFiles : string[]
-  primaryMessage:string
-  additionalInfo : string
+  // primaryMessage:string
+  // additionalInfo : string
 }
 
 export type AssetCraftStore = {
   template : Template | null
   assetType : AssetType | null
+  campaignId: string | null
   campaignInformation : CampaignInfoType
   assetInformation : AssetInfoType
   updateAssetType : (type: AssetType | null) => void

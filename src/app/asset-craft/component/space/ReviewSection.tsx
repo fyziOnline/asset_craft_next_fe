@@ -1,3 +1,4 @@
+import { useAssetCraftStoreSelector } from "@/store/assetCraftStore";
 import { FileText, Globe, Lightbulb, Target } from "lucide-react";
 
 const ReviewSection = () => {
@@ -28,6 +29,10 @@ const ReviewSection = () => {
     assetUrls: [],
     assetDocs: []
   };
+
+  const campaignInformation = useAssetCraftStoreSelector.use.campaignInformation()
+  const assetInformation = useAssetCraftStoreSelector.use.assetInformation()
+  const assetType = useAssetCraftStoreSelector.use.assetType()
 
   const InfoCard = ({ icon: Icon, title, children, className = "" }) => (
     <div className={`bg-white rounded-lg p-6 shadow-sm border border-gray-200 ${className}`}>
@@ -65,17 +70,17 @@ const ReviewSection = () => {
     </div>
   );
 
-  const CreativityMeter = ({ level }) => (
+  const CreativityMeter = () => (
     <div className="flex items-center gap-3">
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1">
           <span className="text-sm font-medium text-gray-600">Creativity Level</span>
-          <span className="text-sm font-semibold text-gray-900">{level}/10</span>
+          <span className="text-sm font-semibold text-gray-900">{campaignInformation.outputScale}/10</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div 
             className="bg-gradient-to-r from-green-300 to-green-500 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${level * 10}%` }}
+            style={{ width: `${campaignInformation.outputScale * 10}%` }}
           ></div>
         </div>
       </div>
@@ -91,12 +96,12 @@ const ReviewSection = () => {
           <div className="space-y-6">
             <InfoCard icon={Target} title="Type and Campaign">
               <dl className="space-y-4">
-                <DataField label="Asset Type" value={typeAndCampaignData.assetType} />
+                <DataField label="Asset Type" value={assetType} />
                 <DataField label="Template" value={typeAndCampaignData.template} />
-                <DataField label="Product/Solution" value={typeAndCampaignData.productSolution} />
-                <DataField label="Campaign Name" value={typeAndCampaignData.campaignName} />
-                <DataField label="Campaign Goal" value={typeAndCampaignData.campaignGoal} />
-                <DataField label="Target Audience" value={typeAndCampaignData.targetAudience} />
+                <DataField label="Product/Solution" value={campaignInformation.product} />
+                <DataField label="Campaign Name" value={campaignInformation.campaignName} />
+                <DataField label="Campaign Goal" value={campaignInformation.campaignGoal} />
+                <DataField label="Target Audience" value={campaignInformation.targetAudience} />
               </dl>
             </InfoCard>
 
@@ -104,7 +109,7 @@ const ReviewSection = () => {
               <dl className="space-y-4">
                 <DataField 
                   label="Campaign URLs" 
-                  value={typeAndCampaignData.campaignUrls} 
+                  value={campaignInformation.webUrl} 
                   isList={true} 
                 />
                 <DataField 
@@ -128,7 +133,7 @@ const ReviewSection = () => {
 
             <InfoCard icon={Lightbulb} title="Creative Configuration">
               <div className="mb-4">
-                <CreativityMeter level={assetDetailsData.creativityLevel} />
+                <CreativityMeter/>
               </div>
               <dl className="space-y-4">
                 <DataField 

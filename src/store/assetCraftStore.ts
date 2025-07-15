@@ -8,6 +8,7 @@ const useAssetCraftStore = create<AssetCraftStore>((set,get) => ({
   // Initial state
   template : null,
   assetType : null,
+  campaignId : null,
   campaignInformation:{
     product : "", 
     campaignName:"",
@@ -16,6 +17,7 @@ const useAssetCraftStore = create<AssetCraftStore>((set,get) => ({
     webUrl :[],
     outputScale : 0,
     keyPoints :"",
+    topic:"",
     tone :"", 
     type :"",
     fileName :[]
@@ -24,8 +26,8 @@ const useAssetCraftStore = create<AssetCraftStore>((set,get) => ({
     assetName : "",
     assetSpecificUrls :[],
     assetSpecificFiles : [],
-    primaryMessage:"",
-    additionalInfo : ""
+    // primaryMessage:"",
+    // additionalInfo : ""
   },
 
   // Actions

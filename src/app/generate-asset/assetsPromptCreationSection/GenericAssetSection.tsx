@@ -8,6 +8,9 @@ import { getAssetLabels } from '@/app/generate-asset/config/assetConfig';
 import { useAssetCraftStoreSelector } from '@/store/assetCraftStore';
 import FieldHeader from '@/components/global/FieldHeader';
 import { useProjectFormData } from '@/hooks/useProjectFormData';
+import { Blocks } from '@/app/asset-craft/component/blocks/_index';
+import { Elements } from '@/app/asset-craft/component/elements/_index';
+import DragAndDrop from '@/components/global/MultyFileDragAndDrop';
 interface GenericAssetSectionProps {
   existingData?: AIPromptAsset | null;
   handleInputChange: (field: string, value: string | number | null) => void;
@@ -48,8 +51,9 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
   const [formData, setFormData] = useState(initialFormData);
   const [validationState, setValidationState] = useState<boolean>(false);
   const assetInformation = useAssetCraftStoreSelector.use.assetInformation()
-  const updateAssetInformation = useAssetCraftStoreSelector.use.updateAssetInformation()
+  const campaignInformation = useAssetCraftStoreSelector.use.campaignInformation()
   const updateCampaignInformation = useAssetCraftStoreSelector.use.updateCampaignInformation()
+  const updateAssetInformation = useAssetCraftStoreSelector.use.updateAssetInformation()
   const {onChangeAssetDetails,isAssetNameExists} = useProjectFormData()
 
   const initialOutputScale = useMemo(() => {
@@ -149,10 +153,10 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
       />
       <TextField
         handleChange={(e) => {
-          updateFormData('primaryMessage', e.target.value);
-          updateAssetInformation({primaryMessage:e.target.value})
+          // updateFormData('primaryMessage', e.target.value);
+          updateCampaignInformation({topic:e.target.value})
         }}
-        defaultValue={formData.primaryMessage}
+        defaultValue={campaignInformation.topic}
         rows={4}
         placeholder={labels.primaryMessage.placeholder}
         customAreaClass=" overflow-x-auto overflow-y-auto"
@@ -165,10 +169,10 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
       />
       <TextField
         handleChange={(e) => {
-          updateFormData('additionalInfo', e.target.value);
-          updateAssetInformation({additionalInfo : e.target.value})
+          // updateFormData('additionalInfo', e.target.value);
+          updateCampaignInformation({keyPoints : e.target.value})
         }}
-        defaultValue={formData.additionalInfo}
+        defaultValue={campaignInformation.keyPoints}
         rows={4}
         placeholder={labels.additionalInfo.placeholder}
         customAreaClass=" overflow-x-auto overflow-y-auto"
@@ -187,6 +191,23 @@ const GenericAssetSection: React.FC<GenericAssetSectionProps> = ({
           defaultValue={initialOutputScale}
         />
       </div>
+      <Blocks.Section title='Additional Asset References' defaultOpen >
+        <div className='mt-5'>
+          <Elements.MultiUrlInput
+            label="Campaign URLs"
+            urls={assetInformation.assetSpecificUrls}
+            setUrls={(urls:string[])=>{
+              // setUrls(urls)
+              updateAssetInformation({assetSpecificUrls:urls})
+            }}
+          />
+        </div>
+        <div className="overflow-y-auto">
+          <DragAndDrop 
+            
+          />
+        </div>
+      </Blocks.Section>
     </div>
   );
 };
